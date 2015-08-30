@@ -1,0 +1,6 @@
+**/Makefile
+**/CMakeFiles
+**/.cproject
+**/.kdev4
+**/.project
+**/CMakeCache.txt
