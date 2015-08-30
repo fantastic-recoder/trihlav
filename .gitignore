@@ -4,3 +4,4 @@
 **/.kdev4
 **/.project
 **/CMakeCache.txt
+**/cmake_install.cmake
