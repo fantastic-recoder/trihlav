@@ -1,9 +1,3 @@
-###############################################################################
-#
-cmake_minimum_required(VERSION 2.6)
-
-project(trihlavsrv)
-
 FIND_PACKAGE( Wt REQUIRED )
 
 INCLUDE_DIRECTORIES( ${Wt_INCLUDE_DIR} )
