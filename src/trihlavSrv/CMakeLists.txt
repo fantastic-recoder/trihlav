@@ -1,5 +1,4 @@
-FIND_PACKAGE( Wt REQUIRED )
-
+# Main server
 INCLUDE_DIRECTORIES( ${Wt_INCLUDE_DIR} )
 
 add_executable(trihlavsrv main.cpp trihlavApp.cpp)
