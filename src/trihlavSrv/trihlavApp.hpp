@@ -24,8 +24,8 @@ public:
 	virtual ~App();
 	static App *createApplication(const Wt::WEnvironment& pEnv);
 private:
-	Wt::WLineEdit *nameEdit_;
-	Wt::WText *greeting_;
+	Wt::WLineEdit *itsPwdEdit;
+	Wt::WText *itsGreeting;
 
     void check();
 };

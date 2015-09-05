@@ -24,8 +24,8 @@ App::App(const WEnvironment& pEnv) :
 
 	root()->addWidget(new WText("Passwort"));
 	// show some text
-	nameEdit_ = new WLineEdit(root());    // allow text input
-	nameEdit_->setFocus();                // give focus
+	itsPwdEdit = new WLineEdit(root());    // allow text input
+	itsPwdEdit->setFocus();                // give focus
 
 	WPushButton *myChkBtn = new WPushButton("Check.", root());
 	// create a button
@@ -33,12 +33,12 @@ App::App(const WEnvironment& pEnv) :
 
 	root()->addWidget(new WBreak());      // insert a line break
 
-	greeting_ = new WText(root());        // empty text
+	itsGreeting = new WText(root());        // empty text
 
 	// Connect signals with slots
 
 	myChkBtn->clicked().connect(SLOT(this, App::check));
-	nameEdit_->enterPressed().connect(SLOT(this, App::check));
+	itsPwdEdit->enterPressed().connect(SLOT(this, App::check));
 
 }
 
@@ -62,7 +62,7 @@ void App::check() {
 	/*
 	 * Update the text, using text input into the nameEdit_ field.
 	 */
-	greeting_->setText("Hello there, " + nameEdit_->text());
+	itsGreeting->setText("Hello there, " + itsPwdEdit->text());
 }
 
 } /* namespace trihlav */
