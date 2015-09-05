@@ -5,3 +5,8 @@
 **/.project
 **/CMakeCache.txt
 **/cmake_install.cmake
+/CMakeLists.txt.user
+/CPackConfig.cmake
+/CPackSourceConfig.cmake
+/install_manifest.txt
+/trihlavsrv.cbp
