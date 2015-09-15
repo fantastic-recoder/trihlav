@@ -1,2 +1,2 @@
 # Main server
-install(DIRECTORY trihlav RUNTIME DESTINATION /etc)
+install(DIRECTORY trihlav DESTINATION /etc)
