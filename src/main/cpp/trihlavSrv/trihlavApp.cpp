@@ -62,7 +62,7 @@ void App::check() {
 	/*
 	 * Update the text, using text input into the nameEdit_ field.
 	 */
-	itsGreeting->setText("Hello there, " + itsPwdEdit->text());
+    itsGreeting->setText("Hello there, " + itsPwdEdit->text()+" is invalid.");
 }
 
 } /* namespace trihlav */
