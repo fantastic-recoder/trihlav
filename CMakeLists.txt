@@ -4,6 +4,21 @@ cmake_minimum_required(VERSION 2.6)
 
 project(trihlavsrv)
 
+set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
+find_package(Boost 1.36.0 COMPONENTS date_time filesystem system ...)
+find_package(yubikey)
+
+
+if (CMAKE_VERSION VERSION_LESS "3.1")
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
+  endif ()
+else ()
+  set (CMAKE_CXX_STANDARD 11)
+endif ()
+
 ###############################################################################
 # Start CPack
 SET(CPACK_GENERATOR "RPM")
@@ -43,5 +58,6 @@ SET (WT_CONNECTOR "wtfcgi" CACHE STRING "Connector used (wthttp or wtfcgi)")
 ###############################################################################
 
 add_subdirectory(src/main/cpp/trihlavSrv)
+add_subdirectory(src/main/cpp/trihlavLib)
 add_subdirectory(src/main/resources)
 
