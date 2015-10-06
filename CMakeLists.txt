@@ -60,4 +60,5 @@ SET (WT_CONNECTOR "wtfcgi" CACHE STRING "Connector used (wthttp or wtfcgi)")
 add_subdirectory(src/main/cpp/trihlavSrv)
 add_subdirectory(src/main/cpp/trihlavLib)
 add_subdirectory(src/main/resources)
+add_subdirectory(src/test/cpp)
 

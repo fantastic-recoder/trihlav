@@ -2,7 +2,7 @@
 #define YUSERCONFIG_HPP
 
 #include <yubikey.h>
-#include <QtCore/QString>
+#include <string>
 
 #include "trihlavUTimestamp.hpp"
 
@@ -15,21 +15,24 @@ class YubikoOtpKeyConfig
 {
 private:
     bool             itsChangedFlag;
-    QString          itsFilename;
+    std::string      itsFilename;
     yubikey_token_st itsToken;
     uint8_t          itsKey[YUBIKEY_KEY_SIZE];
+
+	const std::string checkFileName(bool pIsOut);
+
 protected:
-    void setFilename(const QString &value);
+    void setFilename(const std::string &value);
 public:
     /**
      * @brief YubikoOtpKeyConfig::YubikoOtpKeyConfig
      */
-    YubikoOtpKeyConfig(const QString& pDataPathDir);
+    YubikoOtpKeyConfig(const std::string& pDataPathDir);
 
     /**
      * @brief getPrivateId access the private id config value
      */
-    const QString getPrivateId() const;
+    const std::string getPrivateId() const;
 
     /**
      * @brief Timestamp incremented by approx 8Hz.
@@ -55,7 +58,7 @@ public:
     /**
      * @brief setPrivateId sets the private id part of the Yubikey token
      */
-    void setPrivateId(const QString& pPrivateId);
+    void setPrivateId(const std::string& pPrivateId);
 
     /**
      * @brief The random value of Yubiko token.
@@ -140,7 +143,7 @@ public:
      * @brief Getter.
      * @return The filename of the of the keys config file.
      */
-    const QString& getFilename() const
+    const std::string& getFilename() const
     {
         return itsFilename;
     }

@@ -1,6 +1,6 @@
 # Basic functionality
 
-add_library(trihlavApi SHARED trihlavApi.cpp trihlavWrongConfigValue.cpp)
+add_library(trihlavApi SHARED trihlavApi.cpp trihlavWrongConfigValue.cpp trihlavYubikoOtpKeyConfig.cpp )
 
 TARGET_LINK_LIBRARIES( yubiko )
 
