@@ -1,16 +1,27 @@
 ###############################################################################
 # Trihlav auth server main directory
 cmake_minimum_required(VERSION 2.6)
-
 project(trihlavsrv)
+###############################################################################
 
-set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+###############################################################################
+# Boost & threads
+#set(Boost_USE_STATIC_LIBS       ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
-find_package(Boost 1.36.0 COMPONENTS date_time filesystem system ...)
-find_package(yubikey)
+find_package(Boost 1.54.0 COMPONENTS date_time filesystem system unit_test_framework log REQUIRED)
+find_package (Threads)
+ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
+ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
+###############################################################################
 
+###############################################################################
+# C++11
+find_library(YUBIKEY_LIB yubikey /usr/lib64 /usr/lib )
+###############################################################################
 
+###############################################################################
+# C++11
 if (CMAKE_VERSION VERSION_LESS "3.1")
   if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
@@ -18,6 +29,12 @@ if (CMAKE_VERSION VERSION_LESS "3.1")
 else ()
   set (CMAKE_CXX_STANDARD 11)
 endif ()
+###############################################################################
+
+###############################################################################
+# Global Unit Testing
+enable_testing()
+###############################################################################
 
 ###############################################################################
 # Start CPack
