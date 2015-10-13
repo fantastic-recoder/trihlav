@@ -1,39 +1,59 @@
 ###############################################################################
 # Trihlav auth server main directory
-cmake_minimum_required(VERSION 2.6)
-project(trihlavsrv)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+IF(POLICY CMP0048)
+   CMAKE_POLICY(SET CMP0048 NEW)
+ENDIF(POLICY CMP0048)
+PROJECT(trihlavsrv VERSION 0.0.1)
 ###############################################################################
 
 ###############################################################################
 # Boost & threads
-#set(Boost_USE_STATIC_LIBS       ON) # only find static libs
-set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME    OFF)
-find_package(Boost 1.54.0 COMPONENTS date_time filesystem system unit_test_framework log REQUIRED)
-find_package (Threads)
+#SET(Boost_USE_STATIC_LIBS       ON) # only find static libs
+SET(Boost_USE_MULTITHREADED      ON)
+SET(Boost_USE_STATIC_RUNTIME    OFF)
+FIND_PACKAGE(Boost 1.54.0 COMPONENTS date_time filesystem system unit_test_framework log REQUIRED)
+FIND_PACKAGE (Threads)
 ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
 ###############################################################################
 
 ###############################################################################
+# add a target to generate API documentation with Doxygen
+FIND_PACKAGE(Doxygen)
+IF(DOXYGEN_FOUND)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+	ADD_CUSTOM_TARGET(doc
+		${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMENT "Generating API documentation with Doxygen" VERBATIM
+	)
+	ADD_CUSTOM_TARGET(hack_inst ${CMAKE_COMMAND} -E echo "Hacking install target")
+	IF("${CMAKE_GENERATOR}" MATCHES Make)
+	    INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_BUILD_TOOL} hack_inst WORKING_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}\")")
+	ENDIF()
+	INSTALL( DIRECTORY ${CMAKE_BINARY_DIR}/doc/ DESTINATION /usr/share/doc/packages/trihlav-${PROJECT_VERSION} )
+ENDIF(DOXYGEN_FOUND)
+
+###############################################################################
 # C++11
-find_library(YUBIKEY_LIB yubikey /usr/lib64 /usr/lib )
+FIND_LIBRARY(YUBIKEY_LIB yubikey /usr/lib64 /usr/lib )
 ###############################################################################
 
 ###############################################################################
 # C++11
-if (CMAKE_VERSION VERSION_LESS "3.1")
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
-  endif ()
-else ()
-  set (CMAKE_CXX_STANDARD 11)
-endif ()
+IF (CMAKE_VERSION VERSION_LESS "3.1")
+  IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    SET (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
+  ENDIF ()
+ELSE ()
+  SET (CMAKE_CXX_STANDARD 11)
+ENDIF ()
 ###############################################################################
 
 ###############################################################################
 # Global Unit Testing
-enable_testing()
+ENABLE_TESTING()
 ###############################################################################
 
 ###############################################################################
@@ -62,7 +82,7 @@ ELSE(WIN32 AND NOT UNIX)
   SET(CPACK_SOURCE_STRIP_FILES "")
 ENDIF(WIN32 AND NOT UNIX)
 SET(CPACK_PACKAGE_EXECUTABLES "trihlavsrv" "Trihlav Server")
-include(CPack)
+INCLUDE(CPack)
 
 # end CPack
 ###############################################################################
@@ -74,8 +94,8 @@ SET (WT_CONNECTOR "wtfcgi" CACHE STRING "Connector used (wthttp or wtfcgi)")
 # end Wt
 ###############################################################################
 
-add_subdirectory(src/main/cpp/trihlavSrv)
-add_subdirectory(src/main/cpp/trihlavLib)
-add_subdirectory(src/main/resources)
-add_subdirectory(src/test/cpp)
+ADD_SUBDIRECTORY(src/main/cpp/trihlavSrv)
+ADD_SUBDIRECTORY(src/main/cpp/trihlavLib)
+ADD_SUBDIRECTORY(src/main/resources)
+ADD_SUBDIRECTORY(src/test/cpp)
 

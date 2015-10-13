@@ -113,9 +113,14 @@ void YubikoOtpKeyConfig::load() {
 	setCrc(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_CRC));
 	setRandom(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_RANDOM));
 	setUseCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_USE_CNTR));
+
 	itsChangedFlag = false;
 }
 
+/**
+ * Save the key data in a JSON like format. The filename is specified in
+ * constructor YubikoOtpKeyConfig::YubikoOtpKeyConfig(const string& )
+ */
 void YubikoOtpKeyConfig::save() {
 	const string myOutFile = checkFileName(true);
 	ptree myTree;

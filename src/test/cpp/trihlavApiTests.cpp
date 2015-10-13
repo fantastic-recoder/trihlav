@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(testUTimestampMemLayout) {
 
 BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
     path myTestCfgFile(unique_path());
-    string myTestDtaPth=myTestCfgFile.string();
+    string myTestDtaPth=myTestCfgFile.native();
     BOOST_LOG_TRIVIAL(debug) << "Test data location: '" << myTestDtaPth <<"'.";
     YubikoOtpKeyConfig myTestCfg0(myTestDtaPth);
     myTestCfg0.setPrivateId("010203040506");
@@ -158,6 +158,8 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
     BOOST_REQUIRE(myTestCfg0.getCrc()               ==myTestCfg1.getCrc()               );
     BOOST_REQUIRE(myTestCfg0.getRandom()            ==myTestCfg1.getRandom()            );
     BOOST_REQUIRE(myTestCfg0.getUseCounter()        ==myTestCfg1.getUseCounter()        );
+
+    remove(myTestCfgFile);
 }
 
 
