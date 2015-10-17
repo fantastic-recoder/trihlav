@@ -40,8 +40,23 @@ IF(DOXYGEN_FOUND)
 	ENDIF()
 	INSTALL( DIRECTORY ${CMAKE_BINARY_DIR}/doc/ DESTINATION /usr/share/doc/packages/trihlav-${PROJECT_VERSION} )
 ENDIF(DOXYGEN_FOUND)
+################################################################################
 
-###############################################################################
+################################################################################
+#
+# Git build path
+#
+find_package(Git)
+if(GIT_FOUND)
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} describe --match build
+            OUTPUT_VARIABLE DESCRIBE_BUILD
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+    string(REGEX MATCH "[0-9]+" BUILD_NUMBER ${DESCRIBE_BUILD})
+endif()
+################################################################################
+
+################################################################################
 #
 # C++11
 #

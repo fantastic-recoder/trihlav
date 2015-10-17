@@ -161,5 +161,9 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
     remove(myTestCfgFile);
 }
 
+BOOST_AUTO_TEST_CASE(testKeyManager) {
+	BOOST_LOG_TRIVIAL(debug) << "<-- testKeyManager";
+	KeyManager myKMan(uni);
+}
 
 BOOST_AUTO_TEST_SUITE_END()
