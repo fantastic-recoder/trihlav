@@ -1,5 +1,7 @@
 ###############################################################################
+#
 # Trihlav auth server main directory
+#
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 IF(POLICY CMP0048)
    CMAKE_POLICY(SET CMP0048 NEW)
@@ -8,7 +10,9 @@ PROJECT(trihlavsrv VERSION 0.0.1)
 ###############################################################################
 
 ###############################################################################
+#
 # Boost & threads
+#
 #SET(Boost_USE_STATIC_LIBS       ON) # only find static libs
 SET(Boost_USE_MULTITHREADED      ON)
 SET(Boost_USE_STATIC_RUNTIME    OFF)
@@ -19,7 +23,9 @@ ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
 ###############################################################################
 
 ###############################################################################
-# add a target to generate API documentation with Doxygen
+#
+# Add a target to generate API documentation with Doxygen
+#
 FIND_PACKAGE(Doxygen)
 IF(DOXYGEN_FOUND)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
@@ -36,12 +42,16 @@ IF(DOXYGEN_FOUND)
 ENDIF(DOXYGEN_FOUND)
 
 ###############################################################################
+#
 # C++11
+#
 FIND_LIBRARY(YUBIKEY_LIB yubikey /usr/lib64 /usr/lib )
 ###############################################################################
 
 ###############################################################################
+#
 # C++11
+#
 IF (CMAKE_VERSION VERSION_LESS "3.1")
   IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     SET (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
@@ -52,12 +62,16 @@ ENDIF ()
 ###############################################################################
 
 ###############################################################################
+#
 # Global Unit Testing
+#
 ENABLE_TESTING()
 ###############################################################################
 
 ###############################################################################
+#
 # Start CPack
+#
 SET(CPACK_GENERATOR "RPM")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Trihlav Authentification server")
 SET(CPACK_PACKAGE_VENDOR "Me, myself, and I")
@@ -88,10 +102,12 @@ INCLUDE(CPack)
 ###############################################################################
 
 ###############################################################################
+#
 # Wt toolkit
+#
 FIND_PACKAGE( Wt REQUIRED )
 SET (WT_CONNECTOR "wtfcgi" CACHE STRING "Connector used (wthttp or wtfcgi)")
-# end Wt
+#
 ###############################################################################
 
 ADD_SUBDIRECTORY(src/main/cpp/trihlavSrv)
