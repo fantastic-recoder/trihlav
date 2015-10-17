@@ -3,8 +3,11 @@
 
 #include <yubikey.h>
 #include <string>
+#include <boost/filesystem.hpp>
 
 #include "trihlavUTimestamp.hpp"
+
+namespace bfs = ::boost::filesystem;
 
 namespace trihlavApi {
 
@@ -14,8 +17,8 @@ namespace trihlavApi {
 class YubikoOtpKeyConfig
 {
 private:
-    bool             itsChangedFlag;
-    std::string      itsFilename;
+    bool             itsChangedFlag; //< will be set internaly when something changed
+    bfs::path        itsFilename; //< where to store it
     yubikey_token_st itsToken;
     uint8_t          itsKey[YUBIKEY_KEY_SIZE];
 
@@ -27,7 +30,7 @@ public:
     /**
      * @brief YubikoOtpKeyConfig::YubikoOtpKeyConfig
      */
-    YubikoOtpKeyConfig(const std::string& pDataPathDir);
+    YubikoOtpKeyConfig(const bfs::path& pDataPathDir);
 
     /**
      * @brief getPrivateId access the private id config value
@@ -143,7 +146,7 @@ public:
      * @brief Getter.
      * @return The filename of the of the keys config file.
      */
-    const std::string& getFilename() const
+    const bfs::path& getFilename() const
     {
         return itsFilename;
     }

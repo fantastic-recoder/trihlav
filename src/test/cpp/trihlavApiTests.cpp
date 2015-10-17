@@ -124,10 +124,9 @@ BOOST_AUTO_TEST_CASE(testUTimestampMemLayout) {
 }
 
 BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
-    path myTestCfgFile(unique_path());
-    string myTestDtaPth=myTestCfgFile.native();
-    BOOST_LOG_TRIVIAL(debug) << "Test data location: '" << myTestDtaPth <<"'.";
-    YubikoOtpKeyConfig myTestCfg0(myTestDtaPth);
+    path myTestCfgFile(unique_path("%%%%-%%%%-%%%%-%%%%.json"));
+    BOOST_LOG_TRIVIAL(debug) << "Test data location: '" << myTestCfgFile <<"'.";
+    YubikoOtpKeyConfig myTestCfg0(myTestCfgFile);
     myTestCfg0.setPrivateId("010203040506");
     myTestCfg0.setTimestamp(UTimestamp(12345));
     myTestCfg0.setCounter(33);
@@ -150,7 +149,7 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 
 
     myTestCfg0.save();
-    YubikoOtpKeyConfig myTestCfg1(myTestDtaPth);
+    YubikoOtpKeyConfig myTestCfg1(myTestCfgFile);
     myTestCfg1.load();
     BOOST_REQUIRE(myTestCfg0.getPrivateId()         ==myTestCfg1.getPrivateId()         );
     BOOST_REQUIRE(myTestCfg0.getTimestamp().tstp_int==myTestCfg1.getTimestamp().tstp_int);

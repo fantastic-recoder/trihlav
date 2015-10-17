@@ -42,7 +42,7 @@ static const string K_NM_KEY("key");
  * Just init fields, does not loads the data.
  * @param pDataPathDir Where the config data will be stored.
  */
-YubikoOtpKeyConfig::YubikoOtpKeyConfig(const string& pPath2KeyKonfig) :
+YubikoOtpKeyConfig::YubikoOtpKeyConfig(const bfs::path& pPath2KeyKonfig) :
 		itsChangedFlag(false), itsFilename(pPath2KeyKonfig) {
 	memset(&itsToken, 0, sizeof(yubikey_token_st));
 }
@@ -79,25 +79,24 @@ void YubikoOtpKeyConfig::setPrivateId(const string &pPrivateId) {
 }
 
 const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
-	path myInFile(getFilename() + ".json");
 	std::string myRetVal;
 	if (pIsOut) {
-		if (exists(myInFile)) {
+		if (exists(getFilename())) {
 			throw new out_of_range(
-					(format("File \"%1\" already exists.") % myInFile).str());
+					(format("File \"%1\" already exists.") % getFilename()).str());
 		}
-		myRetVal = myInFile.string();
+		myRetVal = getFilename().native();
 	} else {
-		if (!exists(myInFile)) {
+		if (!exists(getFilename())) {
 			throw new out_of_range(
-					(format("Couldn't open save file \"%1\".") % myInFile).str());
+					(format("Couldn't open save file \"%1\".") % getFilename()).str());
 		}
-		uintmax_t myFSz = file_size(myInFile);
+		uintmax_t myFSz = file_size(getFilename());
 		if (myFSz > K_MX_KEY_FILE_SZ) {
 			throw new out_of_range(
-					(format("File \"%\" is too big: %.") % myInFile % myFSz).str());
+					(format("File \"%\" is too big: %.") % getFilename() % myFSz).str());
 		}
-		myRetVal = canonical(myInFile).string();
+		myRetVal = getFilename().native();
 	}
 	return myRetVal;
 }
