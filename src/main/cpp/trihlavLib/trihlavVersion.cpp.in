@@ -11,10 +11,10 @@
 
 using namespace std;
 
-namespace trihlav {
+namespace trihlavApi {
 
-string Version::getVersion() {
-	return "@DESCRIBE_BUILD@";
+const string Version::getVersion() {
+	return "@GIT_SHA1@";
 }
 
 } /* namespace trihlav */

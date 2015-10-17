@@ -6,6 +6,7 @@
 
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
 
 using namespace std;
 using namespace trihlavApi;
@@ -163,7 +164,7 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 
 BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_LOG_TRIVIAL(debug) << "<-- testKeyManager";
-	KeyManager myKMan(uni);
+	KeyManager myKMan(unique_path("/tmp/%%%%-%%%%-%%%%-%%%%"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

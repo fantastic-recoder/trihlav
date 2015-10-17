@@ -8,16 +8,18 @@
 #ifndef TRIHLAVVERSION_HPP_
 #define TRIHLAVVERSION_HPP_
 
-namespace trihlav {
+#include <boost/filesystem.hpp>
+
+namespace trihlavApi {
 
 class Version {
 public:
-	Version(){}
+	Version( const boost::filesystem::path& ){}
 	virtual ~Version(){}
-	std::string getVersion() const;
+	static const std::string getVersion();
 };
 
-} /* namespace trihlav */
+} /* namespace trihlavApi */
 
 #endif /* TRIHLAVVERSION_HPP_ */
 

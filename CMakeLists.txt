@@ -7,6 +7,8 @@ IF(POLICY CMP0048)
    CMAKE_POLICY(SET CMP0048 NEW)
 ENDIF(POLICY CMP0048)
 PROJECT(trihlavsrv VERSION 0.0.1)
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cmake")
+INCLUDE(GetGitRevisionDescription)
 ###############################################################################
 
 ###############################################################################
@@ -40,20 +42,6 @@ IF(DOXYGEN_FOUND)
 	ENDIF()
 	INSTALL( DIRECTORY ${CMAKE_BINARY_DIR}/doc/ DESTINATION /usr/share/doc/packages/trihlav-${PROJECT_VERSION} )
 ENDIF(DOXYGEN_FOUND)
-################################################################################
-
-################################################################################
-#
-# Git build path
-#
-find_package(Git)
-if(GIT_FOUND)
-    execute_process(
-            COMMAND ${GIT_EXECUTABLE} describe --match build
-            OUTPUT_VARIABLE DESCRIBE_BUILD
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(REGEX MATCH "[0-9]+" BUILD_NUMBER ${DESCRIBE_BUILD})
-endif()
 ################################################################################
 
 ################################################################################
