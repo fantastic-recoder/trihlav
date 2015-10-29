@@ -9,7 +9,13 @@
 
 namespace trihlavApi {
 
-KeyManager::KeyManager(const boost::filesystem::path& pDir) {
+/**
+ *  @param pDir The directory where to store the key configuration data.
+ */
+KeyManager::KeyManager(const boost::filesystem::path& pDir) :
+		itsInitializedFlag(false),
+		itsConfigDir(pDir) {
+
 	// TODO Auto-generated constructor stub
 
 }

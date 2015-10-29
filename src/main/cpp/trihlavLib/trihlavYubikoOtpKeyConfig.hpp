@@ -3,6 +3,7 @@
 
 #include <yubikey.h>
 #include <string>
+#include <boost/array.hpp>
 #include <boost/filesystem.hpp>
 
 #include "trihlavUTimestamp.hpp"
@@ -17,6 +18,7 @@ namespace trihlavApi {
 class YubikoOtpKeyConfig
 {
 private:
+	std::string      itsPrefix;
     bool             itsChangedFlag; //< will be set internaly when something changed
     bfs::path        itsFilename; //< where to store it
     yubikey_token_st itsToken;
@@ -165,6 +167,14 @@ public:
         return itsToken;
     }
 
+	const std::string& getPrefix() const {
+		return itsPrefix;
+	}
+
+protected:
+	void setPrefix(const std::string& prefix) {
+		this->itsPrefix = prefix;
+	}
 };
 
 } // end namespace
