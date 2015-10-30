@@ -11,6 +11,8 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cmake")
 INCLUDE(GetGitRevisionDescription)
 ###############################################################################
 
+FIND_PACKAGE (Threads)
+
 ###############################################################################
 #
 # Boost & threads
@@ -18,8 +20,7 @@ INCLUDE(GetGitRevisionDescription)
 #SET(Boost_USE_STATIC_LIBS       ON) # only find static libs
 SET(Boost_USE_MULTITHREADED      ON)
 SET(Boost_USE_STATIC_RUNTIME    OFF)
-FIND_PACKAGE(Boost 1.54.0 COMPONENTS date_time filesystem system unit_test_framework log REQUIRED)
-FIND_PACKAGE (Threads)
+FIND_PACKAGE(Boost 1.54.0 COMPONENTS  log log_setup date_time filesystem system unit_test_framework thread REQUIRED)
 ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
 ###############################################################################

@@ -12,6 +12,9 @@
 
 namespace trihlavApi {
 
+/**
+ * Manage key operations, fe. their persistence.
+ */
 class KeyManager {
 	bool itsInitializedFlag;
 	boost::filesystem::path itsConfigDir;
@@ -21,17 +24,12 @@ public:
 
 	virtual ~KeyManager();
 
-	/**
-	 * @return (getter) current connection directory.
-	 */
-	const boost::filesystem::path& getConfigDir() const {
-		return itsConfigDir;
-	}
+	const boost::filesystem::path& getConfigDir() const;
 
 	/**
 	 * Are all internal resources ready.
 	 */
-	const bool isRequired() const {
+	const bool isInitialized() const {
 		return itsInitializedFlag;
 	}
 };
