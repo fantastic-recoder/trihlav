@@ -26,11 +26,15 @@ namespace keywords = boost::log::keywords;
 namespace src      = boost::log::sources;
 
 struct TrihlavApiTestsGlobalFixture {
+	/**
+	 * Tear up. Called beforeall. Sets up logging.
+	 */
 	TrihlavApiTestsGlobalFixture() {
+		BOOST_LOG_NAMED_SCOPE("TrihlavApiTestsGlobalFixture");
 		boost::log::add_common_attributes();
 		boost::shared_ptr< boost::log::core > p_core = boost::log::core::get();
 		p_core->add_global_attribute("Scope",attrs::named_scope());
-		 /* log formatter:
+		    /* log formatter:
 		     * [TimeStamp] [ThreadId] [Severity Level] [Scope] Log message
 		     */
 		    auto fmtTimeStamp = boost::log::expressions::
@@ -44,7 +48,7 @@ struct TrihlavApiTestsGlobalFixture {
 		        boost::log::keywords::iteration = boost::log::expressions::reverse,
 		        boost::log::keywords::depth = 2);
 		    boost::log::formatter logFmt =
-		        boost::log::expressions::format("[%1%] (%2%) [%3%] [%4%] %5%")
+		        boost::log::expressions::format("[%1%] (%2%) [%3% \t] [%4%] %5%")
 		        % fmtTimeStamp % fmtThreadId % fmtSeverity % fmtScope
 		        % boost::log::expressions::smessage;
 
@@ -53,7 +57,14 @@ struct TrihlavApiTestsGlobalFixture {
 		    consoleSink->set_formatter(logFmt);
 		BOOST_LOG_TRIVIAL(info)<< "global setup ok";
 	}
-	~TrihlavApiTestsGlobalFixture() {BOOST_LOG_TRIVIAL(info) << "global teardown\n";}
+
+	/**
+	 * Called on tear down.
+	 */
+	~TrihlavApiTestsGlobalFixture() {
+		BOOST_LOG_NAMED_SCOPE("~TrihlavApiTestsGlobalFixture");
+		BOOST_LOG_TRIVIAL(info) << "global teardown\n";
+	}
 };
 
 
@@ -65,6 +76,7 @@ BOOST_GLOBAL_FIXTURE( TrihlavApiTestsGlobalFixture)
 
 
 inline void logDebug_token(const yubikey_token_st& pToken) {
+	BOOST_LOG_NAMED_SCOPE("logDebug_token");
 	std::string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
 	yubikey_hex_encode(&myUid[0], reinterpret_cast<const char*>(&pToken.uid),
 			YUBIKEY_UID_SIZE);
@@ -101,7 +113,7 @@ BOOST_AUTO_TEST_CASE( testHexToString ) {
  * @return void
  */
 BOOST_AUTO_TEST_CASE(testGenerateAndParse) {
-	//BOOST_LOG_NAMED_SCOPE("testGenerateAndParse");
+	BOOST_LOG_NAMED_SCOPE("testGenerateAndParse");
 	/* Decrypt TOKEN using KEY and store output in OUT structure.  Note
 	 that there is no error checking whether the output data is valid or
 	 not, use yubikey_check_* for that. */
