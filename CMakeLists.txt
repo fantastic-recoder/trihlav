@@ -8,6 +8,7 @@ IF(POLICY CMP0048)
 ENDIF(POLICY CMP0048)
 PROJECT(trihlavsrv VERSION 0.0.1)
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cmake")
+
 INCLUDE(GetGitRevisionDescription)
 ###############################################################################
 

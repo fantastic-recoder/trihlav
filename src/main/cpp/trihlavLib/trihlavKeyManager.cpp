@@ -9,6 +9,9 @@
 #include <boost/log/attributes.hpp>
 
 #include "trihlavKeyManager.hpp"
+#include "trihlavFailedCreateConfigDir.hpp"
+
+using namespace  boost::filesystem;
 
 namespace trihlavApi {
 
@@ -29,8 +32,18 @@ KeyManager::KeyManager(const boost::filesystem::path& pDir) :
  */
 const boost::filesystem::path&
 	KeyManager::getConfigDir() const {
+        BOOST_LOG_NAMED_SCOPE("getConfigDir");
 	if(!isInitialized()) {
+        if(exists(getConfigDir()))  {
+            const perms &myPerms = status(getConfigDir()).permissions();
+            if(!myPerms & perms::owner_write){
 
+           } else {
+                if(!create_directories(getConfigDir())) {
+                    throw new FailedCreateConfigDir(getConfigDir());
+                }
+            }
+        }
 	}
 	return itsConfigDir;
 }
