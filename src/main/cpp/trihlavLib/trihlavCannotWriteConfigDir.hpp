@@ -2,15 +2,15 @@
 // Created by grobap on 05.11.15.
 //
 
-#ifndef TRIHLAV_FAILEDCREATECONFIGDIR_HPP_
-#define TRIHLAV_FAILEDCREATECONFIGDIR_HPP_
+#ifndef TRIHLAV_CANNOTWRITECONFIGDIR_HPP_
+#define TRIHLAV_CANNOTWRITECONFIGDIR_HPP_
 
 #include <stdexcept>
 #include <boost/filesystem/path.hpp>
 
 namespace trihlavApi {
 
-    class FailedCreateConfigDir  : virtual public std::invalid_argument {
+    class CannotWriteConfigDir  : virtual public std::invalid_argument {
     private:
         boost::filesystem::path itsConfigDir;
         std::string             itsMsg;
@@ -24,9 +24,9 @@ namespace trihlavApi {
         }
         const char* what() const throw();
     public:
-        FailedCreateConfigDir(const boost::filesystem::path& pConfigDir);
+        CannotWriteConfigDir(const boost::filesystem::path& pConfigDir);
     };
 
 }
 
-#endif //TRIHLAVSRV_FAILEDCREATECONFIGDIR_H
+#endif //TRIHLAV_CANNOTWRITECONFIGDIR_HPP_

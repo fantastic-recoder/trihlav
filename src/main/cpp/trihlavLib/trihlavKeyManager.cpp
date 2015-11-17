@@ -5,13 +5,16 @@
  *      Author: grobap
  */
 
+#include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 
+
 #include "trihlavKeyManager.hpp"
 #include "trihlavFailedCreateConfigDir.hpp"
+#include "trihlavCannotWriteConfigDir.hpp"
 
-using namespace  boost::filesystem;
+using namespace boost::filesystem;
 
 namespace trihlavApi {
 
@@ -19,9 +22,9 @@ namespace trihlavApi {
  *  @param pDir The directory where to store the key configuration data.
  */
 KeyManager::KeyManager(const boost::filesystem::path& pDir) :
-		itsInitializedFlag(false),
-		itsConfigDir(pDir) {
-	BOOST_LOG_NAMED_SCOPE ("KeyManager::KeyManager");
+		itsInitializedFlag(false), itsConfigDir(pDir) {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::KeyManager");
+	BOOST_LOG_TRIVIAL(debug)<< "C'tor from config directory is ok config dir: "<< itsConfigDir << ".";
 }
 
 /**
@@ -31,19 +34,24 @@ KeyManager::KeyManager(const boost::filesystem::path& pDir) :
  * @return (getter) current connection directory.
  */
 const boost::filesystem::path&
-	KeyManager::getConfigDir() const {
-        BOOST_LOG_NAMED_SCOPE("getConfigDir");
-	if(!isInitialized()) {
-        if(exists(getConfigDir()))  {
-            const perms &myPerms = status(getConfigDir()).permissions();
-            if(!myPerms & perms::owner_write){
-
-           } else {
-                if(!create_directories(getConfigDir())) {
-                    throw new FailedCreateConfigDir(getConfigDir());
-                }
-            }
-        }
+KeyManager::getConfigDir() {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::getConfigDir()");
+	if (!isInitialized()) {
+		BOOST_LOG_TRIVIAL(debug)<< "Checking config dir " << itsConfigDir << ".";
+		if(exists(itsConfigDir)) {
+			const perms &myPerms = status(getConfigDir()).permissions();
+			if(!myPerms & perms::owner_write) {
+				throw new CannotWriteConfigDir(itsConfigDir);
+			}
+		} else {
+			BOOST_LOG_TRIVIAL(debug)<< "Creating config dir " << itsConfigDir << ".";
+			if(!create_directories(itsConfigDir)) {
+				throw new FailedCreateConfigDir(itsConfigDir);
+			}
+		}
+		itsInitializedFlag=true;
+	} else {
+		BOOST_LOG_TRIVIAL(debug)<< "Config dir was already initialized.";
 	}
 	return itsConfigDir;
 }

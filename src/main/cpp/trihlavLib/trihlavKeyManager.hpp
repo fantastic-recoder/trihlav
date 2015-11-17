@@ -24,7 +24,7 @@ public:
 
 	virtual ~KeyManager();
 
-	const boost::filesystem::path& getConfigDir() const;
+	const boost::filesystem::path& getConfigDir();
 
 	/**
 	 * Are all internal resources ready.

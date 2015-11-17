@@ -3,7 +3,11 @@
 #include <exception>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+
+#include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/format.hpp>
@@ -45,6 +49,7 @@ static const string K_NM_KEY("key");
 YubikoOtpKeyConfig::YubikoOtpKeyConfig(const bfs::path& pPath2KeyKonfig) :
 		itsChangedFlag(false), itsFilename(pPath2KeyKonfig) {
 	memset(&itsToken, 0, sizeof(yubikey_token_st));
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
 }
 
 /**
@@ -53,6 +58,7 @@ YubikoOtpKeyConfig::YubikoOtpKeyConfig(const bfs::path& pPath2KeyKonfig) :
  * @return Hex-encoded string representing the private id Yubikey token part.
  */
 const string YubikoOtpKeyConfig::getPrivateId() const {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::getPrivateId");
 	string myRetVal(K_YBK_PRIVATE_ID_LEN, '\0');
 	yubikey_hex_encode(&myRetVal[0],
 			reinterpret_cast<const char*>(&itsToken.uid), YUBIKEY_UID_SIZE);
@@ -65,6 +71,7 @@ const string YubikoOtpKeyConfig::getPrivateId() const {
  * @param pPrivateId Hex-encoded string representing the private id Yubikey token part.
  */
 void YubikoOtpKeyConfig::setPrivateId(const string &pPrivateId) {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::setPrivateId");
 	string myPrivateId(pPrivateId);
 	trim(myPrivateId);
 	if (myPrivateId.size() != K_YBK_PRIVATE_ID_LEN) {
@@ -79,6 +86,7 @@ void YubikoOtpKeyConfig::setPrivateId(const string &pPrivateId) {
 }
 
 const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkFileName");
 	std::string myRetVal;
 	if (pIsOut) {
 		if (exists(getFilename())) {
@@ -102,6 +110,7 @@ const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 }
 
 void YubikoOtpKeyConfig::load() {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::load");
 	const string myInFile = checkFileName(false);
 	ptree myTree;
 	read_json(myInFile, myTree);
@@ -121,6 +130,7 @@ void YubikoOtpKeyConfig::load() {
  * constructor YubikoOtpKeyConfig::YubikoOtpKeyConfig(const string& )
  */
 void YubikoOtpKeyConfig::save() {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::save");
 	const string myOutFile = checkFileName(true);
 	ptree myTree;
 	myTree.put(K_NM_DOC_NM + K_NM_PRIV_ID /*--->*/, getPrivateId());
@@ -134,12 +144,14 @@ void YubikoOtpKeyConfig::save() {
 }
 
 YubikoOtpKeyConfig::~YubikoOtpKeyConfig() {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::~YubikoOtpKeyConfig");
 	if (itsChangedFlag) {
 		save();
 	}
 }
 
 void YubikoOtpKeyConfig::setFilename(const string &value) {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::setFilename");
 	itsFilename = value;
 }
 

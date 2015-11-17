@@ -20,10 +20,10 @@ using namespace trihlavApi;
 using namespace boost;
 using namespace boost::filesystem;
 
-namespace attrs    = boost::log::attributes;
-namespace expr     = boost::log::expressions;
+namespace attrs = boost::log::attributes;
+namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
-namespace src      = boost::log::sources;
+namespace src = boost::log::sources;
 
 struct TrihlavApiTestsGlobalFixture {
 	/**
@@ -32,29 +32,30 @@ struct TrihlavApiTestsGlobalFixture {
 	TrihlavApiTestsGlobalFixture() {
 		BOOST_LOG_NAMED_SCOPE("TrihlavApiTestsGlobalFixture");
 		boost::log::add_common_attributes();
-		boost::shared_ptr< boost::log::core > p_core = boost::log::core::get();
-		p_core->add_global_attribute("Scope",attrs::named_scope());
-		    /* log formatter:
-		     * [TimeStamp] [ThreadId] [Severity Level] [Scope] Log message
-		     */
-		    auto fmtTimeStamp = boost::log::expressions::
-		        format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f");
-		    auto fmtThreadId = boost::log::expressions::
-		        attr<boost::log::attributes::current_thread_id::value_type>("ThreadID");
-		    auto fmtSeverity = boost::log::expressions::
-		        attr<boost::log::trivial::severity_level>("Severity");
-		    auto fmtScope = boost::log::expressions::format_named_scope("Scope",
-		        boost::log::keywords::format = "%n",
-		        boost::log::keywords::iteration = boost::log::expressions::reverse,
-		        boost::log::keywords::depth = 2);
-		    boost::log::formatter logFmt =
-		        boost::log::expressions::format("[%1%] (%2%) [%3% \t] [%4%] %5%")
-		        % fmtTimeStamp % fmtThreadId % fmtSeverity % fmtScope
-		        % boost::log::expressions::smessage;
+		boost::shared_ptr<boost::log::core> p_core = boost::log::core::get();
+		p_core->add_global_attribute("Scope", attrs::named_scope());
+		/* log formatter:
+		 * [TimeStamp] [ThreadId] [Severity Level] [Scope] Log message
+		 */
+		auto fmtTimeStamp = boost::log::expressions::format_date_time<
+				boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f");
+		auto fmtThreadId = boost::log::expressions::attr<
+				boost::log::attributes::current_thread_id::value_type>(
+				"ThreadID");
+		auto fmtSeverity = boost::log::expressions::attr<
+				boost::log::trivial::severity_level>("Severity");
+		auto fmtScope = boost::log::expressions::format_named_scope("Scope",
+				boost::log::keywords::format = "%n",
+				boost::log::keywords::iteration =
+						boost::log::expressions::reverse,
+				boost::log::keywords::depth = 2);
+		boost::log::formatter logFmt = boost::log::expressions::format(
+				"[%1%] (%2%) [%3% \t] [%4%] %5%") % fmtTimeStamp % fmtThreadId
+				% fmtSeverity % fmtScope % boost::log::expressions::smessage;
 
-		    /* console sink */
-		    auto consoleSink = boost::log::add_console_log(std::clog);
-		    consoleSink->set_formatter(logFmt);
+		/* console sink */
+		auto consoleSink = boost::log::add_console_log(std::clog);
+		consoleSink->set_formatter(logFmt);
 		BOOST_LOG_TRIVIAL(info)<< "global setup ok";
 	}
 
@@ -67,19 +68,17 @@ struct TrihlavApiTestsGlobalFixture {
 	}
 };
 
-
 #define BOOST_TEST_MAIN
 #define BOOST_REQUIRE_MODULE trihlavApiTests
 #include <boost/test/included/unit_test.hpp>
 
 BOOST_GLOBAL_FIXTURE( TrihlavApiTestsGlobalFixture)
 
-
 inline void logDebug_token(const yubikey_token_st& pToken) {
 	BOOST_LOG_NAMED_SCOPE("logDebug_token");
 	std::string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
 	yubikey_hex_encode(&myUid[0], reinterpret_cast<const char*>(&pToken.uid),
-			YUBIKEY_UID_SIZE);
+	YUBIKEY_UID_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "yubikey_token_st:{";
 	BOOST_LOG_TRIVIAL(debug)<< "   uid  :\""<< myUid.c_str() << "\"";
 	BOOST_LOG_TRIVIAL(debug)<< "   ctr  :\""<< int(pToken.ctr) << "\"";
@@ -103,7 +102,8 @@ BOOST_AUTO_TEST_CASE( testHexToString ) {
 	std::string myTest0HexEncoded(K_TEST0_SIZE * 2 + 1, ' ');
 	const std::string K_EXPECTED("7175616e74756d\0", K_TEST0_SIZE * 2 + 1);
 	yubikey_hex_encode(&myTest0HexEncoded[0], K_TEST0, K_TEST0_SIZE);
-	BOOST_LOG_TRIVIAL(debug)<< "Encoded \""<<K_TEST0<<"\" is \""<<myTest0HexEncoded.c_str() <<"\"";
+	BOOST_LOG_TRIVIAL(debug)<< "Encoded \""<<K_TEST0<<"\" is \""
+	<<myTest0HexEncoded.c_str() <<"\"";
 	BOOST_REQUIRE(myTest0HexEncoded == K_EXPECTED);
 	BOOST_LOG_TRIVIAL(debug)<< "testHexToString() ok";
 }
@@ -154,8 +154,7 @@ BOOST_AUTO_TEST_CASE(testGenerateAndParse) {
 	YUBIKEY_KEY_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
 	BOOST_REQUIRE_MESSAGE(
-			yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)),
-			"CRC failed!");
+	yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)), "CRC failed!");
 	yubikey_generate(&myToken, myKey, myOtp1);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated yubikey OTP (1) "<<myOtp1;
 	BOOST_REQUIRE_MESSAGE(strncmp(myOtp0,myOtp1,YUBIKEY_OTP_SIZE)==0,
@@ -217,16 +216,17 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 
 BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManager");
-	KeyManager myKMan(unique_path("/tmp/%%%%-%%%%-%%%%-%%%%"));
+	KeyManager myKMan(unique_path("/tmp/trihlav-%%%%-%%%%-%%%%-%%%%"));
 	BOOST_LOG_TRIVIAL(debug)<< "Test lazy init. only first getter will cause"
-	"initalization";
+	" initalization";
 	BOOST_REQUIRE(!myKMan.isInitialized());
-	const path myKManPath = myKMan.getConfigDir();
+	const path& myKManPath = myKMan.getConfigDir();
 	BOOST_LOG_TRIVIAL(debug)<< "Got config directory \"" << myKManPath << "\","
 	" now we should be initialized";
 	BOOST_REQUIRE(myKMan.isInitialized());
 	BOOST_REQUIRE(exists(myKManPath));
-	BOOST_REQUIRE(remove(myKManPath));
+
+	BOOST_REQUIRE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager ok";
 }
 
