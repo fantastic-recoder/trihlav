@@ -8,7 +8,7 @@
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
-
+#include <boost/log/expressions.hpp>
 
 #include "trihlavKeyManager.hpp"
 #include "trihlavFailedCreateConfigDir.hpp"
@@ -29,7 +29,7 @@ KeyManager::KeyManager(const boost::filesystem::path& pDir) :
 
 /**
  * If the internal resources will be initialized in case they are not yet
- * initialized
+ * initialized.
  * ,
  * @return (getter) current connection directory.
  */

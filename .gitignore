@@ -5,6 +5,8 @@
 **/.project
 **/CMakeCache.txt
 **/cmake_install.cmake
+**/*~
+**/.pydevproject
 /CMakeLists.txt.user
 /CPackConfig.cmake
 /CPackSourceConfig.cmake
