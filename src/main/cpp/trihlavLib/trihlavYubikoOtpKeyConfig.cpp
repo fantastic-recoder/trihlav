@@ -12,9 +12,9 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/format.hpp>
 
-#include "trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "yubikey.h"
-#include "trihlavWrongConfigValue.hpp"
+#include "trihlavLib/trihlavWrongConfigValue.hpp"
 
 using namespace std;
 using namespace boost;

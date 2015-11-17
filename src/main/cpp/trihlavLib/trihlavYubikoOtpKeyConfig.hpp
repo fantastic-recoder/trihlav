@@ -1,12 +1,12 @@
-#ifndef YUSERCONFIG_HPP
-#define YUSERCONFIG_HPP
+#ifndef TRIHLAV_YubikoOtpKeyConfig_HPP_
+#define TRIHLAV_YubikoOtpKeyConfig_HPP_
 
 #include <yubikey.h>
 #include <string>
 #include <boost/array.hpp>
 #include <boost/filesystem.hpp>
 
-#include "trihlavUTimestamp.hpp"
+#include "trihlavLib/trihlavUTimestamp.hpp"
 
 namespace bfs = ::boost::filesystem;
 
@@ -177,7 +177,7 @@ protected:
 	}
 };
 
-} // end namespace
+} // end namespace trihlavApi
 
 
-#endif // YUSERCONFIG_HPP
+#endif // TRIHLAV_YubikoOtpKeyConfig_HPP_

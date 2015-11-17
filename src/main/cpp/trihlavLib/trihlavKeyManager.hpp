@@ -5,8 +5,8 @@
  *      Author: grobap
  */
 
-#ifndef TRIHLAVKEYMANAGER_HPP_
-#define TRIHLAVKEYMANAGER_HPP_
+#ifndef TRIHLAV_KEY_MANAGER_HPP_
+#define TRIHLAV_KEY_MANAGER_HPP_
 
 #include <boost/filesystem.hpp>
 
@@ -36,4 +36,4 @@ public:
 
 } /* namespace trihlav */
 
-#endif /* TRIHLAVKEYMANAGER_HPP_ */
+#endif /* TRIHLAV_KEY_MANAGER_HPP_ */

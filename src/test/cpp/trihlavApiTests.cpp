@@ -11,9 +11,13 @@
 
 #include <boost/filesystem.hpp>
 
+#include "trihlavLib/trihlavYubikoOptKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+
+#include "trihlavTstYubikoOptKeyView.hpp"
 
 using namespace std;
 using namespace trihlavApi;
@@ -225,7 +229,8 @@ BOOST_AUTO_TEST_CASE(testKeyManager) {
 	" now we should be initialized";
 	BOOST_REQUIRE(myKMan.isInitialized());
 	BOOST_REQUIRE(exists(myKManPath));
-
+	TstYubikoOptKeyView myTstYubikoOptKeyView;
+	YubikoOptKeyPresenter myPresenter(myTstYubikoOptKeyView);
 	BOOST_REQUIRE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager ok";
 }
