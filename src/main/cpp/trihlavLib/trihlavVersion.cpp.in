@@ -11,7 +11,7 @@
 
 using namespace std;
 
-namespace trihlavApi {
+namespace trihlav {
 
 const string Version::getVersion() {
 	return "@GIT_SHA1@";

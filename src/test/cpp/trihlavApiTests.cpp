@@ -17,7 +17,6 @@
 
 #include <FakeIt/single_header/boost/fakeit.hpp>
 
-
 #include "trihlavLib/trihlavYubikoOptKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
@@ -31,7 +30,6 @@ using namespace trihlav;
 using namespace boost;
 using namespace boost::filesystem;
 using namespace fakeit;
-
 
 namespace attrs = boost::log::attributes;
 namespace expr = boost::log::expressions;
@@ -223,7 +221,7 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg ok";
 }
 
-string myPrefixStr;
+string itsPrefixStr;
 
 BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManager");
@@ -238,12 +236,14 @@ BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_REQUIRE(exists(myKManPath));
 	Mock<ILineEdit> myPrefixEdtMock;
 	When(Method(myPrefixEdtMock,setValue)).AlwaysDo([](string pVal) {
-		myPrefixStr=pVal;
+		itsPrefixStr=pVal;
 	});
 	Mock<IYubikoOptKeyView> myMockYubikoOptKeyView;
-//	When(ConstOverloadedMethod(myMockYubikoOptKeyView,getPrefix,IYubikoOptKeyView())).AlwaysReturn(myPrefixEdtMock);
-//	When(OverloadedMethod(myMockYubikoOptKeyView,getPrefix,IYubikoOptKeyView())).AlwaysReturn(myPrefixEdtMock);
-//	YubikoOptKeyPresenter myPresenter(myMockYubikoOptKeyView.get());
+	When(ConstOverloadedMethod( myMockYubikoOptKeyView, getPrefix, const ILineEdit& () )).AlwaysReturn(
+			myPrefixEdtMock.get());
+	When(OverloadedMethod( myMockYubikoOptKeyView, getPrefix, ILineEdit& () )).AlwaysReturn(
+			myPrefixEdtMock.get());
+	YubikoOptKeyPresenter myPresenter(myMockYubikoOptKeyView.get());
 	//verify(Method);
 	BOOST_REQUIRE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager ok";
