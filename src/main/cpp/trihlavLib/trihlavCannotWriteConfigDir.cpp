@@ -11,7 +11,7 @@ namespace {
     static const std::string K_FAILED_FORMAT_MSG("Failed to format the error message.");
 }
 
-namespace trihlavApi {
+namespace trihlav {
     using namespace std;
 
     CannotWriteConfigDir::CannotWriteConfigDir(const boost::filesystem::path &pConfigDir) : invalid_argument(

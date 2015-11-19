@@ -10,11 +10,13 @@
 
 #include <trihlavLib/trihlavILineEdit.hpp>
 
-namespace trihlavApi {
+namespace trihlav {
 
 class IYubikoOptKeyView {
+public:
 	virtual const ILineEdit& getPrefix() const=0;
 	virtual ILineEdit& getPrefix()=0;
+	virtual ~IYubikoOptKeyView()=0;
 };
 
 } /* namespace trihlavApi */

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace trihlavApi {
+namespace trihlav {
 
     /**
      * @param pPasswd

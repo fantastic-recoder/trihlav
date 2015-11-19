@@ -16,7 +16,7 @@
 
 using namespace boost::filesystem;
 
-namespace trihlavApi {
+namespace trihlav {
 
 /**
  *  @param pDir The directory where to store the key configuration data.

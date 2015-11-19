@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <boost/filesystem/path.hpp>
 
-namespace trihlavApi {
+namespace trihlav {
 
     class CannotWriteConfigDir  : virtual public std::invalid_argument {
     private:

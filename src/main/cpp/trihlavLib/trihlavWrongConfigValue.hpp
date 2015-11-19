@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace trihlavApi {
+namespace trihlav {
 
 
 class WrongConfigValue : virtual public std::invalid_argument

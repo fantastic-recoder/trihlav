@@ -8,7 +8,7 @@
 #ifndef TRIHLAV_YUBIKO_OPT_KEY_PRESENTER_HPP_
 #define TRIHLAV_YUBIKO_OPT_KEY_PRESENTER_HPP_
 
-namespace trihlavApi {
+namespace trihlav {
 
 class IYubikoOptKeyView;
 

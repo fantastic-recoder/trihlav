@@ -2,8 +2,7 @@
 
 include_directories(../../main/cpp)
 
-add_executable( trihlavApiTests trihlavApiTests.cpp 
-	trihlavTstYubikoOptKeyView.cpp trihlavTstLineEdit.cpp)
+add_executable( trihlavApiTests trihlavApiTests.cpp )
 
 add_test( NAME trihlavApiTests COMMAND trihlavApiTests )
 

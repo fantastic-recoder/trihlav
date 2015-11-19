@@ -10,7 +10,7 @@
 
 namespace bfs = ::boost::filesystem;
 
-namespace trihlavApi {
+namespace trihlav {
 
 /**
  * @brief Store, load and provide the APIs configuration.

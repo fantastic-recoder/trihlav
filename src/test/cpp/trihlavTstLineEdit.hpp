@@ -11,7 +11,7 @@
 #include <string>
 #include <trihlavLib/trihlavILineEdit.hpp>
 
-namespace trihlavApi {
+namespace trihlav {
 
 /**
  * A dummy/test implementation of a virtual line editor UI element.

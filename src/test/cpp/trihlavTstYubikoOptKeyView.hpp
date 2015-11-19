@@ -12,7 +12,7 @@
 
 #include "trihlavTstLineEdit.hpp"
 
-namespace trihlavApi {
+namespace trihlav {
 
 class TstYubikoOptKeyView: public IYubikoOptKeyView {
 	TstLineEdit itsPrefix;

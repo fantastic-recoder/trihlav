@@ -26,7 +26,7 @@ namespace {
 static const uintmax_t K_MX_KEY_FILE_SZ = 1024;
 }
 
-namespace trihlavApi {
+namespace trihlav {
 
 static const size_t K_YBK_PRIVATE_ID_LEN(YUBIKEY_UID_SIZE * 2);
 static const string K_NM_DOC_NM("yubikey.");

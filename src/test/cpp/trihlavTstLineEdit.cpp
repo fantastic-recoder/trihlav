@@ -7,7 +7,7 @@
 
 #include "trihlavTstLineEdit.hpp"
 
-namespace trihlavApi {
+namespace trihlav {
 
 TstLineEdit::~TstLineEdit() {
 	// TODO Auto-generated destructor stub

@@ -8,7 +8,7 @@
 #include "trihlavLib/trihlavYubikoOptKeyPresenter.hpp"
 #include "trihlavLib/trihlavIYubikoOptKeyView.hpp"
 
-namespace trihlavApi {
+namespace trihlav {
 
 YubikoOptKeyPresenter::YubikoOptKeyPresenter(IYubikoOptKeyView& pView ): itsView(pView) {
 	// TODO Auto-generated constructor stub

@@ -1,0 +1,3 @@
+[submodule "src/main/cpp/FakeIt"]
+	path = src/main/cpp/FakeIt
+	url = https://github.com/eranpeer/FakeIt.git

@@ -10,11 +10,13 @@
 
 #include <string>
 
-namespace trihlavApi {
+namespace trihlav {
 
 class ILineEdit {
+public:
 	virtual const std::string& getValue() const = 0;
 	virtual void setValue(const std::string& pVal) =0;
+	virtual ~ILineEdit()=0;
 };
 
 } /* namespace trihlavApi */

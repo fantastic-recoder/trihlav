@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace trihlavApi {
+namespace trihlav {
 
 static const string K_NO_REASON_SET("no-reason-set");
 static const string K_WRONG_SIZE("wrong size");

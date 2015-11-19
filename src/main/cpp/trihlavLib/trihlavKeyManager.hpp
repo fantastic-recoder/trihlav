@@ -10,7 +10,7 @@
 
 #include <boost/filesystem.hpp>
 
-namespace trihlavApi {
+namespace trihlav {
 
 /**
  * Manage key operations, fe. their persistence.

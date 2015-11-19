@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace trihlavApi {
+namespace trihlav {
 
 class YubikoOtpKeyConfig;
 

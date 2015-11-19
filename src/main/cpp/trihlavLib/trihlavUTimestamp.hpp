@@ -10,7 +10,7 @@
 
 #include <yubikey.h>
 
-namespace trihlavApi {
+namespace trihlav {
 
 	/**
 	 * Allow easier acces to Yubikeys timestamp.

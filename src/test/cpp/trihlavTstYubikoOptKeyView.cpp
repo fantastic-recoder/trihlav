@@ -7,7 +7,7 @@
 
 #include "trihlavTstYubikoOptKeyView.hpp"
 
-namespace trihlavApi {
+namespace trihlav {
 
 TstYubikoOptKeyView::~TstYubikoOptKeyView() {
 	// TODO Auto-generated destructor stub

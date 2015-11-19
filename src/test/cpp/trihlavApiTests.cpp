@@ -11,18 +11,27 @@
 
 #include <boost/filesystem.hpp>
 
+#define BOOST_TEST_MAIN
+#define BOOST_REQUIRE_MODULE trihlavApiTests
+#include <boost/test/included/unit_test.hpp>
+
+#include <FakeIt/single_header/boost/fakeit.hpp>
+
+
 #include "trihlavLib/trihlavYubikoOptKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
-
-#include "trihlavTstYubikoOptKeyView.hpp"
+#include "trihlavLib/trihlavILineEdit.hpp"
+#include "trihlavLib/trihlavIYubikoOptKeyView.hpp"
 
 using namespace std;
-using namespace trihlavApi;
+using namespace trihlav;
 using namespace boost;
 using namespace boost::filesystem;
+using namespace fakeit;
+
 
 namespace attrs = boost::log::attributes;
 namespace expr = boost::log::expressions;
@@ -72,11 +81,7 @@ struct TrihlavApiTestsGlobalFixture {
 	}
 };
 
-#define BOOST_TEST_MAIN
-#define BOOST_REQUIRE_MODULE trihlavApiTests
-#include <boost/test/included/unit_test.hpp>
-
-BOOST_GLOBAL_FIXTURE( TrihlavApiTestsGlobalFixture)
+BOOST_GLOBAL_FIXTURE(TrihlavApiTestsGlobalFixture)
 
 inline void logDebug_token(const yubikey_token_st& pToken) {
 	BOOST_LOG_NAMED_SCOPE("logDebug_token");
@@ -218,6 +223,8 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg ok";
 }
 
+string myPrefixStr;
+
 BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManager");
 	KeyManager myKMan(unique_path("/tmp/trihlav-%%%%-%%%%-%%%%-%%%%"));
@@ -229,8 +236,15 @@ BOOST_AUTO_TEST_CASE(testKeyManager) {
 	" now we should be initialized";
 	BOOST_REQUIRE(myKMan.isInitialized());
 	BOOST_REQUIRE(exists(myKManPath));
-	TstYubikoOptKeyView myTstYubikoOptKeyView;
-	YubikoOptKeyPresenter myPresenter(myTstYubikoOptKeyView);
+	Mock<ILineEdit> myPrefixEdtMock;
+	When(Method(myPrefixEdtMock,setValue)).AlwaysDo([](string pVal) {
+		myPrefixStr=pVal;
+	});
+	Mock<IYubikoOptKeyView> myMockYubikoOptKeyView;
+//	When(ConstOverloadedMethod(myMockYubikoOptKeyView,getPrefix,IYubikoOptKeyView())).AlwaysReturn(myPrefixEdtMock);
+//	When(OverloadedMethod(myMockYubikoOptKeyView,getPrefix,IYubikoOptKeyView())).AlwaysReturn(myPrefixEdtMock);
+//	YubikoOptKeyPresenter myPresenter(myMockYubikoOptKeyView.get());
+	//verify(Method);
 	BOOST_REQUIRE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager ok";
 }
