@@ -21,11 +21,11 @@ public:
 
 	virtual ~TstYubikoOptKeyView();
 
-	virtual const ILineEdit& getPrefix() const {
+	virtual const ILineEdit& getPublicIdentity() const {
 		return itsPrefix;
 	}
 
-	virtual ILineEdit& getPrefix() {
+	virtual ILineEdit& getPublicIdentity() {
 		return itsPrefix;
 	}
 };

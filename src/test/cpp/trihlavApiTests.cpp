@@ -22,7 +22,7 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
-#include "trihlavLib/trihlavILineEdit.hpp"
+#include "trihlavLib/trihlavIEdit.hpp"
 #include "trihlavLib/trihlavIYubikoOptKeyView.hpp"
 
 using namespace std;
@@ -234,14 +234,14 @@ BOOST_AUTO_TEST_CASE(testKeyManager) {
 	" now we should be initialized";
 	BOOST_REQUIRE(myKMan.isInitialized());
 	BOOST_REQUIRE(exists(myKManPath));
-	Mock<ILineEdit> myPrefixEdtMock;
+	Mock<IStrEdit> myPrefixEdtMock;
 	When(Method(myPrefixEdtMock,setValue)).AlwaysDo([](string pVal) {
 		itsPrefixStr=pVal;
 	});
 	Mock<IYubikoOptKeyView> myMockYubikoOptKeyView;
-	When(ConstOverloadedMethod( myMockYubikoOptKeyView, getPrefix, const ILineEdit& () )).AlwaysReturn(
+	When(ConstOverloadedMethod( myMockYubikoOptKeyView, getPublicIdentity, const IStrEdit& () )).AlwaysReturn(
 			myPrefixEdtMock.get());
-	When(OverloadedMethod( myMockYubikoOptKeyView, getPrefix, ILineEdit& () )).AlwaysReturn(
+	When(OverloadedMethod( myMockYubikoOptKeyView, getPublicIdentity, IStrEdit& () )).AlwaysReturn(
 			myPrefixEdtMock.get());
 	YubikoOptKeyPresenter myPresenter(myMockYubikoOptKeyView.get());
 	//verify(Method);
