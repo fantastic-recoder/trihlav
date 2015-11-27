@@ -23,7 +23,7 @@ public:
 
 	virtual const IStrEdit& getPrivateIdentity() const=0;
 	virtual IStrEdit& getPrivateIdentity()=0;
-
+/*
 	virtual const IStrEdit& getSecretKey() const=0;
 	virtual IStrEdit& getSecretKey()=0;
 
@@ -37,6 +37,7 @@ public:
 	virtual IButton&  getGenSecretKeyBtn() =0;
 
 	virtual ~IYubikoOptKeyView()=0;
+	*/
 };
 
 } /* namespace trihlavApi */

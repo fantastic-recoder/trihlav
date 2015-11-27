@@ -221,7 +221,9 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg ok";
 }
 
-string itsPrefixStr;
+string aPrivateIdStr;
+string aPublicIdStr;
+int aPublicIdLen=666;
 
 BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManager");
@@ -232,19 +234,36 @@ BOOST_AUTO_TEST_CASE(testKeyManager) {
 	const path& myKManPath = myKMan.getConfigDir();
 	BOOST_LOG_TRIVIAL(debug)<< "Got config directory \"" << myKManPath << "\","
 	" now we should be initialized";
+
 	BOOST_REQUIRE(myKMan.isInitialized());
 	BOOST_REQUIRE(exists(myKManPath));
-	Mock<IStrEdit> myPrefixEdtMock;
-	When(Method(myPrefixEdtMock,setValue)).AlwaysDo([](string pVal) {
-		itsPrefixStr=pVal;
+
+	Mock<IStrEdit> myPrivateIdStrEditMock;
+	Mock<IStrEdit> myPublicIdStrEditMock;
+	Mock<IEdit<int>> myPublicIdLenEditMock;
+
+	When(Method(myPrivateIdStrEditMock,setValue)).AlwaysDo([](const string& pVal) {
+		aPrivateIdStr=pVal;
+		BOOST_LOG_TRIVIAL(debug)<< "Priv id == \"" << aPrivateIdStr << "\".";
 	});
+
 	Mock<IYubikoOptKeyView> myMockYubikoOptKeyView;
 	When(ConstOverloadedMethod( myMockYubikoOptKeyView, getPublicIdentity, const IStrEdit& () )).AlwaysReturn(
-			myPrefixEdtMock.get());
+			myPublicIdStrEditMock.get());
 	When(OverloadedMethod( myMockYubikoOptKeyView, getPublicIdentity, IStrEdit& () )).AlwaysReturn(
-			myPrefixEdtMock.get());
+			myPublicIdStrEditMock.get());
+	When(ConstOverloadedMethod( myMockYubikoOptKeyView, getPrivateIdentity, const IStrEdit& () )).AlwaysReturn(
+			myPrivateIdStrEditMock.get());
+	When(OverloadedMethod( myMockYubikoOptKeyView, getPrivateIdentity, IStrEdit& () )).AlwaysReturn(
+			myPrivateIdStrEditMock.get());
+	When(ConstOverloadedMethod( myMockYubikoOptKeyView, getPublicIdentityLen, const IEdit<int>& () )).AlwaysReturn(
+			myPublicIdLenEditMock.get());
+	When(OverloadedMethod( myMockYubikoOptKeyView, getPublicIdentityLen, IEdit<int>& () )).AlwaysReturn(
+			myPublicIdLenEditMock.get());
+
 	YubikoOptKeyPresenter myPresenter(myMockYubikoOptKeyView.get());
-	//verify(Method);
+	Verify(Method(myPrivateIdStrEditMock,setValue)/*.Using("")*/).AtLeastOnce();
+	BOOST_REQUIRE(aPrivateIdStr.empty());
 	BOOST_REQUIRE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager ok";
 }
