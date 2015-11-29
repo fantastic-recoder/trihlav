@@ -9,7 +9,8 @@ INCLUDE_DIRECTORIES(..)
 ADD_LIBRARY(trihlavApi SHARED trihlavApi.cpp trihlavWrongConfigValue.cpp 
 	trihlavYubikoOtpKeyConfig.cpp
 		trihlavWrongConfigValue.cpp trihlavKeyManager.cpp trihlavVersion.cpp 
-		trihlavYubikoOptKeyPresenter.cpp
-		trihlavFailedCreateConfigDir.cpp trihlavCannotWriteConfigDir.cpp)
+		trihlavYubikoOtpKeyPresenter.cpp
+		trihlavFailedCreateConfigDir.cpp trihlavCannotWriteConfigDir.cpp
+		trihlavLog.cpp)
 
 INSTALL(TARGETS trihlavApi LIBRARY DESTINATION lib)

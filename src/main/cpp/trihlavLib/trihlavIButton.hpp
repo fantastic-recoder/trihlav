@@ -12,6 +12,7 @@
 
 namespace trihlav {
 	class IButton {
+	public:
 		virtual void setCallback( ICallback& pCallback)=0;
 		virtual ~IButton()=0;
 	};

@@ -10,13 +10,13 @@
 
 namespace trihlav {
 
-class IYubikoOptKeyView;
+class IYubikoOtpKeyView;
 
-class YubikoOptKeyPresenter {
-	IYubikoOptKeyView& itsView;
+class YubikoOtpKeyPresenter {
+	IYubikoOtpKeyView& itsView;
 public:
-	YubikoOptKeyPresenter(IYubikoOptKeyView& pView);
-	virtual ~YubikoOptKeyPresenter();
+	YubikoOtpKeyPresenter(IYubikoOtpKeyView& pView);
+	virtual ~YubikoOtpKeyPresenter();
 };
 
 } /* namespace trihlavApi */
