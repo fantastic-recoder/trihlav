@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(testGenerateAndParse) {
 			K_YBK_TKEN_SZ - sizeof(myToken.crc));
 	memcpy(&myTokenBack, &myToken, sizeof(myToken));
 	logDebug_token(myTokenBack);
-	char myOtp0[YUBIKEY_OTP_SIZE], myOtp1[YUBIKEY_OTP_SIZE];
+	char myOtp0[YUBIKEY_OTP_SIZE+1], myOtp1[YUBIKEY_OTP_SIZE+1];
 	yubikey_generate(&myToken, myKey, myOtp0);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated yubikey OTP (0) " << myOtp0;
 	yubikey_parse(reinterpret_cast<uint8_t*>(myOtp0), myKey, &myToken);
