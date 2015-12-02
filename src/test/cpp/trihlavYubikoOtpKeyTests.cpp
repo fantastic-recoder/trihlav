@@ -11,6 +11,7 @@
 #define BOOST_REQUIRE_MODULE trihlavYubikoOtpKeyTests
 #include <boost/test/included/unit_test.hpp>
 
+
 #include <FakeIt/single_header/boost/fakeit.hpp>
 
 #include "trihlavGlobalFixture.hpp"
@@ -28,8 +29,6 @@ using namespace boost;
 using namespace boost::filesystem;
 using namespace fakeit;
 
-BOOST_GLOBAL_FIXTURE(GlobalFixture)
-
 
 string thePrivateIdStr("666");
 string thePublicIdStr("666");
@@ -46,7 +45,9 @@ Mock<IButton>    myGenSecretKeyMock;
 Mock<IButton>    mySaveButtonMock;
 Mock<IButton>    myCancelButtonMock;
 
-BOOST_AUTO_TEST_SUITE(trihlavApiTestsSuit)
+BOOST_GLOBAL_FIXTURE(GlobalFixture);
+
+BOOST_AUTO_TEST_SUITE(trihlavYubikoOtpKeyTests)
 
 BOOST_AUTO_TEST_CASE(testKeyManager) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManager");

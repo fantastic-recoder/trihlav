@@ -34,8 +34,6 @@ namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 namespace src = boost::log::sources;
 
-BOOST_GLOBAL_FIXTURE(GlobalFixture)
-
 inline void logDebug_token(const yubikey_token_st& pToken) {
 	BOOST_LOG_NAMED_SCOPE("logDebug_token");
 	std::string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
@@ -51,6 +49,9 @@ inline void logDebug_token(const yubikey_token_st& pToken) {
 	BOOST_LOG_TRIVIAL(debug)<< "   crc  :\""<< int(pToken.crc) << "\"";
 	BOOST_LOG_TRIVIAL(debug)<< "}";
 }
+
+BOOST_GLOBAL_FIXTURE(GlobalFixture);
+
 
 BOOST_AUTO_TEST_SUITE(trihlavApiTestsSuit)
 
