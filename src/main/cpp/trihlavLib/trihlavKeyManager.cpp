@@ -19,12 +19,12 @@ using namespace boost::filesystem;
 namespace trihlav {
 
 /**
- *  @param pDir The directory where to store the key configuration data.
+ *  @param pConfigDir The directory where to store the key configuration data.
  */
-KeyManager::KeyManager(const boost::filesystem::path& pDir) :
-		itsInitializedFlag(false), itsConfigDir(pDir) {
+KeyManager::KeyManager(const boost::filesystem::path& pConfigDir) :
+		itsInitializedFlag(false), itsConfigDir(pConfigDir) {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::KeyManager");
-	BOOST_LOG_TRIVIAL(debug)<< "C'tor from config directory is ok config dir: "<< itsConfigDir << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "C'tor from config dir ok: "<< itsConfigDir << ".";
 }
 
 /**

@@ -36,108 +36,122 @@ string theSecretKeyStr("666");
 int thePublicIdLen=666;
 
 Mock<IStrEdit>   thePrivateIdEditMock;
-Mock<IStrEdit>   myPublicIdEditMock;
-Mock<IStrEdit>   mySecretKeyEditMock;
-Mock<IEdit<int>> myPublicIdLenEditMock;
-Mock<IButton>    myGenPrivateIdMock;
-Mock<IButton>    myGenPublicIdMock;
-Mock<IButton>    myGenSecretKeyMock;
-Mock<IButton>    mySaveButtonMock;
-Mock<IButton>    myCancelButtonMock;
+Mock<IStrEdit>   thePublicIdEditMock;
+Mock<IStrEdit>   theSecretKeyEditMock;
+Mock<IEdit<int>> thePublicIdLenEditMock;
+Mock<IButton>    theGenPrivateIdMock;
+Mock<IButton>    theGenPublicIdMock;
+Mock<IButton>    theGenSecretKeyMock;
+Mock<IButton>    theSaveButtonMock;
+Mock<IButton>    theCancelButtonMock;
+Mock<IYubikoOtpKeyView> theMockYubikoOtpKeyView;
 
-BOOST_GLOBAL_FIXTURE(GlobalFixture);
+class InitYoubikoUiMock : virtual public GlobalFixture {
+public:
+	InitYoubikoUiMock() : GlobalFixture() {
+		BOOST_LOG_NAMED_SCOPE("InitYoubikoUiMock");
+		When(Method(thePrivateIdEditMock,setValue)).AlwaysDo([](const string& pVal) {
+			thePrivateIdStr=pVal;
+			BOOST_LOG_TRIVIAL(debug)<< "Priv Id == \"" << thePrivateIdStr << "\".";
+		});
+
+		When(Method(thePublicIdEditMock,setValue)).AlwaysDo([](const string& pVal) {
+			thePublicIdStr=pVal;
+			BOOST_LOG_TRIVIAL(debug)<< "Publ Id == \"" << thePublicIdStr << "\".";
+		});
+
+		When(Method(theSecretKeyEditMock,setValue)).AlwaysDo([](const string& pVal) {
+			theSecretKeyStr =pVal;
+			BOOST_LOG_TRIVIAL(debug)<< "Sec Key == \"" << theSecretKeyStr << "\".";
+		});
+
+		When(Method(thePublicIdLenEditMock,setValue)).AlwaysDo([](const int& pVal) {
+			thePublicIdLen=pVal;
+			BOOST_LOG_TRIVIAL(debug)<< "Id Len == \"" << thePublicIdLen << "\".";
+		});
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getPublicId, const IStrEdit& () )).AlwaysReturn(
+				thePublicIdEditMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getPublicId, IStrEdit& () )).AlwaysReturn(
+				thePublicIdEditMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getPrivateId, const IStrEdit& () )).AlwaysReturn(
+				thePrivateIdEditMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getPrivateId, IStrEdit& () )).AlwaysReturn(
+				thePrivateIdEditMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getSecretKey, const IStrEdit& () )).AlwaysReturn(
+				theSecretKeyEditMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getSecretKey, IStrEdit& () )).AlwaysReturn(
+				theSecretKeyEditMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getPublicIdLen, const IEdit<int>& () )).AlwaysReturn(
+				thePublicIdLenEditMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getPublicIdLen, IEdit<int>& () )).AlwaysReturn(
+				thePublicIdLenEditMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getGenPublicIdentityBtn, const IButton& () )).AlwaysReturn(
+				theGenPublicIdMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getGenPublicIdentityBtn, IButton& () )).AlwaysReturn(
+				theGenPublicIdMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getGenPrivateIdentityBtn, const IButton& () )).AlwaysReturn(
+				theGenPrivateIdMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getGenPrivateIdentityBtn, IButton& () )).AlwaysReturn(
+				theGenPrivateIdMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getGenSecretKeyBtn, const IButton& () )).AlwaysReturn(
+				theGenSecretKeyMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getGenSecretKeyBtn, IButton& () )).AlwaysReturn(
+				theGenSecretKeyMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getCancelBtn, const IButton& () )).AlwaysReturn(
+				theCancelButtonMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getCancelBtn, IButton& () )).AlwaysReturn(
+				theCancelButtonMock.get());
+
+		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getSaveBtn, const IButton& () )).AlwaysReturn(
+				theSaveButtonMock.get());
+		When(OverloadedMethod( theMockYubikoOtpKeyView, getSaveBtn, IButton& () )).AlwaysReturn(
+				theSaveButtonMock.get());
+
+	}
+};
+
+BOOST_GLOBAL_FIXTURE(InitYoubikoUiMock);
 
 BOOST_AUTO_TEST_SUITE(trihlavYubikoOtpKeyTests)
 
-BOOST_AUTO_TEST_CASE(testKeyManager) {
-	BOOST_LOG_NAMED_SCOPE("testKeyManager");
-	KeyManager myKMan(unique_path("/tmp/trihlav-%%%%-%%%%-%%%%-%%%%"));
+BOOST_AUTO_TEST_CASE(testKeyManagerInitialisation) {
+	BOOST_LOG_NAMED_SCOPE("testKeyManagerInitialisation");
+	KeyManager myKMan(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
 	BOOST_LOG_TRIVIAL(debug)<< "Test lazy init. only first getter will cause"
-	" initalization";
+	" initialization";
 	BOOST_REQUIRE(!myKMan.isInitialized());
 	const path& myKManPath = myKMan.getConfigDir();
-	BOOST_LOG_TRIVIAL(debug)<< "Got config directory \"" << myKManPath << "\","
+	BOOST_LOG_TRIVIAL(debug)<< "Got config. directory \"" << myKManPath << "\","
 	" now we should be initialized";
 
 	BOOST_REQUIRE(myKMan.isInitialized());
+	BOOST_LOG_TRIVIAL(debug)<< "Does the configuration path exists?";
 	BOOST_REQUIRE(exists(myKManPath));
+	BOOST_LOG_TRIVIAL(debug)<< "Yes, it does.";
 
-	When(Method(thePrivateIdEditMock,setValue)).AlwaysDo([](const string& pVal) {
-		thePrivateIdStr=pVal;
-		BOOST_LOG_TRIVIAL(debug)<< "Priv Id == \"" << thePrivateIdStr << "\".";
-	});
-
-	When(Method(myPublicIdEditMock,setValue)).AlwaysDo([](const string& pVal) {
-		thePublicIdStr=pVal;
-		BOOST_LOG_TRIVIAL(debug)<< "Publ Id == \"" << thePublicIdStr << "\".";
-	});
-
-	When(Method(mySecretKeyEditMock,setValue)).AlwaysDo([](const string& pVal) {
-		theSecretKeyStr =pVal;
-		BOOST_LOG_TRIVIAL(debug)<< "Sec Key == \"" << theSecretKeyStr << "\".";
-	});
-
-	When(Method(myPublicIdLenEditMock,setValue)).AlwaysDo([](const int& pVal) {
-		thePublicIdLen=pVal;
-		BOOST_LOG_TRIVIAL(debug)<< "Id Len == \"" << thePublicIdLen << "\".";
-	});
-
-	Mock<IYubikoOtpKeyView> myMockYubikoOtpKeyView;
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getPublicId, const IStrEdit& () )).AlwaysReturn(
-			myPublicIdEditMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getPublicId, IStrEdit& () )).AlwaysReturn(
-			myPublicIdEditMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getPrivateId, const IStrEdit& () )).AlwaysReturn(
-			thePrivateIdEditMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getPrivateId, IStrEdit& () )).AlwaysReturn(
-			thePrivateIdEditMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getSecretKey, const IStrEdit& () )).AlwaysReturn(
-			mySecretKeyEditMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getSecretKey, IStrEdit& () )).AlwaysReturn(
-			mySecretKeyEditMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getPublicIdLen, const IEdit<int>& () )).AlwaysReturn(
-			myPublicIdLenEditMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getPublicIdLen, IEdit<int>& () )).AlwaysReturn(
-			myPublicIdLenEditMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getGenPublicIdentityBtn, const IButton& () )).AlwaysReturn(
-			myGenPublicIdMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getGenPublicIdentityBtn, IButton& () )).AlwaysReturn(
-			myGenPublicIdMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getGenPrivateIdentityBtn, const IButton& () )).AlwaysReturn(
-			myGenPrivateIdMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getGenPrivateIdentityBtn, IButton& () )).AlwaysReturn(
-			myGenPrivateIdMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getGenSecretKeyBtn, const IButton& () )).AlwaysReturn(
-			myGenSecretKeyMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getGenSecretKeyBtn, IButton& () )).AlwaysReturn(
-			myGenSecretKeyMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getCancelBtn, const IButton& () )).AlwaysReturn(
-			myCancelButtonMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getCancelBtn, IButton& () )).AlwaysReturn(
-			myCancelButtonMock.get());
-
-	When(ConstOverloadedMethod( myMockYubikoOtpKeyView, getSaveBtn, const IButton& () )).AlwaysReturn(
-			mySaveButtonMock.get());
-	When(OverloadedMethod( myMockYubikoOtpKeyView, getSaveBtn, IButton& () )).AlwaysReturn(
-			mySaveButtonMock.get());
-
-	YubikoOtpKeyPresenter myPresenter(myMockYubikoOtpKeyView.get());
+	YubikoOtpKeyPresenter myPresenter(theMockYubikoOtpKeyView.get());
 	// Method(thePrivateIdEditMock,setValue).Using("") does crash - why?
 	Verify(Method(thePrivateIdEditMock,setValue)).AtLeastOnce();
-	Verify(Method(myPublicIdEditMock,setValue)).AtLeastOnce();
-	Verify(Method(myPublicIdLenEditMock,setValue)).AtLeastOnce();
+	Verify(Method(thePublicIdEditMock,setValue)).AtLeastOnce();
+	Verify(Method(thePublicIdLenEditMock,setValue)).AtLeastOnce();
 	BOOST_REQUIRE(thePrivateIdStr.empty());
 	BOOST_REQUIRE(thePublicIdStr.empty());
 	BOOST_REQUIRE(thePublicIdLen==6);
 	BOOST_REQUIRE(remove_all(myKManPath));
-	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager ok";
+	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
+}
+
+BOOST_AUTO_TEST_CASE(testGenerateButtons) {
+	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
+	YubikoOtpKeyPresenter myPresenter(theMockYubikoOtpKeyView.get());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

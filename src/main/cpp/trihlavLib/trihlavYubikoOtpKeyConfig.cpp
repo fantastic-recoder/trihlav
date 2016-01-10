@@ -42,14 +42,15 @@ static const string K_NM_KEY("key");
  * ResDium's Yubikey Server API settings.
  */
 //QSettings theYuSerApiSettings("ResDium","yuSerApi");
+
 /**
- * Just init fields, does not loads the data.
- * @param pDataPathDir Where the config data will be stored.
+ * Just initialize fields, does not loads the data.
+ * @param pDataPathDir Where the configuration data will be stored.
  */
 YubikoOtpKeyConfig::YubikoOtpKeyConfig(const bfs::path& pPath2KeyKonfig) :
 		itsChangedFlag(false), itsFilename(pPath2KeyKonfig) {
-	memset(&itsToken, 0, sizeof(yubikey_token_st));
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
+	memset(&itsToken, 0, sizeof(yubikey_token_st));
 }
 
 /**

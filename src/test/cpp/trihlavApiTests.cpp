@@ -36,7 +36,7 @@ namespace src = boost::log::sources;
 
 inline void logDebug_token(const yubikey_token_st& pToken) {
 	BOOST_LOG_NAMED_SCOPE("logDebug_token");
-	std::string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
+	string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
 	yubikey_hex_encode(&myUid[0], reinterpret_cast<const char*>(&pToken.uid),
 	YUBIKEY_UID_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "yubikey_token_st:{";
@@ -62,8 +62,8 @@ BOOST_AUTO_TEST_CASE( testHexToString ) {
 	BOOST_LOG_NAMED_SCOPE("testHexToString");
 	const char* K_TEST0 = "quantum";
 	const size_t K_TEST0_SIZE = strlen(K_TEST0);
-	std::string myTest0HexEncoded(K_TEST0_SIZE * 2 + 1, ' ');
-	const std::string K_EXPECTED("7175616e74756d\0", K_TEST0_SIZE * 2 + 1);
+	string myTest0HexEncoded(K_TEST0_SIZE * 2 + 1, ' ');
+	const string K_EXPECTED("7175616e74756d\0", K_TEST0_SIZE * 2 + 1);
 	yubikey_hex_encode(&myTest0HexEncoded[0], K_TEST0, K_TEST0_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "Encoded \""<<K_TEST0<<"\" is \""
 	<<myTest0HexEncoded.c_str() <<"\"";
