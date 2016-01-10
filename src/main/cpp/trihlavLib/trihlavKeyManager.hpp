@@ -32,6 +32,10 @@ public:
 	const bool isInitialized() const {
 		return itsInitializedFlag;
 	}
+
+	/// Get users home directory
+	static const boost::filesystem::path
+	getHome();
 };
 
 } /* namespace trihlav */

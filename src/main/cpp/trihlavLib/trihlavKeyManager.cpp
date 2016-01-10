@@ -51,13 +51,35 @@ KeyManager::getConfigDir() {
 		}
 		itsInitializedFlag=true;
 	} else {
-		BOOST_LOG_TRIVIAL(debug)<< "Config dir was already initialized.";
+		BOOST_LOG_TRIVIAL(debug)<< "Config. dir. was already initialized.";
 	}
 	return itsConfigDir;
 }
 
 KeyManager::~KeyManager() {
-	// TODO Auto-generated destructor stub
+	BOOST_LOG_NAMED_SCOPE("KeyManager::~KeyManager");
+}
+
+/**
+ * 	the most portable way would have to be getenv("HOME")
+	on Unix and concatenating the results of
+*	getenv("HOMEDRIVE") and getenv("HOMEPATH") on Windows.
+ *
+ */
+const boost::filesystem::path KeyManager::getHome() {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::getHome");
+
+#ifdef TARGET_OS_MAC
+
+#elif defined __linux__
+	path myHome(getenv("HOME"));
+#elif defined _WIN32 || defined _WIN64
+	path myHome(string(getenv("HOMEDRIVE"))+"\\\\"+string(getenv("HOMEPATH"));
+#else
+#   error "unknown platform"
+#endif
+	BOOST_LOG_TRIVIAL(debug)<< "Home: \"" << myHome<<"\"";
+	return myHome;
 }
 
 } /* namespace trihlav */
