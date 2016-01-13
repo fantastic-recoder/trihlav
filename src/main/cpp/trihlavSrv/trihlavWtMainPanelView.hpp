@@ -44,6 +44,8 @@ public:
 	WtMainPanelView();
 	virtual ~WtMainPanelView();
 	virtual Wt::WContainerWidget* getNativeView();
+	virtual void setupUi();
+
 private:
 	Wt::WContainerWidget* itsView;
 };

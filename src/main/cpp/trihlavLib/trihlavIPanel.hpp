@@ -15,6 +15,7 @@ class IWidget;
 class IPanel {
 public:
 	virtual ~IPanel(){}
+	virtual void setupUi()=0;
 };
 
 }  // namespace trihlav

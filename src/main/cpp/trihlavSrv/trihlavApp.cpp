@@ -29,6 +29,7 @@ App::App(const WEnvironment& pEnv) :
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>
 		(myIMainPanelView);
 	root()->addWidget(myMainPanelView->getNativeView());
+	myMainPanelView->setupUi();
 }
 
 App *App::createApplication(const WEnvironment& env) {
