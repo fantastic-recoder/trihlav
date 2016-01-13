@@ -30,9 +30,11 @@
 
 #include "trihlavLib/trihlavIMainPanelView.hpp"
 
-namespace trihlav {
+namespace Wt {
+	class WContainerWidget;
+}
 
-class ContainerWgt;
+namespace trihlav {
 
 /**
  * WT++ implementation of IMainPanelView.
@@ -41,9 +43,9 @@ class WtMainPanelView : virtual public IMainPanelView {
 public:
 	WtMainPanelView();
 	virtual ~WtMainPanelView();
-	virtual void* getNativeView();
+	virtual Wt::WContainerWidget* getNativeView();
 private:
-	ContainerWgt* itsView;
+	Wt::WContainerWidget* itsView;
 };
 
 } /* namespace trihlav */

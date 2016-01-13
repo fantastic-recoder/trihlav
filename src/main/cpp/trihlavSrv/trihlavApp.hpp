@@ -47,10 +47,6 @@ public:
 	static App *createApplication(const Wt::WEnvironment& pEnv);
 private:
 	MainPanelCntrl* itsMainPanelCntrl;
-	Wt::WLineEdit *itsPwdEdit;
-	Wt::WText *itsGreeting;
-
-    void check();
 };
 
 } /* namespace trihlav */

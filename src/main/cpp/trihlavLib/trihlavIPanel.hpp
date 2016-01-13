@@ -14,7 +14,7 @@ class IWidget;
 
 class IPanel {
 public:
-	virtual void* getNativeView()=0;
+	virtual ~IPanel(){}
 };
 
 }  // namespace trihlav
