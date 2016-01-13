@@ -11,11 +11,12 @@
 #include <string>
 
 #include "trihlavLib/trihlavICallback.hpp"
+#include "trihlavLib/trihlavIWidget.hpp"
 
 namespace trihlav {
 
 template< class T>
-class IEdit {
+class IEdit : virtual public IWidget {
 public:
 	virtual void setCallback(IValCallback<T>& pCallback) = 0;
 	virtual const T& getValue() const = 0;

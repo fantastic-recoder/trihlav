@@ -28,28 +28,28 @@
 
 #include <string>
 
-#include "trihlavCannotWriteConfigDir.hpp"
+#include "trihlavCannotCastImplementation.hpp"
 
 namespace {
-    static const std::string K_CONFIG_DIR_NOT_WRIEABLE("Config directory is not writeable.");
+    static const std::string K_PREFIX("Internal error, cannot cast to class ");
     static const std::string K_FAILED_FORMAT_MSG("Failed to format the error message.");
 }
 
 namespace trihlav {
     using namespace std;
 
-    CannotWriteConfigDir::CannotWriteConfigDir(const boost::filesystem::path &pConfigDir) : invalid_argument(
-    		K_CONFIG_DIR_NOT_WRIEABLE.c_str()) {
+    CannotCastImplementation::CannotCastImplementation(const std::string& pTypename) : invalid_argument(
+    		K_PREFIX.c_str()) {
         try {
-            itsMsg=K_CONFIG_DIR_NOT_WRIEABLE+string("Directory \"")
-                   + getConfigDir().native()
-                   + string("\"") ;
+            itsMsg=K_PREFIX+string(" \"")
+                   + getTypename()
+                   + string("\".") ;
         } catch (...) {
             itsMsg=K_FAILED_FORMAT_MSG.c_str();
         }
     }
 
-    const char* CannotWriteConfigDir::what() const throw() {
+    const char* CannotCastImplementation::what() const throw() {
         return itsMsg.c_str();
     }
 

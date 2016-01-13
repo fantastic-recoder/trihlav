@@ -1,5 +1,8 @@
+#ifndef TRIHLAV_GET_UI_FACTORY_
+#define TRIHLAV_GET_UI_FACTORY_
+
 /*
-	This program is free software: you can redistribute it and/or modify
+ 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
@@ -26,32 +29,13 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#include <string>
-
-#include "trihlavCannotWriteConfigDir.hpp"
-
-namespace {
-    static const std::string K_CONFIG_DIR_NOT_WRIEABLE("Config directory is not writeable.");
-    static const std::string K_FAILED_FORMAT_MSG("Failed to format the error message.");
-}
+#include "trihlavLib/trihlavIUiFactory.hpp"
 
 namespace trihlav {
-    using namespace std;
+	/**
+	 * Get the implementation specific UI & Co.
+	 */
+	IUiFactory& getUiFactory();
+}  // namespace trihlav
 
-    CannotWriteConfigDir::CannotWriteConfigDir(const boost::filesystem::path &pConfigDir) : invalid_argument(
-    		K_CONFIG_DIR_NOT_WRIEABLE.c_str()) {
-        try {
-            itsMsg=K_CONFIG_DIR_NOT_WRIEABLE+string("Directory \"")
-                   + getConfigDir().native()
-                   + string("\"") ;
-        } catch (...) {
-            itsMsg=K_FAILED_FORMAT_MSG.c_str();
-        }
-    }
-
-    const char* CannotWriteConfigDir::what() const throw() {
-        return itsMsg.c_str();
-    }
-
-
-}
+#endif // TRIHLAV_GET_UI_FACTORY_

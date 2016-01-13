@@ -25,33 +25,27 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_WT_MAIN_PANEL_VIEW_HPP_
+#define TRIHLAV_WT_MAIN_PANEL_VIEW_HPP_
 
-#include <string>
-
-#include "trihlavCannotWriteConfigDir.hpp"
-
-namespace {
-    static const std::string K_CONFIG_DIR_NOT_WRIEABLE("Config directory is not writeable.");
-    static const std::string K_FAILED_FORMAT_MSG("Failed to format the error message.");
-}
+#include "trihlavLib/trihlavIMainPanelView.hpp"
 
 namespace trihlav {
-    using namespace std;
 
-    CannotWriteConfigDir::CannotWriteConfigDir(const boost::filesystem::path &pConfigDir) : invalid_argument(
-    		K_CONFIG_DIR_NOT_WRIEABLE.c_str()) {
-        try {
-            itsMsg=K_CONFIG_DIR_NOT_WRIEABLE+string("Directory \"")
-                   + getConfigDir().native()
-                   + string("\"") ;
-        } catch (...) {
-            itsMsg=K_FAILED_FORMAT_MSG.c_str();
-        }
-    }
+class ContainerWgt;
 
-    const char* CannotWriteConfigDir::what() const throw() {
-        return itsMsg.c_str();
-    }
+/**
+ * WT++ implementation of IMainPanelView.
+ */
+class WtMainPanelView : virtual public IMainPanelView {
+public:
+	WtMainPanelView();
+	virtual ~WtMainPanelView();
+	virtual void* getNativeView();
+private:
+	ContainerWgt* itsView;
+};
 
+} /* namespace trihlav */
 
-}
+#endif /* TRIHLAV_WT_MAIN_PANEL_VIEW_HPP_ */
