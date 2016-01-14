@@ -11,6 +11,7 @@
 #include <Wt/WContainerWidget>
 #include <Wt/WLineEdit>
 #include <Wt/WPushButton>
+#include <Wt/WBootstrapTheme>
 
 #include "trihlavLib/trihlavMainPanelCntrl.hpp"
 
@@ -24,6 +25,14 @@ namespace trihlav {
 App::App(const WEnvironment& pEnv) :
 		WApplication(pEnv) {
 	setTitle("Trihlav server");               // application title
+	useStyleSheet("style/everywidget.css");
+	useStyleSheet("style/dragdrop.css");
+	useStyleSheet("style/combostyle.css");
+	useStyleSheet("style/pygments.css");
+	useStyleSheet("style/layout.css");
+	//useStyleSheet("style/CSSexample.css");
+	setTheme(new WBootstrapTheme(this));
+
 	itsMainPanelCntrl=new MainPanelCntrl();
 	trihlav::IPanel* myIMainPanelView = itsMainPanelCntrl->getView();
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>

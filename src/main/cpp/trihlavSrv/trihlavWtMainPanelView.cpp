@@ -26,11 +26,9 @@ namespace trihlav {
  *
  */
 void WtMainPanelView::setupUi() {
-	itsView->setWidth(WLength(1200.0,WLength::Pixel));
-	itsView->setHeight(WLength(800.0,WLength::Pixel));
 	// Create a navigation bar with a link to a web page.
 	Wt::WNavigationBar* navigation = new Wt::WNavigationBar(itsView);
-	navigation->setTitle("Res Diums Safe",
+	navigation->setTitle("Res Dium Safe",
 			"http://www.google.com/search?q=Res+Dium");
 	navigation->setResponsive(true);
 	Wt::WStackedWidget* contentsStack = new Wt::WStackedWidget(itsView);
@@ -39,7 +37,7 @@ void WtMainPanelView::setupUi() {
 	Wt::WMenu* leftMenu = new Wt::WMenu(contentsStack, itsView);
 	navigation->addMenu(leftMenu);
 	Wt::WText* searchResult = new Wt::WText("Buy or Sell... Bye!");
-	leftMenu->addItem("Home", new Wt::WText("There is no better place!"));
+	leftMenu->addItem("Home", new Wt::WText("There is no safer place 4 Your data!"));
 	leftMenu->addItem("Layout", new Wt::WText("Layout contents"))->setLink(
 			Wt::WLink(Wt::WLink::InternalPath, "/layout"));
 	leftMenu->addItem("Sales", searchResult);
