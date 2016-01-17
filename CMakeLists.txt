@@ -6,7 +6,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 IF(POLICY CMP0048)
    CMAKE_POLICY(SET CMP0048 NEW)
 ENDIF(POLICY CMP0048)
-PROJECT(trihlavsrv VERSION 0.0.1)
+PROJECT(trihlav VERSION 0.0.1)
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cmake")
 
 INCLUDE(GetGitRevisionDescription)
@@ -102,7 +102,6 @@ ELSE(WIN32 AND NOT UNIX)
 ENDIF(WIN32 AND NOT UNIX)
 SET(CPACK_PACKAGE_EXECUTABLES "trihlavsrv" "Trihlav Server")
 INCLUDE(CPack)
-
 # end CPack
 ###############################################################################
 
@@ -112,11 +111,16 @@ INCLUDE(CPack)
 #
 FIND_PACKAGE( Wt REQUIRED )
 SET (WT_CONNECTOR "wtfcgi" CACHE STRING "Connector used (wthttp or wtfcgi)")
-#
+# Find Wt resources
+FIND_PATH(WT_RESOURCES NAMES ajax-loading.gif PATHS /usr/share/wt/resources /opt/wt/resources )
+IF(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
+   MESSAGE( FATAL_ERROR "Wt resource directory not found." )
+ELSE(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
+   MESSAGE( STATUS "Found the Wt resource directory =${WT_RESOURCES}." )
+ENDIF(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
 ###############################################################################
 
 ADD_SUBDIRECTORY(src/main/cpp/trihlavSrv)
 ADD_SUBDIRECTORY(src/main/cpp/trihlavLib)
 ADD_SUBDIRECTORY(src/main/resources)
 ADD_SUBDIRECTORY(src/test/cpp)
-

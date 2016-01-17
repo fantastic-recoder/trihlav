@@ -37,12 +37,16 @@ import subprocess
 def main ():
 
     global options, args
-    # TODO: Do something more interesting here...
-    print 'Calling cmake'
-    cmake = subprocess.check_output(["/usr/bin/env", "cmake", "-DCMAKE_BUILD_TYPE=Debug","../trihlav-build"])
-    print 'Executing '+cmake
 if __name__ == '__main__':
     try:
+        myBuildDir="../trihlav-build"
+        if not os.path.exists(myBuildDir):
+            os.makedirs(myBuildDir)
+        os.chdir(myBuildDir)
+        # TODO: Do something more interesting here...
+        print 'Calling cmake'
+        cmake = subprocess.check_output(["/usr/bin/env", "cmake", "-DCMAKE_BUILD_TYPE=Debug","../trihlav"])
+        print 'Executing '+cmake
         start_time = time.time()
         parser = optparse.OptionParser(formatter=optparse.TitledHelpFormatter(), usage=globals()['__doc__'], version='$Id$')
         parser.add_option ('-v', '--verbose', action='store_true', default=False, help='verbose output')

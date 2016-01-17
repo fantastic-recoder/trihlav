@@ -15,4 +15,4 @@ TARGET_LINK_LIBRARIES( trihlavsrv
     ${Boost_LIBRARIES}
 )
 
-install(TARGETS trihlavsrv RUNTIME DESTINATION bin)
+INSTALL(TARGETS trihlavsrv RUNTIME DESTINATION bin)
