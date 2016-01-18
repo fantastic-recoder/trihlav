@@ -38,7 +38,7 @@ namespace Wt {
 
 namespace trihlav {
 
-class MainPanelCntrl;
+class MainPanelPresenter;
 
 class App : public Wt::WApplication {
 public:
@@ -46,7 +46,7 @@ public:
 	virtual ~App();
 	static App *createApplication(const Wt::WEnvironment& pEnv);
 private:
-	MainPanelCntrl* itsMainPanelCntrl;
+	MainPanelPresenter* itsMainPanelCntrl;
 };
 
 } /* namespace trihlav */

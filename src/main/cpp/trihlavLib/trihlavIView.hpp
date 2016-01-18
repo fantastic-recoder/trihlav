@@ -12,9 +12,16 @@ namespace trihlav {
 
 class IWidget;
 
-class IPanel {
+/**
+ * Parent to all view interfaces.
+ */
+class IView {
 public:
-	virtual ~IPanel(){}
+	virtual ~IView(){}
+
+	/**
+	 *
+	 */
 	virtual void setupUi()=0;
 };
 

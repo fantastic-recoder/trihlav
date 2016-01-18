@@ -13,10 +13,9 @@
 #include <Wt/WPushButton>
 #include <Wt/WBootstrapTheme>
 
-#include "trihlavLib/trihlavMainPanelCntrl.hpp"
-
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavApp.hpp"
+#include "../trihlavLib/trihlavMainPanelPresenter.hpp"
 
 using namespace Wt;
 
@@ -33,12 +32,12 @@ App::App(const WEnvironment& pEnv) :
 	//useStyleSheet("style/CSSexample.css");
 	setTheme(new WBootstrapTheme(this));
 
-	itsMainPanelCntrl=new MainPanelCntrl();
-	trihlav::IPanel* myIMainPanelView = itsMainPanelCntrl->getView();
+	itsMainPanelCntrl=new MainPanelPresenter();
+	trihlav::IView* myIMainPanelView = itsMainPanelCntrl->getView();
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>
 		(myIMainPanelView);
 	root()->addWidget(myMainPanelView->getNativeView());
-	myMainPanelView->setupUi();
+	itsMainPanelCntrl->setupUi();
 }
 
 App *App::createApplication(const WEnvironment& env) {

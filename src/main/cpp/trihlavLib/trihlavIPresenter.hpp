@@ -5,10 +5,10 @@
  *      Author: grobap
  */
 
-#ifndef TRIHLAV_I_CNTRL_HPP_
-#define TRIHLAV_I_CNTRL_HPP_
+#ifndef TRIHLAV_I_PRESENTER_HPP_
+#define TRIHLAV_I_PRESENTER_HPP_
 
-#include "trihlavLib/trihlavIPanel.hpp"
+#include "trihlavIView.hpp"
 
 namespace trihlav {
 
@@ -16,10 +16,10 @@ namespace trihlav {
  * Common functionality to all controllers.
  * Every controller has an view.
  */
-class ICntrl {
-	virtual IPanel* getView()=0;
+class IPresenter {
+	virtual IView* getView()=0;
 };
 
 } /* namespace trihlav */
 
-#endif /* TRIHLAV_I_CNTRL_HPP_ */
+#endif /* TRIHLAV_I_PRESENTER_HPP_ */
