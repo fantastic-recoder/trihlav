@@ -9,7 +9,7 @@
 
 namespace trihlav {
 
-IUiFactory& getUiFactory() {
+IFactory& getUiFactory() {
 
 }
 

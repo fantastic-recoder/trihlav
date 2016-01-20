@@ -24,24 +24,25 @@
 
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+*/
 
- */
+#ifndef TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_
+#define TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_
 
-#ifndef TRIHLAV_I_UI_FACTORY_HPP_
-#define TRIHLAV_I_UI_FACTORY_HPP_
-
-#include "trihlavLib/trihlavIMainPanelView.hpp"
+#include "trihlavLib/trihlavIPresenter.hpp"
 
 namespace trihlav {
 
-	class IUiFactory {
-	public:
-		virtual IMainPanelView* createIMainPanelView() const=0;
-		virtual ~IUiFactory(){};
-	};
+class IPswdChckPresenter : virtual public IPresenter {
+public:
+	IPswdChckPresenter(const IFactory& pFactory) : IPresenter(pFactory) {
+	}
+
+
+};
 
 }  // namespace trihlav
 
 
 
-#endif /* TRIHLAVIUIFACTORY_HPP_ */
+#endif /* TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_ */

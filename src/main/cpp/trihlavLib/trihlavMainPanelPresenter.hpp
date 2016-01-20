@@ -12,6 +12,7 @@
 
 namespace trihlav {
 
+class IFactory;
 class IMainPanelView;
 class IKeyListPresenter;
 class IPswdChckPresenter;
@@ -20,11 +21,11 @@ class IPswdChckPresenter;
  * Implementation of the top level UI presenter.
  */
 class MainPanelPresenter : virtual public IPresenter {
-	IMainPanelView*     itsView;
-	IKeyListPresenter*  itsKeyList;
-	IPswdChckPresenter* itsPswdChck;
+	IMainPanelView*     itsMainPanelView;
+	IKeyListPresenter*  itsKeyListPresenter;
+	IPswdChckPresenter* itsPswdChckPresenter;
 public:
-	MainPanelPresenter();
+	MainPanelPresenter(IFactory& pFactory);
 	virtual ~MainPanelPresenter();
 	virtual IView* getView();
 	virtual void setupUi();

@@ -21,13 +21,19 @@ WtUiFactory::~WtUiFactory() {
 	// TODO Auto-generated destructor stub
 }
 
-IMainPanelView* WtUiFactory::createIMainPanelView() const {
+IMainPanelView* WtUiFactory::createMainPanelView() const {
 	return new WtMainPanelView();
 }
 
-IUiFactory& getUiFactory() {
+IFactory& getUiFactory() {
 	static WtUiFactory theWtUiFactory;
 	return theWtUiFactory;
+}
+
+IKeyListView* WtUiFactory::createKeyListView() const {
+}
+
+IPswdChckView* WtUiFactory::createPswdChckView() const {
 }
 
 } /* namespace trihlav */

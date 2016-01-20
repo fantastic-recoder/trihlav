@@ -15,7 +15,8 @@
 
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavApp.hpp"
-#include "../trihlavLib/trihlavMainPanelPresenter.hpp"
+#include "trihlavLib/trihlavMainPanelPresenter.hpp"
+#include "trihlavLib/trihlavGetUiFactory.hpp"
 
 using namespace Wt;
 
@@ -32,7 +33,7 @@ App::App(const WEnvironment& pEnv) :
 	//useStyleSheet("style/CSSexample.css");
 	setTheme(new WBootstrapTheme(this));
 
-	itsMainPanelCntrl=new MainPanelPresenter();
+	itsMainPanelCntrl=new MainPanelPresenter(getUiFactory());
 	trihlav::IView* myIMainPanelView = itsMainPanelCntrl->getView();
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>
 		(myIMainPanelView);

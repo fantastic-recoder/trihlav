@@ -5,27 +5,33 @@
  *      Author: grobap
  */
 
-#include "trihlavLib/trihlavMainPanelPresenter.hpp"
+#include "trihlavLib/trihlavIMainPanelView.hpp"
+#include "trihlavLib/trihlavIKeyListPresenter.hpp"
+#include "trihlavLib/trihlavIPswdChckPresenter.hpp"
 
-#include "trihlavLib/trihlavGetUiFactory.hpp"
+#include "trihlavLib/trihlavMainPanelPresenter.hpp"
+#include "trihlavIFactory.hpp"
 
 namespace trihlav {
 
-MainPanelPresenter::MainPanelPresenter() {
-	IUiFactory& myFactory = getUiFactory();
-	itsView = myFactory.createIMainPanelView();
+MainPanelPresenter::MainPanelPresenter(IFactory& pFactory) :
+		IPresenter(pFactory),
+		itsKeyListPresenter(pFactory.createKeyListPresenter()),
+		itsPswdChckPresenter(pFactory.createPswdChckPresenter()),
+		itsMainPanelView(pFactory.createMainPanelView())
+{
+	;
 }
 
 MainPanelPresenter::~MainPanelPresenter() {
-	delete itsView;
 }
 
 IView* MainPanelPresenter::getView() {
-	return itsView;
+	return itsMainPanelView;
 }
 
 void MainPanelPresenter::setupUi() {
-	itsView->setupUi();
+	itsMainPanelView->setupUi();
 }
 
 } /* namespace trihlav */

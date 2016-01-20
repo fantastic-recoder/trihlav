@@ -25,22 +25,22 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_WT_UI_FACTORY_HPP_
-#define TRIHLAV_WT_UI_FACTORY_HPP_
 
-#include "../trihlavLib/trihlavIFactory.hpp"
+#include "trihlavLib/trihlavIFactory.hpp"
+#include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavPswdChckPresenter.hpp"
 
 namespace trihlav {
 
-class WtUiFactory: virtual public IFactory {
-public:
-	WtUiFactory();
-	virtual ~WtUiFactory();
-	virtual IMainPanelView* createMainPanelView() const;
-	virtual IKeyListView* createKeyListView() const;
-	virtual IPswdChckView* createPswdChckView() const;
-};
+IKeyListPresenter* IFactory::createKeyListPresenter() const {
+	return new KeyListPresenter(*this);
+}
 
-} /* namespace trihlav */
+IPswdChckPresenter* IFactory::createPswdChckPresenter() const {
+	return new PswdChckPresenter(*this);
+}
 
-#endif /* TRIHLAV_WT_UI_FACTORY_HPP_ */
+
+}  // namespace trihlav
+
+
