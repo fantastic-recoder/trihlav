@@ -33,11 +33,16 @@
 
 namespace trihlav {
 
+class IPswdChckView;
+
 class IPswdChckPresenter : virtual public IPresenter {
 public:
 	IPswdChckPresenter(const IFactory& pFactory) : IPresenter(pFactory) {
 	}
 
+	virtual IPswdChckView& getView() =0;
+
+	virtual ~IPswdChckPresenter() {}
 
 };
 

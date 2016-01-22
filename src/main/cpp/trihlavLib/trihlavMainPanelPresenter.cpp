@@ -32,6 +32,8 @@ IView* MainPanelPresenter::getView() {
 
 void MainPanelPresenter::setupUi() {
 	itsMainPanelView->setupUi();
+	IPswdChckView& myPswdChckView=itsPswdChckPresenter->getView();
+	itsMainPanelView->add("Password check",myPswdChckView);
 }
 
 } /* namespace trihlav */

@@ -33,10 +33,10 @@
 
 namespace trihlav {
 
-class IPswdCheckView : virtual public IView {
+class IPswdChckView : virtual public IView {
 public:
-	IPswdCheckView();
-	virtual ~IPswdCheckView();
+	IPswdChckView(){}
+	virtual ~IPswdChckView(){}
 };
 
 } /* namespace trihlav */

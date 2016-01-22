@@ -29,16 +29,22 @@
 #ifndef TRIHLAV_PSWD_CHCK_PRESENTER_HPP_
 #define TRIHLAV_PSWD_CHCK_PRESENTER_HPP_
 
+#include <memory>
 #include "trihlavLib/trihlavIPswdChckPresenter.hpp"
 
 namespace trihlav {
 
 class IFactory;
+class IPswdChckView;
 
 class PswdChckPresenter: public IPswdChckPresenter {
+	std::unique_ptr<IPswdChckView> itsView;
 public:
 	PswdChckPresenter(const IFactory& pFactory);
 	virtual ~PswdChckPresenter();
+
+	IPswdChckView& getView() { return *itsView; }
+
 };
 
 } /* namespace trihlav */

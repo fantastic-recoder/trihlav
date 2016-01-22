@@ -25,24 +25,26 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_I_MAIN_PANEL_VIEW_HPP_
-#define TRIHLAV_I_MAIN_PANEL_VIEW_HPP_
+#ifndef TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
+#define TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
 
-#include <string>
-#include "trihlavLib/trihlavIView.hpp"
+#include "trihlavLib/trihlavIPswdChckView.hpp"
 
+namespace Wt {
+class WWidget;
+}
 namespace trihlav {
 
-class IPswdChckView;
-/**
- * The interface of the top level UI view, as in MVP design pattern.
- */
-class IMainPanelView : virtual public IView {
+class WtPswdChckView: public IPswdChckView {
 public:
-	virtual ~IMainPanelView(){}
-	virtual void add(const std::string& pName,IPswdChckView& pPswdChckView)=0;
+	WtPswdChckView();
+	virtual Wt::WWidget* getWWidget();
+	virtual ~WtPswdChckView();
+	virtual void setupUi();
+private:
+	Wt::WWidget* itsMainPanel;
 };
 
-} // end namespace trihlav
+} /* namespace trihlav */
 
-#endif /* TRIHLAV_I_MAIN_PANEL_VIEW_HPP_ */
+#endif /* TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_ */

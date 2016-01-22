@@ -16,34 +16,37 @@
 #include <Wt/WContainerWidget>
 
 #include "trihlavWtMainPanelView.hpp"
+#include "trihlavWtPswdChckView.hpp"
+#include "trihlavLib/trihlavCannotCastImplementation.hpp"
 
 using namespace Wt;
+using namespace std;
 
 namespace trihlav {
 
 /**
- * 	Create a navigation bar with a link to a web page.
+ * 	Create a itsNavigation bar with a link to a web page.
  *
  */
 void WtMainPanelView::setupUi() {
-	// Create a navigation bar with a link to a web page.
-	Wt::WNavigationBar* navigation = new Wt::WNavigationBar(itsView);
-	navigation->setTitle("Res Dium Safe",
-			"http://www.google.com/search?q=Res+Dium");
-	navigation->setResponsive(true);
+	// Create a itsNavigation bar with a link to a web page.
+	itsNavigation = new Wt::WNavigationBar(itsView);
+	itsNavigation->setTitle("Trihlav OTP Server",
+			"http://www.google.com/search?q=One+Time+Password");
+	itsNavigation->setResponsive(true);
 	Wt::WStackedWidget* contentsStack = new Wt::WStackedWidget(itsView);
 	contentsStack->addStyleClass("contents");
 	// Setup a Left-aligned menu.
-	Wt::WMenu* leftMenu = new Wt::WMenu(contentsStack, itsView);
-	navigation->addMenu(leftMenu);
+	setLeftMenu(new Wt::WMenu(contentsStack, itsView));
+	itsNavigation->addMenu(getLeftMenu());
 	Wt::WText* searchResult = new Wt::WText("Buy or Sell... Bye!");
-	leftMenu->addItem("Home", new Wt::WText("There is no safer place 4 Your data!"));
-	leftMenu->addItem("Layout", new Wt::WText("Layout contents"))->setLink(
+	getLeftMenu()->addItem("Home", new Wt::WText("There is no safer place 4 Your data!"));
+	getLeftMenu()->addItem("Layout", new Wt::WText("Layout contents"))->setLink(
 			Wt::WLink(Wt::WLink::InternalPath, "/layout"));
-	leftMenu->addItem("Sales", searchResult);
+	getLeftMenu()->addItem("Sales", searchResult);
 	// Setup a Right-aligned menu.
 	Wt::WMenu* rightMenu = new Wt::WMenu();
-	navigation->addMenu(rightMenu, Wt::AlignRight);
+	itsNavigation->addMenu(rightMenu, Wt::AlignRight);
 	// Create a popup submenu for the Help menu.
 	Wt::WPopupMenu* popup = new Wt::WPopupMenu();
 	popup->addItem("Contents");
@@ -68,12 +71,22 @@ void WtMainPanelView::setupUi() {
 	edit->setEmptyText("Enter a search item");
 	edit->enterPressed().connect(
 			std::bind([=]() {
-				leftMenu->select(2); // is the index of the "Sales"
+				getLeftMenu()->select(2); // is the index of the "Sales"
 					searchResult->setText(Wt::WString("Nothing found for {1}.").arg(edit->text()));
 				}));
-	navigation->addSearch(edit, Wt::AlignRight);
+	itsNavigation->addSearch(edit, Wt::AlignRight);
 	itsView->addWidget(contentsStack);
 }
+
+void WtMainPanelView::add(const string& pName, IPswdChckView& pPswdChckView) {
+	WtPswdChckView* myPswdChckView=dynamic_cast<WtPswdChckView*>(&pPswdChckView);
+	if(myPswdChckView==0) {
+		//TODO add rtti of the base type to the err msg
+		throw new CannotCastImplementation("WtPswdChckView");
+	}
+	getLeftMenu()->addItem(pName.c_str(), myPswdChckView->getWWidget());
+}
+
 
 WtMainPanelView::WtMainPanelView() {
 	itsView = new WContainerWidget();
