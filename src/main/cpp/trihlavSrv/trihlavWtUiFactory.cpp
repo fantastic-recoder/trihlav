@@ -10,6 +10,7 @@
 #include "trihlavWtUiFactory.hpp"
 #include "trihlavWtPswdChckView.hpp"
 #include "trihlavWtMainPanelView.hpp"
+#include "trihlavWtKeyListView.hpp"
 
 namespace trihlav {
 
@@ -32,7 +33,7 @@ IFactory& getUiFactory() {
 }
 
 IKeyListView* WtUiFactory::createKeyListView() const {
-	return 0;
+	return new WtKeyListView();
 }
 
 IPswdChckView* WtUiFactory::createPswdChckView() const {

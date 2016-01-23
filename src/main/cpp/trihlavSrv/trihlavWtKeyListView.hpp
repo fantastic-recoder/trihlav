@@ -25,22 +25,46 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_I_KEYLIST_PRESENTER_HPP_
-#define TRIHLAV_I_KEYLIST_PRESENTER_HPP_
 
-#include "trihlavLib/trihlavIPresenter.hpp"
+#ifndef TRIHLAV_WT_KEY_LIST_VIEW_HPP_
+#define TRIHLAV_WT_KEY_LIST_VIEW_HPP_
+
+#include "trihlavLib/trihlavIKeyListView.hpp"
+#include "trihlavIWtView.hpp"
+
+namespace Wt {
+
+class WWidget;
+class WTable;
+
+}  // namespace Wt
 
 namespace trihlav {
 
-class IKeyListView;
-
-class IKeyListPresenter : virtual public IPresenter {
+class WtKeyListView: virtual public IKeyListView, virtual public IWtView {
 public:
-	IKeyListPresenter(const IFactory& pFactory):IPresenter(pFactory) {}
-	virtual ~IKeyListPresenter(){}
-	virtual IKeyListView& getView()=0;
+	WtKeyListView();
+	virtual ~WtKeyListView();
+	virtual Wt::WWidget* getWWidget();
+	virtual void setupUi();
+
+	const Wt::WTable* getTable() const {
+		return itsTable;
+	}
+
+	Wt::WTable* getTable() {
+		return itsTable;
+	}
+
+protected:
+	void setTable(Wt::WTable* myTable) {
+		itsTable = myTable;
+	}
+
+private:
+	Wt::WTable *itsTable;
 };
 
-}  // namespace trihlav
+} /* namespace trihlav */
 
-#endif /* TRIHLAV_I_KEYLIST_PRESENTER_HPP_ */
+#endif /* TRIHLAV_WT_KEY_LIST_VIEW_HPP_ */

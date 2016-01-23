@@ -8,11 +8,11 @@
 #ifndef TRIHLAV_I_KEY_LIST_VIEW_HPP_
 #define TRIHLAV_I_KEY_LIST_VIEW_HPP_
 
-namespace trihlav {
-
 #include "trihlavLib/trihlavIView.hpp"
 
-class IKeyListView : virtual public IView  {
+namespace trihlav {
+
+class IKeyListView: virtual public IView {
 };
 
 } /* namespace trihlav */

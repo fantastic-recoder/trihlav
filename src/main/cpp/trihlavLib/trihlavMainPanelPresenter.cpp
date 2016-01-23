@@ -31,9 +31,11 @@ IView* MainPanelPresenter::getView() {
 }
 
 void MainPanelPresenter::setupUi() {
-	itsMainPanelView->setupUi();
 	IPswdChckView& myPswdChckView=itsPswdChckPresenter->getView();
 	itsMainPanelView->add("Password check",myPswdChckView);
+	IKeyListView& myKeyListView=itsKeyListPresenter->getView();
+	itsMainPanelView->add("Key list",myKeyListView);
+	itsMainPanelView->setupUi();
 }
 
 } /* namespace trihlav */

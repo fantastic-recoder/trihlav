@@ -5,8 +5,8 @@
  *      Author: grobap
  */
 
-#ifndef TRIHLAVVERSION_HPP_
-#define TRIHLAVVERSION_HPP_
+#ifndef TRIHLAV_VERSION_HPP_
+#define TRIHLAV_VERSION_HPP_
 
 #include <boost/filesystem.hpp>
 
@@ -21,5 +21,5 @@ public:
 
 } /* namespace trihlavApi */
 
-#endif /* TRIHLAVVERSION_HPP_ */
+#endif /* TRIHLAV_VERSION_HPP_ */
 

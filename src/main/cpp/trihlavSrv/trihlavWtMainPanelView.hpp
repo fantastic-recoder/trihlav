@@ -35,9 +35,12 @@ namespace Wt {
 class WContainerWidget;
 class WNavigationBar;
 class WMenu;
+class WStackedWidget;
 }
 
 namespace trihlav {
+
+class IWtView;
 
 /**
  * WT++ implementation of IMainPanelView.
@@ -49,13 +52,14 @@ public:
 	virtual Wt::WContainerWidget* getNativeView();
 	virtual void setupUi();
 	virtual void add(const std::string& pName, IPswdChckView& pPswdChckView);
+	virtual void add(const std::string& pName, IKeyListView& pKeyListView);
 
 	const Wt::WNavigationBar* getNavigation() const {
 		return itsNavigation;
 	}
 
-	void setNavigation(Wt::WNavigationBar* pNavigation) {
-		itsNavigation = pNavigation;
+	Wt::WNavigationBar* getNavigation() {
+		return itsNavigation;
 	}
 
 	const Wt::WMenu* getLeftMenu() const {
@@ -66,6 +70,25 @@ public:
 		return itsLeftMenu;
 	}
 
+	const Wt::WStackedWidget* getContentsStack() const {
+		return itsContentsStack;
+	}
+
+	Wt::WStackedWidget* getContentsStack() {
+		return itsContentsStack;
+	}
+
+	void setContentsStack(Wt::WStackedWidget* myContentsStack) {
+		itsContentsStack = myContentsStack;
+	}
+
+protected:
+	virtual void addView(const std::string& pName, IWtView& pView);
+
+	void setNavigation(Wt::WNavigationBar* pNavigation) {
+		itsNavigation = pNavigation;
+	}
+
 	void setLeftMenu(Wt::WMenu* pLeftMenu) {
 		itsLeftMenu = pLeftMenu;
 	}
@@ -74,6 +97,7 @@ private:
 	Wt::WContainerWidget* itsView;
 	Wt::WNavigationBar* itsNavigation;
 	Wt::WMenu* itsLeftMenu;
+	Wt::WStackedWidget* itsContentsStack;
 };
 
 } /* namespace trihlav */

@@ -5,8 +5,8 @@
  *      Author: grobap
  */
 
-#ifndef TRIHLAV_I_PANEL_HPP_
-#define TRIHLAV_I_PANEL_HPP_
+#ifndef TRIHLAV_I_VIEW_HPP_
+#define TRIHLAV_I_VIEW_HPP_
 
 namespace trihlav {
 
@@ -17,8 +17,6 @@ class IWidget;
  */
 class IView {
 public:
-	virtual ~IView(){}
-
 	/**
 	 *
 	 */
@@ -27,4 +25,4 @@ public:
 
 }  // namespace trihlav
 
-#endif // TRIHLAV_I_PANEL_HPP_
+#endif // TRIHLAV_I_VIEW_HPP_

@@ -15,9 +15,12 @@
 #include <Wt/WText>
 #include <Wt/WContainerWidget>
 
+#include "trihlavIWtView.hpp"
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavWtPswdChckView.hpp"
+#include "trihlavWtKeyListView.hpp"
 #include "trihlavLib/trihlavCannotCastImplementation.hpp"
+#include "trihlavLib/trihlavVersion.hpp"
 
 using namespace Wt;
 using namespace std;
@@ -29,24 +32,51 @@ namespace trihlav {
  *
  */
 void WtMainPanelView::setupUi() {
+	itsView->addWidget(getContentsStack());
+}
+
+void WtMainPanelView::add(const string& pName,IKeyListView&  pKeyListView){
+	WtKeyListView* myKeyListView =
+			dynamic_cast<WtKeyListView*>(&pKeyListView);
+	if (myKeyListView== 0) {
+		//TODO add rtti of the base type to the err msg
+		throw new CannotCastImplementation("WtKeyListView");
+	}
+	addView(pName,*myKeyListView);
+}
+
+void WtMainPanelView::add(const string& pName, IPswdChckView& pPswdChckView) {
+	WtPswdChckView* myPswdChckView =
+			dynamic_cast<WtPswdChckView*>(&pPswdChckView);
+	if (myPswdChckView == 0) {
+		//TODO add rtti of the base type to the err msg
+		throw new CannotCastImplementation("WtPswdChckView");
+	}
+	addView(pName,*myPswdChckView);
+}
+
+void WtMainPanelView::addView(const std::string& pName,IWtView&  pView) {
+	WMenuItem* myItem = getLeftMenu()->addItem(pName.c_str(),
+			pView.getWWidget());
+	string myUrl("/"+pName);
+	myItem->setLink(
+			Wt::WLink(Wt::WLink::InternalPath, myUrl.c_str()));
+}
+
+WtMainPanelView::WtMainPanelView():itsView ( new WContainerWidget()) {
 	// Create a itsNavigation bar with a link to a web page.
-	itsNavigation = new Wt::WNavigationBar(itsView);
-	itsNavigation->setTitle("Trihlav OTP Server",
+	setNavigation(new Wt::WNavigationBar(itsView));
+	getNavigation()->setTitle("Trihlav OTP Server",
 			"http://www.google.com/search?q=One+Time+Password");
-	itsNavigation->setResponsive(true);
-	Wt::WStackedWidget* contentsStack = new Wt::WStackedWidget(itsView);
-	contentsStack->addStyleClass("contents");
+	getNavigation()->setResponsive(true);
+	setContentsStack (new Wt::WStackedWidget(itsView));
+	itsContentsStack->addStyleClass("contents");
 	// Setup a Left-aligned menu.
-	setLeftMenu(new Wt::WMenu(contentsStack, itsView));
-	itsNavigation->addMenu(getLeftMenu());
-	Wt::WText* searchResult = new Wt::WText("Buy or Sell... Bye!");
-	getLeftMenu()->addItem("Home", new Wt::WText("There is no safer place 4 Your data!"));
-	getLeftMenu()->addItem("Layout", new Wt::WText("Layout contents"))->setLink(
-			Wt::WLink(Wt::WLink::InternalPath, "/layout"));
-	getLeftMenu()->addItem("Sales", searchResult);
+	setLeftMenu(new Wt::WMenu(itsContentsStack, itsView));
+	getNavigation()->addMenu(getLeftMenu(), Wt::AlignLeft);
 	// Setup a Right-aligned menu.
 	Wt::WMenu* rightMenu = new Wt::WMenu();
-	itsNavigation->addMenu(rightMenu, Wt::AlignRight);
+	getNavigation()->addMenu(rightMenu, Wt::AlignRight);
 	// Create a popup submenu for the Help menu.
 	Wt::WPopupMenu* popup = new Wt::WPopupMenu();
 	popup->addItem("Contents");
@@ -71,25 +101,15 @@ void WtMainPanelView::setupUi() {
 	edit->setEmptyText("Enter a search item");
 	edit->enterPressed().connect(
 			std::bind([=]() {
-				getLeftMenu()->select(2); // is the index of the "Sales"
-					searchResult->setText(Wt::WString("Nothing found for {1}.").arg(edit->text()));
+				getLeftMenu()->select(1); // is the index of the "Sales"
+					Wt::WMessageBox* messageBox = new Wt::WMessageBox("Help", Wt::WString::fromUTF8("<p>Not yet implemented, should search for: {1}</p>").arg(edit->valueText()), Wt::Information, Wt::Ok);
+					messageBox->buttonClicked().connect(std::bind([=]() {
+										delete messageBox;
+									}
+							));
+					messageBox->show();
 				}));
-	itsNavigation->addSearch(edit, Wt::AlignRight);
-	itsView->addWidget(contentsStack);
-}
-
-void WtMainPanelView::add(const string& pName, IPswdChckView& pPswdChckView) {
-	WtPswdChckView* myPswdChckView=dynamic_cast<WtPswdChckView*>(&pPswdChckView);
-	if(myPswdChckView==0) {
-		//TODO add rtti of the base type to the err msg
-		throw new CannotCastImplementation("WtPswdChckView");
-	}
-	getLeftMenu()->addItem(pName.c_str(), myPswdChckView->getWWidget());
-}
-
-
-WtMainPanelView::WtMainPanelView() {
-	itsView = new WContainerWidget();
+	getNavigation()->addSearch(edit, Wt::AlignRight);
 }
 
 WtMainPanelView::~WtMainPanelView() {

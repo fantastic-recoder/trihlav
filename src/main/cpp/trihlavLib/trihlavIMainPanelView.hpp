@@ -34,13 +34,15 @@
 namespace trihlav {
 
 class IPswdChckView;
+class IKeyListView;
+
 /**
  * The interface of the top level UI view, as in MVP design pattern.
  */
 class IMainPanelView : virtual public IView {
 public:
-	virtual ~IMainPanelView(){}
 	virtual void add(const std::string& pName,IPswdChckView& pPswdChckView)=0;
+	virtual void add(const std::string& pName,IKeyListView& pKeyListView)=0;
 };
 
 } // end namespace trihlav

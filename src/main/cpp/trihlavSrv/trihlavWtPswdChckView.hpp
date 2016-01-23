@@ -29,20 +29,23 @@
 #define TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
 
 #include "trihlavLib/trihlavIPswdChckView.hpp"
+#include "trihlavIWtView.hpp"
 
 namespace Wt {
-class WWidget;
+	class WContainerWidget;
+	class WWidget;
 }
+
 namespace trihlav {
 
-class WtPswdChckView: public IPswdChckView {
+class WtPswdChckView: virtual public IPswdChckView, virtual public IWtView {
 public:
 	WtPswdChckView();
 	virtual Wt::WWidget* getWWidget();
 	virtual ~WtPswdChckView();
 	virtual void setupUi();
 private:
-	Wt::WWidget* itsMainPanel;
+	Wt::WContainerWidget* itsMainPanel;
 };
 
 } /* namespace trihlav */

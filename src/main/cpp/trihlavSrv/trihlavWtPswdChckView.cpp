@@ -8,6 +8,8 @@
 #include <Wt/WPanel>
 #include <Wt/WWidget>
 #include <Wt/WText>
+#include <Wt/WLineEdit>
+#include <Wt/WContainerWidget>
 #include "trihlavWtPswdChckView.hpp"
 
 using namespace Wt;
@@ -15,7 +17,9 @@ using namespace Wt;
 namespace trihlav {
 
 WtPswdChckView::WtPswdChckView() {
-	itsMainPanel = new Wt::WText("Password 0");
+	itsMainPanel = new WContainerWidget();
+	itsMainPanel->addWidget(new WText("Password 0"));
+	itsMainPanel->addWidget(new WLineEdit());
 }
 
 WtPswdChckView::~WtPswdChckView() {

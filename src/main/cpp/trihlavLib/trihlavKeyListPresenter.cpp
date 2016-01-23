@@ -41,8 +41,8 @@ KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
 
 }
 
-IKeyListView* KeyListPresenter::getKeyListView() {
-	return getFactory().createKeyListView();
+IKeyListView& KeyListPresenter::getView() {
+	return *itsKeyListView;
 }
 
 KeyListPresenter::~KeyListPresenter() {

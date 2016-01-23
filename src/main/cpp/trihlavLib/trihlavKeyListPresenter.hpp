@@ -39,7 +39,7 @@ class IFactory;
 class KeyListPresenter: virtual public IKeyListPresenter {
 public:
 	KeyListPresenter( const IFactory& pFactory);
-	virtual IKeyListView* getKeyListView();
+	virtual IKeyListView& getView();
 	virtual ~KeyListPresenter();
 private:
 	IKeyListView* itsKeyListView;
