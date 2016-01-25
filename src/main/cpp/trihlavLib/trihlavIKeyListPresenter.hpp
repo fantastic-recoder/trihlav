@@ -39,6 +39,7 @@ public:
 	IKeyListPresenter(const IFactory& pFactory):IPresenter(pFactory) {}
 	virtual ~IKeyListPresenter(){}
 	virtual IKeyListView& getView()=0;
+	virtual void addKey()=0;
 };
 
 }  // namespace trihlav

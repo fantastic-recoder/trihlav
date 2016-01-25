@@ -41,6 +41,7 @@ public:
 	KeyListPresenter( const IFactory& pFactory);
 	virtual IKeyListView& getView();
 	virtual ~KeyListPresenter();
+	virtual void addKey();
 private:
 	IKeyListView* itsKeyListView;
 };

@@ -49,5 +49,8 @@ KeyListPresenter::~KeyListPresenter() {
 	// TODO Auto-generated destructor stub
 }
 
+void KeyListPresenter::addKey() {
+}
+
 } /* namespace trihlav */
 

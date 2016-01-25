@@ -71,6 +71,7 @@ BOOST_AUTO_TEST_SUITE(trihlavTestKeyListPresenter)
 BOOST_AUTO_TEST_CASE(canAddYubikoKey) {
 	BOOST_LOG_NAMED_SCOPE("canAddYubikoKey");
 	KeyListPresenter myKeyListPresenter(theIFactoryMock.get());
+	myKeyListPresenter.addKey();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
