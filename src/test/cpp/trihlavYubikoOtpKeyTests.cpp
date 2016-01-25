@@ -15,13 +15,13 @@
 #include <FakeIt/single_header/boost/fakeit.hpp>
 
 #include "trihlavGlobalFixture.hpp"
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavIEdit.hpp"
-#include "../../main/cpp/trihlavLib/trihlavIYubikoOtpKeyView.hpp"
+#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 
 using namespace std;
 using namespace trihlav;

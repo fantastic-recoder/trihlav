@@ -24,3 +24,14 @@ target_link_libraries(trihlavYubikoOtpKeyTests
                       ${CMAKE_THREAD_LIBS_INIT}
                       )
 
+add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp trihlavGlobalFixture.cpp)
+
+add_test( NAME trihlavTestKeyListPresenter COMMAND trihlavTestKeyListPresenter )
+
+target_link_libraries(trihlavTestKeyListPresenter
+                      ${Boost_LIBRARIES}
+                      ${YUBIKEY_LIB}
+                      trihlavApi
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      )
+
