@@ -10,7 +10,6 @@
 namespace trihlav {
 
 IFactory& getUiFactory() {
-
 }
 
 } /* namespace trihlav */

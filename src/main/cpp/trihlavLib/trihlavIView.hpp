@@ -21,6 +21,7 @@ public:
 	 *
 	 */
 	virtual void setupUi()=0;
+	virtual ~IView(){}
 };
 
 }  // namespace trihlav

@@ -12,11 +12,13 @@ namespace trihlav {
 
 	class ICallback {
 		virtual void callback()=0;
+		virtual ~ICallback()=0;
 	};
 
 	template <class T>
 	class IValCallback {
 		virtual void callback( const T& pVal)=0;
+		virtual ~IValCallback()=0;
 	};
 
 } // end namespace trihlav

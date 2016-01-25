@@ -36,7 +36,6 @@ static const string K_NM_SES_CNTR("counter");
 static const string K_NM_USE_CNTR("use");
 static const string K_NM_RANDOM("random");
 static const string K_NM_CRC("crc");
-static const string K_NM_KEY("key");
 
 /**
  * ResDium's Yubikey Server API settings.

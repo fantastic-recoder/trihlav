@@ -39,6 +39,7 @@ namespace trihlav {
 class IWtView {
 public:
 	virtual Wt::WWidget* getWWidget()=0;
+	virtual ~IWtView(){}
 };
 
 }  // namespace trihlav
