@@ -13,19 +13,26 @@
 #include <boost/log/expressions.hpp>
 
 #include "trihlavIYubikoOtpKeyView.hpp"
+#include "trihlavLib/trihlavIFactory.hpp"
 
 namespace trihlav {
 
-YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(IYubikoOtpKeyView& pView ): itsView(pView) {
+YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory )
+: IYubikoOtpKeyPresenter(pFactory)
+, itsView(pFactory.createYubikoOtpKeyView()) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
-	pView.getPrivateId().setValue("");
-	pView.getSecretKey().setValue("");
-	pView.getPublicId().setValue("");
-	pView.getPublicIdLen().setValue(6);
+	itsView->getPrivateId().setValue("");
+	itsView->getSecretKey().setValue("");
+	itsView->getPublicId().setValue("");
+	itsView->getPublicIdLen().setValue("6");
 }
 
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::~YubikoOptKeyPresenter");
+}
+
+void YubikoOtpKeyPresenter::addKey() {
+	itsView->show();
 }
 
 } /* namespace trihlav */

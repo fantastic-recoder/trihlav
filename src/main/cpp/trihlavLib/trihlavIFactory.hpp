@@ -37,6 +37,8 @@ class IKeyListPresenter;
 class IKeyListView;
 class IPswdChckPresenter;
 class IPswdChckView;
+class IYubikoOtpKeyView;
+class IYubikoOtpKeyPresenter;
 
 class IFactory {
 public:
@@ -44,7 +46,9 @@ public:
 	virtual IKeyListPresenter* createKeyListPresenter() const ;
 	virtual IKeyListView* createKeyListView() const =0;
 	virtual IPswdChckPresenter* createPswdChckPresenter() const;
+	virtual IYubikoOtpKeyPresenter* createYubikoOtpKeyPresenter() const;
 	virtual IPswdChckView* createPswdChckView() const =0;
+	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() const =0;
 	virtual ~IFactory() {
 	}
 };

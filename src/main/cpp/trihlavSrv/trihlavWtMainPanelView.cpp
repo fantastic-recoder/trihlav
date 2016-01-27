@@ -27,14 +27,6 @@ using namespace std;
 
 namespace trihlav {
 
-/**
- * 	Create a itsNavigation bar with a link to a web page.
- *
- */
-void WtMainPanelView::setupUi() {
-	itsView->addWidget(getContentsStack());
-}
-
 void WtMainPanelView::add(const string& pName,IKeyListView&  pKeyListView){
 	WtKeyListView* myKeyListView =
 			dynamic_cast<WtKeyListView*>(&pKeyListView);
@@ -63,6 +55,10 @@ void WtMainPanelView::addView(const std::string& pName,IWtView&  pView) {
 			Wt::WLink(Wt::WLink::InternalPath, myUrl.c_str()));
 }
 
+/**
+ * 	Create a itsNavigation bar with a link to a web page.
+ *
+ */
 WtMainPanelView::WtMainPanelView():itsView ( new WContainerWidget()) {
 	// Create a itsNavigation bar with a link to a web page.
 	setNavigation(new Wt::WNavigationBar(itsView));
@@ -110,6 +106,7 @@ WtMainPanelView::WtMainPanelView():itsView ( new WContainerWidget()) {
 					messageBox->show();
 				}));
 	getNavigation()->addSearch(edit, Wt::AlignRight);
+	itsView->addWidget(getContentsStack());
 }
 
 WtMainPanelView::~WtMainPanelView() {

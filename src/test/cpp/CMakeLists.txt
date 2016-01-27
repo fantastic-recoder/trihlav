@@ -13,11 +13,11 @@ target_link_libraries(trihlavApiTests
                       ${CMAKE_THREAD_LIBS_INIT}
                       )
 
-add_executable( trihlavYubikoOtpKeyTests trihlavYubikoOtpKeyTests.cpp trihlavGlobalFixture.cpp trihlavTestGetFactory.cpp)
+add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp trihlavGlobalFixture.cpp trihlavTestGetFactory.cpp)
 
-add_test( NAME trihlavYubikoOtpKeyTests COMMAND trihlavYubikoOtpKeyTests )
+add_test( NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey )
 
-target_link_libraries(trihlavYubikoOtpKeyTests
+target_link_libraries(trihlavTestYubikoOtpKey
                       ${Boost_LIBRARIES}
                       ${YUBIKEY_LIB}
                       trihlavApi

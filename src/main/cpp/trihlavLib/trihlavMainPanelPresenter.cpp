@@ -35,7 +35,6 @@ void MainPanelPresenter::setupUi() {
 	itsMainPanelView->add("Password check",myPswdChckView);
 	IKeyListView& myKeyListView=itsKeyListPresenter->getView();
 	itsMainPanelView->add("Key list",myKeyListView);
-	itsMainPanelView->setupUi();
 }
 
 } /* namespace trihlav */

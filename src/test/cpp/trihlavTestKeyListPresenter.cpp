@@ -41,9 +41,12 @@
 #include <FakeIt/single_header/boost/fakeit.hpp>
 
 #include "trihlavGlobalFixture.hpp"
+#include "trihlavLib/trihlavIButton.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavIKeyListView.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavIYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -51,8 +54,32 @@ using namespace boost;
 using namespace boost::filesystem;
 using namespace fakeit;
 
+class TstButton: public IButton {
+public:
+	/**
+	 * @return Buttons label value in UTF8.
+	 */
+	virtual const std::string getText() const {
+		return itsText;
+	}
+
+	/**
+	 * @param pText Set the button-label value in UTF8.
+	 */
+	virtual void setText(const std::string& pText) {
+		itsText = pText;
+	}
+private:
+	std::string itsText;
+};
+
 Mock<IFactory> theIFactoryMock;
 Mock<IKeyListView> theIKeyListViewMock;
+Mock<IYubikoOtpKeyPresenter> theIYubikoOtpKeyPresenter;
+Mock<IYubikoOtpKeyView> theIYubikoOtpKeyView;
+
+bool theAddKeyFlag = false;
+TstButton theBtnAddKey;
 
 class InitTestKeyListPresenterMocks: virtual public GlobalFixture {
 public:
@@ -61,6 +88,17 @@ public:
 		BOOST_LOG_NAMED_SCOPE("InitTestKeyListPresenterMocks");
 		When(Method( theIFactoryMock, createKeyListView)) //< mock factory methods
 		.AlwaysReturn(&theIKeyListViewMock.get());
+		When(Method( theIFactoryMock, createYubikoOtpKeyPresenter)) //< mock factory methods
+		.AlwaysReturn(&theIYubikoOtpKeyPresenter.get());
+		When(Method( theIFactoryMock, createYubikoOtpKeyView)) //< mock factory methods
+		.AlwaysReturn(&theIYubikoOtpKeyView.get());
+		When(Method( theIYubikoOtpKeyPresenter, addKey)) //< mock YubikoOtpKeyPresenter
+		.AlwaysDo([] {
+			BOOST_LOG_TRIVIAL(debug)<<"addKey";
+			theAddKeyFlag=true;
+		});
+		When(Method( theIKeyListViewMock, getBtnAddKey)) //< mock UI elements
+		.AlwaysReturn(theBtnAddKey);
 	}
 };
 
@@ -70,8 +108,12 @@ BOOST_AUTO_TEST_SUITE(trihlavTestKeyListPresenter)
 
 BOOST_AUTO_TEST_CASE(canAddYubikoKey) {
 	BOOST_LOG_NAMED_SCOPE("canAddYubikoKey");
-	KeyListPresenter myKeyListPresenter(theIFactoryMock.get());
-	myKeyListPresenter.addKey();
+	theAddKeyFlag = false;
+	KeyListPresenter* myKeyListPresenter = new KeyListPresenter(
+			theIFactoryMock.get());
+	myKeyListPresenter->addKey();
+	Verify(Method(theIYubikoOtpKeyPresenter,addKey)).AtLeastOnce();
+	BOOST_REQUIRE(theAddKeyFlag);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

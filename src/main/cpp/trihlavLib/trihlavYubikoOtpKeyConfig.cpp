@@ -38,11 +38,6 @@ static const string K_NM_RANDOM("random");
 static const string K_NM_CRC("crc");
 
 /**
- * ResDium's Yubikey Server API settings.
- */
-//QSettings theYuSerApiSettings("ResDium","yuSerApi");
-
-/**
  * Just initialize fields, does not loads the data.
  * @param pDataPathDir Where the configuration data will be stored.
  */

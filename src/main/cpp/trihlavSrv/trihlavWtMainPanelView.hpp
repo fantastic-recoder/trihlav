@@ -50,7 +50,6 @@ public:
 	WtMainPanelView();
 	virtual ~WtMainPanelView();
 	virtual Wt::WContainerWidget* getNativeView();
-	virtual void setupUi();
 	virtual void add(const std::string& pName, IPswdChckView& pPswdChckView);
 	virtual void add(const std::string& pName, IKeyListView& pKeyListView);
 

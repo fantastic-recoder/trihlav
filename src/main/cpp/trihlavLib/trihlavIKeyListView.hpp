@@ -12,7 +12,11 @@
 
 namespace trihlav {
 
+class IButton;
+
 class IKeyListView: virtual public IView {
+public:
+	virtual IButton&  getBtnAddKey() =0;
 };
 
 } /* namespace trihlav */

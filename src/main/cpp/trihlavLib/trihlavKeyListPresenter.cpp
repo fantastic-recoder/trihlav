@@ -26,19 +26,22 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
+#include "trihlavLib/trihlavIButton.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavIKeyListPresenter.hpp"
+#include "trihlavLib/trihlavIKeyListView.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 
 namespace trihlav {
 
 KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
 : IKeyListPresenter(pFactory)
 , IPresenter(pFactory)
+, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
 , itsKeyListView(pFactory.createKeyListView())
 {
-	// TODO Auto-generated constructor stub
-
+	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
 }
 
 IKeyListView& KeyListPresenter::getView() {
@@ -50,6 +53,7 @@ KeyListPresenter::~KeyListPresenter() {
 }
 
 void KeyListPresenter::addKey() {
+	itsYubikoOtpKeyPresenter->addKey();
 }
 
 } /* namespace trihlav */

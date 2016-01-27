@@ -15,13 +15,24 @@
 
 namespace trihlav {
 
+/**
+ * Interface to a UI widget, which can edit, set and get a value.
+ */
 template< class T>
 class IEdit : virtual public IWidget {
 public:
-	virtual void setCallback(IValCallback<T>& pCallback) = 0;
-	virtual const T& getValue() const = 0;
+	/**
+	 * @return The edited value.
+	 */
+	virtual const T getValue() const = 0;
+
+	/**
+	 * @param pVal set the value, which can be edited.
+	 */
 	virtual void setValue(const T& pVal) =0;
-	virtual ~IEdit()=0;
+
+	/// Just ensure virtual destructor.
+	virtual ~IEdit(){}
 };
 
 typedef IEdit<std::string> IStrEdit;

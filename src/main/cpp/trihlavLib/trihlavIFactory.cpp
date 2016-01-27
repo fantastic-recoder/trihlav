@@ -29,6 +29,7 @@
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 
 namespace trihlav {
 
@@ -40,6 +41,9 @@ IPswdChckPresenter* IFactory::createPswdChckPresenter() const {
 	return new PswdChckPresenter(*this);
 }
 
+IYubikoOtpKeyPresenter* IFactory::createYubikoOtpKeyPresenter() const {
+	return new YubikoOtpKeyPresenter(*this);
+}
 
 }  // namespace trihlav
 

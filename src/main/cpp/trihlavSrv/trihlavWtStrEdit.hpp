@@ -26,32 +26,34 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TRIHLAV_KEY_LIST_PRESENTER_HPP_
-#define TRIHLAV_KEY_LIST_PRESENTER_HPP_
+#ifndef TRIHLAV_WT_STR_EDIT_HPP_
+#define TRIHLAV_WT_STR_EDIT_HPP_
 
-#include <memory>
-
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
+#include <Wt/WLineEdit>
+#include "trihlavLib/trihlavIEdit.hpp"
 
 namespace trihlav {
 
-class IKeyListView;
-class IYubikoOtpKeyPresenter;
-class IFactory;
-
-class KeyListPresenter: virtual public IKeyListPresenter {
+class WtStrEdit: virtual public Wt::WLineEdit, virtual public IStrEdit {
 public:
-	typedef std::unique_ptr<IYubikoOtpKeyPresenter> IYubikoOtpKeyPresenterPtr;
+	WtStrEdit();
+	virtual ~WtStrEdit();
+	/**
+	 * @return The edited value.
+	 */
+	virtual const std::string getValue() const {
+		return text().toUTF8();
+	}
 
-	KeyListPresenter( const IFactory& pFactory);
-	virtual IKeyListView& getView();
-	virtual ~KeyListPresenter();
-	virtual void addKey();
-private:
-	IKeyListView* itsKeyListView;
-	IYubikoOtpKeyPresenterPtr itsYubikoOtpKeyPresenter;
+	/**
+	 * @param pVal set the value, which can be edited.
+	 */
+	virtual void setValue(const std::string& pVal) {
+		setText(Wt::WString::fromUTF8(pVal));
+	}
+
 };
 
 } /* namespace trihlav */
 
-#endif /* TRIHLAV_KEY_LIST_PRESENTER_HPP_ */
+#endif /* TRIHLAV_WT_STR_EDIT_HPP_ */

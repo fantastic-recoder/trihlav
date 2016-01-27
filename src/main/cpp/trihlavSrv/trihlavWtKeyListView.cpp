@@ -6,14 +6,19 @@
  */
 
 #include <Wt/WTable>
-#include <Wt/WText>
+#include <Wt/WPushButton>
+#include <Wt/WContainerWidget>
+#include "trihlavWtPushButton.hpp"
 #include "trihlavWtKeyListView.hpp"
+
+using namespace Wt;
 
 namespace trihlav {
 
 WtKeyListView::WtKeyListView() {
-	// TODO Auto-generated constructor stub
-	itsTable = new Wt::WTable();
+	itsPanel = new WContainerWidget;
+	itsBtnAdd = new WtPushButton("New key");
+	itsTable = new WTable();
 	itsTable->setHeaderCount(1);
 	itsTable->setWidth(Wt::WLength("100%"));
 
@@ -22,6 +27,8 @@ WtKeyListView::WtKeyListView() {
 	itsTable->elementAt(0, 2)->addWidget(new Wt::WText("Type"));
 	itsTable->elementAt(0, 3)->addWidget(new Wt::WText("Note"));
 
+	itsPanel->addWidget(itsBtnAdd);
+	itsPanel->addWidget(itsTable);
 }
 
 WtKeyListView::~WtKeyListView() {
@@ -29,10 +36,11 @@ WtKeyListView::~WtKeyListView() {
 }
 
 Wt::WWidget* WtKeyListView::getWWidget() {
-	return itsTable;
+	return itsPanel;
 }
 
-void WtKeyListView::setupUi() {
+IButton& WtKeyListView::getBtnAddKey() {
+	return *itsBtnAdd;
 }
 
 } /* namespace trihlav */
