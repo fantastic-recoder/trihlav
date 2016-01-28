@@ -41,6 +41,8 @@ public:
 	YubikoOtpKeyPresenter(const IFactory& );
 	virtual ~YubikoOtpKeyPresenter();
 	virtual void addKey();
+private:
+    virtual void accepted( bool pAccepted);
 };
 
 } /* namespace trihlavApi */

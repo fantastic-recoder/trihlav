@@ -30,6 +30,8 @@
 
 #include <memory>
 
+#include <Wt/WDialog>
+
 #include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 
 namespace Wt {
@@ -42,7 +44,7 @@ class WtStrEdit;
 class WtPushButton;
 
 class WtYubikoOtpKeyView: public IYubikoOtpKeyView {
-	Wt::WDialog*   itsDlg;
+    std::unique_ptr<Wt::WDialog> itsDlg;
 	WtStrEdit* itsPublicId;
 	WtStrEdit* itsPublicIdLen;
 	WtStrEdit* itsPrivateId;
@@ -84,6 +86,9 @@ public:
 	virtual IButton&  getSaveBtn();
 
 	virtual void show();
+
+private:
+    virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
 };
 
 } /* namespace trihlav */

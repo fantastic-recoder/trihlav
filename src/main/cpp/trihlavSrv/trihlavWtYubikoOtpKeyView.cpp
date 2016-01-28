@@ -45,12 +45,14 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		itsDlg(new WDialog), //
 		itsPublicId(new WtStrEdit), //
 		itsPublicIdLen(new WtStrEdit), //
-		itsPrivateId(new WtStrEdit), itsSecretKey(new WtStrEdit), itsGenPublicIdentityBtn(
-				new WtPushButton(translate("Generate"))), itsGenPrivateIdentityBtn(
-				new WtPushButton(translate("Generate"))), itsCancelBtn(
-				new WtPushButton(translate("Cancel"))), itsSaveBtn(
-				new WtPushButton(translate("Save"))), itsGenSecretKeyBtn(
-				new WtPushButton(translate("Generate"))) {
+		itsPrivateId(new WtStrEdit), //
+		itsSecretKey(new WtStrEdit), //
+		itsGenPublicIdentityBtn(new WtPushButton(translate("Generate"))), //
+		itsGenPrivateIdentityBtn(new WtPushButton(translate("Generate"))), //
+		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
+		itsSaveBtn(new WtPushButton(translate("Save"))), //
+		itsGenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
+{
 	itsDlg->contents()->addWidget(itsPublicId);
 	itsDlg->contents()->addWidget(itsPublicIdLen);
 	itsDlg->contents()->addWidget(itsPrivateId);
@@ -59,10 +61,13 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 	itsDlg->contents()->addWidget(itsGenPrivateIdentityBtn);
 	itsDlg->contents()->addWidget(itsCancelBtn);
 	itsDlg->contents()->addWidget(itsSaveBtn);
+    itsDlg->finished().connect(this,&WtYubikoOtpKeyView::finishedSlot);
+    itsCancelBtn->clicked().connect(itsDlg.get(),&WDialog::reject);
+    itsSaveBtn->clicked().connect(itsDlg.get(),&WDialog::accept);
 }
 
 WtYubikoOtpKeyView::~WtYubikoOtpKeyView() {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stubb
 }
 
 const IStrEdit& WtYubikoOtpKeyView::getPublicId() const {
@@ -138,7 +143,12 @@ IButton& WtYubikoOtpKeyView::getSaveBtn() {
 }
 
 void WtYubikoOtpKeyView::show() {
-	itsDlg->show();
+    itsDlg->show();
+}
+
+void WtYubikoOtpKeyView::finishedSlot(WDialog::DialogCode pCode)
+{
+    getAcceptedSignal()(pCode==WDialog::DialogCode::Accepted);
 }
 
 } /* namespace trihlav */

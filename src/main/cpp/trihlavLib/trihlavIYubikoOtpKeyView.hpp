@@ -29,6 +29,8 @@
 #ifndef TRIHLAV_I_YUBIKO_OTP_KEY_VIEW_HPP_
 #define TRIHLAV_I_YUBIKO_OTP_KEY_VIEW_HPP_
 
+#include <boost/signals2.hpp>
+
 #include <trihlavLib/trihlavIEdit.hpp>
 #include <trihlavLib/trihlavIButton.hpp>
 
@@ -36,6 +38,11 @@ namespace trihlav {
 
 class IYubikoOtpKeyView {
 public:
+    typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
+
+    AcceptedSignal& getAcceptedSignal() { return itsAcceptedSignal; }
+    const AcceptedSignal& getAcceptedSignal() const { return itsAcceptedSignal; }
+
 	virtual const IStrEdit& getPublicId() const=0;
 	virtual IStrEdit& getPublicId()=0;
 
@@ -66,7 +73,8 @@ public:
 	virtual void show() =0;
 
 	virtual ~IYubikoOtpKeyView(){}
-
+private:
+    AcceptedSignal itsAcceptedSignal;
 };
 
 } /* namespace trihlavApi */

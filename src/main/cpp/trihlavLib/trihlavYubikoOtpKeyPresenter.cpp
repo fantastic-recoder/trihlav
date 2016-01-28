@@ -5,6 +5,8 @@
  *      Author: grobap
  */
 
+#include <iostream>
+
 #include "trihlavYubikoOtpKeyPresenter.hpp"
 
 #include <boost/log/core.hpp>
@@ -14,6 +16,8 @@
 
 #include "trihlavIYubikoOtpKeyView.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
+
+using namespace std;
 
 namespace trihlav {
 
@@ -25,6 +29,7 @@ YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory )
 	itsView->getSecretKey().setValue("");
 	itsView->getPublicId().setValue("");
 	itsView->getPublicIdLen().setValue("6");
+    itsView->getAcceptedSignal().connect([=](bool pAccepted){accepted(pAccepted);});
 }
 
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
@@ -32,7 +37,14 @@ YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 }
 
 void YubikoOtpKeyPresenter::addKey() {
-	itsView->show();
+    itsView->show();
+}
+
+void YubikoOtpKeyPresenter::accepted(bool pAccepted)
+{
+    BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::accepted");
+    BOOST_LOG_TRIVIAL(info) << "Accepted==" << pAccepted ;
+
 }
 
 } /* namespace trihlav */
