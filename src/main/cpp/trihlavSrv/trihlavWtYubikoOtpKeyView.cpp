@@ -28,7 +28,10 @@
 
 #include <boost/locale.hpp>
 
+#include <Wt/WGridLayout>
 #include <Wt/WDialog>
+#include <Wt/WLength>
+#include <Wt/WLabel>
 
 #include "trihlavWtStrEdit.hpp"
 #include "trihlavWtPushButton.hpp"
@@ -38,6 +41,8 @@ using namespace Wt;
 using namespace std;
 using namespace boost;
 using boost::locale::translate;
+
+typedef Wt::WLength::Unit U;
 
 namespace trihlav {
 
@@ -53,21 +58,52 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		itsSaveBtn(new WtPushButton(translate("Save"))), //
 		itsGenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
 {
-	itsDlg->contents()->addWidget(itsPublicId);
-	itsDlg->contents()->addWidget(itsPublicIdLen);
-	itsDlg->contents()->addWidget(itsPrivateId);
-	itsDlg->contents()->addWidget(itsSecretKey);
-	itsDlg->contents()->addWidget(itsGenPublicIdentityBtn);
-	itsDlg->contents()->addWidget(itsGenPrivateIdentityBtn);
-	itsDlg->contents()->addWidget(itsCancelBtn);
-	itsDlg->contents()->addWidget(itsSaveBtn);
-    itsDlg->finished().connect(this,&WtYubikoOtpKeyView::finishedSlot);
-    itsCancelBtn->clicked().connect(itsDlg.get(),&WDialog::reject);
-    itsSaveBtn->clicked().connect(itsDlg.get(),&WDialog::accept);
+	itsDlg->setCaption(translate("Add key").str());
+	itsDlg->setWidth(WLength(64, U::FontEm));
+	WGridLayout* myTopLayout = new WGridLayout;
+	{
+		itsGenPublicIdentityBtn->setWidth(WLength(9.0,U::FontEm));
+		itsPublicId->setWidth(WLength(13.0,U::FontEm));
+		itsPublicIdLen->setWidth(WLength(2.0,U::FontEm));
+		Wt::WLabel* myLbl = new WLabel(translate("Public ID").str());
+		myLbl->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(myLbl,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsPublicId,0,1,1,3,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsPublicIdLen,0,4,1,1,Wt::AlignLeft|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsGenPublicIdentityBtn,0,5,1,1,Wt::AlignTop);
+	}
+	{
+		itsGenPrivateIdentityBtn->setWidth(WLength(9.0,U::FontEm));
+		itsPrivateId->setWidth(WLength(18.0,U::FontEm));
+		Wt::WLabel* myLbl = new WLabel(translate("Private ID").str());
+		myLbl->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(myLbl,1,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsPrivateId,1,1,1,4,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsGenPrivateIdentityBtn,1,5,1,1,Wt::AlignTop);
+	}
+	{
+		itsGenSecretKeyBtn->setWidth(WLength(9.0,U::FontEm));
+		itsSecretKey->setWidth(WLength(18.0,U::FontEm));
+		Wt::WText* myLbl = new WText(translate("Secret key").str());
+		myLbl->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(myLbl,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsSecretKey,2,1,1,4,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsGenSecretKeyBtn,2,5,1,1,Wt::AlignTop);
+	}
+	{
+		myTopLayout->addWidget(itsCancelBtn,3,1,1,1,Wt::AlignCenter|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsSaveBtn,3,4,1,1,Wt::AlignCenter|Wt::AlignMiddle);
+		itsCancelBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
+		itsSaveBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
+	}
+	itsDlg->contents()->setLayout(myTopLayout);
+	itsDlg->finished().connect(this, &WtYubikoOtpKeyView::finishedSlot);
+	itsCancelBtn->clicked().connect(itsDlg.get(), &WDialog::reject);
+	itsSaveBtn->clicked().connect(itsDlg.get(), &WDialog::accept);
 }
 
 WtYubikoOtpKeyView::~WtYubikoOtpKeyView() {
-    // TODO Auto-generated destructor stubb
+	// TODO Auto-generated destructor stubb
 }
 
 const IStrEdit& WtYubikoOtpKeyView::getPublicId() const {
@@ -143,12 +179,11 @@ IButton& WtYubikoOtpKeyView::getSaveBtn() {
 }
 
 void WtYubikoOtpKeyView::show() {
-    itsDlg->show();
+	itsDlg->show();
 }
 
-void WtYubikoOtpKeyView::finishedSlot(WDialog::DialogCode pCode)
-{
-    getAcceptedSignal()(pCode==WDialog::DialogCode::Accepted);
+void WtYubikoOtpKeyView::finishedSlot(WDialog::DialogCode pCode) {
+	getAcceptedSignal()(pCode == WDialog::DialogCode::Accepted);
 }
 
 } /* namespace trihlav */
