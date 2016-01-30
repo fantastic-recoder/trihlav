@@ -42,7 +42,7 @@ public:
 	virtual ~YubikoOtpKeyPresenter();
 	virtual void addKey();
 private:
-    virtual void accepted( bool pAccepted);
+    void accepted( bool pAccepted);
 };
 
 } /* namespace trihlavApi */

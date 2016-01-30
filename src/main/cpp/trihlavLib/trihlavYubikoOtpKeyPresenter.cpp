@@ -29,7 +29,7 @@ YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory )
 	itsView->getSecretKey().setValue("");
 	itsView->getPublicId().setValue("");
 	itsView->getPublicIdLen().setValue("6");
-    itsView->getAcceptedSignal().connect([=](bool pAccepted){accepted(pAccepted);});
+    itsView->getAcceptedSignal().connect([=](const bool pAccepted){accepted(pAccepted);});
 }
 
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
@@ -40,7 +40,7 @@ void YubikoOtpKeyPresenter::addKey() {
     itsView->show();
 }
 
-void YubikoOtpKeyPresenter::accepted(bool pAccepted)
+void YubikoOtpKeyPresenter::accepted(const bool pAccepted)
 {
     BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::accepted");
     BOOST_LOG_TRIVIAL(info) << "Accepted==" << pAccepted ;

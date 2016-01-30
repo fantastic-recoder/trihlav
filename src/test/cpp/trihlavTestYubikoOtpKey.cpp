@@ -7,13 +7,11 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
 
-#define BOOST_TEST_MAIN
-#define BOOST_REQUIRE_MODULE trihlavYubikoOtpKeyTests
-#include <boost/test/included/unit_test.hpp>
-
-#include <FakeIt/single_header/boost/fakeit.hpp>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"  // Brings in Google Mock.
 
 #include "trihlavGlobalFixture.hpp"
+#include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
@@ -27,137 +25,156 @@ using namespace std;
 using namespace trihlav;
 using namespace boost;
 using namespace boost::filesystem;
-using namespace fakeit;
+
+using ::testing::Return;
+using ::testing::ReturnRef;
 
 string thePrivateIdStr("666");
 string thePublicIdStr("666");
 string theSecretKeyStr("666");
 int thePublicIdLen = 666;
 
-Mock<IStrEdit> thePrivateIdEditMock;
-Mock<IStrEdit> thePublicIdEditMock;
-Mock<IStrEdit> theSecretKeyEditMock;
-Mock<IStrEdit> thePublicIdLenEditMock;
-Mock<IButton> theGenPrivateIdMock;
-Mock<IButton> theGenPublicIdMock;
-Mock<IButton> theGenSecretKeyMock;
-Mock<IButton> theSaveButtonMock;
-Mock<IButton> theCancelButtonMock;
-Mock<IYubikoOtpKeyView> theMockYubikoOtpKeyView;
-Mock<IFactory> theMockFactory;
-
-class InitYoubikoUiMock: virtual public GlobalFixture {
+class StrEditMock: public IStrEdit {
 public:
-	InitYoubikoUiMock() :
-			GlobalFixture() {
-		BOOST_LOG_NAMED_SCOPE("InitYoubikoUiMock");
-		When(Method(thePrivateIdEditMock,setValue)).AlwaysDo(
-				[](const string& pVal) {
-					thePrivateIdStr=pVal;
-					BOOST_LOG_TRIVIAL(debug)<< "Priv Id == \"" << thePrivateIdStr << "\".";
-				});
+	std::string val;
+	StrEditMock() {}
+	StrEditMock(const StrEditMock& ) {}
 
-		When(Method(thePublicIdEditMock,setValue)).AlwaysDo(
-				[](const string& pVal) {
-					thePublicIdStr=pVal;
-					BOOST_LOG_TRIVIAL(debug)<< "Publ Id == \"" << thePublicIdStr << "\".";
-				});
+	virtual const std::string getValue() const { return val; }
 
-		When(Method(theSecretKeyEditMock,setValue)).AlwaysDo(
-				[](const string& pVal) {
-					theSecretKeyStr =pVal;
-					BOOST_LOG_TRIVIAL(debug)<< "Sec Key == \"" << theSecretKeyStr << "\".";
-				});
+	virtual void setValue(const std::string& pVal) {
+		val=pVal;
+	}
 
-		When(Method(thePublicIdLenEditMock,setValue)).AlwaysDo(
-				[](const string& pVal) {
-					thePublicIdLen=lexical_cast<int>(pVal);
-					BOOST_LOG_TRIVIAL(debug)<< "Id Len == \"" << thePublicIdLen << "\".";
-				});
 
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getPublicId, const IStrEdit& () )).AlwaysReturn(
-				thePublicIdEditMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getPublicId, IStrEdit& () )).AlwaysReturn(
-				thePublicIdEditMock.get());
+};
 
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getPrivateId, const IStrEdit& () )).AlwaysReturn(
-				thePrivateIdEditMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getPrivateId, IStrEdit& () )).AlwaysReturn(
-				thePrivateIdEditMock.get());
+class MockIButton : public IButton {
+public:
+	std::string val;
+	virtual const std::string getText() const { return val; }
 
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getSecretKey, const IStrEdit& () )).AlwaysReturn(
-				theSecretKeyEditMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getSecretKey, IStrEdit& () )).AlwaysReturn(
-				theSecretKeyEditMock.get());
-
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getPublicIdLen, const IStrEdit& () )).AlwaysReturn(
-				thePublicIdLenEditMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getPublicIdLen, IStrEdit& () )).AlwaysReturn(
-				thePublicIdLenEditMock.get());
-
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getGenPublicIdentityBtn, const IButton& () )).AlwaysReturn(
-				theGenPublicIdMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getGenPublicIdentityBtn, IButton& () )).AlwaysReturn(
-				theGenPublicIdMock.get());
-
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getGenPrivateIdentityBtn, const IButton& () )).AlwaysReturn(
-				theGenPrivateIdMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getGenPrivateIdentityBtn, IButton& () )).AlwaysReturn(
-				theGenPrivateIdMock.get());
-
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getGenSecretKeyBtn, const IButton& () )).AlwaysReturn(
-				theGenSecretKeyMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getGenSecretKeyBtn, IButton& () )).AlwaysReturn(
-				theGenSecretKeyMock.get());
-
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getCancelBtn, const IButton& () )).AlwaysReturn(
-				theCancelButtonMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getCancelBtn, IButton& () )).AlwaysReturn(
-				theCancelButtonMock.get());
-
-		When(ConstOverloadedMethod( theMockYubikoOtpKeyView, getSaveBtn, const IButton& () )).AlwaysReturn(
-				theSaveButtonMock.get());
-		When(OverloadedMethod( theMockYubikoOtpKeyView, getSaveBtn, IButton& () )).AlwaysReturn(
-				theSaveButtonMock.get());
-
-		When(ConstOverloadedMethod(theMockFactory,createYubikoOtpKeyView,IYubikoOtpKeyView*())).AlwaysReturn(&theMockYubikoOtpKeyView.get());
+	virtual void setText( const std::string& pVal) {
+		val=pVal;
 	}
 };
 
-BOOST_GLOBAL_FIXTURE(InitYoubikoUiMock);
+class MockYubikoOtpKeyView: public IYubikoOtpKeyView {
+public:
+	StrEditMock itsPrivateIdEditMock;
+	StrEditMock itsPublicIdEditMock;
+	StrEditMock itsSecretKeyEditMock;
+	StrEditMock itsPublicIdLenEditMock;
+	MockIButton itsGenPrivateIdMock;
+	MockIButton  itsGenPublicIdMock;
+	MockIButton  itsGenSecretKeyMock;
+	MockIButton  itsMockSaveBtn;
+	MockIButton  itsCancelButtonMock;
+	MockYubikoOtpKeyView() {
+		ON_CALL(*this,getPrivateId()) //
+		.WillByDefault(ReturnRef(itsPrivateIdEditMock));
 
-BOOST_AUTO_TEST_SUITE(trihlavTestYubikoOtpKey)
+		ON_CALL(*this,getSecretKey()) //
+		.WillByDefault(ReturnRef(itsSecretKeyEditMock));
 
-BOOST_AUTO_TEST_CASE(testKeyManagerInitialisation) {
+		ON_CALL(*this,getPublicId()) //
+		.WillByDefault(ReturnRef(itsPublicIdEditMock));
+
+		ON_CALL(*this,getPublicIdLen()) //
+		.WillByDefault(ReturnRef(itsPublicIdLenEditMock));
+
+		ON_CALL(*this,getSaveBtn()) //
+		.WillByDefault(ReturnRef(itsMockSaveBtn));
+
+	}
+	MOCK_CONST_METHOD0( getPublicId, IStrEdit& () );
+	MOCK_METHOD0(getPublicId,IStrEdit& () );
+
+	MOCK_METHOD0(getPublicIdLen, IStrEdit& () );
+	MOCK_CONST_METHOD0(getPublicIdLen, IStrEdit& () );
+
+	MOCK_CONST_METHOD0(getPrivateId, IStrEdit& () );
+	MOCK_METHOD0(getPrivateId, IStrEdit& () );
+
+	MOCK_CONST_METHOD0(getSecretKey, IStrEdit& () );
+	MOCK_METHOD0(getSecretKey, IStrEdit& () );
+
+	MOCK_CONST_METHOD0(getGenPublicIdentityBtn, IButton& () );
+	MOCK_METHOD0(getGenPublicIdentityBtn, IButton& () );
+
+	MOCK_CONST_METHOD0(getGenPrivateIdentityBtn, IButton& () );
+	MOCK_METHOD0(getGenPrivateIdentityBtn, IButton& () );
+
+	MOCK_CONST_METHOD0(getGenSecretKeyBtn, IButton& () );
+	MOCK_METHOD0(getGenSecretKeyBtn, IButton& () );
+
+	MOCK_CONST_METHOD0(getCancelBtn, IButton& () );
+	MOCK_METHOD0(getCancelBtn, IButton& () );
+
+	MOCK_CONST_METHOD0(getSaveBtn, IButton& () );
+	MOCK_METHOD0(getSaveBtn, IButton& () );
+
+	MOCK_METHOD0(show, void ());
+
+};
+
+class MockFactory: public IFactory {
+	MockYubikoOtpKeyView itsMockYubikoOtpKeyView;
+public:
+	MOCK_CONST_METHOD0(createMainPanelView,IMainPanelView* ());
+	MOCK_CONST_METHOD0(createKeyListPresenter,IKeyListPresenter* () );
+	MOCK_CONST_METHOD0(createKeyListView,IKeyListView* () );
+	MOCK_CONST_METHOD0(createPswdChckPresenter,IPswdChckPresenter* () );
+	MOCK_CONST_METHOD0(createYubikoOtpKeyPresenter,IYubikoOtpKeyPresenter* ());
+	MOCK_CONST_METHOD0(createPswdChckView,IPswdChckView* () );
+	MOCK_CONST_METHOD0(createYubikoOtpKeyView,IYubikoOtpKeyView* () );
+
+	MockFactory() {
+		ON_CALL(*this,createYubikoOtpKeyView()) //
+		.WillByDefault(Return(&itsMockYubikoOtpKeyView));
+	}
+
+	MockYubikoOtpKeyView& getYubikoOtpKeyView() {
+		return itsMockYubikoOtpKeyView;
+	}
+};
+
+int main(int argc, char **argv) {
+	initLog();
+	::testing::InitGoogleTest(&argc, argv);
+	int ret = RUN_ALL_TESTS();
+	return ret;
+}
+
+TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManagerInitialisation");
 	KeyManager myKMan(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
 	BOOST_LOG_TRIVIAL(debug)<< "Test lazy init. only first getter will cause"
 	" initialization";
-	BOOST_REQUIRE(!myKMan.isInitialized());
+	EXPECT_TRUE(!myKMan.isInitialized());
 	const path& myKManPath = myKMan.getConfigDir();
 	BOOST_LOG_TRIVIAL(debug)<< "Got config. directory \"" << myKManPath << "\","
 	" now we should be initialized";
 
-	BOOST_REQUIRE(myKMan.isInitialized());
+	EXPECT_TRUE(myKMan.isInitialized());
 	BOOST_LOG_TRIVIAL(debug)<< "Does the configuration path exists?";
-	BOOST_REQUIRE(exists(myKManPath));
+	EXPECT_TRUE(exists(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "Yes, it does.";
 
-	YubikoOtpKeyPresenter myPresenter(theMockFactory.get());
-	// Method(thePrivateIdEditMock,setValue).Using("") does crash - why?
-	Verify(Method(thePrivateIdEditMock,setValue)).AtLeastOnce();
-	Verify(Method(thePublicIdEditMock,setValue)).AtLeastOnce();
-	Verify(Method(thePublicIdLenEditMock,setValue)).AtLeastOnce();
-	BOOST_REQUIRE(thePrivateIdStr.empty());
-	BOOST_REQUIRE(thePublicIdStr.empty());
-	BOOST_REQUIRE(thePublicIdLen == 6);
-	BOOST_REQUIRE(remove_all(myKManPath));
+	MockFactory myMockFactory;
+
+	YubikoOtpKeyPresenter myPresenter(myMockFactory);
+	MockYubikoOtpKeyView& myYubikoOtpKeyView(myMockFactory.getYubikoOtpKeyView());
+	EXPECT_TRUE(myYubikoOtpKeyView.itsPrivateIdEditMock.getValue().empty());
+	EXPECT_TRUE(myYubikoOtpKeyView.itsPublicIdEditMock.getValue().empty());
+	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getValue(),"6");
+	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }
 
-BOOST_AUTO_TEST_CASE(testGenerateButtons) {
+TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
-	YubikoOtpKeyPresenter myPresenter(theMockFactory.get());
+	MockFactory myMockFactory;
+	YubikoOtpKeyPresenter myPresenter(myMockFactory);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
