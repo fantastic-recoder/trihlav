@@ -16,24 +16,29 @@
 
 #include "trihlavIYubikoOtpKeyView.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavKeyManager.hpp"
 
 using namespace std;
 
 namespace trihlav {
 
 YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory )
-: IYubikoOtpKeyPresenter(pFactory)
-, itsView(pFactory.createYubikoOtpKeyView()) {
-	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
-	itsView->getPrivateId().setValue("");
-	itsView->getSecretKey().setValue("");
-	itsView->getPublicId().setValue("");
-	itsView->getPublicIdLen().setValue("6");
-    itsView->getAcceptedSignal().connect([=](const bool pAccepted){accepted(pAccepted);});
+    : IYubikoOtpKeyPresenter(pFactory)
+    , itsView(pFactory.createYubikoOtpKeyView())
+    , itsCurCfg(new YubikoOtpKeyConfig(pFactory.getKeyManager().getConfigDir())){
+    BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
+    itsView->getPrivateId().setValue("");
+    itsView->getSecretKey().setValue("");
+    itsView->getPublicId().setValue("");
+    itsView->getPublicIdLen().setValue("6");
+    itsView->getAcceptedSignal().connect([=](const bool pAccepted) {
+        accepted(pAccepted);
+    });
 }
 
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
-	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::~YubikoOptKeyPresenter");
+    BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::~YubikoOptKeyPresenter");
 }
 
 void YubikoOtpKeyPresenter::addKey() {

@@ -40,8 +40,11 @@ class IPswdChckView;
 class IYubikoOtpKeyView;
 class IYubikoOtpKeyPresenter;
 
+class KeyManager;
+
 class IFactory {
 public:
+	virtual ~IFactory() {}
 	virtual IMainPanelView* createMainPanelView() const=0;
 	virtual IKeyListPresenter* createKeyListPresenter() const ;
 	virtual IKeyListView* createKeyListView() const =0;
@@ -49,8 +52,7 @@ public:
 	virtual IYubikoOtpKeyPresenter* createYubikoOtpKeyPresenter() const;
 	virtual IPswdChckView* createPswdChckView() const =0;
 	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() const =0;
-	virtual ~IFactory() {
-	}
+        virtual KeyManager& getKeyManager() const;
 };
 
 }  // namespace trihlav

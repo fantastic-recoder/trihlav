@@ -26,14 +26,27 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+
+#include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
 
 namespace trihlav {
 
+  KeyManager& IFactory::getKeyManager() const {
+    BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
+    static KeyManager theKeyManager;
+    return theKeyManager;
+  }
+  
 IKeyListPresenter* IFactory::createKeyListPresenter() const {
+  BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
 	return new KeyListPresenter(*this);
 }
 

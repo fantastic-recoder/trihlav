@@ -12,30 +12,36 @@
 
 namespace trihlav {
 
+typedef boost::filesystem::path path;
+
 /**
  * Manage key operations, fe. their persistence.
  */
 class KeyManager {
-	bool itsInitializedFlag;
-	boost::filesystem::path itsConfigDir;
 public:
-	/// Lazy initialization constructor.
-	KeyManager(const boost::filesystem::path& pDir);
+    /// Lazy initialization constructor.
+    KeyManager(const path& pDir);
 
-	virtual ~KeyManager();
+    KeyManager();
 
-	const boost::filesystem::path& getConfigDir();
+    virtual ~KeyManager();
 
-	/**
-	 * Are all internal resources ready.
-	 */
-	const bool isInitialized() const {
-		return itsInitializedFlag;
-	}
+    virtual const path& getConfigDir() const;
 
-	/// Get users home directory
-	static const boost::filesystem::path
-	getHome();
+    /**
+     * Are all internal resources ready.
+     */
+    const bool isInitialized() const {
+        return itsInitializedFlag;
+    }
+
+    /// Get users home directory
+    static const path getHome();
+private:
+    mutable bool itsInitializedFlag;
+    boost::filesystem::path itsConfigDir;
+    const path detectConfigDir() const;
+    void checkPath(const path& pPath, bool &readable, bool &writable) const;
 };
 
 } /* namespace trihlav */

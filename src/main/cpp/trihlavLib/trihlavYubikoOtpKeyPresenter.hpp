@@ -28,20 +28,41 @@
 #ifndef TRIHLAV_YUBIKO_OPT_KEY_PRESENTER_HPP_
 #define TRIHLAV_YUBIKO_OPT_KEY_PRESENTER_HPP_
 
+#include <memory>
+
 #include "trihlavLib/trihlavIYubikoOtpKeyPresenter.hpp"
 
 namespace trihlav {
 
 class IFactory;
 class IYubikoOtpKeyView;
+class YubikoOtpKeyConfig;
 
+/**
+ * @brief Presents an @see YubikoOtpKeyConfig
+ */
 class YubikoOtpKeyPresenter: public IYubikoOtpKeyPresenter {
-	IYubikoOtpKeyView* itsView;
 public:
-	YubikoOtpKeyPresenter(const IFactory& );
-	virtual ~YubikoOtpKeyPresenter();
-	virtual void addKey();
+    typedef std::unique_ptr<YubikoOtpKeyConfig> YubikoOtpKeyConfigPtr;
+
+    YubikoOtpKeyPresenter(const IFactory& );
+
+    virtual ~YubikoOtpKeyPresenter();
+
+    virtual void addKey();
+
+    virtual YubikoOtpKeyConfigPtr& getCurCfg() {
+      return itsCurCfg;
+    }
+
+    virtual const YubikoOtpKeyConfigPtr& getCurCfg() const {
+      return itsCurCfg;
+    }
+
 private:
+    IYubikoOtpKeyView* itsView;
+    YubikoOtpKeyConfigPtr itsCurCfg;
+    YubikoOtpKeyConfigPtr itsOldCfg;
     void accepted( bool pAccepted);
 };
 

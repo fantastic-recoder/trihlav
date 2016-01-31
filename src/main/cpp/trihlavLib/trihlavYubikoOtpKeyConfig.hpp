@@ -12,20 +12,13 @@ namespace bfs = ::boost::filesystem;
 
 namespace trihlav {
 
+class KeyManager;
+
 /**
  * @brief Store, load and provide the APIs configuration.
  */
 class YubikoOtpKeyConfig
 {
-private:
-	std::string      itsPrefix;
-    bool             itsChangedFlag; //< will be set internaly when something changed
-    bfs::path        itsFilename; //< where to store it
-    yubikey_token_st itsToken;
-    uint8_t          itsKey[YUBIKEY_KEY_SIZE];
-
-	const std::string checkFileName(bool pIsOut);
-
 protected:
     void setFilename(const std::string &value);
 public:
@@ -157,7 +150,7 @@ public:
      * @return The Yubikey constant token.
      */
     const yubikey_token_st& getToken() const {
-    	return itsToken;
+        return itsToken;
     }
 
     /**
@@ -167,14 +160,38 @@ public:
         return itsToken;
     }
 
-	const std::string& getPrefix() const {
-		return itsPrefix;
-	}
+    const std::string& getPublicId() const {
+        return itsPublicId;
+    }
 
-protected:
-	void setPrefix(const std::string& prefix) {
-		this->itsPrefix = prefix;
-	}
+    void setPublicId(const std::string& pPubId) {
+        this->itsPublicId = pPubId;
+    }
+    
+    /**
+     * @see setSecretKey(const std::string& pKey)
+     * 
+     * @return the secret key, hex encoded. 
+     */
+    const std::string getSecretKey() const;
+    
+    /**
+     * @brief Set the secret key, 16 bytes 32 characters hex encoded.
+     * 
+     * @param pKey new value for the secret key, hex encoded.
+     */
+    void setSecretKey( const std::string& pKey);
+
+private:
+    std::string      itsPublicId; //< Keys public ID max 6 characters.
+    bool             itsChangedFlag; //< will be set internaly when something changed
+    bfs::path        itsFilename; //< where to store it
+    yubikey_token_st itsToken;
+    uint8_t          itsKey[YUBIKEY_KEY_SIZE];
+
+    const std::string checkFileName(bool pIsOut);
+
+
 };
 
 } // end namespace trihlavApi

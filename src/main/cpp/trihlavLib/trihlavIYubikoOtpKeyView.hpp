@@ -25,7 +25,6 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-
 #ifndef TRIHLAV_I_YUBIKO_OTP_KEY_VIEW_HPP_
 #define TRIHLAV_I_YUBIKO_OTP_KEY_VIEW_HPP_
 

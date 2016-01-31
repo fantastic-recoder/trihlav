@@ -34,33 +34,33 @@ string thePublicIdStr("666");
 string theSecretKeyStr("666");
 int thePublicIdLen = 666;
 
-class StrEditMock: public IStrEdit {
-public:
-	std::string val;
+struct StrEditMock: public IStrEdit {
+	std::string itsVal;
 	StrEditMock() {}
 	StrEditMock(const StrEditMock& ) {}
 
-	virtual const std::string getValue() const { return val; }
+	virtual const std::string getValue() const { return itsVal; }
 
+	/**
+	 * @brief Just sets the internal value.
+	 * @see IStrEdit::getValue
+	 * @return void
+	 */
 	virtual void setValue(const std::string& pVal) {
-		val=pVal;
+		itsVal=pVal;
 	}
-
-
 };
 
-class MockIButton : public IButton {
-public:
-	std::string val;
-	virtual const std::string getText() const { return val; }
+struct MockIButton : public IButton {
+	std::string itsVal;
+	virtual const std::string getText() const { return itsVal; }
 
 	virtual void setText( const std::string& pVal) {
-		val=pVal;
+		itsVal=pVal;
 	}
 };
 
-class MockYubikoOtpKeyView: public IYubikoOtpKeyView {
-public:
+struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
 	StrEditMock itsPrivateIdEditMock;
 	StrEditMock itsPublicIdEditMock;
 	StrEditMock itsSecretKeyEditMock;
@@ -118,9 +118,15 @@ public:
 
 };
 
-class MockFactory: public IFactory {
+/**
+ * @brief Mock factory.
+ * It returns mock implementations. It has only
+ * singleton objects, so consequent execution of the same createXXX 
+ * method returns same object.
+ */
+struct MockFactory: public IFactory {
 	MockYubikoOtpKeyView itsMockYubikoOtpKeyView;
-public:
+	
 	MOCK_CONST_METHOD0(createMainPanelView,IMainPanelView* ());
 	MOCK_CONST_METHOD0(createKeyListPresenter,IKeyListPresenter* () );
 	MOCK_CONST_METHOD0(createKeyListView,IKeyListView* () );
@@ -175,6 +181,15 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
 	MockFactory myMockFactory;
-	YubikoOtpKeyPresenter myPresenter(myMockFactory);
+	YubikoOtpKeyPresenter myYubikoOtpKeyPresenter(myMockFactory);
+	MockYubikoOtpKeyView& myYubikoOtpKeyView(myMockFactory.getYubikoOtpKeyView());
+	myYubikoOtpKeyView.itsGenPrivateIdMock.getPressedSignal()();
+	myYubikoOtpKeyView.itsGenPublicIdMock.getPressedSignal()();
+	myYubikoOtpKeyView.itsGenSecretKeyMock.getPressedSignal()();
+	auto& myCfg=myYubikoOtpKeyPresenter.getCurCfg();
+	EXPECT_TRUE(!myCfg->getPrivateId().empty());
+	EXPECT_TRUE(!myCfg->getPublicId().empty());
+	EXPECT_TRUE(!myCfg->getSecretKey().empty());
+	EXPECT_EQ(!myCfg->getPublicId().length(),6);
 }
 

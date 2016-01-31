@@ -11,7 +11,8 @@ class WrongConfigValue : virtual public std::invalid_argument
 public:
     enum EValNames {
         EYbkPrivateId,
-        ENoValSpecified
+        ENoValSpecified,
+	EYbkSecretKey
     };
 
     enum EReason {
@@ -35,7 +36,7 @@ public:
 
     EReason getReason() const;
 
-    void setItsReason(const EReason &value);
+    void setReason(const EReason &value);
 
     const char* what() const throw();
 
