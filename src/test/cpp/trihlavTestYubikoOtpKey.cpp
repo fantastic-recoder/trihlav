@@ -183,13 +183,24 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	MockFactory myMockFactory;
 	YubikoOtpKeyPresenter myYubikoOtpKeyPresenter(myMockFactory);
 	MockYubikoOtpKeyView& myYubikoOtpKeyView(myMockFactory.getYubikoOtpKeyView());
+	auto& myCfg=myYubikoOtpKeyPresenter.getCurCfg();
+	const string myPrivId(myCfg->getPrivateId());
+	const string myPublicId(myCfg->getPublicId());
+	const string mySecretKey(myCfg->getSecretKey());
+	BOOST_LOG_TRIVIAL(debug)<< "0 myPrivId   : "<< myPrivId << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "0 myPublicId : "<< myPublicId << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "0 mySecretKey: "<< mySecretKey<< ".";
+	BOOST_LOG_TRIVIAL(debug)<< "1 myPrivId   : "<< myCfg->getPrivateId() << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "1 myPublicId : "<< myCfg->getPublicId() << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "1 mySecretKey: "<< myCfg->getSecretKey() << ".";
 	myYubikoOtpKeyView.itsGenPrivateIdMock.getPressedSignal()();
 	myYubikoOtpKeyView.itsGenPublicIdMock.getPressedSignal()();
 	myYubikoOtpKeyView.itsGenSecretKeyMock.getPressedSignal()();
-	auto& myCfg=myYubikoOtpKeyPresenter.getCurCfg();
 	EXPECT_TRUE(!myCfg->getPrivateId().empty());
 	EXPECT_TRUE(!myCfg->getPublicId().empty());
 	EXPECT_TRUE(!myCfg->getSecretKey().empty());
-	EXPECT_EQ(!myCfg->getPublicId().length(),6);
+	EXPECT_TRUE(myPublicId.compare( myCfg->getPublicId())==0);
+	EXPECT_TRUE(myPrivId.compare( myCfg->getPrivateId())==0);
+	EXPECT_TRUE(mySecretKey.compare(myCfg->getSecretKey())==0);
 }
 

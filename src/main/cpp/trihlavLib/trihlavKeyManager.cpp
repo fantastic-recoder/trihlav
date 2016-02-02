@@ -59,7 +59,7 @@ KeyManager::getConfigDir() const {
     if (!isInitialized()) {
         BOOST_LOG_TRIVIAL(debug)<< "Checking config dir " << itsConfigDir << ".";
         if(exists(itsConfigDir)) {
-            const perms &myPerms = status(getConfigDir()).permissions();
+            const perms &myPerms = status(itsConfigDir).permissions();
             if(!myPerms & perms::owner_write) {
                 throw new CannotWriteConfigDir(itsConfigDir);
             }
@@ -341,11 +341,15 @@ const path KeyManager::detectConfigDir() const
     if(myWriteable) {
         BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writeable.";
     } else {
-        myDefPath=getHome() / ".trihlav";
-        if(!create_directories(myDefPath))
+        myDefPath=(getHome() / ".trihlav") / "keys";
+        create_directories(myDefPath);
+        checkPath(myDefPath,myWriteable,myReadable);
+        if(myWriteable) {
+            BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writeable.";
+        } else {
             throw new FailedCreateConfigDir(itsConfigDir);
+        }
+        return myDefPath;
     }
-    return myDefPath;
 }
-
 } /* namespace trihlav */
