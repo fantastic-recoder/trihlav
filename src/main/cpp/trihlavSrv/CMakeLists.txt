@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES( ${Wt_INCLUDE_DIR} ..)
 
 add_executable(trihlavsrv main.cpp trihlavApp.cpp trihlavWtUiFactory.cpp 
 	trihlavWtMainPanelView.cpp trihlavWtPswdChckView.cpp 
-	trihlavWtKeyListView.cpp trihlavWtPushButton.cpp 
+	trihlavWtKeyListView.cpp trihlavWtPushButton.cpp trihlavWtSpinBox.cpp
 	trihlavWtYubikoOtpKeyView.cpp trihlavWtStrEdit.cpp )
 
 TARGET_LINK_LIBRARIES( trihlavsrv

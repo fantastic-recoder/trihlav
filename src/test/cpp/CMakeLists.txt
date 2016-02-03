@@ -17,8 +17,6 @@ target_link_libraries(trihlavApiTests
                       ${CMAKE_THREAD_LIBS_INIT}
                       )
 
-MESSAGE( STATUS "GTEST_LIBRARIES=${GTEST_LIBRARIES} ${GMOCK_LIBRARIES}.")
-
 add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp trihlavGlobalFixture.cpp trihlavTestGetFactory.cpp)
 
 add_test( NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey )

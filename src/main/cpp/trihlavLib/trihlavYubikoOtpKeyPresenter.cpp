@@ -15,6 +15,8 @@
 #include <boost/log/expressions.hpp>
 
 #include "trihlavIYubikoOtpKeyView.hpp"
+#include "trihlavLib/trihlavIEdit.hpp"
+#include "trihlavLib/trihlavISpinBox.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavKeyManager.hpp"
@@ -31,7 +33,7 @@ YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory )
     itsView->getPrivateId().setValue("");
     itsView->getSecretKey().setValue("");
     itsView->getPublicId().setValue("");
-    itsView->getPublicIdLen().setValue("6");
+    itsView->getPublicIdLen().setValue(6);
     itsView->getAcceptedSignal().connect([=](const bool pAccepted) {
         accepted(pAccepted);
     });

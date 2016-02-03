@@ -30,10 +30,11 @@
 
 #include <boost/signals2.hpp>
 
-#include <trihlavLib/trihlavIEdit.hpp>
-#include <trihlavLib/trihlavIButton.hpp>
-
 namespace trihlav {
+
+class ISpinBox;
+class IStrEdit;
+class IButton;
 
 class IYubikoOtpKeyView {
 public:
@@ -45,8 +46,8 @@ public:
 	virtual const IStrEdit& getPublicId() const=0;
 	virtual IStrEdit& getPublicId()=0;
 
-	virtual IStrEdit& getPublicIdLen()=0;
-	virtual const IStrEdit& getPublicIdLen() const=0;
+	virtual ISpinBox& getPublicIdLen()=0;
+	virtual const ISpinBox& getPublicIdLen() const=0;
 
 	virtual const IStrEdit& getPrivateId() const=0;
 	virtual IStrEdit& getPrivateId()=0;

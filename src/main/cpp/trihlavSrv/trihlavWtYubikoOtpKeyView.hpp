@@ -42,11 +42,12 @@ namespace trihlav {
 
 class WtStrEdit;
 class WtPushButton;
+class WtSpinBox;
 
 class WtYubikoOtpKeyView: public IYubikoOtpKeyView {
     std::unique_ptr<Wt::WDialog> itsDlg;
 	WtStrEdit* itsPublicId;
-	WtStrEdit* itsPublicIdLen;
+	WtSpinBox* itsPublicIdLen;
 	WtStrEdit* itsPrivateId;
 	WtStrEdit* itsSecretKey;
 	WtPushButton* itsGenPublicIdentityBtn;
@@ -61,8 +62,8 @@ public:
 	virtual const IStrEdit& getPublicId() const;
 	virtual IStrEdit& getPublicId();
 
-	virtual IStrEdit& getPublicIdLen();
-	virtual const IStrEdit& getPublicIdLen() const;
+	virtual ISpinBox& getPublicIdLen();
+	virtual const ISpinBox& getPublicIdLen() const;
 
 	virtual const IStrEdit& getPrivateId() const;
 	virtual IStrEdit& getPrivateId();

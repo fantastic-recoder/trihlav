@@ -20,6 +20,8 @@
 #include "trihlavLib/trihlavIEdit.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
+#include "trihlavLib/trihlavIButton.hpp"
+#include "trihlavLib/trihlavISpinBox.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -34,42 +36,92 @@ string thePublicIdStr("666");
 string theSecretKeyStr("666");
 int thePublicIdLen = 666;
 
-struct StrEditMock: public IStrEdit {
-	std::string itsVal;
-	StrEditMock() {}
-	StrEditMock(const StrEditMock& ) {}
+template<typename T>
+struct IMockEdit: virtual public IEdit<T> {
+	T itsVal;
 
-	virtual const std::string getValue() const { return itsVal; }
+	/**
+	 * @brief Getter
+	 * @return a copy of it's value
+	 */
+	virtual const T getValue() const {
+		return itsVal;
+	}
 
 	/**
 	 * @brief Just sets the internal value.
 	 * @see IStrEdit::getValue
 	 * @return void
 	 */
-	virtual void setValue(const std::string& pVal) {
-		itsVal=pVal;
+	virtual void setValue(const T& pVal) {
+		itsVal = pVal;
 	}
+
 };
 
-struct MockIButton : public IButton {
-	std::string itsVal;
-	virtual const std::string getText() const { return itsVal; }
+struct MockStrEdit: virtual public IMockEdit<std::string>, virtual public IStrEdit {
+};
 
-	virtual void setText( const std::string& pVal) {
-		itsVal=pVal;
+struct MockSpinBox: virtual public IMockEdit<int>, virtual public ISpinBox {
+	int itsMin;
+	int itsMax;
+	int itsStep;
+
+	virtual const int getValue() const {
+		return IMockEdit<int>::getValue();
+	}
+
+	virtual void setValue(const int& pVal) {
+		IMockEdit<int>::setValue(pVal);
+	}
+
+	virtual void setMin(const int pMin) {
+		itsMin = pMin;
+	}
+
+	virtual const int getMin() const {
+		return itsMin;
+	}
+
+	virtual void setMax(const int pMax) {
+		itsMax = pMax;
+	}
+
+	virtual const int getMax() const {
+		return itsMax;
+	}
+
+	virtual void setStep(const int pStep) {
+		itsStep = pStep;
+	}
+
+	virtual const int getStep() const {
+		return itsStep;
+	}
+
+};
+
+struct MockButton: public IButton {
+	std::string itsVal;
+	virtual const std::string getText() const {
+		return itsVal;
+	}
+
+	virtual void setText(const std::string& pVal) {
+		itsVal = pVal;
 	}
 };
 
 struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
-	StrEditMock itsPrivateIdEditMock;
-	StrEditMock itsPublicIdEditMock;
-	StrEditMock itsSecretKeyEditMock;
-	StrEditMock itsPublicIdLenEditMock;
-	MockIButton itsGenPrivateIdMock;
-	MockIButton  itsGenPublicIdMock;
-	MockIButton  itsGenSecretKeyMock;
-	MockIButton  itsMockSaveBtn;
-	MockIButton  itsCancelButtonMock;
+	MockStrEdit itsPrivateIdEditMock;
+	MockStrEdit itsPublicIdEditMock;
+	MockStrEdit itsSecretKeyEditMock;
+	MockSpinBox itsPublicIdLenEditMock;
+	MockButton itsGenPrivateIdMock;
+	MockButton itsGenPublicIdMock;
+	MockButton itsGenSecretKeyMock;
+	MockButton itsMockSaveBtn;
+	MockButton itsCancelButtonMock;
 	MockYubikoOtpKeyView() {
 		ON_CALL(*this,getPrivateId()) //
 		.WillByDefault(ReturnRef(itsPrivateIdEditMock));
@@ -90,8 +142,8 @@ struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
 	MOCK_CONST_METHOD0( getPublicId, IStrEdit& () );
 	MOCK_METHOD0(getPublicId,IStrEdit& () );
 
-	MOCK_METHOD0(getPublicIdLen, IStrEdit& () );
-	MOCK_CONST_METHOD0(getPublicIdLen, IStrEdit& () );
+	MOCK_METHOD0(getPublicIdLen, ISpinBox& () );
+	MOCK_CONST_METHOD0(getPublicIdLen, ISpinBox& () );
 
 	MOCK_CONST_METHOD0(getPrivateId, IStrEdit& () );
 	MOCK_METHOD0(getPrivateId, IStrEdit& () );
@@ -126,7 +178,7 @@ struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
  */
 struct MockFactory: public IFactory {
 	MockYubikoOtpKeyView itsMockYubikoOtpKeyView;
-	
+
 	MOCK_CONST_METHOD0(createMainPanelView,IMainPanelView* ());
 	MOCK_CONST_METHOD0(createKeyListPresenter,IKeyListPresenter* () );
 	MOCK_CONST_METHOD0(createKeyListView,IKeyListView* () );
@@ -170,10 +222,11 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	MockFactory myMockFactory;
 
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
-	MockYubikoOtpKeyView& myYubikoOtpKeyView(myMockFactory.getYubikoOtpKeyView());
+	MockYubikoOtpKeyView& myYubikoOtpKeyView(
+			myMockFactory.getYubikoOtpKeyView());
 	EXPECT_TRUE(myYubikoOtpKeyView.itsPrivateIdEditMock.getValue().empty());
 	EXPECT_TRUE(myYubikoOtpKeyView.itsPublicIdEditMock.getValue().empty());
-	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getValue(),"6");
+	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getValue(), 6);
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }
@@ -182,8 +235,9 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
 	MockFactory myMockFactory;
 	YubikoOtpKeyPresenter myYubikoOtpKeyPresenter(myMockFactory);
-	MockYubikoOtpKeyView& myYubikoOtpKeyView(myMockFactory.getYubikoOtpKeyView());
-	auto& myCfg=myYubikoOtpKeyPresenter.getCurCfg();
+	MockYubikoOtpKeyView& myYubikoOtpKeyView(
+			myMockFactory.getYubikoOtpKeyView());
+	auto& myCfg = myYubikoOtpKeyPresenter.getCurCfg();
 	const string myPrivId(myCfg->getPrivateId());
 	const string myPublicId(myCfg->getPublicId());
 	const string mySecretKey(myCfg->getSecretKey());
@@ -199,8 +253,8 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	EXPECT_TRUE(!myCfg->getPrivateId().empty());
 	EXPECT_TRUE(!myCfg->getPublicId().empty());
 	EXPECT_TRUE(!myCfg->getSecretKey().empty());
-	EXPECT_TRUE(myPublicId.compare( myCfg->getPublicId())==0);
-	EXPECT_TRUE(myPrivId.compare( myCfg->getPrivateId())==0);
-	EXPECT_TRUE(mySecretKey.compare(myCfg->getSecretKey())==0);
+	EXPECT_TRUE(myPublicId.compare(myCfg->getPublicId()) == 0);
+	EXPECT_TRUE(myPrivId.compare(myCfg->getPrivateId()) == 0);
+	EXPECT_TRUE(mySecretKey.compare(myCfg->getSecretKey()) == 0);
 }
 

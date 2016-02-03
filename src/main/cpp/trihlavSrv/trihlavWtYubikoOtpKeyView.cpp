@@ -34,6 +34,7 @@
 #include <Wt/WLabel>
 
 #include "trihlavWtStrEdit.hpp"
+#include "trihlavWtSpinBox.hpp"
 #include "trihlavWtPushButton.hpp"
 #include "trihlavWtYubikoOtpKeyView.hpp"
 
@@ -49,7 +50,7 @@ namespace trihlav {
 WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		itsDlg(new WDialog), //
 		itsPublicId(new WtStrEdit), //
-		itsPublicIdLen(new WtStrEdit), //
+		itsPublicIdLen(new WtSpinBox), //
 		itsPrivateId(new WtStrEdit), //
 		itsSecretKey(new WtStrEdit), //
 		itsGenPublicIdentityBtn(new WtPushButton(translate("Generate"))), //
@@ -114,11 +115,11 @@ IStrEdit& WtYubikoOtpKeyView::getPublicId() {
 	return *itsPublicId;
 }
 
-IStrEdit& WtYubikoOtpKeyView::getPublicIdLen() {
+ISpinBox& WtYubikoOtpKeyView::getPublicIdLen() {
 	return *itsPublicIdLen;
 }
 
-const IStrEdit& WtYubikoOtpKeyView::getPublicIdLen() const {
+const ISpinBox& WtYubikoOtpKeyView::getPublicIdLen() const {
 	return *itsPublicIdLen;
 }
 

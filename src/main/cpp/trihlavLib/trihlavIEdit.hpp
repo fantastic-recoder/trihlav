@@ -18,7 +18,7 @@ namespace trihlav {
 /**
  * Interface to a UI widget, which can edit, set and get a value.
  */
-template< class T>
+template< typename T>
 class IEdit : virtual public IWidget {
 public:
 	/**
@@ -35,7 +35,7 @@ public:
 	virtual ~IEdit(){}
 };
 
-typedef IEdit<std::string> IStrEdit;
+struct IStrEdit: virtual public IEdit<std::string>{};
 
 } /* namespace trihlav */
 
