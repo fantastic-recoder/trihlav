@@ -67,6 +67,13 @@ struct MockSpinBox: virtual public IMockEdit<int>, virtual public ISpinBox {
 	int itsMax;
 	int itsStep;
 
+	/**
+	 * Set some unlikely initialization values like min = -1, max = -1 und
+	 * step = 0.
+	 */
+	MockSpinBox():itsMin(-1),itsMax(-1),itsStep(0) {
+	}
+
 	virtual const int getValue() const {
 		return IMockEdit<int>::getValue();
 	}
@@ -227,6 +234,9 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	EXPECT_TRUE(myYubikoOtpKeyView.itsPrivateIdEditMock.getValue().empty());
 	EXPECT_TRUE(myYubikoOtpKeyView.itsPublicIdEditMock.getValue().empty());
 	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getValue(), 6);
+	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getMin(), 0);
+	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getMax(), 6);
+	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getStep(), 1);
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }

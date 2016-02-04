@@ -37,6 +37,7 @@ namespace trihlav {
 class IFactory;
 class IYubikoOtpKeyView;
 class YubikoOtpKeyConfig;
+class IStrEdit;
 
 /**
  * @brief Presents an @see YubikoOtpKeyConfig
@@ -59,6 +60,23 @@ public:
       return itsCurCfg;
     }
 
+    /// @brief generate random private id
+    virtual void generatePrivateId();
+    /// @brief generate random public id
+    virtual void generatePublicId();
+    /// @brief generate random secret key
+    virtual void generateSecretKey();
+    /// @brief get the length of public id.
+	int getPublicIdLen() const;
+	/// @brief Accessor returns private id.
+	IStrEdit& getPrivateId();
+
+	IYubikoOtpKeyView& getView();
+	const IYubikoOtpKeyView& getView() const;
+
+protected:
+    /// @brief generate random hex encoded byte array
+    void generate(int pBytes, std::string& pTarget) const;
 private:
     IYubikoOtpKeyView* itsView;
     YubikoOtpKeyConfigPtr itsCurCfg;
