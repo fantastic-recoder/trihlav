@@ -120,58 +120,82 @@ struct MockButton: public IButton {
 };
 
 struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
-	MockStrEdit itsPrivateIdEditMock;
+	MockStrEdit itsMockEdtPrivateId;
 	MockStrEdit itsPublicIdEditMock;
 	MockStrEdit itsSecretKeyEditMock;
-	MockSpinBox itsPublicIdLenEditMock;
-	MockButton itsGenPrivateIdMock;
-	MockButton itsGenPublicIdMock;
-	MockButton itsGenSecretKeyMock;
-	MockButton itsMockSaveBtn;
-	MockButton itsCancelButtonMock;
+	MockSpinBox itsMockSbxPublicIdLen;
+	MockButton itsMockBtnGenPrivateId;
+	MockButton itsMockBtnGenPublicId;
+	MockButton itsMockBtnGenSecretKey;
+	MockButton itsMockBtnSave;
+	MockButton itsMockBtnCancel;
 	MockYubikoOtpKeyView() {
-		ON_CALL(*this,getPrivateId()) //
-		.WillByDefault(ReturnRef(itsPrivateIdEditMock));
+		ON_CALL(*this,getEdtPrivateId()) //
+		.WillByDefault(ReturnRef(itsMockEdtPrivateId));
 
-		ON_CALL(*this,getSecretKey()) //
+		ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPrivateId()) //
+		.WillByDefault(ReturnRef(itsMockEdtPrivateId));
+
+		ON_CALL(*this,getEdtSecretKey()) //
 		.WillByDefault(ReturnRef(itsSecretKeyEditMock));
 
-		ON_CALL(*this,getPublicId()) //
+		ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtSecretKey()) //
+		.WillByDefault(ReturnRef(itsSecretKeyEditMock));
+
+		ON_CALL(*this,getEdtPublicId()) //
 		.WillByDefault(ReturnRef(itsPublicIdEditMock));
 
-		ON_CALL(*this,getPublicIdLen()) //
-		.WillByDefault(ReturnRef(itsPublicIdLenEditMock));
+		ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPublicId()) //
+		.WillByDefault(ReturnRef(itsPublicIdEditMock));
 
-		ON_CALL(*this,getSaveBtn()) //
-		.WillByDefault(ReturnRef(itsMockSaveBtn));
+		ON_CALL(*this,getSbxPublicIdLen()) //
+		.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
+
+		ON_CALL((const MockYubikoOtpKeyView&)(*this),getSbxPublicIdLen()) //
+		.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
+
+		ON_CALL(*this,getSbxPublicIdLen()) //
+		.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
+
+		ON_CALL(*this,getBtnSave()) //
+		.WillByDefault(ReturnRef(itsMockBtnSave));
+
+		ON_CALL(*this,getBtnGenPrivateId()) //
+		.WillByDefault(ReturnRef(itsMockBtnGenPrivateId));
+
+		ON_CALL(*this,getBtnGenPublicId()) //
+		.WillByDefault(ReturnRef(itsMockBtnGenPublicId));
+
+		ON_CALL(*this,getBtnGenSecretKey()) //
+		.WillByDefault(ReturnRef(itsMockBtnGenSecretKey));
 
 	}
-	MOCK_CONST_METHOD0( getPublicId, IStrEdit& () );
-	MOCK_METHOD0(getPublicId,IStrEdit& () );
+	MOCK_CONST_METHOD0( getEdtPublicId, const IStrEdit& () );
+	MOCK_METHOD0(getEdtPublicId,IStrEdit& () );
 
-	MOCK_METHOD0(getPublicIdLen, ISpinBox& () );
-	MOCK_CONST_METHOD0(getPublicIdLen, ISpinBox& () );
+	MOCK_METHOD0(getSbxPublicIdLen, ISpinBox& () );
+	MOCK_CONST_METHOD0(getSbxPublicIdLen, const ISpinBox& () );
 
-	MOCK_CONST_METHOD0(getPrivateId, IStrEdit& () );
-	MOCK_METHOD0(getPrivateId, IStrEdit& () );
+	MOCK_CONST_METHOD0(getEdtPrivateId, const  IStrEdit& () );
+	MOCK_METHOD0(getEdtPrivateId, IStrEdit& () );
 
-	MOCK_CONST_METHOD0(getSecretKey, IStrEdit& () );
-	MOCK_METHOD0(getSecretKey, IStrEdit& () );
+	MOCK_CONST_METHOD0(getEdtSecretKey, const  IStrEdit& () );
+	MOCK_METHOD0(getEdtSecretKey, IStrEdit& () );
 
-	MOCK_CONST_METHOD0(getGenPublicIdentityBtn, IButton& () );
-	MOCK_METHOD0(getGenPublicIdentityBtn, IButton& () );
+	MOCK_CONST_METHOD0(getBtnGenPublicId, const  IButton& () );
+	MOCK_METHOD0(getBtnGenPublicId, IButton& () );
 
-	MOCK_CONST_METHOD0(getGenPrivateIdentityBtn, IButton& () );
-	MOCK_METHOD0(getGenPrivateIdentityBtn, IButton& () );
+	MOCK_CONST_METHOD0(getBtnGenPrivateId, const  IButton& () );
+	MOCK_METHOD0(getBtnGenPrivateId, IButton& () );
 
-	MOCK_CONST_METHOD0(getGenSecretKeyBtn, IButton& () );
-	MOCK_METHOD0(getGenSecretKeyBtn, IButton& () );
+	MOCK_CONST_METHOD0(getBtnGenSecretKey, const  IButton& () );
+	MOCK_METHOD0(getBtnGenSecretKey, IButton& () );
 
-	MOCK_CONST_METHOD0(getCancelBtn, IButton& () );
-	MOCK_METHOD0(getCancelBtn, IButton& () );
+	MOCK_CONST_METHOD0(getBtnCancel,  const IButton& () );
+	MOCK_METHOD0(getBtnCancel, IButton& () );
 
-	MOCK_CONST_METHOD0(getSaveBtn, IButton& () );
-	MOCK_METHOD0(getSaveBtn, IButton& () );
+	MOCK_CONST_METHOD0(getBtnSave, const  IButton& () );
+	MOCK_METHOD0(getBtnSave, IButton& () );
 
 	MOCK_METHOD0(show, void ());
 
@@ -231,12 +255,12 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
 	MockYubikoOtpKeyView& myYubikoOtpKeyView(
 			myMockFactory.getYubikoOtpKeyView());
-	EXPECT_TRUE(myYubikoOtpKeyView.itsPrivateIdEditMock.getValue().empty());
+	EXPECT_TRUE(myYubikoOtpKeyView.itsMockEdtPrivateId.getValue().empty());
 	EXPECT_TRUE(myYubikoOtpKeyView.itsPublicIdEditMock.getValue().empty());
-	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getValue(), 6);
-	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getMin(), 0);
-	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getMax(), 6);
-	EXPECT_EQ(myYubikoOtpKeyView.itsPublicIdLenEditMock.getStep(), 1);
+	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getValue(), 6);
+	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getMin(), 0);
+	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getMax(), 6);
+	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getStep(), 1);
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }
@@ -247,19 +271,21 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	YubikoOtpKeyPresenter myYubikoOtpKeyPresenter(myMockFactory);
 	MockYubikoOtpKeyView& myYubikoOtpKeyView(
 			myMockFactory.getYubikoOtpKeyView());
-	auto& myCfg = myYubikoOtpKeyPresenter.getCurCfg();
-	const string myPrivId(myCfg->getPrivateId());
-	const string myPublicId(myCfg->getPublicId());
-	const string mySecretKey(myCfg->getSecretKey());
+	myYubikoOtpKeyView.itsMockBtnGenPrivateId.getPressedSignal()();
+	myYubikoOtpKeyView.itsMockBtnGenPublicId.getPressedSignal()();
+	myYubikoOtpKeyView.itsMockBtnGenSecretKey.getPressedSignal()();
+	myYubikoOtpKeyView.getAcceptedSignal()(true);
+	const string myPrivId(myYubikoOtpKeyView.getEdtPrivateId().getValue());
+	const string myPublicId(myYubikoOtpKeyView.getEdtPublicId().getValue());
+	const string mySecretKey(myYubikoOtpKeyView.getEdtSecretKey().getValue());
+	const int myPubIdLen(myYubikoOtpKeyView.getSbxPublicIdLen().getValue());
+	const auto& myCfg = myYubikoOtpKeyPresenter.getCurCfg();
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPrivId   : "<< myPrivId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPublicId : "<< myPublicId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 mySecretKey: "<< mySecretKey<< ".";
 	BOOST_LOG_TRIVIAL(debug)<< "1 myPrivId   : "<< myCfg->getPrivateId() << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "1 myPublicId : "<< myCfg->getPublicId() << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "1 mySecretKey: "<< myCfg->getSecretKey() << ".";
-	myYubikoOtpKeyView.itsGenPrivateIdMock.getPressedSignal()();
-	myYubikoOtpKeyView.itsGenPublicIdMock.getPressedSignal()();
-	myYubikoOtpKeyView.itsGenSecretKeyMock.getPressedSignal()();
 	EXPECT_TRUE(!myCfg->getPrivateId().empty());
 	EXPECT_TRUE(!myCfg->getPublicId().empty());
 	EXPECT_TRUE(!myCfg->getSecretKey().empty());
@@ -268,3 +294,14 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	EXPECT_TRUE(mySecretKey.compare(myCfg->getSecretKey()) == 0);
 }
 
+const int K_TST_STR_L=8;
+
+TEST(trihlavYubikoOtpKey,generateHex) {
+	BOOST_LOG_NAMED_SCOPE("generateHex");
+	string myTestVal("XXXXXXXXXXXXXXX");
+	YubikoOtpKeyPresenter::generate(0,myTestVal);
+	EXPECT_EQ(myTestVal.size(),0);
+	YubikoOtpKeyPresenter::generate(K_TST_STR_L,myTestVal);
+	BOOST_LOG_TRIVIAL(debug)<< "Generated:"<<myTestVal<<".";
+	EXPECT_EQ(myTestVal.size(),K_TST_STR_L*2);
+}

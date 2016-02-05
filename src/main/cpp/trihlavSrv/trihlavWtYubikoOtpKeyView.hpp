@@ -59,32 +59,32 @@ public:
 	WtYubikoOtpKeyView();
 	virtual ~WtYubikoOtpKeyView();
 
-	virtual const IStrEdit& getPublicId() const;
-	virtual IStrEdit& getPublicId();
+	virtual const IStrEdit& getEdtPublicId() const;
+	virtual IStrEdit& getEdtPublicId();
 
-	virtual ISpinBox& getPublicIdLen();
-	virtual const ISpinBox& getPublicIdLen() const;
+	virtual ISpinBox& getSbxPublicIdLen();
+	virtual const ISpinBox& getSbxPublicIdLen() const;
 
-	virtual const IStrEdit& getPrivateId() const;
-	virtual IStrEdit& getPrivateId();
+	virtual const IStrEdit& getEdtPrivateId() const;
+	virtual IStrEdit& getEdtPrivateId();
 
-	virtual const IStrEdit& getSecretKey() const;
-	virtual IStrEdit& getSecretKey();
+	virtual const IStrEdit& getEdtSecretKey() const;
+	virtual IStrEdit& getEdtSecretKey();
 
-	virtual const IButton&  getGenPublicIdentityBtn() const;
-	virtual IButton&  getGenPublicIdentityBtn();
+	virtual const IButton&  getBtnGenPublicId() const;
+	virtual IButton&  getBtnGenPublicId();
 
-	virtual const IButton&  getGenPrivateIdentityBtn() const;
-	virtual IButton&  getGenPrivateIdentityBtn();
+	virtual const IButton&  getBtnGenPrivateId() const;
+	virtual IButton&  getBtnGenPrivateId();
 
-	virtual const IButton&  getGenSecretKeyBtn() const;
-	virtual IButton&  getGenSecretKeyBtn();
+	virtual const IButton&  getBtnGenSecretKey() const;
+	virtual IButton&  getBtnGenSecretKey();
 
-	virtual const IButton&  getCancelBtn() const;
-	virtual IButton&  getCancelBtn();
+	virtual const IButton&  getBtnCancel() const;
+	virtual IButton&  getBtnCancel();
 
-	virtual const IButton&  getSaveBtn() const;
-	virtual IButton&  getSaveBtn();
+	virtual const IButton&  getBtnSave() const;
+	virtual IButton&  getBtnSave();
 
 	virtual void show();
 

@@ -68,15 +68,36 @@ public:
     virtual void generateSecretKey();
     /// @brief get the length of public id.
 	int getPublicIdLen() const;
-	/// @brief Accessor returns private id.
-	IStrEdit& getPrivateId();
+
+	/// @brief Accessor returns private id edit widget.
+	IStrEdit& getEdtPrivateId();
+
+	/// @brief Accessor returns private id edit widget.
+	const IStrEdit& getEdtPrivateId() const;
 
 	IYubikoOtpKeyView& getView();
 	const IYubikoOtpKeyView& getView() const;
 
-protected:
     /// @brief generate random hex encoded byte array
-    void generate(int pBytes, std::string& pTarget) const;
+    static void generate(int pBytes, std::string& pTarget) ;
+
+	/// @brief Accessor returns secret key edit widget.
+	IStrEdit& getEdtSecretKey();
+
+	/// @brief Const accessor returns secret key edit widget.
+	const IStrEdit& getEdtSecretKey() const;
+
+	/// @brief Accessor returns secret key edit widget.
+	IStrEdit& getEdtPublicId();
+
+	/// @brief Const accessor returns secret key edit widget.
+	const IStrEdit& getEdtPublicId() const;
+
+	const std::string getPublicId() const;
+	/// @brief Accessor gets the value of the private id from UI.
+	const std::string getPrivateId() const;
+
+	const std::string getSecretKey() const;
 private:
     IYubikoOtpKeyView* itsView;
     YubikoOtpKeyConfigPtr itsCurCfg;

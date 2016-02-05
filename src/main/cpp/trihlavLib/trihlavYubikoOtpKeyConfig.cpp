@@ -169,9 +169,6 @@ void YubikoOtpKeyConfig::save() {
 
 YubikoOtpKeyConfig::~YubikoOtpKeyConfig() {
     BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::~YubikoOtpKeyConfig");
-    if (itsChangedFlag) {
-        save();
-    }
 }
 
 void YubikoOtpKeyConfig::setFilename(const string &value) {

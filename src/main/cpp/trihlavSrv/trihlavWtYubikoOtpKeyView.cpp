@@ -107,75 +107,75 @@ WtYubikoOtpKeyView::~WtYubikoOtpKeyView() {
 	// TODO Auto-generated destructor stubb
 }
 
-const IStrEdit& WtYubikoOtpKeyView::getPublicId() const {
+const IStrEdit& WtYubikoOtpKeyView::getEdtPublicId() const {
 	return *itsPublicId;
 }
 
-IStrEdit& WtYubikoOtpKeyView::getPublicId() {
+IStrEdit& WtYubikoOtpKeyView::getEdtPublicId() {
 	return *itsPublicId;
 }
 
-ISpinBox& WtYubikoOtpKeyView::getPublicIdLen() {
+ISpinBox& WtYubikoOtpKeyView::getSbxPublicIdLen() {
 	return *itsPublicIdLen;
 }
 
-const ISpinBox& WtYubikoOtpKeyView::getPublicIdLen() const {
+const ISpinBox& WtYubikoOtpKeyView::getSbxPublicIdLen() const {
 	return *itsPublicIdLen;
 }
 
-const IStrEdit& WtYubikoOtpKeyView::getPrivateId() const {
+const IStrEdit& WtYubikoOtpKeyView::getEdtPrivateId() const {
 	return *itsPrivateId;
 }
 
-IStrEdit& WtYubikoOtpKeyView::getPrivateId() {
+IStrEdit& WtYubikoOtpKeyView::getEdtPrivateId() {
 	return *itsPrivateId;
 }
 
-const IStrEdit& WtYubikoOtpKeyView::getSecretKey() const {
+const IStrEdit& WtYubikoOtpKeyView::getEdtSecretKey() const {
 	return *itsSecretKey;
 }
 
-IStrEdit& WtYubikoOtpKeyView::getSecretKey() {
+IStrEdit& WtYubikoOtpKeyView::getEdtSecretKey() {
 	return *itsSecretKey;
 }
 
-const IButton& WtYubikoOtpKeyView::getGenPublicIdentityBtn() const {
+const IButton& WtYubikoOtpKeyView::getBtnGenPublicId() const {
 	return *itsGenPublicIdentityBtn;
 }
 
-IButton& WtYubikoOtpKeyView::getGenPublicIdentityBtn() {
+IButton& WtYubikoOtpKeyView::getBtnGenPublicId() {
 	return *itsGenPublicIdentityBtn;
 }
 
-const IButton& WtYubikoOtpKeyView::getGenPrivateIdentityBtn() const {
+const IButton& WtYubikoOtpKeyView::getBtnGenPrivateId() const {
 	return *itsGenPrivateIdentityBtn;
 }
 
-IButton& WtYubikoOtpKeyView::getGenPrivateIdentityBtn() {
+IButton& WtYubikoOtpKeyView::getBtnGenPrivateId() {
 	return *itsGenPrivateIdentityBtn;
 }
 
-const IButton& WtYubikoOtpKeyView::getGenSecretKeyBtn() const {
+const IButton& WtYubikoOtpKeyView::getBtnGenSecretKey() const {
 	return *itsGenSecretKeyBtn;
 }
 
-IButton& WtYubikoOtpKeyView::getGenSecretKeyBtn() {
+IButton& WtYubikoOtpKeyView::getBtnGenSecretKey() {
 	return *itsGenSecretKeyBtn;
 }
 
-const IButton& WtYubikoOtpKeyView::getCancelBtn() const {
+const IButton& WtYubikoOtpKeyView::getBtnCancel() const {
 	return *itsCancelBtn;
 }
 
-IButton& WtYubikoOtpKeyView::getCancelBtn() {
+IButton& WtYubikoOtpKeyView::getBtnCancel() {
 	return *itsCancelBtn;
 }
 
-const IButton& WtYubikoOtpKeyView::getSaveBtn() const {
+const IButton& WtYubikoOtpKeyView::getBtnSave() const {
 	return *itsSaveBtn;
 }
 
-IButton& WtYubikoOtpKeyView::getSaveBtn() {
+IButton& WtYubikoOtpKeyView::getBtnSave() {
 	return *itsSaveBtn;
 }
 
