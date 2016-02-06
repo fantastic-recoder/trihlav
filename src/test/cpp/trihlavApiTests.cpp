@@ -11,18 +11,19 @@
 
 #include <boost/filesystem.hpp>
 
-#define BOOST_TEST_MAIN
-#define BOOST_REQUIRE_MODULE trihlavApiTests
-#include <boost/test/included/unit_test.hpp>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"  // Brings in Google Mock.
+
+#include "trihlavLib/trihlavLog.hpp"
 
 #include "trihlavGlobalFixture.hpp"
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavIEdit.hpp"
-#include "../../main/cpp/trihlavLib/trihlavIYubikoOtpKeyView.hpp"
+#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -50,15 +51,10 @@ inline void logDebug_token(const yubikey_token_st& pToken) {
 	BOOST_LOG_TRIVIAL(debug)<< "}";
 }
 
-BOOST_GLOBAL_FIXTURE(GlobalFixture);
-
-
-BOOST_AUTO_TEST_SUITE(trihlavApiTestsSuit)
-
 /**
  * Test the yubico-c library text to string calls.
  */
-BOOST_AUTO_TEST_CASE( testHexToString ) {
+TEST( trihlavApi, testHexToString ) {
 	BOOST_LOG_NAMED_SCOPE("testHexToString");
 	const char* K_TEST0 = "quantum";
 	const size_t K_TEST0_SIZE = strlen(K_TEST0);
@@ -67,7 +63,7 @@ BOOST_AUTO_TEST_CASE( testHexToString ) {
 	yubikey_hex_encode(&myTest0HexEncoded[0], K_TEST0, K_TEST0_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "Encoded \""<<K_TEST0<<"\" is \""
 	<<myTest0HexEncoded.c_str() <<"\"";
-	BOOST_REQUIRE(myTest0HexEncoded == K_EXPECTED);
+	EXPECT_TRUE(myTest0HexEncoded == K_EXPECTED);
 	BOOST_LOG_TRIVIAL(debug)<< "testHexToString() ok";
 }
 
@@ -75,7 +71,7 @@ BOOST_AUTO_TEST_CASE( testHexToString ) {
  * Generate two OTPs, parse them and check token parts
  * @return void
  */
-BOOST_AUTO_TEST_CASE(testGenerateAndParse) {
+TEST( trihlavApi, testGenerateAndParse) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateAndParse");
 	/* Decrypt TOKEN using KEY and store output in OUT structure.  Note
 	 that there is no error checking whether the output data is valid or
@@ -100,43 +96,44 @@ BOOST_AUTO_TEST_CASE(testGenerateAndParse) {
 			K_YBK_TKEN_SZ - sizeof(myToken.crc));
 	memcpy(&myTokenBack, &myToken, sizeof(myToken));
 	logDebug_token(myTokenBack);
-	char myOtp0[YUBIKEY_OTP_SIZE+1], myOtp1[YUBIKEY_OTP_SIZE+1];
+	char myOtp0[YUBIKEY_OTP_SIZE + 1], myOtp1[YUBIKEY_OTP_SIZE + 1];
 	yubikey_generate(&myToken, myKey, myOtp0);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated yubikey OTP (0) " << myOtp0;
 	yubikey_parse(reinterpret_cast<uint8_t*>(myOtp0), myKey, &myToken);
 	logDebug_token(myToken);
-	BOOST_REQUIRE(myTokenBack.ctr == myToken.ctr);
-	BOOST_REQUIRE(myTokenBack.rnd == myToken.rnd);
-	BOOST_REQUIRE(myTokenBack.use == myToken.use);
-	BOOST_REQUIRE(myTokenBack.tstph == myToken.tstph);
-	BOOST_REQUIRE(myTokenBack.tstpl == myToken.tstpl);
-	BOOST_REQUIRE_MESSAGE(
-			strncmp( reinterpret_cast<const char*>(&myTokenBack.uid), reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE)==0,
-			"The uid-s are different!");
+	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
+	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);
+	EXPECT_TRUE(myTokenBack.use == myToken.use);
+	EXPECT_TRUE(myTokenBack.tstph == myToken.tstph);
+	EXPECT_TRUE(myTokenBack.tstpl == myToken.tstpl);
+	EXPECT_TRUE(
+			strncmp( reinterpret_cast<const char*>(&myTokenBack.uid),
+					reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE)==0)
+			<< "The uid-s are different!";
 	uint16_t myCrc = yubikey_crc16(reinterpret_cast<uint8_t*>(&myToken),
 	YUBIKEY_KEY_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
-	BOOST_REQUIRE_MESSAGE(
-	yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)), "CRC failed!");
+	EXPECT_TRUE(yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)))
+			<< "CRC failed!";
 	yubikey_generate(&myToken, myKey, myOtp1);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated yubikey OTP (1) "<<myOtp1;
-	BOOST_REQUIRE_MESSAGE(strncmp(myOtp0,myOtp1,YUBIKEY_OTP_SIZE)==0,
-			"The (re)generatet keys are different!");
+	EXPECT_TRUE(strncmp(myOtp0, myOtp1, YUBIKEY_OTP_SIZE) == 0)
+			<<"The (re)generatet keys are different!";
 	BOOST_LOG_TRIVIAL(debug)<< "testGenerateAndParse() ok";
 }
 
-BOOST_AUTO_TEST_CASE(testUTimestampMemLayout) {
+TEST( trihlavApi, testUTimestampMemLayout) {
 	BOOST_LOG_NAMED_SCOPE("testUTimestampMemLayout");
 	UTimestamp myTstp;
 	myTstp.tstp_int = 0x6789ABCD;
-	BOOST_REQUIRE_MESSAGE(sizeof(myTstp) == 4,
-			"Memory alignment is not bytewise!");
-	BOOST_REQUIRE(int(myTstp.tstp.tstpl) == int(0x6789));
-	BOOST_REQUIRE(int(myTstp.tstp.tstph) == int(0xAB));
-	BOOST_REQUIRE(int(myTstp.tstp.filler) == int(0xCD));
+	EXPECT_TRUE(sizeof(myTstp) == 4)
+			<<"Memory alignment is not bytewise!";
+	EXPECT_TRUE(int(myTstp.tstp.tstpl) == int(0x6789));
+	EXPECT_TRUE(int(myTstp.tstp.tstph) == int(0xAB));
+	EXPECT_TRUE(int(myTstp.tstp.filler) == int(0xCD));
 }
 
-BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
+TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	BOOST_LOG_NAMED_SCOPE("testLoadAndSaveKeyCfg");
 	path myTestCfgFile(unique_path("%%%%-%%%%-%%%%-%%%%.json"));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgFile <<"'.";
@@ -147,34 +144,40 @@ BOOST_AUTO_TEST_CASE(testLoadAndSaveKeyCfg) {
 	myTestCfg0.setRandom(44);
 	myTestCfg0.setCrc(55);
 	myTestCfg0.setUseCounter(7);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().uid[0]) == 1);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().uid[1]) == 2);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().uid[2]) == 3);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().uid[3]) == 4);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().uid[4]) == 5);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().uid[5]) == 6);
+	EXPECT_TRUE(int(myTestCfg0.getToken().uid[0]) == 1);
+	EXPECT_TRUE(int(myTestCfg0.getToken().uid[1]) == 2);
+	EXPECT_TRUE(int(myTestCfg0.getToken().uid[2]) == 3);
+	EXPECT_TRUE(int(myTestCfg0.getToken().uid[3]) == 4);
+	EXPECT_TRUE(int(myTestCfg0.getToken().uid[4]) == 5);
+	EXPECT_TRUE(int(myTestCfg0.getToken().uid[5]) == 6);
 	BOOST_LOG_TRIVIAL(debug)<< "Private id:'" << myTestCfg0.getPrivateId() << "'.";
-	BOOST_REQUIRE(myTestCfg0.getPrivateId().compare("010203040506") == 0);
+	EXPECT_TRUE(myTestCfg0.getPrivateId().compare("010203040506") == 0);
 
-	BOOST_REQUIRE(int(myTestCfg0.getToken().ctr) == 33);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().rnd) == 44);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().crc) == 55);
-	BOOST_REQUIRE(int(myTestCfg0.getToken().use) == 7);
+	EXPECT_TRUE(int(myTestCfg0.getToken().ctr) == 33);
+	EXPECT_TRUE(int(myTestCfg0.getToken().rnd) == 44);
+	EXPECT_TRUE(int(myTestCfg0.getToken().crc) == 55);
+	EXPECT_TRUE(int(myTestCfg0.getToken().use) == 7);
 
 	myTestCfg0.save();
 	YubikoOtpKeyConfig myTestCfg1(myTestCfgFile);
 	myTestCfg1.load();
-	BOOST_REQUIRE(myTestCfg0.getPrivateId() == myTestCfg1.getPrivateId());
-	BOOST_REQUIRE(
+	EXPECT_TRUE(myTestCfg0.getPrivateId() == myTestCfg1.getPrivateId());
+	EXPECT_TRUE(
 			myTestCfg0.getTimestamp().tstp_int
 					== myTestCfg1.getTimestamp().tstp_int);
-	BOOST_REQUIRE(myTestCfg0.getCounter() == myTestCfg1.getCounter());
-	BOOST_REQUIRE(myTestCfg0.getCrc() == myTestCfg1.getCrc());
-	BOOST_REQUIRE(myTestCfg0.getRandom() == myTestCfg1.getRandom());
-	BOOST_REQUIRE(myTestCfg0.getUseCounter() == myTestCfg1.getUseCounter());
+	EXPECT_TRUE(myTestCfg0.getCounter() == myTestCfg1.getCounter());
+	EXPECT_TRUE(myTestCfg0.getCrc() == myTestCfg1.getCrc());
+	EXPECT_TRUE(myTestCfg0.getRandom() == myTestCfg1.getRandom());
+	EXPECT_TRUE(myTestCfg0.getUseCounter() == myTestCfg1.getUseCounter());
 
 	remove(myTestCfgFile);
 	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg ok";
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+int main(int argc, char **argv) {
+	initLog();
+	::testing::InitGoogleTest(&argc, argv);
+	int ret = RUN_ALL_TESTS();
+	return ret;
+}
+

@@ -15,6 +15,8 @@ target_link_libraries(trihlavApiTests
                       ${YUBIKEY_LIB}
                       trihlavApi
                       ${CMAKE_THREAD_LIBS_INIT}
+                      libgtest
+    				  libgmock
                       )
 
 add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp trihlavGlobalFixture.cpp trihlavTestGetFactory.cpp)
