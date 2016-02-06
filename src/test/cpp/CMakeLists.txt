@@ -6,7 +6,7 @@ include_directories(
     ${GMOCK_INCLUDE_DIRS}
 )
 
-add_executable( trihlavApiTests trihlavApiTests.cpp trihlavGlobalFixture.cpp trihlavTestGetFactory.cpp)
+add_executable( trihlavApiTests trihlavApiTests.cpp trihlavGlobalFixture.cpp )
 
 add_test( NAME trihlavApiTests COMMAND trihlavApiTests )
 
@@ -19,7 +19,8 @@ target_link_libraries(trihlavApiTests
     				  libgmock
                       )
 
-add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp trihlavGlobalFixture.cpp trihlavTestGetFactory.cpp)
+add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp 
+trihlavGlobalFixture.cpp)
 
 add_test( NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey )
 
