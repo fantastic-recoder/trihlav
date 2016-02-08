@@ -47,6 +47,7 @@ class WtSpinBox;
 class WtYubikoOtpKeyView: public IYubikoOtpKeyView {
     std::unique_ptr<Wt::WDialog> itsDlg;
 	WtStrEdit* itsPublicId;
+	WtStrEdit* itsEdtDescription;
 	WtSpinBox* itsPublicIdLen;
 	WtStrEdit* itsPrivateId;
 	WtStrEdit* itsSecretKey;
@@ -85,6 +86,9 @@ public:
 
 	virtual const IButton&  getBtnSave() const;
 	virtual IButton&  getBtnSave();
+
+	virtual IStrEdit& getEdtDescription() ;
+	virtual const IStrEdit& getEdtDescription() const ;
 
 	virtual void show();
 

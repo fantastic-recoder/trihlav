@@ -53,6 +53,7 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		itsPublicIdLen(new WtSpinBox), //
 		itsPrivateId(new WtStrEdit), //
 		itsSecretKey(new WtStrEdit), //
+		itsEdtDescription(new WtStrEdit), //
 		itsGenPublicIdentityBtn(new WtPushButton(translate("Generate"))), //
 		itsGenPrivateIdentityBtn(new WtPushButton(translate("Generate"))), //
 		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
@@ -187,4 +188,13 @@ void WtYubikoOtpKeyView::finishedSlot(WDialog::DialogCode pCode) {
 	getAcceptedSignal()(pCode == WDialog::DialogCode::Accepted);
 }
 
+IStrEdit& WtYubikoOtpKeyView::getEdtDescription() {
+	return *itsEdtDescription;
+}
+
+const IStrEdit& WtYubikoOtpKeyView::getEdtDescription() const {
+	return *itsEdtDescription;
+}
+
 } /* namespace trihlav */
+

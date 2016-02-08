@@ -75,6 +75,8 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 		getCurCfg()->setPrivateId(getPrivateId());
 		getCurCfg()->setSecretKey(getSecretKey());
 		getCurCfg()->setPublicId(getPublicId());
+		getCurCfg()->setDescription(getDescription());
+		getCurCfg()->save();
 	}
 }
 
@@ -95,6 +97,15 @@ void YubikoOtpKeyPresenter::generatePrivateId() {
 
 int YubikoOtpKeyPresenter::getPublicIdLen() const {
 	const int myRetVal = getView().getSbxPublicIdLen().getValue();
+	return myRetVal;
+}
+
+/**
+ * Free text, will not be interpreted technically.
+ * @return Users description of the key.
+ */
+const string YubikoOtpKeyPresenter::getDescription() const {
+	const string myRetVal = getView().getEdtDescription().getValue();
 	return myRetVal;
 }
 

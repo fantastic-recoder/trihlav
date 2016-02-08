@@ -93,11 +93,18 @@ public:
 	/// @brief Const accessor returns secret key edit widget.
 	const IStrEdit& getEdtPublicId() const;
 
+	/// @brief Public ID getter.
 	const std::string getPublicId() const;
-	/// @brief Accessor gets the value of the private id from UI.
+
+	/// @brief Private id from UI getter.
 	const std::string getPrivateId() const;
 
+	/// @brief Secret key getter.
 	const std::string getSecretKey() const;
+
+	/// @brief Description getter.
+	const std::string getDescription() const;
+
 private:
     IYubikoOtpKeyView* itsView;
     YubikoOtpKeyConfigPtr itsCurCfg;

@@ -43,34 +43,37 @@ public:
     AcceptedSignal& getAcceptedSignal() { return itsAcceptedSignal; }
     const AcceptedSignal& getAcceptedSignal() const { return itsAcceptedSignal; }
 
-	virtual const IStrEdit& getEdtPublicId() const=0;
-	virtual IStrEdit& getEdtPublicId()=0;
+	virtual const IStrEdit& getEdtPublicId() const = 0;
+	virtual IStrEdit& getEdtPublicId() = 0;
 
-	virtual ISpinBox& getSbxPublicIdLen()=0;
-	virtual const ISpinBox& getSbxPublicIdLen() const=0;
+	virtual IStrEdit& getEdtDescription() = 0;
+	virtual const IStrEdit& getEdtDescription() const = 0;
 
-	virtual const IStrEdit& getEdtPrivateId() const=0;
-	virtual IStrEdit& getEdtPrivateId()=0;
+	virtual ISpinBox& getSbxPublicIdLen() = 0;
+	virtual const ISpinBox& getSbxPublicIdLen() const = 0;
 
-	virtual const IStrEdit& getEdtSecretKey() const=0;
-	virtual IStrEdit& getEdtSecretKey()=0;
+	virtual const IStrEdit& getEdtPrivateId() const = 0;
+	virtual IStrEdit& getEdtPrivateId() = 0;
 
-	virtual const IButton&  getBtnGenPublicId() const =0;
-	virtual IButton&  getBtnGenPublicId() =0;
+	virtual const IStrEdit& getEdtSecretKey() const = 0;
+	virtual IStrEdit& getEdtSecretKey() = 0;
 
-	virtual const IButton&  getBtnGenPrivateId() const =0;
-	virtual IButton&  getBtnGenPrivateId() =0;
+	virtual const IButton&  getBtnGenPublicId() const = 0;
+	virtual IButton&  getBtnGenPublicId() = 0;
 
-	virtual const IButton&  getBtnGenSecretKey() const =0;
-	virtual IButton&  getBtnGenSecretKey() =0;
+	virtual const IButton&  getBtnGenPrivateId() const = 0;
+	virtual IButton&  getBtnGenPrivateId() = 0;
 
-	virtual const IButton&  getBtnCancel() const =0;
-	virtual IButton&  getBtnCancel() =0;
+	virtual const IButton&  getBtnGenSecretKey() const = 0;
+	virtual IButton&  getBtnGenSecretKey() = 0;
 
-	virtual const IButton&  getBtnSave() const =0;
-	virtual IButton&  getBtnSave() =0;
+	virtual const IButton&  getBtnCancel() const = 0;
+	virtual IButton&  getBtnCancel() = 0;
 
-	virtual void show() =0;
+	virtual const IButton&  getBtnSave() const = 0;
+	virtual IButton&  getBtnSave() = 0;
+
+	virtual void show() = 0;
 
 	virtual ~IYubikoOtpKeyView(){}
 private:

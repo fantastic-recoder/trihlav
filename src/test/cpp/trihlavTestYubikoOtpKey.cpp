@@ -120,15 +120,18 @@ struct MockButton: public IButton {
 };
 
 struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
+
 	MockStrEdit itsMockEdtPrivateId;
-	MockStrEdit itsPublicIdEditMock;
-	MockStrEdit itsSecretKeyEditMock;
+	MockStrEdit itsMockEdtPublicId;
+	MockStrEdit itsMockEdtDescription;
+	MockStrEdit itsMockEdtSecretKey;
 	MockSpinBox itsMockSbxPublicIdLen;
 	MockButton itsMockBtnGenPrivateId;
 	MockButton itsMockBtnGenPublicId;
 	MockButton itsMockBtnGenSecretKey;
 	MockButton itsMockBtnSave;
 	MockButton itsMockBtnCancel;
+
 	MockYubikoOtpKeyView() {
 		ON_CALL(*this,getEdtPrivateId()) //
 		.WillByDefault(ReturnRef(itsMockEdtPrivateId));
@@ -137,16 +140,22 @@ struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
 		.WillByDefault(ReturnRef(itsMockEdtPrivateId));
 
 		ON_CALL(*this,getEdtSecretKey()) //
-		.WillByDefault(ReturnRef(itsSecretKeyEditMock));
+		.WillByDefault(ReturnRef(itsMockEdtSecretKey));
 
 		ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtSecretKey()) //
-		.WillByDefault(ReturnRef(itsSecretKeyEditMock));
+		.WillByDefault(ReturnRef(itsMockEdtSecretKey));
 
 		ON_CALL(*this,getEdtPublicId()) //
-		.WillByDefault(ReturnRef(itsPublicIdEditMock));
+		.WillByDefault(ReturnRef(itsMockEdtPublicId));
 
 		ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPublicId()) //
-		.WillByDefault(ReturnRef(itsPublicIdEditMock));
+		.WillByDefault(ReturnRef(itsMockEdtPublicId));
+
+		ON_CALL(*this,getEdtDescription()) //
+		.WillByDefault(ReturnRef(itsMockEdtDescription));
+
+		ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtDescription()) //
+		.WillByDefault(ReturnRef(itsMockEdtDescription));
 
 		ON_CALL(*this,getSbxPublicIdLen()) //
 		.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
@@ -181,6 +190,9 @@ struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
 
 	MOCK_CONST_METHOD0(getEdtSecretKey, const  IStrEdit& () );
 	MOCK_METHOD0(getEdtSecretKey, IStrEdit& () );
+
+	MOCK_CONST_METHOD0(getEdtDescription, const  IStrEdit& () );
+	MOCK_METHOD0(getEdtDescription, IStrEdit& () );
 
 	MOCK_CONST_METHOD0(getBtnGenPublicId, const  IButton& () );
 	MOCK_METHOD0(getBtnGenPublicId, IButton& () );
@@ -256,7 +268,7 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	MockYubikoOtpKeyView& myYubikoOtpKeyView(
 			myMockFactory.getYubikoOtpKeyView());
 	EXPECT_TRUE(myYubikoOtpKeyView.itsMockEdtPrivateId.getValue().empty());
-	EXPECT_TRUE(myYubikoOtpKeyView.itsPublicIdEditMock.getValue().empty());
+	EXPECT_TRUE(myYubikoOtpKeyView.itsMockEdtPublicId.getValue().empty());
 	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getValue(), 6);
 	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getMin(), 0);
 	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getMax(), 6);

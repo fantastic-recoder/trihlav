@@ -178,9 +178,34 @@ public:
     /**
      * @brief Set the secret key, 16 bytes 32 characters hex encoded.
      * 
+     * Not interpreted technically.
+     *
      * @param pKey new value for the secret key, hex encoded.
      */
     void setSecretKey( const std::string& pKey);
+
+    /**
+     * @brief getter
+     * @return users description of the key.
+     *
+     * Not interpreted technically.
+     *
+     * @see itsDescription
+     */
+    const std::string& getDescription() const {
+    	return itsDescription;
+    }
+
+    /**
+     * @brief setter, sets the user description.
+     * @see itsDescription
+     */
+    void setDescription(const std::string& pDesc) {
+    	if(pDesc.compare(getDescription())!=0) {
+    		itsDescription=pDesc;
+    		itsChangedFlag=true;
+    	}
+    }
 
 private:
     std::string      itsPublicId; //< Keys public ID max 6 characters.
@@ -188,6 +213,7 @@ private:
     bfs::path        itsFilename; //< where to store it
     yubikey_token_st itsToken;
     uint8_t          itsKey[YUBIKEY_KEY_SIZE];
+    std::string      itsDescription; //< Users free text describing the key
 
     const std::string checkFileName(bool pIsOut);
 
