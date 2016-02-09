@@ -13,6 +13,8 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost/log/expressions.hpp>
+#include <boost/locale/message.hpp>
+#include <boost/format.hpp>
 
 #include "trihlavIYubikoOtpKeyView.hpp"
 #include "trihlavLib/trihlavIButton.hpp"
@@ -23,13 +25,14 @@
 #include "trihlavKeyManager.hpp"
 
 using namespace std;
+using namespace boost;
+using namespace boost::locale;
 
 namespace trihlav {
 
 YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory) :
 		IYubikoOtpKeyPresenter(pFactory), itsView(
-				pFactory.createYubikoOtpKeyView()), itsCurCfg(
-				new YubikoOtpKeyConfig(pFactory.getKeyManager().getConfigDir())) {
+				pFactory.createYubikoOtpKeyView()) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
 	itsView->getEdtPrivateId().setValue("");
 	itsView->getEdtSecretKey().setValue("");
@@ -57,6 +60,11 @@ YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 }
 
 void YubikoOtpKeyPresenter::addKey() {
+	itsCurCfg.release();
+	bfs::path myFilename(
+			getFactory().getKeyManager().getConfigDir() / "%%-%%-%%");
+	myFilename = bfs::unique_path(myFilename);
+	itsCurCfg.reset(new YubikoOtpKeyConfig(myFilename));
 	itsView->show();
 }
 
@@ -68,10 +76,40 @@ const std::string YubikoOtpKeyPresenter::getSecretKey() const {
 	return getEdtSecretKey().getValue();
 }
 
+void YubikoOtpKeyPresenter::deleteKey() {
+	if (getCurCfg()) {
+		const path myFilename = getCurCfg()->getFilename();
+		if (exists(myFilename)) {
+			if (!remove(myFilename)) {
+				auto myErrMsg = format(
+						translate("Failed to delete file %1%.")) % myFilename.native();
+				BOOST_LOG_TRIVIAL(error)<< myErrMsg;
+				throw new std::runtime_error(myErrMsg.str());
+			}
+		} else {
+			BOOST_LOG_TRIVIAL(warning)<< "Filename " << myFilename
+			<< " does not exist.";
+		}
+	} else {
+		throwNoConfig();
+	}
+}
+
+void YubikoOtpKeyPresenter::throwNoConfig() {
+	const string myErrMsg =
+			translate(
+					"Internal error, YubikoOtpKeyPresenter has no YubikoOtpKeyConfigPtr.");
+	BOOST_LOG_TRIVIAL(error)<< myErrMsg;
+	throw new std::runtime_error(myErrMsg);
+}
+
 void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::accepted");
 	BOOST_LOG_TRIVIAL(info)<< "Accepted==" << pAccepted;
-	if(pAccepted) {
+	if (pAccepted) {
+		if (!getCurCfg()) {
+			throwNoConfig();
+		}
 		getCurCfg()->setPrivateId(getPrivateId());
 		getCurCfg()->setSecretKey(getSecretKey());
 		getCurCfg()->setPublicId(getPublicId());
@@ -91,7 +129,7 @@ const string YubikoOtpKeyPresenter::getPublicId() const {
 void YubikoOtpKeyPresenter::generatePrivateId() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::generatePrivateId");
 	string myNewId;
-	generate(YUBIKEY_UID_SIZE,myNewId);
+	generate(YUBIKEY_UID_SIZE, myNewId);
 	getEdtPrivateId().setValue(myNewId);
 }
 
@@ -137,7 +175,7 @@ void YubikoOtpKeyPresenter::generatePublicId() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::generatePublicId");
 	const int mySz = getPublicIdLen();
 	string myNewId;
-	generate(mySz,myNewId);
+	generate(mySz, myNewId);
 	getEdtPublicId().setValue(myNewId);
 }
 
@@ -148,7 +186,7 @@ IStrEdit& YubikoOtpKeyPresenter::getEdtSecretKey() {
 void YubikoOtpKeyPresenter::generateSecretKey() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::generateSecretKey");
 	string myNewKey;
-	generate(YUBIKEY_KEY_SIZE,myNewKey);
+	generate(YUBIKEY_KEY_SIZE, myNewKey);
 	getEdtSecretKey().setValue(myNewKey);
 }
 
@@ -159,14 +197,14 @@ void YubikoOtpKeyPresenter::generateSecretKey() {
  */
 void YubikoOtpKeyPresenter::generate(int pBytes, string& pTarget) {
 	auto randchar = []() -> char
-	    {
-	        const char charset[] = "0123456789abcdef";
-	        const size_t myMaxIdx = (sizeof(charset) - 1);
-	        return charset[ rand() % myMaxIdx ];
-	    };
-	const size_t myLen=min(2*pBytes,4094);
+	{
+		const char charset[] = "0123456789abcdef";
+		const size_t myMaxIdx = (sizeof(charset) - 1);
+		return charset[ rand() % myMaxIdx ];
+	};
+	const size_t myLen = min(2 * pBytes, 4094);
 	pTarget.resize(myLen);
-	generate_n( pTarget.begin(), myLen, randchar );
+	generate_n(pTarget.begin(), myLen, randchar);
 }
 
 }/* namespace trihlav */

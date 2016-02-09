@@ -44,10 +44,10 @@ static const string K_VL_VERS("0.0.1");
 /**
  * Just initialize fields, does not loads the data.
  *
- * @param pDataPathDir Where the configuration data will be stored.
+ * @param pFilename Where the configuration data will be stored.
  */
-YubikoOtpKeyConfig::YubikoOtpKeyConfig(const bfs::path& pPath2KeyKonfig) :
-		itsChangedFlag(false), itsFilename(pPath2KeyKonfig) {
+YubikoOtpKeyConfig::YubikoOtpKeyConfig(const bfs::path& pFilename) :
+		itsChangedFlag(false), itsFilename(pFilename) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
 	memset(&itsToken, 0, sizeof(yubikey_token_st));
 	memset(&itsKey, 0, YUBIKEY_KEY_SIZE);
@@ -113,10 +113,18 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkFileName");
 	std::string myRetVal;
+	if(is_directory(getFilename())) {
+		const string myMsg = (format("File %1% is a directory.")
+				% getFilename()).str();
+		BOOST_LOG_TRIVIAL(error)<< myMsg;
+		throw new out_of_range(
+				myMsg);
+	}
 	if (pIsOut) {
 		if (exists(getFilename())) {
-			const string myMsg = (format("File \"%1%\" already exists.")
+			const string myMsg = (format("File %1% already exists.")
 					% getFilename()).str();
+			BOOST_LOG_TRIVIAL(error)<< myMsg;
 			throw new out_of_range(
 					myMsg);
 		}
@@ -124,14 +132,19 @@ const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 	} else {
 		if (!exists(getFilename())) {
 			const string myMsg = (format(
-					"Couldn't open save file \"%1%\".") % getFilename()).str();
+					"Couldn't open save file %1%.") % getFilename()).str();
+			BOOST_LOG_TRIVIAL(error)<< myMsg;
 			throw new out_of_range(
 					myMsg);
 		}
 		uintmax_t myFSz = file_size(getFilename());
 		if (myFSz > K_MX_KEY_FILE_SZ) {
+			const string myMsg =
+					(format("File %1% is too big: %2%.") % getFilename()
+							% myFSz).str();
+			BOOST_LOG_TRIVIAL(error)<< myMsg;
 			throw new out_of_range(
-					(format("File \"%1%\" is too big: %2%.") % getFilename() % myFSz).str());
+					myMsg);
 		}
 		myRetVal = getFilename().native();
 	}

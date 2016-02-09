@@ -277,12 +277,14 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }
 
-TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
+TEST(trihlavYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
 	MockFactory myMockFactory;
 	YubikoOtpKeyPresenter myYubikoOtpKeyPresenter(myMockFactory);
 	MockYubikoOtpKeyView& myYubikoOtpKeyView(
 			myMockFactory.getYubikoOtpKeyView());
+	EXPECT_CALL(myYubikoOtpKeyView,show());
+	myYubikoOtpKeyPresenter.addKey();
 	myYubikoOtpKeyView.itsMockBtnGenPrivateId.getPressedSignal()();
 	myYubikoOtpKeyView.itsMockBtnGenPublicId.getPressedSignal()();
 	myYubikoOtpKeyView.itsMockBtnGenSecretKey.getPressedSignal()();
@@ -292,6 +294,7 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	const string mySecretKey(myYubikoOtpKeyView.getEdtSecretKey().getValue());
 	const int myPubIdLen(myYubikoOtpKeyView.getSbxPublicIdLen().getValue());
 	const auto& myCfg = myYubikoOtpKeyPresenter.getCurCfg();
+	const path myFilename(myCfg->getFilename());
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPrivId   : "<< myPrivId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPublicId : "<< myPublicId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 mySecretKey: "<< mySecretKey<< ".";
@@ -304,6 +307,8 @@ TEST(trihlavYubikoOtpKey,generateBtnsFcionality) {
 	EXPECT_TRUE(myPublicId.compare(myCfg->getPublicId()) == 0);
 	EXPECT_TRUE(myPrivId.compare(myCfg->getPrivateId()) == 0);
 	EXPECT_TRUE(mySecretKey.compare(myCfg->getSecretKey()) == 0);
+	myYubikoOtpKeyPresenter.deleteKey();
+	EXPECT_FALSE(exists(myFilename));
 }
 
 const int K_TST_STR_L=8;

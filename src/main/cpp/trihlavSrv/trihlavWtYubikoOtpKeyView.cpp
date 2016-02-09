@@ -64,37 +64,43 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 	itsDlg->setWidth(WLength(64, U::FontEm));
 	WGridLayout* myTopLayout = new WGridLayout;
 	{
+		Wt::WLabel* myLbl = new WLabel(translate("Description").str());
+		myLbl->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(myLbl,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsEdtDescription,0,1,1,5,Wt::AlignMiddle);
+	}
+	{
 		itsGenPublicIdentityBtn->setWidth(WLength(9.0,U::FontEm));
 		itsPublicId->setWidth(WLength(13.0,U::FontEm));
 		itsPublicIdLen->setWidth(WLength(2.0,U::FontEm));
 		Wt::WLabel* myLbl = new WLabel(translate("Public ID").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsPublicId,0,1,1,3,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsPublicIdLen,0,4,1,1,Wt::AlignLeft|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsGenPublicIdentityBtn,0,5,1,1,Wt::AlignTop);
+		myTopLayout->addWidget(myLbl,1,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsPublicId,1,1,1,3,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsPublicIdLen,1,4,1,1,Wt::AlignLeft|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsGenPublicIdentityBtn,1,5,1,1,Wt::AlignTop);
 	}
 	{
 		itsGenPrivateIdentityBtn->setWidth(WLength(9.0,U::FontEm));
 		itsPrivateId->setWidth(WLength(18.0,U::FontEm));
 		Wt::WLabel* myLbl = new WLabel(translate("Private ID").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,1,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsPrivateId,1,1,1,4,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsGenPrivateIdentityBtn,1,5,1,1,Wt::AlignTop);
+		myTopLayout->addWidget(myLbl,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsPrivateId,2,1,1,4,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsGenPrivateIdentityBtn,2,5,1,1,Wt::AlignTop);
 	}
 	{
 		itsGenSecretKeyBtn->setWidth(WLength(9.0,U::FontEm));
 		itsSecretKey->setWidth(WLength(18.0,U::FontEm));
 		Wt::WText* myLbl = new WText(translate("Secret key").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsSecretKey,2,1,1,4,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsGenSecretKeyBtn,2,5,1,1,Wt::AlignTop);
+		myTopLayout->addWidget(myLbl,3,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsSecretKey,3,1,1,4,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsGenSecretKeyBtn,3,5,1,1,Wt::AlignTop);
 	}
 	{
-		myTopLayout->addWidget(itsCancelBtn,3,1,1,1,Wt::AlignCenter|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsSaveBtn,3,4,1,1,Wt::AlignCenter|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsCancelBtn,4,1,1,1,Wt::AlignCenter|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsSaveBtn,4,4,1,1,Wt::AlignCenter|Wt::AlignMiddle);
 		itsCancelBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
 		itsSaveBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
 	}

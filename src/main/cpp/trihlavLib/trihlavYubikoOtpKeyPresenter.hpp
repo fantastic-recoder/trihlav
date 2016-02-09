@@ -50,7 +50,11 @@ public:
 
     virtual ~YubikoOtpKeyPresenter();
 
+    /// @brief Add a new key and present it in its view.
     virtual void addKey();
+
+    /// @brief delete current key being edited.
+    virtual void deleteKey();
 
     virtual YubikoOtpKeyConfigPtr& getCurCfg() {
       return itsCurCfg;
@@ -110,6 +114,7 @@ private:
     YubikoOtpKeyConfigPtr itsCurCfg;
     YubikoOtpKeyConfigPtr itsOldCfg;
     void accepted( bool pAccepted);
+	void throwNoConfig();
 };
 
 } /* namespace trihlavApi */

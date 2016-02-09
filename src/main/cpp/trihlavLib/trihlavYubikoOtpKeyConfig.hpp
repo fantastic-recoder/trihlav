@@ -209,7 +209,7 @@ public:
 
 private:
     std::string      itsPublicId; //< Keys public ID max 6 characters.
-    bool             itsChangedFlag; //< will be set internaly when something changed
+    bool             itsChangedFlag; //< will be set internal when something changed
     bfs::path        itsFilename; //< where to store it
     yubikey_token_st itsToken;
     uint8_t          itsKey[YUBIKEY_KEY_SIZE];
