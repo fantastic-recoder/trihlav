@@ -23,7 +23,7 @@
 #include "trihlavLib/trihlavISpinBox.hpp"
 
 #include "trihlavMockButton.hpp"
-#include "trihlavMockEditBase.hpp"
+#include "trihlavMockEditI.hpp"
 #include "trihlavMockStrEdit.hpp"
 #include "trihlavMockSpinBox.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
@@ -97,19 +97,19 @@ TEST(trihlavYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	const string mySecretKey(myYubikoOtpKeyView.getEdtSecretKey().getValue());
 	const int myPubIdLen(myYubikoOtpKeyView.getSbxPublicIdLen().getValue());
 	const auto& myCfg = myYubikoOtpKeyPresenter.getCurCfg();
-	const path myFilename(myCfg->getFilename());
+	const path myFilename(myCfg.getFilename());
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPrivId   : "<< myPrivId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPublicId : "<< myPublicId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 mySecretKey: "<< mySecretKey<< ".";
-	BOOST_LOG_TRIVIAL(debug)<< "1 myPrivId   : "<< myCfg->getPrivateId() << ".";
-	BOOST_LOG_TRIVIAL(debug)<< "1 myPublicId : "<< myCfg->getPublicId() << ".";
-	BOOST_LOG_TRIVIAL(debug)<< "1 mySecretKey: "<< myCfg->getSecretKey() << ".";
-	EXPECT_TRUE(!myCfg->getPrivateId().empty());
-	EXPECT_TRUE(!myCfg->getPublicId().empty());
-	EXPECT_TRUE(!myCfg->getSecretKey().empty());
-	EXPECT_TRUE(myPublicId.compare(myCfg->getPublicId()) == 0);
-	EXPECT_TRUE(myPrivId.compare(myCfg->getPrivateId()) == 0);
-	EXPECT_TRUE(mySecretKey.compare(myCfg->getSecretKey()) == 0);
+	BOOST_LOG_TRIVIAL(debug)<< "1 myPrivId   : "<< myCfg.getPrivateId() << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "1 myPublicId : "<< myCfg.getPublicId() << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "1 mySecretKey: "<< myCfg.getSecretKey() << ".";
+	EXPECT_TRUE(!myCfg.getPrivateId().empty());
+	EXPECT_TRUE(!myCfg.getPublicId().empty());
+	EXPECT_TRUE(!myCfg.getSecretKey().empty());
+	EXPECT_TRUE(myPublicId.compare(myCfg.getPublicId()) == 0);
+	EXPECT_TRUE(myPrivId.compare(myCfg.getPrivateId()) == 0);
+	EXPECT_TRUE(mySecretKey.compare(myCfg.getSecretKey()) == 0);
 	myYubikoOtpKeyPresenter.deleteKey();
 	EXPECT_FALSE(exists(myFilename));
 }

@@ -8,6 +8,8 @@
 #ifndef TRIHLAV_I_VIEW_HPP_
 #define TRIHLAV_I_VIEW_HPP_
 
+#include <boost/utility.hpp>
+
 namespace trihlav {
 
 class IWidget;
@@ -15,7 +17,7 @@ class IWidget;
 /**
  * Parent to all view interfaces.
  */
-class IView {
+class IView : boost::noncopyable {
 public:
 	virtual ~IView(){}
 };

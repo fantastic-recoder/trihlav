@@ -30,15 +30,15 @@
 
 #include <gmock/gmock.h>
 
-#include "trihlavLib/trihlavIYubikoOtpKeyPresenter.hpp"
+#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyPresenterI.hpp"
 
 namespace trihlav {
 
 class IFactory;
 
-struct MockYubikoOtpKeyPresenter: virtual public IYubikoOtpKeyPresenter {
+struct MockYubikoOtpKeyPresenter: virtual public YubikoOtpKeyPresenterI {
 	MockYubikoOtpKeyPresenter(const IFactory& pFactory) :
-			IYubikoOtpKeyPresenter(pFactory) {
+			YubikoOtpKeyPresenterI(pFactory) {
 	}
 
 	MOCK_METHOD0(addKey, void () );

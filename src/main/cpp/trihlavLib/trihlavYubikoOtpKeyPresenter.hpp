@@ -30,7 +30,7 @@
 
 #include <memory>
 
-#include "trihlavLib/trihlavIYubikoOtpKeyPresenter.hpp"
+#include "trihlavYubikoOtpKeyPresenterI.hpp"
 
 namespace trihlav {
 
@@ -42,10 +42,10 @@ class IStrEdit;
 /**
  * @brief Presents an @see YubikoOtpKeyConfig
  */
-class YubikoOtpKeyPresenter: public IYubikoOtpKeyPresenter {
+class YubikoOtpKeyPresenter: public YubikoOtpKeyPresenterI {
 public:
-    typedef std::unique_ptr<YubikoOtpKeyConfig> YubikoOtpKeyConfigPtr;
-    typedef std::unique_ptr<IYubikoOtpKeyView> IYubikoOtpKeyViewPtr;
+//    typedef std::unique_ptr<YubikoOtpKeyConfig> YubikoOtpKeyConfigPtr;
+//    typedef std::unique_ptr<IYubikoOtpKeyView> IYubikoOtpKeyViewPtr;
 
     YubikoOtpKeyPresenter(const IFactory& );
 
@@ -57,13 +57,7 @@ public:
     /// @brief delete current key being edited.
     virtual void deleteKey();
 
-    virtual YubikoOtpKeyConfigPtr& getCurCfg() {
-      return itsCurCfg;
-    }
-
-    virtual const YubikoOtpKeyConfigPtr& getCurCfg() const {
-      return itsCurCfg;
-    }
+    virtual YubikoOtpKeyConfig& getCurCfg();
 
     /// @brief generate random private id
     virtual void generatePrivateId();
@@ -72,16 +66,12 @@ public:
     /// @brief generate random secret key
     virtual void generateSecretKey();
     /// @brief get the length of public id.
-	int getPublicIdLen() const;
+	int getPublicIdLen();
 
 	/// @brief Accessor returns private id edit widget.
 	IStrEdit& getEdtPrivateId();
 
-	/// @brief Accessor returns private id edit widget.
-	const IStrEdit& getEdtPrivateId() const;
-
 	IYubikoOtpKeyView& getView();
-	const IYubikoOtpKeyView& getView() const;
 
     /// @brief generate random hex encoded byte array
     static void generate(int pBytes, std::string& pTarget) ;
@@ -89,33 +79,27 @@ public:
 	/// @brief Accessor returns secret key edit widget.
 	IStrEdit& getEdtSecretKey();
 
-	/// @brief Const accessor returns secret key edit widget.
-	const IStrEdit& getEdtSecretKey() const;
-
 	/// @brief Accessor returns secret key edit widget.
 	IStrEdit& getEdtPublicId();
 
-	/// @brief Const accessor returns secret key edit widget.
-	const IStrEdit& getEdtPublicId() const;
-
 	/// @brief Public ID getter.
-	const std::string getPublicId() const;
+	std::string getPublicId();
 
 	/// @brief Private id from UI getter.
-	const std::string getPrivateId() const;
+	std::string getPrivateId();
 
 	/// @brief Secret key getter.
-	const std::string getSecretKey() const;
+	std::string getSecretKey();
 
 	/// @brief Description getter.
-	const std::string getDescription() const;
+	std::string getDescription();
 
 private:
-    IYubikoOtpKeyViewPtr itsView;
-    YubikoOtpKeyConfigPtr itsCurCfg;
-    YubikoOtpKeyConfigPtr itsOldCfg;
+    IYubikoOtpKeyView* itsView;
+    YubikoOtpKeyConfig* itsCurCfg;
     void accepted( bool pAccepted);
 	void throwNoConfig();
+	void initUi();
 };
 
 } /* namespace trihlavApi */

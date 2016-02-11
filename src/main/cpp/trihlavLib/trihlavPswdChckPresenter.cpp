@@ -35,14 +35,22 @@ namespace trihlav {
 PswdChckPresenter::PswdChckPresenter(const IFactory& pFactory) :
 		IPswdChckPresenter(pFactory), //< forced by virtua inheritance
 		IPresenter(pFactory), //< has a factory
-		itsView(pFactory.createPswdChckView()) //< initialize view
+		itsView(0) //< initialize view
 {
 	// TODO Auto-generated constructor stub
 
 }
 
+IPswdChckView& PswdChckPresenter::getView()
+{
+	if(!itsView) {
+		itsView=getFactory().createPswdChckView();
+	}
+	return *itsView;
+}
+
 PswdChckPresenter::~PswdChckPresenter() {
-	// TODO Auto-generated destructor stub
+	delete itsView;
 }
 
 } /* namespace trihlav */

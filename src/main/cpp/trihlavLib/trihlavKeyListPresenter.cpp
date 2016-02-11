@@ -38,22 +38,33 @@ namespace trihlav {
 KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
 : IKeyListPresenter(pFactory)
 , IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
+, itsYubikoOtpKeyPresenter(0)
+, itsKeyListView(0)
 {
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
 }
 
 IKeyListView& KeyListPresenter::getView() {
+	if(itsKeyListView==0) {
+		itsKeyListView=getFactory().createKeyListView();
+		getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
+	}
 	return *itsKeyListView;
 }
 
 KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
+	delete itsYubikoOtpKeyPresenter;
+	delete itsKeyListView;
 }
 
 void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
+	getYubikoOtpKeyPresenter().addKey();
+}
+
+YubikoOtpKeyPresenterI& KeyListPresenter::getYubikoOtpKeyPresenter() {
+	if(itsYubikoOtpKeyPresenter==0) {
+		itsYubikoOtpKeyPresenter=getFactory().createYubikoOtpKeyPresenter();
+	}
+	return *itsYubikoOtpKeyPresenter;
 }
 
 } /* namespace trihlav */

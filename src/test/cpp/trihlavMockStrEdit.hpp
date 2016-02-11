@@ -28,10 +28,15 @@
 #ifndef TRIHLAV_MOCK_STREDIT_HPP_
 #define TRIHLAV_MOCK_STREDIT_HPP_
 
+#include <string>
+
+#include "trihlavMockEditI.hpp"
+
 namespace trihlav {
 
-struct MockStrEdit: virtual public MockEditBase<std::string>,
+struct MockStrEdit: virtual public MockEditI<std::string>,
 		virtual public IStrEdit {
+	MockStrEdit():MockEditI<std::string>("nope!"){}
 };
 
 }  // namespace trihlav

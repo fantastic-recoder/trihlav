@@ -28,12 +28,12 @@
 #ifndef TRIHLAV_MOCK_SPIN_BOX_HPP_
 #define TRIHLAV_MOCK_SPIN_BOX_HPP_
 
-#include "trihlavMockEditBase.hpp"
 #include "trihlavLib/trihlavISpinBox.hpp"
+#include "trihlavMockEditI.hpp"
 
 namespace trihlav {
 
-struct MockSpinBox: virtual public MockEditBase<int>, virtual public ISpinBox {
+struct MockSpinBox: virtual public MockEditI<int>, virtual public ISpinBox {
 	int itsMin;
 	int itsMax;
 	int itsStep;
@@ -42,15 +42,15 @@ struct MockSpinBox: virtual public MockEditBase<int>, virtual public ISpinBox {
 	 * Set some unlikely initialization values like min = -1, max = -1 und
 	 * step = 0.
 	 */
-	MockSpinBox():itsMin(-1),itsMax(-1),itsStep(0) {
+	MockSpinBox():MockEditI<int>(0), ISpinBox(), itsMin(-1),itsMax(-1),itsStep(0) {
 	}
 
 	virtual const int getValue() const {
-		return MockEditBase<int>::getValue();
+		return MockEditI<int>::getValue();
 	}
 
 	virtual void setValue(const int& pVal) {
-		MockEditBase<int>::setValue(pVal);
+		MockEditI<int>::setValue(pVal);
 	}
 
 	virtual void setMin(const int pMin) {

@@ -14,12 +14,11 @@ namespace trihlav {
 
 class IYubikoOtpKeyView;
 
-class IYubikoOtpKeyPresenter : public IPresenter {
+class YubikoOtpKeyPresenterI : public IPresenter {
 public:
-	IYubikoOtpKeyPresenter(const IFactory& pFactory):IPresenter(pFactory){}
+	YubikoOtpKeyPresenterI(const IFactory& pFactory):IPresenter(pFactory){}
 	virtual void addKey()=0;
 	virtual IYubikoOtpKeyView& getView()=0;
-	virtual const IYubikoOtpKeyView& getView() const=0;
 
 private:
 };

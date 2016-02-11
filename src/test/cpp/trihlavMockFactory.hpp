@@ -48,7 +48,7 @@ struct MockFactory: virtual public IFactory {
 	MOCK_CONST_METHOD0(createKeyListPresenter,IKeyListPresenter* () );
 	MOCK_CONST_METHOD0(createKeyListView,IKeyListView* () );
 	MOCK_CONST_METHOD0(createPswdChckPresenter,IPswdChckPresenter* () );
-	MOCK_CONST_METHOD0(createYubikoOtpKeyPresenter,IYubikoOtpKeyPresenter* ());
+	MOCK_CONST_METHOD0(createYubikoOtpKeyPresenter,YubikoOtpKeyPresenterI* ());
 	MOCK_CONST_METHOD0(createPswdChckView,IPswdChckView* () );
 	MOCK_CONST_METHOD0(createYubikoOtpKeyView,IYubikoOtpKeyView* () );
 

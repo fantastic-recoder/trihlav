@@ -54,7 +54,7 @@ IPswdChckPresenter* IFactory::createPswdChckPresenter() const {
 	return new PswdChckPresenter(*this);
 }
 
-IYubikoOtpKeyPresenter* IFactory::createYubikoOtpKeyPresenter() const {
+YubikoOtpKeyPresenterI* IFactory::createYubikoOtpKeyPresenter() const {
 	return new YubikoOtpKeyPresenter(*this);
 }
 

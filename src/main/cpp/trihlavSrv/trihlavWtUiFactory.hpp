@@ -32,7 +32,7 @@
 
 namespace trihlav {
 
-class IYubikoOtpKeyPresenter;
+class YubikoOtpKeyPresenterI;
 
 class WtUiFactory: virtual public IFactory {
 public:

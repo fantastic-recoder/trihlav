@@ -34,7 +34,9 @@
 
 namespace trihlav {
 
-struct MockButton: public IButton {
+struct MockButton: virtual public IButton {
+	MockButton():IButton() {}
+
 	std::string itsVal;
 	virtual const std::string getText() const {
 		return itsVal;

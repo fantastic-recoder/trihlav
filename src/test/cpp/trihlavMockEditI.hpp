@@ -34,8 +34,11 @@
 namespace trihlav {
 
 template<typename T>
-struct MockEditBase: virtual public IEdit<T> {
+struct MockEditI: virtual public IEdit<T> {
 	T itsVal;
+
+	MockEditI(const T& pVal) : itsVal(pVal) {
+	}
 
 	/**
 	 * @brief Getter
@@ -54,7 +57,7 @@ struct MockEditBase: virtual public IEdit<T> {
 		itsVal = pVal;
 	}
 
-	virtual ~MockEditBase(){}
+	virtual ~MockEditI(){}
 };
 
 } // end namespace trihlav

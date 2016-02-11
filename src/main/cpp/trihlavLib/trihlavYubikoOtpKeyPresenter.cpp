@@ -30,55 +30,57 @@ using namespace boost::locale;
 
 namespace trihlav {
 
-YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory) :
-		IYubikoOtpKeyPresenter(pFactory), itsView(
-				pFactory.createYubikoOtpKeyView()) {
-	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
-	itsView->getEdtPrivateId().setValue("");
-	itsView->getEdtSecretKey().setValue("");
-	itsView->getEdtPublicId().setValue("");
-	itsView->getSbxPublicIdLen().setValue(6);
-	itsView->getSbxPublicIdLen().setMin(0);
-	itsView->getSbxPublicIdLen().setMax(6);
-	itsView->getSbxPublicIdLen().setStep(1);
-	itsView->getAcceptedSignal().connect([=](const bool pAccepted) {
+void YubikoOtpKeyPresenter::initUi() {
+	getView().getEdtPrivateId().setValue("");
+	getView().getEdtSecretKey().setValue("");
+	getView().getEdtPublicId().setValue("");
+	getView().getSbxPublicIdLen().setValue(6);
+	getView().getSbxPublicIdLen().setMin(0);
+	getView().getSbxPublicIdLen().setMax(6);
+	getView().getSbxPublicIdLen().setStep(1);
+	getView().getAcceptedSignal().connect([=](const bool pAccepted) {
 		accepted(pAccepted);
 	});
-	itsView->getBtnGenPrivateId().getPressedSignal().connect([=]() {
+	getView().getBtnGenPrivateId().getPressedSignal().connect([=]() {
 		generatePrivateId();
 	});
-	itsView->getBtnGenPublicId().getPressedSignal().connect([=]() {
+	getView().getBtnGenPublicId().getPressedSignal().connect([=]() {
 		generatePublicId();
 	});
-	itsView->getBtnGenSecretKey().getPressedSignal().connect([=]() {
+	getView().getBtnGenSecretKey().getPressedSignal().connect([=]() {
 		generateSecretKey();
 	});
 }
 
+YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(const IFactory& pFactory) :
+		YubikoOtpKeyPresenterI(pFactory), itsView(0),itsCurCfg(0)  {
+	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
+}
+
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::~YubikoOptKeyPresenter");
+	delete itsView;
+	delete itsCurCfg;
 }
 
 void YubikoOtpKeyPresenter::addKey() {
-	itsCurCfg.release();
 	bfs::path myFilename(
 			getFactory().getKeyManager().getConfigDir() / "%%-%%-%%");
 	myFilename = bfs::unique_path(myFilename);
-	itsCurCfg.reset(new YubikoOtpKeyConfig(myFilename));
-	itsView->show();
+	itsCurCfg=new YubikoOtpKeyConfig(myFilename);
+	getView().show();
 }
 
-const IStrEdit& YubikoOtpKeyPresenter::getEdtSecretKey() const {
-	return getView().getEdtSecretKey();
-}
+YubikoOtpKeyConfig& YubikoOtpKeyPresenter::getCurCfg() {
+	if(!itsCurCfg) {
 
-const std::string YubikoOtpKeyPresenter::getSecretKey() const {
-	return getEdtSecretKey().getValue();
+	}
+  return *itsCurCfg;
 }
 
 void YubikoOtpKeyPresenter::deleteKey() {
-	if (getCurCfg()) {
-		const path myFilename = getCurCfg()->getFilename();
+	if (itsCurCfg) {
+		const path myFilename = getCurCfg().getFilename();
 		if (exists(myFilename)) {
 			if (!remove(myFilename)) {
 				auto myErrMsg = format(
@@ -107,23 +109,27 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::accepted");
 	BOOST_LOG_TRIVIAL(info)<< "Accepted==" << pAccepted;
 	if (pAccepted) {
-		if (!getCurCfg()) {
+		if (itsCurCfg==0) {
 			throwNoConfig();
 		}
-		getCurCfg()->setPrivateId(getPrivateId());
-		getCurCfg()->setSecretKey(getSecretKey());
-		getCurCfg()->setPublicId(getPublicId());
-		getCurCfg()->setDescription(getDescription());
-		getCurCfg()->save();
+		getCurCfg().setPrivateId(getPrivateId());
+		getCurCfg().setSecretKey(getSecretKey());
+		getCurCfg().setPublicId(getPublicId());
+		getCurCfg().setDescription(getDescription());
+		getCurCfg().save();
 	}
 }
 
-const string YubikoOtpKeyPresenter::getPrivateId() const {
+string YubikoOtpKeyPresenter::getPrivateId() {
 	return getEdtPrivateId().getValue();
 }
 
-const string YubikoOtpKeyPresenter::getPublicId() const {
+string YubikoOtpKeyPresenter::getPublicId() {
 	return getEdtPublicId().getValue();
+}
+
+std::string YubikoOtpKeyPresenter::getSecretKey() {
+	return getEdtSecretKey().getValue();
 }
 
 void YubikoOtpKeyPresenter::generatePrivateId() {
@@ -133,25 +139,20 @@ void YubikoOtpKeyPresenter::generatePrivateId() {
 	getEdtPrivateId().setValue(myNewId);
 }
 
-int YubikoOtpKeyPresenter::getPublicIdLen() const {
-	const int myRetVal = getView().getSbxPublicIdLen().getValue();
-	return myRetVal;
-}
-
 /**
  * Free text, will not be interpreted technically.
  * @return Users description of the key.
  */
-const string YubikoOtpKeyPresenter::getDescription() const {
+string YubikoOtpKeyPresenter::getDescription() {
 	const string myRetVal = getView().getEdtDescription().getValue();
 	return myRetVal;
 }
 
 IYubikoOtpKeyView& YubikoOtpKeyPresenter::getView() {
-	return *itsView;
-}
-
-const IYubikoOtpKeyView& YubikoOtpKeyPresenter::getView() const {
+	if(itsView==0) {
+		itsView=getFactory().createYubikoOtpKeyView();
+		initUi();
+	}
 	return *itsView;
 }
 
@@ -159,18 +160,13 @@ IStrEdit& YubikoOtpKeyPresenter::getEdtPrivateId() {
 	return getView().getEdtPrivateId();
 }
 
-const IStrEdit& YubikoOtpKeyPresenter::getEdtPrivateId() const {
-	return getView().getEdtPrivateId();
-}
-
 IStrEdit& YubikoOtpKeyPresenter::getEdtPublicId() {
 	return getView().getEdtPublicId();
 }
 
-const IStrEdit& YubikoOtpKeyPresenter::getEdtPublicId() const {
-	return getView().getEdtPublicId();
+int YubikoOtpKeyPresenter::getPublicIdLen() {
+	return getView().getSbxPublicIdLen().getValue();
 }
-
 void YubikoOtpKeyPresenter::generatePublicId() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::generatePublicId");
 	const int mySz = getPublicIdLen();

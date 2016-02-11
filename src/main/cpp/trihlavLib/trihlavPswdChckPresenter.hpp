@@ -38,13 +38,12 @@ class IFactory;
 class IPswdChckView;
 
 class PswdChckPresenter: public IPswdChckPresenter {
-	std::unique_ptr<IPswdChckView> itsView;
+	IPswdChckView* itsView;
 public:
 	PswdChckPresenter(const IFactory& pFactory);
 	virtual ~PswdChckPresenter();
 
-	IPswdChckView& getView() { return *itsView; }
-
+	IPswdChckView& getView();
 };
 
 } /* namespace trihlav */
