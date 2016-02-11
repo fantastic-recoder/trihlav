@@ -42,13 +42,19 @@ class IFactory;
 class KeyListPresenter: virtual public IKeyListPresenter {
 public:
 	typedef std::unique_ptr<IYubikoOtpKeyPresenter> IYubikoOtpKeyPresenterPtr;
+	typedef std::unique_ptr<IKeyListView> IKeyListViewPtr;
 
 	KeyListPresenter( const IFactory& pFactory);
 	virtual IKeyListView& getView();
 	virtual ~KeyListPresenter();
 	virtual void addKey();
+
+	IYubikoOtpKeyPresenter& getYubikoOtpKeyPresenter() {
+		return *itsYubikoOtpKeyPresenter;
+	}
+
 private:
-	IKeyListView* itsKeyListView;
+	IKeyListViewPtr itsKeyListView;
 	IYubikoOtpKeyPresenterPtr itsYubikoOtpKeyPresenter;
 };
 

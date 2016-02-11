@@ -25,36 +25,64 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_MOCK_SPIN_BOX_HPP_
+#define TRIHLAV_MOCK_SPIN_BOX_HPP_
 
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavMockEditBase.hpp"
+#include "trihlavLib/trihlavISpinBox.hpp"
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
-{
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
-}
+struct MockSpinBox: virtual public MockEditBase<int>, virtual public ISpinBox {
+	int itsMin;
+	int itsMax;
+	int itsStep;
 
-IKeyListView& KeyListPresenter::getView() {
-	return *itsKeyListView;
-}
+	/**
+	 * Set some unlikely initialization values like min = -1, max = -1 und
+	 * step = 0.
+	 */
+	MockSpinBox():itsMin(-1),itsMax(-1),itsStep(0) {
+	}
 
-KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
-}
+	virtual const int getValue() const {
+		return MockEditBase<int>::getValue();
+	}
 
-void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
-}
+	virtual void setValue(const int& pVal) {
+		MockEditBase<int>::setValue(pVal);
+	}
 
-} /* namespace trihlav */
+	virtual void setMin(const int pMin) {
+		itsMin = pMin;
+	}
 
+	virtual const int getMin() const {
+		return itsMin;
+	}
+
+	virtual void setMax(const int pMax) {
+		itsMax = pMax;
+	}
+
+	virtual const int getMax() const {
+		return itsMax;
+	}
+
+	virtual void setStep(const int pStep) {
+		itsStep = pStep;
+	}
+
+	virtual const int getStep() const {
+		return itsStep;
+	}
+
+};
+
+
+
+}  // namespace trihlav
+
+
+
+#endif /* TRIHLAV_MOCK_SPIN_BOX_HPP_ */

@@ -6,11 +6,11 @@ include_directories(
     ${GMOCK_INCLUDE_DIRS}
 )
 
-add_executable( trihlavApiTests trihlavApiTests.cpp trihlavGlobalFixture.cpp )
+add_executable( trihlavTestApi trihlavTestApi.cpp )
 
-add_test( NAME trihlavApiTests COMMAND trihlavApiTests )
+add_test( NAME trihlavTestApi COMMAND trihlavTestApi )
 
-target_link_libraries(trihlavApiTests
+target_link_libraries(trihlavTestApi
                       ${Boost_LIBRARIES}
                       ${YUBIKEY_LIB}
                       trihlavApi
@@ -20,7 +20,8 @@ target_link_libraries(trihlavApiTests
                       )
 
 add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp 
-trihlavGlobalFixture.cpp)
+trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+trihlavMockYubikoOtpKeyView.cpp trihlavMockYubikoOtpKeyPresenter.cpp)
 
 add_test( NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey )
 
@@ -33,7 +34,9 @@ target_link_libraries(trihlavTestYubikoOtpKey
     					libgmock
                       )
 
-add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp trihlavGlobalFixture.cpp)
+add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp 
+	trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+	trihlavMockYubikoOtpKeyView.cpp trihlavMockYubikoOtpKeyPresenter.cpp)
 
 add_test( NAME trihlavTestKeyListPresenter COMMAND trihlavTestKeyListPresenter )
 
@@ -42,5 +45,6 @@ target_link_libraries(trihlavTestKeyListPresenter
                       ${YUBIKEY_LIB}
                       trihlavApi
                       ${CMAKE_THREAD_LIBS_INIT}
+                      libgtest
+    				  libgmock
                       )
-

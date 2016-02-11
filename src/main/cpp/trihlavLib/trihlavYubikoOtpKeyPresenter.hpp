@@ -45,6 +45,7 @@ class IStrEdit;
 class YubikoOtpKeyPresenter: public IYubikoOtpKeyPresenter {
 public:
     typedef std::unique_ptr<YubikoOtpKeyConfig> YubikoOtpKeyConfigPtr;
+    typedef std::unique_ptr<IYubikoOtpKeyView> IYubikoOtpKeyViewPtr;
 
     YubikoOtpKeyPresenter(const IFactory& );
 
@@ -110,7 +111,7 @@ public:
 	const std::string getDescription() const;
 
 private:
-    IYubikoOtpKeyView* itsView;
+    IYubikoOtpKeyViewPtr itsView;
     YubikoOtpKeyConfigPtr itsCurCfg;
     YubikoOtpKeyConfigPtr itsOldCfg;
     void accepted( bool pAccepted);

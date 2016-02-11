@@ -25,36 +25,38 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_MOCK_FACTORY_HPP_
+#define TRIHLAV_MOCK_FACTORY_HPP_
 
-#include "trihlavLib/trihlavIButton.hpp"
+#include <memory>
+#include <gmock/gmock.h>
+
 #include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
-{
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
+class MockYubikoOtpKeyView;
+class MockYubikoOtpKeyPresenter;
+class MockKeyListView;
+
+/**
+ * @brief Mock factory.
+ */
+struct MockFactory: virtual public IFactory {
+
+	MOCK_CONST_METHOD0(createMainPanelView,IMainPanelView* ());
+	MOCK_CONST_METHOD0(createKeyListPresenter,IKeyListPresenter* () );
+	MOCK_CONST_METHOD0(createKeyListView,IKeyListView* () );
+	MOCK_CONST_METHOD0(createPswdChckPresenter,IPswdChckPresenter* () );
+	MOCK_CONST_METHOD0(createYubikoOtpKeyPresenter,IYubikoOtpKeyPresenter* ());
+	MOCK_CONST_METHOD0(createPswdChckView,IPswdChckView* () );
+	MOCK_CONST_METHOD0(createYubikoOtpKeyView,IYubikoOtpKeyView* () );
+
+	MockFactory();
+	virtual ~MockFactory(){}
+};
+
+
 }
 
-IKeyListView& KeyListPresenter::getView() {
-	return *itsKeyListView;
-}
-
-KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
-}
-
-void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
-}
-
-} /* namespace trihlav */
-
+#endif /* TRIHLAV_MOCK_FACTORY_HPP_ */

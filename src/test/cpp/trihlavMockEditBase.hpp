@@ -26,35 +26,39 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#ifndef TRIHLAV_MOCK_EDIT_BASE_HPP_
+#define TRIHLAV_MOCK_EDIT_BASE_HPP_
+
+#include "trihlavLib/trihlavIEdit.hpp"
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
-{
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
-}
+template<typename T>
+struct MockEditBase: virtual public IEdit<T> {
+	T itsVal;
 
-IKeyListView& KeyListPresenter::getView() {
-	return *itsKeyListView;
-}
+	/**
+	 * @brief Getter
+	 * @return a copy of it's value
+	 */
+	virtual const T getValue() const {
+		return itsVal;
+	}
 
-KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
-}
+	/**
+	 * @brief Just sets the internal value.
+	 * @see IStrEdit::getValue
+	 * @return void
+	 */
+	virtual void setValue(const T& pVal) {
+		itsVal = pVal;
+	}
 
-void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
-}
+	virtual ~MockEditBase(){}
+};
 
-} /* namespace trihlav */
+} // end namespace trihlav
 
+
+
+#endif /* TRIHLAV_MOCK_EDIT_BASE_HPP_ */

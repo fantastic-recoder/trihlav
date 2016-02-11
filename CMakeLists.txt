@@ -124,6 +124,17 @@ include_directories("${source_dir}/include")
 
 ###############################################################################
 #
+# xgettext
+#
+# xgettext --keyword=translate:1,1t --keyword=translate:1c,2,2t       \
+#          --keyword=translate:1,2,3t --keyword=translate:1c,2,3,4t   \
+#          --keyword=gettext:1 --keyword=pgettext:1c,2                \
+#          --keyword=ngettext:1,2 --keyword=npgettext:1c,2,3          \
+#          source_file_1.cpp ... source_file_N.cpp
+###############################################################################
+FIND_PACKAGE(Gettext)
+###############################################################################
+#
 # Start CPack
 #
 SET(CPACK_GENERATOR "RPM")

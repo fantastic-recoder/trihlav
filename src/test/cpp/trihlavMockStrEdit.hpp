@@ -1,4 +1,4 @@
-/*
+ /*
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
@@ -25,36 +25,15 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#ifndef TRIHLAV_MOCK_STREDIT_HPP_
+#define TRIHLAV_MOCK_STREDIT_HPP_
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
-{
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
-}
+struct MockStrEdit: virtual public MockEditBase<std::string>,
+		virtual public IStrEdit {
+};
 
-IKeyListView& KeyListPresenter::getView() {
-	return *itsKeyListView;
-}
+}  // namespace trihlav
 
-KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
-}
-
-void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
-}
-
-} /* namespace trihlav */
-
+#endif /* TRIHLAV_MOCK_STREDIT_HPP_ */

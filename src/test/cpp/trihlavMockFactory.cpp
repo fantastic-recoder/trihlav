@@ -25,62 +25,30 @@
  Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
-#include <string>
 
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost/log/expressions.hpp>
 
-#include <boost/filesystem.hpp>
-
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"  // Brings in Google Mock.
-
-#include "trihlavLib/trihlavLog.hpp"
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIYubikoOtpKeyPresenter.hpp"
-#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
-
-#include "trihlavMockButton.hpp"
-#include "trihlavMockEditBase.hpp"
-#include "trihlavMockStrEdit.hpp"
-#include "trihlavMockSpinBox.hpp"
 #include "trihlavMockFactory.hpp"
-#include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockYubikoOtpKeyPresenter.hpp"
+#include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
 
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
-
-using namespace std;
-using namespace trihlav;
-using namespace boost;
-using namespace boost::filesystem;
-
 using ::testing::Return;
+using ::testing::ReturnRef;
 
-TEST(KeyListPresenter,canAddYubikoKey) {
-	BOOST_LOG_NAMED_SCOPE("canAddYubikoKey");
-	MockFactory myMockFactory;
-	EXPECT_CALL(myMockFactory, createYubikoOtpKeyPresenter()) //
-	.WillOnce(Return(new YubikoOtpKeyPresenter(myMockFactory)));
+namespace trihlav {
 
-	KeyListPresenter myKeyListPresenter(myMockFactory);
-	IKeyListView& myKeyListView = myKeyListPresenter.getView();
-	MockYubikoOtpKeyView& myMockYubikoOtpKeyView=
-			reinterpret_cast<MockYubikoOtpKeyView&>(myKeyListPresenter.getYubikoOtpKeyPresenter().getView());
-//	EXPECT_CALL(myMockYubikoOtpKeyView, show());
-	myKeyListView.getBtnAddKey().getPressedSignal()();
+MockFactory::MockFactory() {
+	BOOST_LOG_NAMED_SCOPE("MockFactory::MockFactory");
+
+	ON_CALL(*this, createYubikoOtpKeyView()) //
+	.WillByDefault(Return(new MockYubikoOtpKeyView));
+
+	ON_CALL(*this, createKeyListView()) //
+	.WillByDefault(Return(new MockKeyListView));
 }
 
-int main(int argc, char **argv) {
-	initLog();
-	::testing::InitGoogleTest(&argc, argv);
-	int ret = RUN_ALL_TESTS();
-	return ret;
-}
-
+}  // namespace trihlav

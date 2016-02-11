@@ -25,35 +25,25 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/expressions.hpp>
 
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavMockButton.hpp"
+#include "trihlavMockKeyListView.hpp"
+
+using ::testing::Return;
+using ::testing::ReturnRef;
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
-{
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
-}
+MockKeyListView::MockKeyListView() {
+	BOOST_LOG_NAMED_SCOPE("MockKeyListView::MockKeyListView");
 
-IKeyListView& KeyListPresenter::getView() {
-	return *itsKeyListView;
-}
+	ON_CALL(*this,getBtnAddKey()) //
+	.WillByDefault(ReturnRef(itsMockBtnAddKey));
 
-KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
-}
-
-void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
 }
 
 } /* namespace trihlav */

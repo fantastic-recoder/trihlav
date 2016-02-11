@@ -25,36 +25,23 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_MOCK_KEY_LIST_VIEW_HPP_
+#define TRIHLAV_MOCK_KEY_LIST_VIEW_HPP_
 
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
+#include <gmock/gmock.h>
+
 #include "trihlavLib/trihlavIKeyListView.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+
+#include "trihlavMockButton.hpp"
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
-, itsKeyListView(pFactory.createKeyListView())
-, itsYubikoOtpKeyPresenter(pFactory.createYubikoOtpKeyPresenter())
-{
-	getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
-}
-
-IKeyListView& KeyListPresenter::getView() {
-	return *itsKeyListView;
-}
-
-KeyListPresenter::~KeyListPresenter() {
-	// TODO Auto-generated destructor stub
-}
-
-void KeyListPresenter::addKey() {
-	itsYubikoOtpKeyPresenter->addKey();
-}
+struct MockKeyListView: virtual IKeyListView {
+	MockButton itsMockBtnAddKey;
+	MockKeyListView();
+	MOCK_METHOD0(getBtnAddKey, IButton& ());
+};
 
 } /* namespace trihlav */
 
+#endif /* TRIHLAV_MOCK_KEY_LIST_VIEW_HPP_ */

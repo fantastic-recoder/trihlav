@@ -16,7 +16,6 @@
 
 #include "trihlavLib/trihlavLog.hpp"
 
-#include "trihlavGlobalFixture.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
