@@ -9,9 +9,9 @@
 #define TRIHLAV_I_EDIT_HPP_
 
 #include <string>
+#include <boost/utility.hpp>
 
 #include "trihlavLib/trihlavICallback.hpp"
-#include "trihlavLib/trihlavIWidget.hpp"
 
 namespace trihlav {
 
@@ -19,7 +19,7 @@ namespace trihlav {
  * Interface to a UI widget, which can edit, set and get a value.
  */
 template< typename T>
-class IEdit : virtual public IWidget {
+class IEdit : virtual public boost::noncopyable {
 public:
 	/**
 	 * @return The edited value.

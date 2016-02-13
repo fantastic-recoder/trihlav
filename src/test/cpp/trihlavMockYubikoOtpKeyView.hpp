@@ -38,7 +38,7 @@
 
 namespace trihlav {
 
-struct MockYubikoOtpKeyView: virtual public IYubikoOtpKeyView {
+struct MockYubikoOtpKeyView: public IYubikoOtpKeyView {
 
 	MockStrEdit itsMockEdtPrivateId;
 	MockStrEdit itsMockEdtPublicId;
@@ -86,6 +86,8 @@ struct MockYubikoOtpKeyView: virtual public IYubikoOtpKeyView {
 	MOCK_METHOD0(show, void ());
 
 	virtual ~MockYubikoOtpKeyView();
+
+	void setupDefaultOnCallHandlers();
 };
 
 }  // namespace trihlav

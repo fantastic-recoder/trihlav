@@ -24,7 +24,7 @@ WtUiFactory::~WtUiFactory() {
 	// TODO Auto-generated destructor stub
 }
 
-IMainPanelView* WtUiFactory::createMainPanelView() const {
+IMainPanelView* WtUiFactory::createMainPanelView() {
 	return new WtMainPanelView();
 }
 
@@ -33,16 +33,24 @@ IFactory& getUiFactory() {
 	return theWtUiFactory;
 }
 
-IKeyListView* WtUiFactory::createKeyListView() const {
+IKeyListView* WtUiFactory::createKeyListView() {
 	return new WtKeyListView();
 }
 
-IPswdChckView* WtUiFactory::createPswdChckView() const {
+IPswdChckView* WtUiFactory::createPswdChckView() {
 	return new WtPswdChckView();
 }
 
-IYubikoOtpKeyView* WtUiFactory::createYubikoOtpKeyView() const {
+IYubikoOtpKeyView* WtUiFactory::createYubikoOtpKeyView() {
 	return new WtYubikoOtpKeyView();
+}
+
+IPswdChckPresenter* WtUiFactory::createPswdChckPresenter() {
+	return nullptr;
+}
+
+YubikoOtpKeyPresenterI* WtUiFactory::createYubikoOtpKeyPresenter() {
+	return nullptr;
 }
 
 } /* namespace trihlav */

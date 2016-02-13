@@ -38,54 +38,41 @@ using ::testing::ReturnRef;
 
 namespace trihlav {
 
+void MockYubikoOtpKeyView::setupDefaultOnCallHandlers() {
+	BOOST_LOG_NAMED_SCOPE("MockYubikoOtpKeyView::setupDefaultOnCallHandlers");
+	ON_CALL(*this,getEdtPrivateId()).WillByDefault(
+			ReturnRef(itsMockEdtPrivateId));
+	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPrivateId()).WillByDefault(
+			ReturnRef(itsMockEdtPrivateId));
+	ON_CALL(*this,getEdtSecretKey()).WillByDefault(
+			ReturnRef(itsMockEdtSecretKey));
+	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtSecretKey()).WillByDefault(
+			ReturnRef(itsMockEdtSecretKey));
+	ON_CALL(*this,getEdtPublicId()).WillByDefault(
+			ReturnRef(itsMockEdtPublicId));
+	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPublicId()).WillByDefault(
+			ReturnRef(itsMockEdtPublicId));
+	ON_CALL(*this,getEdtDescription()).WillByDefault(
+			ReturnRef(itsMockEdtDescription));
+	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtDescription()).WillByDefault(
+			ReturnRef(itsMockEdtDescription));
+	ON_CALL(*this,getSbxPublicIdLen()).WillByDefault(
+			ReturnRef(itsMockSbxPublicIdLen));
+	ON_CALL((const MockYubikoOtpKeyView&)(*this),getSbxPublicIdLen()).WillByDefault(
+			ReturnRef(itsMockSbxPublicIdLen));
+	ON_CALL(*this,getSbxPublicIdLen()).WillByDefault(
+			ReturnRef(itsMockSbxPublicIdLen));
+	ON_CALL(*this,getBtnSave()).WillByDefault(ReturnRef(itsMockBtnSave));
+	ON_CALL(*this,getBtnGenPrivateId()).WillByDefault(
+			ReturnRef(itsMockBtnGenPrivateId));
+	ON_CALL(*this,getBtnGenPublicId()).WillByDefault(
+			ReturnRef(itsMockBtnGenPublicId));
+	ON_CALL(*this,getBtnGenSecretKey()).WillByDefault(
+			ReturnRef(itsMockBtnGenSecretKey));
+}
+
 MockYubikoOtpKeyView::MockYubikoOtpKeyView() {
 	BOOST_LOG_NAMED_SCOPE("MockYubikoOtpKeyView::MockYubikoOtpKeyView");
-
-	ON_CALL(*this,getEdtPrivateId()) //
-	.WillByDefault(ReturnRef(itsMockEdtPrivateId));
-
-	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPrivateId()) //
-	.WillByDefault(ReturnRef(itsMockEdtPrivateId));
-
-	ON_CALL(*this,getEdtSecretKey()) //
-	.WillByDefault(ReturnRef(itsMockEdtSecretKey));
-
-	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtSecretKey()) //
-	.WillByDefault(ReturnRef(itsMockEdtSecretKey));
-
-	ON_CALL(*this,getEdtPublicId()) //
-	.WillByDefault(ReturnRef(itsMockEdtPublicId));
-
-	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPublicId()) //
-	.WillByDefault(ReturnRef(itsMockEdtPublicId));
-
-	ON_CALL(*this,getEdtDescription()) //
-	.WillByDefault(ReturnRef(itsMockEdtDescription));
-
-	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtDescription()) //
-	.WillByDefault(ReturnRef(itsMockEdtDescription));
-
-	ON_CALL(*this,getSbxPublicIdLen()) //
-	.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
-
-	ON_CALL((const MockYubikoOtpKeyView&)(*this),getSbxPublicIdLen()) //
-	.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
-
-	ON_CALL(*this,getSbxPublicIdLen()) //
-	.WillByDefault(ReturnRef(itsMockSbxPublicIdLen));
-
-	ON_CALL(*this,getBtnSave()) //
-	.WillByDefault(ReturnRef(itsMockBtnSave));
-
-	ON_CALL(*this,getBtnGenPrivateId()) //
-	.WillByDefault(ReturnRef(itsMockBtnGenPrivateId));
-
-	ON_CALL(*this,getBtnGenPublicId()) //
-	.WillByDefault(ReturnRef(itsMockBtnGenPublicId));
-
-	ON_CALL(*this,getBtnGenSecretKey()) //
-	.WillByDefault(ReturnRef(itsMockBtnGenSecretKey));
-
 }
 
 MockYubikoOtpKeyView::~MockYubikoOtpKeyView() {

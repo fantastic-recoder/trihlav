@@ -34,7 +34,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyPresenterI.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
@@ -50,7 +50,6 @@
 #include "trihlavMockSpinBox.hpp"
 #include "trihlavMockFactory.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
-#include "trihlavMockYubikoOtpKeyPresenter.hpp"
 #include "trihlavMockKeyListView.hpp"
 
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
@@ -79,17 +78,15 @@ public:
 TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canAddYubikoKey");
 	NiceMock<MockFactory> myMockFactory;
-	EXPECT_CALL(myMockFactory, createYubikoOtpKeyPresenter()) //
-	.WillOnce(Return(new YubikoOtpKeyPresenter(myMockFactory)));
 
 	KeyListPresenter myKeyListPresenter(myMockFactory);
-	YubikoOtpKeyPresenterI& myYubikoOtpKeyPresenter =
+	YubikoOtpKeyPresenter& myYubikoOtpKeyPresenter =
 			myKeyListPresenter.getYubikoOtpKeyPresenter();
-	IYubikoOtpKeyView& myView = myYubikoOtpKeyPresenter.getView();
+	IYubikoOtpKeyView& myView(*myYubikoOtpKeyPresenter.getView());
 	MockYubikoOtpKeyView& myMockYubikoOtpKeyView =
 			reinterpret_cast<MockYubikoOtpKeyView&>(myView);
 	IKeyListView& myKeyListView = myKeyListPresenter.getView();
-	//EXPECT_CALL(myMockYubikoOtpKeyView, show());
+	EXPECT_CALL(myMockYubikoOtpKeyView, show());
 	myKeyListView.getBtnAddKey().getPressedSignal()();
 }
 

@@ -42,16 +42,20 @@ class IFactory;
 class IPresenter {
 public:
 
-	IPresenter(const IFactory& pFactory) : itsFactory(pFactory) {
+	IPresenter(IFactory& pFactory) : itsFactory(pFactory) {
 	}
 
 	const IFactory& getFactory() const {
 		return itsFactory;
 	}
 
+	IFactory& getFactory() {
+		return itsFactory;
+	}
+
 	virtual ~IPresenter(){}
 private:
-	const IFactory& itsFactory;
+	IFactory& itsFactory;
 };
 
 } /* namespace trihlav */

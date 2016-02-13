@@ -33,7 +33,8 @@
 
 namespace trihlav {
 
-struct MockSpinBox: virtual public MockEditI<int>, virtual public ISpinBox {
+struct MockSpinBox: virtual public ISpinBox {
+	int itsVal;
 	int itsMin;
 	int itsMax;
 	int itsStep;
@@ -42,15 +43,15 @@ struct MockSpinBox: virtual public MockEditI<int>, virtual public ISpinBox {
 	 * Set some unlikely initialization values like min = -1, max = -1 und
 	 * step = 0.
 	 */
-	MockSpinBox():MockEditI<int>(0), ISpinBox(), itsMin(-1),itsMax(-1),itsStep(0) {
+	MockSpinBox():itsVal(0), itsMin(-1),itsMax(-1),itsStep(0) {
 	}
 
 	virtual const int getValue() const {
-		return MockEditI<int>::getValue();
+		return itsVal;
 	}
 
 	virtual void setValue(const int& pVal) {
-		MockEditI<int>::setValue(pVal);
+		itsVal=pVal;
 	}
 
 	virtual void setMin(const int pMin) {

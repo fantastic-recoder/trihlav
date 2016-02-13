@@ -40,7 +40,7 @@ class IPswdChckView;
 class PswdChckPresenter: public IPswdChckPresenter {
 	IPswdChckView* itsView;
 public:
-	PswdChckPresenter(const IFactory& pFactory);
+	PswdChckPresenter(IFactory& pFactory);
 	virtual ~PswdChckPresenter();
 
 	IPswdChckView& getView();

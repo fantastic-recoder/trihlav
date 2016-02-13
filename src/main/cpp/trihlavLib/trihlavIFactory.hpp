@@ -44,15 +44,15 @@ class KeyManager;
 
 class IFactory {
 public:
-	virtual ~IFactory() {}
-	virtual IMainPanelView* createMainPanelView() const=0;
-	virtual IKeyListPresenter* createKeyListPresenter() const ;
-	virtual IKeyListView* createKeyListView() const =0;
-	virtual IPswdChckPresenter* createPswdChckPresenter() const;
-	virtual YubikoOtpKeyPresenterI* createYubikoOtpKeyPresenter() const;
-	virtual IPswdChckView* createPswdChckView() const =0;
-	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() const =0;
-        virtual KeyManager& getKeyManager() const;
+	virtual ~IFactory() {
+	}
+	virtual IMainPanelView* createMainPanelView()=0;
+	virtual IKeyListPresenter* createKeyListPresenter();
+	virtual IKeyListView* createKeyListView()=0;
+	virtual IPswdChckPresenter* createPswdChckPresenter()=0;
+	virtual IPswdChckView* createPswdChckView() =0;
+	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() =0;
+	virtual KeyManager& getKeyManager() const;
 };
 
 }  // namespace trihlav

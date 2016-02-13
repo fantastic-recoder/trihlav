@@ -35,7 +35,7 @@
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(const IFactory& pFactory)
+KeyListPresenter::KeyListPresenter(IFactory& pFactory)
 : IKeyListPresenter(pFactory)
 , IPresenter(pFactory)
 , itsYubikoOtpKeyPresenter(0)
@@ -60,9 +60,9 @@ void KeyListPresenter::addKey() {
 	getYubikoOtpKeyPresenter().addKey();
 }
 
-YubikoOtpKeyPresenterI& KeyListPresenter::getYubikoOtpKeyPresenter() {
+YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
 	if(itsYubikoOtpKeyPresenter==0) {
-		itsYubikoOtpKeyPresenter=getFactory().createYubikoOtpKeyPresenter();
+		itsYubikoOtpKeyPresenter=new YubikoOtpKeyPresenter(getFactory());
 	}
 	return *itsYubikoOtpKeyPresenter;
 }

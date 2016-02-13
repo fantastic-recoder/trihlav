@@ -27,7 +27,6 @@
 #include "trihlavMockStrEdit.hpp"
 #include "trihlavMockSpinBox.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
-#include "trihlavMockYubikoOtpKeyPresenter.hpp"
 #include "trihlavMockFactory.hpp"
 #include "trihlavMockKeyListView.hpp"
 
@@ -35,6 +34,7 @@ using namespace std;
 using namespace trihlav;
 using namespace boost;
 using namespace boost::filesystem;
+using ::testing::NiceMock;
 
 string thePrivateIdStr("666");
 string thePublicIdStr("666");
@@ -48,7 +48,19 @@ int main(int argc, char **argv) {
 	return ret;
 }
 
-TEST(trihlavYubikoOtpKey,keyManagerInit) {
+struct TestYubikoOtpKey: testing::Test {
+
+};
+
+TEST_F(TestYubikoOtpKey,factoryPointers) {
+	BOOST_LOG_NAMED_SCOPE("TestYubikoOtpKey_factoryPointers_Test::TestBody");
+	NiceMock<MockFactory> myMockFactory;
+	auto myView = myMockFactory.createKeyListView();
+	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyViewPtr:" << myView;
+	delete myView;
+}
+
+TEST_F(TestYubikoOtpKey,keyManagerInit) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManagerInitialisation");
 	KeyManager myKMan(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
 	BOOST_LOG_TRIVIAL(debug)<< "Test lazy init. only first getter will cause"
@@ -63,40 +75,44 @@ TEST(trihlavYubikoOtpKey,keyManagerInit) {
 	EXPECT_TRUE(exists(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "Yes, it does.";
 
-	MockFactory myMockFactory;
-
+	NiceMock<MockFactory> myMockFactory;
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
-	MockYubikoOtpKeyView& myYubikoOtpKeyView =
-			reinterpret_cast<MockYubikoOtpKeyView&>(myPresenter.getView());
-	BOOST_LOG_TRIVIAL(debug)<< "PrivID"  << myYubikoOtpKeyView.itsMockEdtPrivateId.getValue();
-	EXPECT_TRUE(myYubikoOtpKeyView.itsMockEdtPrivateId.getValue().empty());
-	EXPECT_TRUE(myYubikoOtpKeyView.itsMockEdtPublicId.getValue().empty());
-	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getValue(), 6);
-	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getMin(), 0);
-	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getMax(), 6);
-	EXPECT_EQ(myYubikoOtpKeyView.itsMockSbxPublicIdLen.getStep(), 1);
+	MockYubikoOtpKeyView* myYubikoOtpKeyView(
+			reinterpret_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
+	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyView  " << myYubikoOtpKeyView;
+	BOOST_LOG_TRIVIAL(debug)<< "PrivateID          '" //
+	<< myYubikoOtpKeyView->itsMockEdtPrivateId.getValue() << "'.";
+	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getValue(), 6);
+	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getMin(), 0);
+	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getMax(), 6);
+	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getStep(), 1);
+	EXPECT_TRUE(myPresenter.getView()->getEdtPrivateId() .getValue().empty());
+	EXPECT_TRUE(myPresenter.getView()->getEdtPublicId().getValue().empty());
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }
 
-TEST(trihlavYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
+TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
-	MockFactory myMockFactory;
-	YubikoOtpKeyPresenter myYubikoOtpKeyPresenter(myMockFactory);
-	MockYubikoOtpKeyView& myYubikoOtpKeyView =
-			reinterpret_cast<MockYubikoOtpKeyView&>(myYubikoOtpKeyPresenter.getView());
-
-	EXPECT_CALL(myYubikoOtpKeyView, show());
-	myYubikoOtpKeyPresenter.addKey();
-	myYubikoOtpKeyView.itsMockBtnGenPrivateId.getPressedSignal()();
-	myYubikoOtpKeyView.itsMockBtnGenPublicId.getPressedSignal()();
-	myYubikoOtpKeyView.itsMockBtnGenSecretKey.getPressedSignal()();
-	myYubikoOtpKeyView.getAcceptedSignal()(true);
-	const string myPrivId(myYubikoOtpKeyView.getEdtPrivateId().getValue());
-	const string myPublicId(myYubikoOtpKeyView.getEdtPublicId().getValue());
-	const string mySecretKey(myYubikoOtpKeyView.getEdtSecretKey().getValue());
-	const int myPubIdLen(myYubikoOtpKeyView.getSbxPublicIdLen().getValue());
-	const auto& myCfg = myYubikoOtpKeyPresenter.getCurCfg();
+	NiceMock<MockFactory> myMockFactory;
+	YubikoOtpKeyPresenter myPresenter(myMockFactory);
+	IYubikoOtpKeyView* myViewIface(myPresenter.getView());
+	MockYubikoOtpKeyView* myYubikoOtpKeyView(
+			reinterpret_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
+	EXPECT_TRUE(myYubikoOtpKeyView!=0);
+	BOOST_LOG_TRIVIAL(debug)<< "Expectations...";
+	EXPECT_CALL(*myYubikoOtpKeyView, show());
+	BOOST_LOG_TRIVIAL(debug)<< "Expectations set.";
+	myPresenter.addKey();
+	myViewIface->getBtnGenPrivateId().getPressedSignal()();
+	myViewIface->getBtnGenPublicId().getPressedSignal()();
+	myViewIface->getBtnGenSecretKey().getPressedSignal()();
+	myViewIface->getAcceptedSignal()(true);
+	const string myPrivId(myViewIface->getEdtPrivateId().getValue());
+	const string myPublicId(myViewIface->getEdtPublicId().getValue());
+	const string mySecretKey(myViewIface->getEdtSecretKey().getValue());
+	const int myPubIdLen(myViewIface->getSbxPublicIdLen().getValue());
+	const auto& myCfg = myPresenter.getCurCfg();
 	const path myFilename(myCfg.getFilename());
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPrivId   : "<< myPrivId << ".";
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPublicId : "<< myPublicId << ".";
@@ -110,7 +126,7 @@ TEST(trihlavYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	EXPECT_TRUE(myPublicId.compare(myCfg.getPublicId()) == 0);
 	EXPECT_TRUE(myPrivId.compare(myCfg.getPrivateId()) == 0);
 	EXPECT_TRUE(mySecretKey.compare(myCfg.getSecretKey()) == 0);
-	myYubikoOtpKeyPresenter.deleteKey();
+	myPresenter.deleteKey();
 	EXPECT_FALSE(exists(myFilename));
 }
 

@@ -34,11 +34,11 @@
 namespace trihlav {
 
 template<typename T>
-struct MockEditI: virtual public IEdit<T> {
+class MockEditI: virtual public IEdit<T> {
+public:
 	T itsVal;
 
-	MockEditI(const T& pVal) : itsVal(pVal) {
-	}
+	MockEditI(const T& pVal) : itsVal(pVal){}
 
 	/**
 	 * @brief Getter

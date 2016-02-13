@@ -36,7 +36,7 @@ class IKeyListView;
 
 class IKeyListPresenter : virtual public IPresenter {
 public:
-	IKeyListPresenter(const IFactory& pFactory):IPresenter(pFactory) {}
+	IKeyListPresenter(IFactory& pFactory):IPresenter(pFactory) {}
 	virtual ~IKeyListPresenter(){}
 	virtual IKeyListView& getView()=0;
 	virtual void addKey()=0;

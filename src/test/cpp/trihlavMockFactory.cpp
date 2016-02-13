@@ -35,7 +35,6 @@
 #include "trihlavLib/trihlavIKeyListView.hpp"
 
 #include "trihlavMockFactory.hpp"
-#include "trihlavMockYubikoOtpKeyPresenter.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
 
@@ -55,21 +54,19 @@ MockFactory::MockFactory() {
 			{
 				BOOST_LOG_NAMED_SCOPE("MockFactory::createYubikoOtpKeyView");
 				auto myRetVal=new NiceMock<MockYubikoOtpKeyView>;
+				myRetVal->setupDefaultOnCallHandlers();
 				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
 				return myRetVal;
 			}));
-//	.WillByDefault(Invoke(doCreateYubikoOtpKeyView));
-//	.WillByDefault(Return(new MockYubikoOtpKeyView));
 
 	ON_CALL(*this, createKeyListView()) //
 	.WillByDefault(Invoke([]()->IKeyListView* //
 			{
-				BOOST_LOG_NAMED_SCOPE("MockFactory::createYubikoOtpKeyView");
+				BOOST_LOG_NAMED_SCOPE("MockFactory::createKeyListView");
 				auto myRetVal=new NiceMock<MockKeyListView>;
 				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
 				return myRetVal;
 			}));
-	//.WillByDefault(Return(new NiceMock<MockKeyListView>));
 }
 
 }  // namespace trihlav

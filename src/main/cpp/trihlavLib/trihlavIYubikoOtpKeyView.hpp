@@ -36,7 +36,7 @@ class ISpinBox;
 class IStrEdit;
 class IButton;
 
-class IYubikoOtpKeyView {
+class IYubikoOtpKeyView : private boost::noncopyable {
 public:
     typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
 
@@ -75,7 +75,7 @@ public:
 
 	virtual void show() = 0;
 
-	virtual ~IYubikoOtpKeyView(){}
+	virtual ~IYubikoOtpKeyView();
 private:
     AcceptedSignal itsAcceptedSignal;
 };

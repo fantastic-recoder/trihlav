@@ -45,17 +45,13 @@ namespace trihlav {
     return theKeyManager;
   }
   
-IKeyListPresenter* IFactory::createKeyListPresenter() const {
+IKeyListPresenter* IFactory::createKeyListPresenter() {
   BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
 	return new KeyListPresenter(*this);
 }
 
-IPswdChckPresenter* IFactory::createPswdChckPresenter() const {
+IPswdChckPresenter* IFactory::createPswdChckPresenter() {
 	return new PswdChckPresenter(*this);
-}
-
-YubikoOtpKeyPresenterI* IFactory::createYubikoOtpKeyPresenter() const {
-	return new YubikoOtpKeyPresenter(*this);
 }
 
 }  // namespace trihlav

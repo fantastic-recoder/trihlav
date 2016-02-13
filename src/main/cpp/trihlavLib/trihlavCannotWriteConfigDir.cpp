@@ -31,7 +31,7 @@
 #include "trihlavCannotWriteConfigDir.hpp"
 
 namespace {
-    static const std::string K_CONFIG_DIR_NOT_WRIEABLE("Config directory is not writeable.");
+    static const std::string K_CONFIG_DIR_NOT_WRIEABLE("Configuration directory is not writable.");
     static const std::string K_FAILED_FORMAT_MSG("Failed to format the error message.");
 }
 

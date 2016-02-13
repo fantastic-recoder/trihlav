@@ -32,7 +32,7 @@
 
 namespace trihlav {
 
-PswdChckPresenter::PswdChckPresenter(const IFactory& pFactory) :
+PswdChckPresenter::PswdChckPresenter(IFactory& pFactory) :
 		IPswdChckPresenter(pFactory), //< forced by virtua inheritance
 		IPresenter(pFactory), //< has a factory
 		itsView(0) //< initialize view

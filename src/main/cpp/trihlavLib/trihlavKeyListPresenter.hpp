@@ -36,22 +36,22 @@
 namespace trihlav {
 
 class IKeyListView;
-class YubikoOtpKeyPresenterI;
+class YubikoOtpKeyPresenter;
 class IFactory;
 
 class KeyListPresenter: virtual public IKeyListPresenter {
 public:
 
-	KeyListPresenter( const IFactory& pFactory);
+	KeyListPresenter( IFactory& pFactory);
 	virtual IKeyListView& getView();
 	virtual ~KeyListPresenter();
 	virtual void addKey();
 
-	YubikoOtpKeyPresenterI& getYubikoOtpKeyPresenter();
+	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
 
 private:
 	IKeyListView* itsKeyListView;
-	YubikoOtpKeyPresenterI* itsYubikoOtpKeyPresenter;
+	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
 };
 
 } /* namespace trihlav */

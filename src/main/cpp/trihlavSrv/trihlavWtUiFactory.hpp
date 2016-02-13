@@ -38,10 +38,13 @@ class WtUiFactory: virtual public IFactory {
 public:
 	WtUiFactory();
 	virtual ~WtUiFactory();
-	virtual IMainPanelView* createMainPanelView() const;
-	virtual IKeyListView* createKeyListView() const;
-	virtual IPswdChckView* createPswdChckView() const;
-	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() const;
+	virtual IMainPanelView* createMainPanelView();
+	virtual IKeyListView* createKeyListView();
+	virtual IPswdChckView* createPswdChckView();
+	virtual IYubikoOtpKeyView* createYubikoOtpKeyView();
+	virtual IPswdChckPresenter* createPswdChckPresenter();
+	virtual YubikoOtpKeyPresenterI* createYubikoOtpKeyPresenter();
+
 };
 
 } /* namespace trihlav */
