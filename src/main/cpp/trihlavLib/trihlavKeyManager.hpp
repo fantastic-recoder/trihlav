@@ -12,13 +12,13 @@
 
 namespace trihlav {
 
-typedef boost::filesystem::path path;
-
 /**
  * Manage key operations, fe. their persistence.
  */
 class KeyManager {
 public:
+	typedef boost::filesystem::path path;
+
     /// Lazy initialization constructor.
     KeyManager(const path& pDir);
 
@@ -27,6 +27,8 @@ public:
     virtual ~KeyManager();
 
     virtual const path& getConfigDir() const;
+
+    void setConfigDir( const path& pPath );
 
     /**
      * Are all internal resources ready.

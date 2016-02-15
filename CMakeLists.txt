@@ -48,21 +48,21 @@ ENDIF(DOXYGEN_FOUND)
 
 ################################################################################
 #
-# C++11
+# Yubikey
 #
 FIND_LIBRARY(YUBIKEY_LIB yubikey /usr/lib64 /usr/lib )
 ###############################################################################
 
 ###############################################################################
 #
-# C++11
+# C++14
 #
 IF (CMAKE_VERSION VERSION_LESS "3.1")
   IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    SET (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
+    SET (CMAKE_CXX_FLAGS "--std=gnu++14 ${CMAKE_CXX_FLAGS}")
   ENDIF ()
 ELSE ()
-  SET (CMAKE_CXX_STANDARD 11)
+  SET (CMAKE_CXX_STANDARD 14)
 ENDIF ()
 ###############################################################################
 

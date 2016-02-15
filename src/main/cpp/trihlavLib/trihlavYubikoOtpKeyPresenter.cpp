@@ -27,6 +27,7 @@
 using namespace std;
 using namespace boost;
 using namespace boost::locale;
+using boost::filesystem::path;
 
 namespace trihlav {
 

@@ -44,6 +44,7 @@
 #include "trihlavLib/trihlavIKeyListView.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 #include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
@@ -84,10 +85,22 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 			myKeyListPresenter.getYubikoOtpKeyPresenter();
 	IYubikoOtpKeyView& myView(*myYubikoOtpKeyPresenter.getView());
 	MockYubikoOtpKeyView& myMockYubikoOtpKeyView =
-			reinterpret_cast<MockYubikoOtpKeyView&>(myView);
+			dynamic_cast<MockYubikoOtpKeyView&>(myView);
 	IKeyListView& myKeyListView = myKeyListPresenter.getView();
 	EXPECT_CALL(myMockYubikoOtpKeyView, show());
 	myKeyListView.getBtnAddKey().getPressedSignal()();
+}
+
+TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
+	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter_canReadTheConfigDir_Test::TestBody");
+	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
+	EXPECT_FALSE(exists(myTestCfgFile));
+	EXPECT_TRUE(create_directory(myTestCfgFile));
+	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgFile <<"'.";
+	NiceMock<MockFactory> myMockFactory;
+	myMockFactory.getKeyManager().setConfigDir(myTestCfgFile);
+	remove_all(myTestCfgFile);
+	EXPECT_FALSE(exists(myTestCfgFile));
 }
 
 int main(int argc, char **argv) {

@@ -78,7 +78,7 @@ TEST_F(TestYubikoOtpKey,keyManagerInit) {
 	NiceMock<MockFactory> myMockFactory;
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
 	MockYubikoOtpKeyView* myYubikoOtpKeyView(
-			reinterpret_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
+			dynamic_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
 	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyView  " << myYubikoOtpKeyView;
 	BOOST_LOG_TRIVIAL(debug)<< "PrivateID          '" //
 	<< myYubikoOtpKeyView->itsMockEdtPrivateId.getValue() << "'.";
@@ -98,7 +98,7 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
 	IYubikoOtpKeyView* myViewIface(myPresenter.getView());
 	MockYubikoOtpKeyView* myYubikoOtpKeyView(
-			reinterpret_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
+			dynamic_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
 	EXPECT_TRUE(myYubikoOtpKeyView!=0);
 	BOOST_LOG_TRIVIAL(debug)<< "Expectations...";
 	EXPECT_CALL(*myYubikoOtpKeyView, show());
