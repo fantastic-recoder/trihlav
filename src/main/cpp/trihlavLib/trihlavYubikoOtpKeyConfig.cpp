@@ -73,7 +73,7 @@ YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager)
 , itsChangedFlag(false)
 {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
-	path myFilename = itsKeyManager.getConfigDir() / "%%-%%-%%";
+	path myFilename = itsKeyManager.getConfigDir() / "%%-%%-%%.trihlav-key.json";
 	itsFilename = unique_path(myFilename);
 	zeroToken();
 }
