@@ -134,9 +134,10 @@ TEST( trihlavApi, testUTimestampMemLayout) {
 
 TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	BOOST_LOG_NAMED_SCOPE("testLoadAndSaveKeyCfg");
-	path myTestCfgFile(unique_path("%%%%-%%%%-%%%%-%%%%.json"));
-	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgFile <<"'.";
-	YubikoOtpKeyConfig myTestCfg0(myTestCfgFile);
+	path myTestCfgDir(unique_path("/tmp/trihlav-%%%%-%%%%"));
+	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgDir <<"'.";
+	KeyManager myManager(myTestCfgDir);
+	YubikoOtpKeyConfig myTestCfg0(myManager);
 	myTestCfg0.setPrivateId("010203040506");
 	myTestCfg0.setTimestamp(UTimestamp(12345));
 	myTestCfg0.setCounter(33);
@@ -158,7 +159,7 @@ TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	EXPECT_TRUE(int(myTestCfg0.getToken().use) == 7);
 
 	myTestCfg0.save();
-	YubikoOtpKeyConfig myTestCfg1(myTestCfgFile);
+	YubikoOtpKeyConfig myTestCfg1(myManager,myTestCfg0.getFilename());
 	myTestCfg1.load();
 	EXPECT_TRUE(myTestCfg0.getPrivateId() == myTestCfg1.getPrivateId());
 	EXPECT_TRUE(
@@ -169,7 +170,7 @@ TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	EXPECT_TRUE(myTestCfg0.getRandom() == myTestCfg1.getRandom());
 	EXPECT_TRUE(myTestCfg0.getUseCounter() == myTestCfg1.getUseCounter());
 
-	remove(myTestCfgFile);
+	remove_all(myTestCfgDir);
 	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg ok";
 }
 

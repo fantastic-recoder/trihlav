@@ -21,11 +21,18 @@ class YubikoOtpKeyConfig
 {
 protected:
     void setFilename(const std::string &value);
+	void zeroToken();
+
 public:
     /**
      * @brief YubikoOtpKeyConfig::YubikoOtpKeyConfig
      */
-    YubikoOtpKeyConfig(const bfs::path& pDataPathDir);
+    YubikoOtpKeyConfig(KeyManager& pKeyManager, const bfs::path& pFilename);
+
+    /**
+     * @brief This constructor will generate the filename,
+     */
+    YubikoOtpKeyConfig(KeyManager& pKeyManager );
 
     /**
      * @brief getPrivateId access the private id config value
@@ -214,6 +221,7 @@ private:
     yubikey_token_st itsToken;
     uint8_t          itsKey[YUBIKEY_KEY_SIZE];
     std::string      itsDescription; //< Users free text describing the key
+    KeyManager&      itsKeyManager; //< Global functionality & data
 
     const std::string checkFileName(bool pIsOut);
 

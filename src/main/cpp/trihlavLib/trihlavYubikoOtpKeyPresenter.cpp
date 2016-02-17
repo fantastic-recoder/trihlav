@@ -65,16 +65,13 @@ YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 }
 
 void YubikoOtpKeyPresenter::addKey() {
-	bfs::path myFilename(
-			getFactory().getKeyManager().getConfigDir() / "%%-%%-%%");
-	myFilename = bfs::unique_path(myFilename);
-	itsCurCfg = new YubikoOtpKeyConfig(myFilename);
+	getCurCfg();
 	getView()->show();
 }
 
 YubikoOtpKeyConfig& YubikoOtpKeyPresenter::getCurCfg() {
 	if (!itsCurCfg) {
-
+		itsCurCfg = new YubikoOtpKeyConfig(getFactory().getKeyManager());
 	}
 	return *itsCurCfg;
 }

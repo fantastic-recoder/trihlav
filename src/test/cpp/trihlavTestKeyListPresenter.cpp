@@ -54,6 +54,7 @@
 #include "trihlavMockKeyListView.hpp"
 
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavMockEditI.hpp"
 
 using namespace std;
@@ -99,6 +100,15 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgFile <<"'.";
 	NiceMock<MockFactory> myMockFactory;
 	myMockFactory.getKeyManager().setConfigDir(myTestCfgFile);
+	YubikoOtpKeyConfig myCfg0(myMockFactory.getKeyManager()),
+			myCfg1(myMockFactory.getKeyManager()),
+			myCfg2(myMockFactory.getKeyManager());
+	myCfg0.setDescription("Test key 1");
+	myCfg0.setPrivateId("aabbaabbaabb");
+	myCfg0.setPublicId("ccddccddccdd");
+	myCfg0.setCounter(1);
+	myCfg0.setRandom(11);
+	myCfg0.setSecretKey("ddeeddeeddeeddeeddeeddeeddeeddee");
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
 }
