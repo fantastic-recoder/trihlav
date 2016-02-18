@@ -37,7 +37,10 @@ public:
         return itsInitializedFlag;
     }
 
-    /// Get users home directory
+    /// @brief Load or reload all keys.
+    void loadKeys();
+
+    /// @brief Get users home directory
     static const path getHome();
 private:
     mutable bool itsInitializedFlag;

@@ -92,23 +92,58 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	myKeyListView.getBtnAddKey().getPressedSignal()();
 }
 
+static const char* K_TST_DESC0 = "Test key 1";
+static const char* K_TST_PRIV0="aabbaabbaabb";
+static const char* K_TST_PUBL0="ccddccddccdd";
+static const char* K_TST_SECU0="ddeeddeeddeeddeeddeeddeeddeeddee";
+static const int K_TST_CNTR0 = 1;
+static const int K_TST_RNDM0 = 11;
+static const char* K_TST_DESC1 = "Test key 2";
+static const char* K_TST_PRIV1="aabbaabbaabc";
+static const char* K_TST_PUBL1="ccddccddccde";
+static const char* K_TST_SECU1="ddeeddeeddeeddeeddeeddeeddeeddef";
+static const int K_TST_CNTR1 = 2;
+static const int K_TST_RNDM1 = 12;
+static const char* K_TST_DESC2 = "Test key 3";
+static const char* K_TST_PRIV2="aabbaabbaabd";
+static const char* K_TST_PUBL2="ccddccddccdf";
+static const char* K_TST_SECU2="ddeeddeeddeeddeeddeeddeeddeeddeh";
+static const int K_TST_CNTR2 = 3;
+static const int K_TST_RNDM2 = 13;
+
 TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
-	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter_canReadTheConfigDir_Test::TestBody");
+	BOOST_LOG_NAMED_SCOPE(
+			"TestKeyListPresenter_canReadTheConfigDir_Test::TestBody");
 	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
 	EXPECT_FALSE(exists(myTestCfgFile));
 	EXPECT_TRUE(create_directory(myTestCfgFile));
-	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgFile <<"'.";
+	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
 	NiceMock<MockFactory> myMockFactory;
-	myMockFactory.getKeyManager().setConfigDir(myTestCfgFile);
-	YubikoOtpKeyConfig myCfg0(myMockFactory.getKeyManager()),
-			myCfg1(myMockFactory.getKeyManager()),
-			myCfg2(myMockFactory.getKeyManager());
-	myCfg0.setDescription("Test key 1");
-	myCfg0.setPrivateId("aabbaabbaabb");
-	myCfg0.setPublicId("ccddccddccdd");
-	myCfg0.setCounter(1);
-	myCfg0.setRandom(11);
-	myCfg0.setSecretKey("ddeeddeeddeeddeeddeeddeeddeeddee");
+	KeyManager& myKeyMan(myMockFactory.getKeyManager());
+	myKeyMan.setConfigDir(myTestCfgFile);
+	YubikoOtpKeyConfig myCfg0(myKeyMan), myCfg1(myKeyMan), myCfg2(myKeyMan);
+	myCfg0.setDescription(K_TST_DESC0);
+	myCfg0.setPrivateId(K_TST_PRIV0);
+	myCfg0.setPublicId(K_TST_PUBL0);
+	myCfg0.setCounter(K_TST_CNTR0);
+	myCfg0.setRandom(K_TST_RNDM0);
+	myCfg0.setSecretKey(K_TST_SECU0);
+	myCfg0.save();
+	myCfg1.setDescription(K_TST_DESC1);
+	myCfg1.setPrivateId(K_TST_PRIV1);
+	myCfg1.setPublicId(K_TST_PUBL1);
+	myCfg1.setCounter(K_TST_CNTR1);
+	myCfg1.setRandom(K_TST_RNDM1);
+	myCfg1.setSecretKey(K_TST_SECU1);
+	myCfg1.save();
+	myCfg2.setDescription(K_TST_DESC2);
+	myCfg2.setPrivateId(K_TST_PRIV2);
+	myCfg2.setPublicId(K_TST_PUBL2);
+	myCfg2.setCounter(K_TST_CNTR2);
+	myCfg2.setRandom(K_TST_RNDM2);
+	myCfg2.setSecretKey(K_TST_SECU2);
+	myCfg2.save();
+	myKeyMan.loadKeys();
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
 }

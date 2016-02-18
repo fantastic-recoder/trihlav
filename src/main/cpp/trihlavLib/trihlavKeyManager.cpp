@@ -353,5 +353,11 @@ void KeyManager::setConfigDir(const path& pConfigDir) {
 	itsConfigDir=pConfigDir;
 }
 
+void KeyManager::loadKeys() {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::loadKeys");
+
 }
+
+}
+
 /* namespace trihlav */
