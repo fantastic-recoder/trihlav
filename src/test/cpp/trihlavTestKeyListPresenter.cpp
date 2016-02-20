@@ -107,7 +107,7 @@ static const int K_TST_RNDM1 = 12;
 static const char* K_TST_DESC2 = "Test key 3";
 static const char* K_TST_PRIV2="aabbaabbaabd";
 static const char* K_TST_PUBL2="ccddccddccdf";
-static const char* K_TST_SECU2="ddeeddeeddeeddeeddeeddeeddeeddeh";
+static const char* K_TST_SECU2="ddeeddeeddeeddeeddeeddeeddeeddec";
 static const int K_TST_CNTR2 = 3;
 static const int K_TST_RNDM2 = 13;
 
@@ -144,6 +144,35 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	myCfg2.setSecretKey(K_TST_SECU2);
 	myCfg2.save();
 	myKeyMan.loadKeys();
+	EXPECT_EQ(3,myKeyMan.getKeyCount());
+	const YubikoOtpKeyConfig& myCfg01(myKeyMan.getKeyByPublicId(myCfg0.getPublicId()));
+	const YubikoOtpKeyConfig& myCfg11(myKeyMan.getKeyByPublicId(myCfg1.getPublicId()));
+	const YubikoOtpKeyConfig& myCfg21(myKeyMan.getKeyByPublicId(myCfg2.getPublicId()));
+	EXPECT_EQ(myCfg0,myCfg01);
+	EXPECT_EQ(myCfg1,myCfg11);
+	EXPECT_EQ(myCfg2,myCfg21);
+
+	EXPECT_EQ(K_TST_DESC0, myCfg01.getDescription());
+	EXPECT_EQ(K_TST_PRIV0, myCfg01.getPrivateId());
+	EXPECT_EQ(K_TST_PUBL0, myCfg01.getPublicId());
+	EXPECT_EQ(K_TST_CNTR0, myCfg01.getCounter());
+	EXPECT_EQ(K_TST_RNDM0, myCfg01.getRandom());
+	EXPECT_EQ(K_TST_SECU0, myCfg01.getSecretKey());
+
+	EXPECT_EQ(K_TST_DESC1, myCfg11.getDescription());
+	EXPECT_EQ(K_TST_PRIV1, myCfg11.getPrivateId());
+	EXPECT_EQ(K_TST_PUBL1, myCfg11.getPublicId());
+	EXPECT_EQ(K_TST_CNTR1, myCfg11.getCounter());
+	EXPECT_EQ(K_TST_RNDM1, myCfg11.getRandom());
+	EXPECT_EQ(K_TST_SECU1, myCfg11.getSecretKey());
+
+	EXPECT_EQ(K_TST_DESC2, myCfg21.getDescription());
+	EXPECT_EQ(K_TST_PRIV2, myCfg21.getPrivateId());
+	EXPECT_EQ(K_TST_PUBL2, myCfg21.getPublicId());
+	EXPECT_EQ(K_TST_CNTR2, myCfg21.getCounter());
+	EXPECT_EQ(K_TST_RNDM2, myCfg21.getRandom());
+	EXPECT_EQ(K_TST_SECU2, myCfg21.getSecretKey());
+
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
 }

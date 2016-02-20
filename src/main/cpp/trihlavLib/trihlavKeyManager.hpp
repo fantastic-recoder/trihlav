@@ -8,16 +8,22 @@
 #ifndef TRIHLAV_KEY_MANAGER_HPP_
 #define TRIHLAV_KEY_MANAGER_HPP_
 
+#include <map>
+#include <string>
 #include <boost/filesystem.hpp>
 
 namespace trihlav {
+
+class YubikoOtpKeyConfig;
 
 /**
  * Manage key operations, fe. their persistence.
  */
 class KeyManager {
 public:
-	typedef boost::filesystem::path path;
+	using path = boost::filesystem::path;
+	using KeyList_t = std::vector<std::shared_ptr<YubikoOtpKeyConfig>>;
+	using KeyMap_t = std::map<std::string,std::shared_ptr<YubikoOtpKeyConfig>>;
 
     /// Lazy initialization constructor.
     KeyManager(const path& pDir);
@@ -40,11 +46,23 @@ public:
     /// @brief Load or reload all keys.
     void loadKeys();
 
+    /// @brief How many keys are currently loaded?
+    const size_t getKeyCount() const;
+
+    /// @brief Access an loaded key.
+    const YubikoOtpKeyConfig& getKey( const size_t pIdx) const;
+
+    /// @brief Access an loaded key.
+    const YubikoOtpKeyConfig& getKeyByPublicId( const std::string& pPubId) const;
+
     /// @brief Get users home directory
     static const path getHome();
+
 private:
     mutable bool itsInitializedFlag;
     boost::filesystem::path itsConfigDir;
+    KeyList_t itsKeyList;
+    KeyMap_t  itsKeyMapByPublicId;
     const path detectConfigDir() const;
     void checkPath(const path& pPath, bool &readable, bool &writable) const;
 };

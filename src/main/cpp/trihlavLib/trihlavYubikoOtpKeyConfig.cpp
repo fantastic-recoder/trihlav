@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include <sstream>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -18,6 +19,7 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 
 using std::cout;
+using std::ostringstream;
 using std::string;
 using std::out_of_range;
 using boost::trim;
@@ -27,18 +29,20 @@ using boost::filesystem::path;
 using boost::filesystem::unique_path;
 
 namespace {
-static const uintmax_t K_MX_KEY_FILE_SZ = 1024;
-static const uintmax_t K_SEC_KEY_SZ = YUBIKEY_KEY_SIZE * 2;
+static constexpr uintmax_t K_MX_KEY_FILE_SZ = 1024;
+static constexpr uintmax_t K_SEC_KEY_SZ = YUBIKEY_KEY_SIZE * 2;
 }
 
 namespace trihlav {
 
-static const size_t K_YBK_PRIVATE_ID_LEN(YUBIKEY_UID_SIZE * 2);
+static constexpr size_t K_YBK_PRIVATE_ID_LEN(YUBIKEY_UID_SIZE * 2);
 static const string K_NM_DOC_NM("yubikey.");
 static const string K_NM_PRIV_ID("privateId");
+static const string K_NM_PUB_ID("publicId");
 static const string K_NM_TIMESTAMP("timestamp");
 static const string K_NM_SES_CNTR("counter");
 static const string K_NM_USE_CNTR("use");
+static const string K_NM_SEC_KEY("secretKey");
 static const string K_NM_RANDOM("random");
 static const string K_NM_CRC("crc");
 static const string K_NM_DESC("description");
@@ -55,25 +59,23 @@ void YubikoOtpKeyConfig::zeroToken() {
  *
  * @param pFilename Where the configuration data will be stored.
  */
-YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager, const bfs::path& pFilename)
-: itsKeyManager(pKeyManager)
-, itsChangedFlag(false)
-, itsFilename(pFilename)
-{
+YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager,
+		const bfs::path& pFilename) :
+		itsKeyManager(pKeyManager), itsChangedFlag(false), itsFilename(
+				pFilename) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
-	BOOST_LOG_TRIVIAL(debug) << "Passed filename:  " << pFilename.native();
+	BOOST_LOG_TRIVIAL(debug)<< "Passed filename:  " << pFilename.native();
 	zeroToken();
 }
 
 /**
  *
  */
-YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager)
-: itsKeyManager(pKeyManager)
-, itsChangedFlag(false)
-{
+YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager) :
+		itsKeyManager(pKeyManager), itsChangedFlag(false) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
-	path myFilename = itsKeyManager.getConfigDir() / "%%-%%-%%.trihlav-key.json";
+	path myFilename = itsKeyManager.getConfigDir()
+			/ "%%-%%-%%.trihlav-key.json";
 	itsFilename = unique_path(myFilename);
 	zeroToken();
 }
@@ -84,7 +86,7 @@ YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager)
  */
 const string YubikoOtpKeyConfig::getPrivateId() const {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::getPrivateId");
-	string myRetVal(K_YBK_PRIVATE_ID_LEN, '\0');
+	string myRetVal(K_YBK_PRIVATE_ID_LEN, '.');
 	yubikey_hex_encode(&myRetVal[0],
 			reinterpret_cast<const char*>(&itsToken.uid), YUBIKEY_UID_SIZE);
 	return string(myRetVal);
@@ -112,7 +114,7 @@ void YubikoOtpKeyConfig::setPrivateId(const string &pPrivateId) {
 
 const std::string YubikoOtpKeyConfig::getSecretKey() const {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::getSecretKey()");
-	string myRetVal(K_SEC_KEY_SZ, '\0');
+	string myRetVal(K_SEC_KEY_SZ, '.');
 	yubikey_hex_encode(&myRetVal[0], reinterpret_cast<const char*>(&itsKey),
 	YUBIKEY_KEY_SIZE);
 	return string(myRetVal);
@@ -178,6 +180,8 @@ void YubikoOtpKeyConfig::load() {
 	const string myVer(myTree.get<string>(K_NM_DOC_NM + K_NM_VERS));
 	BOOST_LOG_TRIVIAL(info)<< K_NM_VERS << ":" << myVer;
 	setPrivateId(myTree.get<string>(K_NM_DOC_NM + K_NM_PRIV_ID));
+	setPublicId(myTree.get<string>(K_NM_DOC_NM + K_NM_PUB_ID));
+	setSecretKey(myTree.get<string>(K_NM_DOC_NM + K_NM_SEC_KEY));
 	setTimestamp(
 			UTimestamp(myTree.get<uint64_t>(K_NM_DOC_NM + K_NM_TIMESTAMP)));
 	setCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_SES_CNTR));
@@ -197,6 +201,8 @@ void YubikoOtpKeyConfig::save() {
 	const string myOutFile = checkFileName(true);
 	ptree myTree;
 	myTree.put(K_NM_DOC_NM + K_NM_PRIV_ID /*--->*/, getPrivateId());
+	myTree.put(K_NM_DOC_NM + K_NM_PUB_ID /*---->*/, getPublicId());
+	myTree.put(K_NM_DOC_NM + K_NM_SEC_KEY /*--->*/, getSecretKey());
 	myTree.put(K_NM_DOC_NM + K_NM_TIMESTAMP /*->*/, getTimestamp().tstp_int);
 	myTree.put(K_NM_DOC_NM + K_NM_SES_CNTR /*-->*/, getCounter());
 	myTree.put(K_NM_DOC_NM + K_NM_CRC /*------->*/, getCrc());
@@ -208,6 +214,32 @@ void YubikoOtpKeyConfig::save() {
 	itsChangedFlag = false;
 }
 
+/**
+ * The description will not be compared, only the token, public ID and secret
+ * key are being considered.
+ *
+ * @return true when core settings are same.
+ */
+bool YubikoOtpKeyConfig::operator ==(const YubikoOtpKeyConfig& pOther) const {
+	if (memcmp(&this->getToken(), &pOther.getToken(), sizeof(yubikey_token_st))
+			!= 0) {
+		BOOST_LOG_TRIVIAL(debug) << "Token "
+		<< this->token2json() << "!=" << pOther.token2json();
+		return false;
+	}
+	if (this->getPublicId().compare(pOther.getPublicId()) !=0 ) {
+		BOOST_LOG_TRIVIAL(debug)<< "PublicId "
+		<< this->getPublicId() << "!=" << pOther.getPublicId();
+		return false;
+	}
+	if (memcmp(&this->itsKey, &pOther.itsKey,sizeof(itsKey)) !=0 ) {
+		BOOST_LOG_TRIVIAL(debug)<< "Secret key "
+		<< this->getSecretKey() << "!=" << pOther.getSecretKey();
+		return false;
+	}
+	return true;
+}
+
 YubikoOtpKeyConfig::~YubikoOtpKeyConfig() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::~YubikoOtpKeyConfig");
 }
@@ -215,6 +247,24 @@ YubikoOtpKeyConfig::~YubikoOtpKeyConfig() {
 void YubikoOtpKeyConfig::setFilename(const string &value) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::setFilename");
 	itsFilename = value;
+}
+
+const string YubikoOtpKeyConfig::token2json() const {
+	string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
+	yubikey_hex_encode(&myUid[0],
+			reinterpret_cast<const char*>(&getToken().uid),
+			YUBIKEY_UID_SIZE);
+	ostringstream myOstr;
+	myOstr << "yubikey_token_st:{";
+	myOstr << "   uid  :\"" << myUid.c_str() << "\"";
+	myOstr << "   ctr  :\"" << int(getToken().ctr) << "\"";
+	myOstr << "   use  :\"" << int(getToken().use) << "\"";
+	myOstr << "   rnd  :\"" << int(getToken().rnd) << "\"";
+	myOstr << "   tstpl:\"" << int(getToken().tstpl) << "\"";
+	myOstr << "   tstph:\"" << int(getToken().tstph) << "\"";
+	myOstr << "   crc  :\"" << int(getToken().crc) << "\"";
+	myOstr << "}";
+	return myOstr.str();
 }
 
 } // end namespace yuSerApi

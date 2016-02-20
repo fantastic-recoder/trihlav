@@ -5,7 +5,11 @@
  *      Author: grobap
  */
 
+#include <string>
 #include <iostream>
+#include <stdexcept>
+#include <boost/format.hpp>
+#include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/operations.hpp>
 
@@ -23,10 +27,18 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavFailedCreateConfigDir.hpp"
 #include "trihlavLib/trihlavCannotWriteConfigDir.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 
-using namespace boost::filesystem;
+using std::string;
+using boost::filesystem::path;
+using boost::filesystem::recursive_directory_iterator;
+using boost::filesystem::perms;
+using boost::regex_match;
+using boost::format;
 
 namespace trihlav {
+
+using YubikoOtpKeyConfigPtr= std::shared_ptr<YubikoOtpKeyConfig>;
 
 /**
  *  @param pConfigDir The directory where to store the key configuration data.
@@ -34,7 +46,7 @@ namespace trihlav {
 KeyManager::KeyManager(const path& pConfigDir) :
 		itsInitializedFlag(false), itsConfigDir(pConfigDir) {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::KeyManager");
-	BOOST_LOG_TRIVIAL(debug)<< "C'tor from config dir ok: "<< itsConfigDir << ".";
+	BOOST_LOG_TRIVIAL(debug)<< "C'tor from config. dir. OK: "<< itsConfigDir << ".";
 }
 
 KeyManager::KeyManager() :
@@ -324,13 +336,13 @@ const path KeyManager::detectConfigDir() const {
 	bool myWriteable, myReadable;
 	checkPath(myDefPath, myWriteable, myReadable);
 	if (myWriteable) {
-		BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writeable.";
+		BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writable.";
 	} else {
 		myDefPath=(((getHome() / ".config")/ "trihlav") / "keys");
 		create_directories(myDefPath);
 		checkPath(myDefPath,myWriteable,myReadable);
 		if(myWriteable) {
-			BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writeable.";
+			BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writable.";
 		} else {
 			throw new FailedCreateConfigDir(itsConfigDir);
 		}
@@ -343,21 +355,64 @@ const path KeyManager::detectConfigDir() const {
  */
 void KeyManager::setConfigDir(const path& pConfigDir) {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::setConfigDir");
-	bool myReadable=false,myWriteable=false;
-	checkPath(pConfigDir,myReadable,myWriteable);
-	if(myWriteable) {
-		BOOST_LOG_TRIVIAL(debug)<< ": "<< pConfigDir << " is writeable.";
+	bool myReadable = false, myWriteable = false;
+	checkPath(pConfigDir, myReadable, myWriteable);
+	if (myWriteable) {
+		BOOST_LOG_TRIVIAL(debug)<< ": "<< pConfigDir << " is writable.";
 	} else {
 		throw new FailedCreateConfigDir(itsConfigDir);
 	}
-	itsConfigDir=pConfigDir;
+	itsConfigDir = pConfigDir;
 }
+
+const boost::regex K_KEY_FILTER(".*\\.trihlav-key\\.json");
 
 void KeyManager::loadKeys() {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::loadKeys");
-
+	itsKeyList.resize(0);
+	itsKeyMapByPublicId.clear();
+	for (auto it = recursive_directory_iterator(getConfigDir());
+			it != recursive_directory_iterator(); it++) {
+		boost::smatch matchProd;
+		const path myFName(it->path().native());
+		BOOST_LOG_TRIVIAL(debug)<< "Found key file " << myFName << ".";
+		if (!is_directory(it->path())
+				&& regex_match(myFName.string(), matchProd, K_KEY_FILTER)) {
+			YubikoOtpKeyConfig* myCfg = new YubikoOtpKeyConfig(*this, myFName);
+			myCfg->load();
+			YubikoOtpKeyConfigPtr myKey { myCfg };
+			itsKeyList.emplace_back(myKey);
+			string myId(myKey->getPublicId());
+			if (myId.empty()) {
+				(myId += "generated:") += myKey->getFilename().string();
+			}
+			itsKeyMapByPublicId.emplace(KeyMap_t::value_type { myId, myKey });
+		}
+	}
 }
 
+const size_t KeyManager::getKeyCount() const {
+	return itsKeyList.size();
+}
+
+const YubikoOtpKeyConfig& KeyManager::getKey(const size_t pIdx) const {
+	if (pIdx < 0 || itsKeyList.size() < pIdx) {
+		throw new std::range_error(
+				(format("Key index %1% is out of range <0,%2%>.") % pIdx
+						% itsKeyList.size()).str());
+	}
+	return *(itsKeyList[pIdx]);
+}
+
+const YubikoOtpKeyConfig& KeyManager::getKeyByPublicId(
+		const string& pPubId) const {
+	auto myKey=itsKeyMapByPublicId.find(pPubId);
+	if (myKey == itsKeyMapByPublicId.end()) {
+		throw new std::range_error(
+				(format("Key with public ID %1% is not indexed.") % pPubId).str());
+	}
+	return *(myKey->second);
+}
 }
 
 /* namespace trihlav */
