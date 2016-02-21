@@ -32,13 +32,13 @@
 
 namespace trihlav {
 
-class IKeyListView;
+class KeyListViewIface;
 
 class IKeyListPresenter : virtual public IPresenter {
 public:
 	IKeyListPresenter(IFactory& pFactory):IPresenter(pFactory) {}
 	virtual ~IKeyListPresenter(){}
-	virtual IKeyListView& getView()=0;
+	virtual KeyListViewIface& getView()=0;
 	virtual void addKey()=0;
 };
 

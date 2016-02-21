@@ -29,20 +29,21 @@
 #define TRIHLAV_I_MAIN_PANEL_VIEW_HPP_
 
 #include <string>
-#include "trihlavLib/trihlavIView.hpp"
+
+#include "trihlavViewIface.hpp"
 
 namespace trihlav {
 
 class IPswdChckView;
-class IKeyListView;
+class KeyListViewIface;
 
 /**
  * The interface of the top level UI view, as in MVP design pattern.
  */
-class IMainPanelView : public IView {
+class IMainPanelView : public ViewIface {
 public:
 	virtual void add(const std::string& pName,IPswdChckView& pPswdChckView)=0;
-	virtual void add(const std::string& pName,IKeyListView& pKeyListView)=0;
+	virtual void add(const std::string& pName,KeyListViewIface& pKeyListView)=0;
 	virtual ~IMainPanelView(){}
 };
 

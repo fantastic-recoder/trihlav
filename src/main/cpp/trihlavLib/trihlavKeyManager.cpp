@@ -367,7 +367,10 @@ void KeyManager::setConfigDir(const path& pConfigDir) {
 
 const boost::regex K_KEY_FILTER(".*\\.trihlav-key\\.json");
 
-void KeyManager::loadKeys() {
+/**
+ * @return the loaded keys count.
+ */
+size_t KeyManager::loadKeys() {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::loadKeys");
 	itsKeyList.resize(0);
 	itsKeyMapByPublicId.clear();
@@ -389,6 +392,7 @@ void KeyManager::loadKeys() {
 			itsKeyMapByPublicId.emplace(KeyMap_t::value_type { myId, myKey });
 		}
 	}
+	return itsKeyList.size();
 }
 
 const size_t KeyManager::getKeyCount() const {

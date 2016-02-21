@@ -25,39 +25,40 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_I_KEY_LIST_VIEW_IFACE_HPP_
+#define TRIHLAV_I_KEY_LIST_VIEW_IFACE_HPP_
 
-#ifndef TRIHLAV_I_PRESENTER_HPP_
-#define TRIHLAV_I_PRESENTER_HPP_
+#include <boost/signals2.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include "trihlavViewIface.hpp"
 
 namespace trihlav {
 
-class IFactory;
+class IButton;
+
+using KeyListRow_t = boost::tuple<int,std::string,std::string,std::string>;
 
 /**
- * Common functionality to all controllers.
- * Every controller has an view.
+ * Interface of the key list UI.
  */
-class IPresenter {
+class KeyListViewIface: virtual public ViewIface {
 public:
-
-	IPresenter(IFactory& pFactory) : itsFactory(pFactory) {
-	}
-
-	const IFactory& getFactory() const {
-		return itsFactory;
-	}
-
-	IFactory& getFactory() {
-		return itsFactory;
-	}
-
-	virtual ~IPresenter(){}
-private:
-	IFactory& itsFactory;
+	/**
+	 * Should be fired by the UI when user selects a row.
+	 */
+	boost::signals2::signal<int()> selectedRow;
+	virtual IButton&  getBtnAddKey() =0;
+	virtual IButton&  getBtnDelKey() =0;
+	/**
+	 * Reload the key list.
+	 */
+	virtual IButton&  getBtnReload() =0;
+	virtual void clear()=0;
+	virtual void addRow(const KeyListRow_t pRow)=0;
+	virtual void addedAllRows()=0;
 };
 
 } /* namespace trihlav */
 
-#endif /* TRIHLAV_I_PRESENTER_HPP_ */
+#endif /* TRIHLAV_I_KEY_LIST_VIEW_IFACE_HPP_ */

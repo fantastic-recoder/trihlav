@@ -46,7 +46,7 @@ struct MockFactory: virtual public IFactory {
 
 	MOCK_METHOD0(createMainPanelView,IMainPanelView* ());
 	MOCK_METHOD0(createKeyListPresenter,IKeyListPresenter* () );
-	MOCK_METHOD0(createKeyListView,IKeyListView* () );
+	MOCK_METHOD0(createKeyListView,KeyListViewIface* () );
 	MOCK_METHOD0(createPswdChckPresenter,IPswdChckPresenter* () );
 	MOCK_METHOD0(createPswdChckView,IPswdChckView* () );
 	MOCK_METHOD0(createYubikoOtpKeyView,IYubikoOtpKeyView* () );

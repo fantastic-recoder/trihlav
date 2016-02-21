@@ -27,7 +27,7 @@ class MainPanelPresenter : virtual public IPresenter {
 public:
 	MainPanelPresenter(IFactory& pFactory);
 	virtual ~MainPanelPresenter();
-	virtual IView* getView();
+	virtual ViewIface* getView();
 	virtual void setupUi();
 };
 

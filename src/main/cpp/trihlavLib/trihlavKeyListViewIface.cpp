@@ -5,7 +5,7 @@
  *      Author: grobap
  */
 
-#include "trihlavIKeyListView.hpp"
+#include "trihlavKeyListViewIface.hpp"
 
 namespace trihlav {
 

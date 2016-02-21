@@ -33,7 +33,7 @@ IFactory& getUiFactory() {
 	return theWtUiFactory;
 }
 
-IKeyListView* WtUiFactory::createKeyListView() {
+KeyListViewIface* WtUiFactory::createKeyListView() {
 	return new WtKeyListView();
 }
 
@@ -43,14 +43,6 @@ IPswdChckView* WtUiFactory::createPswdChckView() {
 
 IYubikoOtpKeyView* WtUiFactory::createYubikoOtpKeyView() {
 	return new WtYubikoOtpKeyView();
-}
-
-IPswdChckPresenter* WtUiFactory::createPswdChckPresenter() {
-	return nullptr;
-}
-
-YubikoOtpKeyPresenterI* WtUiFactory::createYubikoOtpKeyPresenter() {
-	return nullptr;
 }
 
 } /* namespace trihlav */

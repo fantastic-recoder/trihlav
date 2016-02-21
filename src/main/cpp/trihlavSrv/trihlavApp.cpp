@@ -34,7 +34,7 @@ App::App(const WEnvironment& pEnv) :
 	setTheme(new WBootstrapTheme(this));
 
 	itsMainPanelCntrl=new MainPanelPresenter(getUiFactory());
-	trihlav::IView* myIMainPanelView = itsMainPanelCntrl->getView();
+	trihlav::ViewIface* myIMainPanelView = itsMainPanelCntrl->getView();
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>
 		(myIMainPanelView);
 	root()->addWidget(myMainPanelView->getNativeView());

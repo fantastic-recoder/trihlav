@@ -35,7 +35,7 @@
 
 namespace trihlav {
 
-class IKeyListView;
+class KeyListViewIface;
 class YubikoOtpKeyPresenter;
 class IFactory;
 
@@ -43,14 +43,16 @@ class KeyListPresenter: virtual public IKeyListPresenter {
 public:
 
 	KeyListPresenter( IFactory& pFactory);
-	virtual IKeyListView& getView();
+	virtual KeyListViewIface& getView();
 	virtual ~KeyListPresenter();
 	virtual void addKey();
+	/// @brief reload current key list
+	void reloadKeyList();
 
 	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
 
 private:
-	IKeyListView* itsKeyListView;
+	KeyListViewIface* itsKeyListView;
 	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
 };
 

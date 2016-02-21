@@ -27,7 +27,7 @@ using namespace std;
 
 namespace trihlav {
 
-void WtMainPanelView::add(const string& pName,IKeyListView&  pKeyListView){
+void WtMainPanelView::add(const string& pName,KeyListViewIface&  pKeyListView){
 	WtKeyListView* myKeyListView =
 			dynamic_cast<WtKeyListView*>(&pKeyListView);
 	if (myKeyListView== 0) {

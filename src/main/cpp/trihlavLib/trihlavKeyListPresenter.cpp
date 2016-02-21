@@ -26,11 +26,21 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/locale/message.hpp>
+#include <boost/format.hpp>
+
 #include "trihlavLib/trihlavIButton.hpp"
 #include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavIKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
+
+#include "trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 
 namespace trihlav {
@@ -43,10 +53,11 @@ KeyListPresenter::KeyListPresenter(IFactory& pFactory)
 {
 }
 
-IKeyListView& KeyListPresenter::getView() {
+KeyListViewIface& KeyListPresenter::getView() {
 	if(itsKeyListView==0) {
 		itsKeyListView=getFactory().createKeyListView();
 		getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
+		getView().getBtnReload().getPressedSignal().connect([=]{reloadKeyList();});
 	}
 	return *itsKeyListView;
 }
@@ -66,6 +77,19 @@ YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
 	}
 	return *itsYubikoOtpKeyPresenter;
 }
+
+void KeyListPresenter::reloadKeyList() {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::reloadKeyList");
+	KeyManager& myKeyMan(getFactory().getKeyManager());
+	const size_t myKeySz = myKeyMan.loadKeys();
+	getView().clear();
+	for (int myRow = 0; myRow < myKeySz; ++myRow) {
+		const auto& myKey=myKeyMan.getKey(myRow);
+		getView().addRow(KeyListRow_t(myRow,myKey.getPublicId(),myKey.getDescription(),myKey.getPrivateId()));
+	}
+	getView().addedAllRows();
+}
+
 
 } /* namespace trihlav */
 

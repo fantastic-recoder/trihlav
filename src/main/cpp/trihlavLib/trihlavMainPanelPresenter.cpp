@@ -26,14 +26,14 @@ MainPanelPresenter::MainPanelPresenter(IFactory& pFactory) :
 MainPanelPresenter::~MainPanelPresenter() {
 }
 
-IView* MainPanelPresenter::getView() {
+ViewIface* MainPanelPresenter::getView() {
 	return itsMainPanelView;
 }
 
 void MainPanelPresenter::setupUi() {
 	IPswdChckView& myPswdChckView=itsPswdChckPresenter->getView();
 	itsMainPanelView->add("Password check",myPswdChckView);
-	IKeyListView& myKeyListView=itsKeyListPresenter->getView();
+	KeyListViewIface& myKeyListView=itsKeyListPresenter->getView();
 	itsMainPanelView->add("Key list",myKeyListView);
 }
 

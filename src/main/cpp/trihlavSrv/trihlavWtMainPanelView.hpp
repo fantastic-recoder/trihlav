@@ -51,7 +51,7 @@ public:
 	virtual ~WtMainPanelView();
 	virtual Wt::WContainerWidget* getNativeView();
 	virtual void add(const std::string& pName, IPswdChckView& pPswdChckView);
-	virtual void add(const std::string& pName, IKeyListView& pKeyListView);
+	virtual void add(const std::string& pName, KeyListViewIface& pKeyListView);
 
 	const Wt::WNavigationBar* getNavigation() const {
 		return itsNavigation;

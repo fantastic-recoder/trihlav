@@ -25,39 +25,23 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_VIEW_IFACE_HPP_
+#define TRIHLAV_VIEW_IFACE_HPP_
 
-#ifndef TRIHLAV_I_PRESENTER_HPP_
-#define TRIHLAV_I_PRESENTER_HPP_
-
-#include "trihlavViewIface.hpp"
+#include <boost/utility.hpp>
 
 namespace trihlav {
 
-class IFactory;
+class IWidget;
 
 /**
- * Common functionality to all controllers.
- * Every controller has an view.
+ * Parent to all view interfaces.
  */
-class IPresenter {
+class ViewIface : boost::noncopyable {
 public:
-
-	IPresenter(IFactory& pFactory) : itsFactory(pFactory) {
-	}
-
-	const IFactory& getFactory() const {
-		return itsFactory;
-	}
-
-	IFactory& getFactory() {
-		return itsFactory;
-	}
-
-	virtual ~IPresenter(){}
-private:
-	IFactory& itsFactory;
+	virtual ~ViewIface(){}
 };
 
-} /* namespace trihlav */
+}  // namespace trihlav
 
-#endif /* TRIHLAV_I_PRESENTER_HPP_ */
+#endif // TRIHLAV_VIEW_IFACE_HPP_

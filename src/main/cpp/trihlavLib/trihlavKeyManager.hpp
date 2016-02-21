@@ -44,7 +44,7 @@ public:
     }
 
     /// @brief Load or reload all keys.
-    void loadKeys();
+    size_t loadKeys();
 
     /// @brief How many keys are currently loaded?
     const size_t getKeyCount() const;

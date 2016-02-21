@@ -29,11 +29,11 @@
 #ifndef TRIHLAV_I_PSWD_CHECK_VIEW_HPP_
 #define TRIHLAV_I_PSWD_CHECK_VIEW_HPP_
 
-#include "trihlavLib/trihlavIView.hpp"
+#include "trihlavViewIface.hpp"
 
 namespace trihlav {
 
-class IPswdChckView : virtual public IView {
+class IPswdChckView : virtual public ViewIface {
 public:
 	virtual ~IPswdChckView(){}
 };

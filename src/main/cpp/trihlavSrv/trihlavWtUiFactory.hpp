@@ -39,11 +39,9 @@ public:
 	WtUiFactory();
 	virtual ~WtUiFactory();
 	virtual IMainPanelView* createMainPanelView();
-	virtual IKeyListView* createKeyListView();
+	virtual KeyListViewIface* createKeyListView();
 	virtual IPswdChckView* createPswdChckView();
 	virtual IYubikoOtpKeyView* createYubikoOtpKeyView();
-	virtual IPswdChckPresenter* createPswdChckPresenter();
-	virtual YubikoOtpKeyPresenterI* createYubikoOtpKeyPresenter();
 
 };
 

@@ -34,7 +34,7 @@ namespace trihlav {
 
 class IMainPanelView;
 class IKeyListPresenter;
-class IKeyListView;
+class KeyListViewIface;
 class IPswdChckPresenter;
 class IPswdChckView;
 class IYubikoOtpKeyView;
@@ -48,11 +48,12 @@ public:
 	}
 	virtual IMainPanelView* createMainPanelView()=0;
 	virtual IKeyListPresenter* createKeyListPresenter();
-	virtual IKeyListView* createKeyListView()=0;
-	virtual IPswdChckPresenter* createPswdChckPresenter()=0;
+	virtual KeyListViewIface* createKeyListView()=0;
+	virtual IPswdChckPresenter* createPswdChckPresenter();
 	virtual IPswdChckView* createPswdChckView() =0;
 	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() =0;
-	virtual KeyManager& getKeyManager() const;
+	virtual const KeyManager& getKeyManager() const;
+	virtual KeyManager& getKeyManager();
 };
 
 }  // namespace trihlav

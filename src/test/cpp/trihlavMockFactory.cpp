@@ -32,9 +32,9 @@
 #include <boost/log/expressions.hpp>
 
 #include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
-#include "trihlavLib/trihlavIKeyListView.hpp"
-
 #include "trihlavMockFactory.hpp"
+
+#include "../../main/cpp/trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
 
@@ -60,7 +60,7 @@ MockFactory::MockFactory() {
 			}));
 
 	ON_CALL(*this, createKeyListView()) //
-	.WillByDefault(Invoke([]()->IKeyListView* //
+	.WillByDefault(Invoke([]()->KeyListViewIface* //
 			{
 				BOOST_LOG_NAMED_SCOPE("MockFactory::createKeyListView");
 				auto myRetVal=new NiceMock<MockKeyListView>;
