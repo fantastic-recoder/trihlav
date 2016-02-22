@@ -8,24 +8,24 @@
 #ifndef TRIHLAV_MAIN_PANEL_PRESENTER_HPP_
 #define TRIHLAV_MAIN_PANEL_PRESENTER_HPP_
 
-#include "trihlavIPresenter.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
-class IFactory;
+class FactoryIface;
 class IMainPanelView;
-class IKeyListPresenter;
+class KeyListPresenterIface;
 class IPswdChckPresenter;
 
 /**
  * Implementation of the top level UI presenter.
  */
-class MainPanelPresenter : virtual public IPresenter {
+class MainPanelPresenter : virtual public PresenterBase {
 	IMainPanelView*     itsMainPanelView;
-	IKeyListPresenter*  itsKeyListPresenter;
+	KeyListPresenterIface*  itsKeyListPresenter;
 	IPswdChckPresenter* itsPswdChckPresenter;
 public:
-	MainPanelPresenter(IFactory& pFactory);
+	MainPanelPresenter(FactoryIface& pFactory);
 	virtual ~MainPanelPresenter();
 	virtual ViewIface* getView();
 	virtual void setupUi();

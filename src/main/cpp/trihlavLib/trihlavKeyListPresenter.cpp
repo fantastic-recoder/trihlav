@@ -34,9 +34,10 @@
 #include <boost/format.hpp>
 
 #include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
+
+#include "trihlavFactoryIface.hpp"
+#include "trihlavKeyListPresenterIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 
@@ -45,9 +46,9 @@
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(IFactory& pFactory)
-: IKeyListPresenter(pFactory)
-, IPresenter(pFactory)
+KeyListPresenter::KeyListPresenter(FactoryIface& pFactory)
+: KeyListPresenterIface(pFactory)
+, PresenterBase(pFactory)
 , itsYubikoOtpKeyPresenter(0)
 , itsKeyListView(0)
 {
@@ -92,4 +93,3 @@ void KeyListPresenter::reloadKeyList() {
 
 
 } /* namespace trihlav */
-

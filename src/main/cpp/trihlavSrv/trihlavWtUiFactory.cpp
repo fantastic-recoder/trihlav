@@ -28,7 +28,7 @@ IMainPanelView* WtUiFactory::createMainPanelView() {
 	return new WtMainPanelView();
 }
 
-IFactory& getUiFactory() {
+FactoryIface& getUiFactory() {
 	static WtUiFactory theWtUiFactory;
 	return theWtUiFactory;
 }
@@ -41,7 +41,7 @@ IPswdChckView* WtUiFactory::createPswdChckView() {
 	return new WtPswdChckView();
 }
 
-IYubikoOtpKeyView* WtUiFactory::createYubikoOtpKeyView() {
+YubikoOtpKeyViewIface* WtUiFactory::createYubikoOtpKeyView() {
 	return new WtYubikoOtpKeyView();
 }
 

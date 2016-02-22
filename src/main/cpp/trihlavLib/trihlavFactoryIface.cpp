@@ -26,12 +26,13 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include "trihlavFactoryIface.hpp"
+
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 
 #include "trihlavLib/trihlavLog.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
@@ -39,24 +40,24 @@
 
 namespace trihlav {
 
-KeyManager& IFactory::getKeyManager() {
+KeyManager& FactoryIface::getKeyManager() {
 	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
 	static KeyManager theKeyManager;
 	return theKeyManager;
 }
 
-const KeyManager& IFactory::getKeyManager() const {
+const KeyManager& FactoryIface::getKeyManager() const {
 	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
 	static KeyManager theKeyManager;
 	return theKeyManager;
 }
 
-IKeyListPresenter* IFactory::createKeyListPresenter() {
+KeyListPresenterIface* FactoryIface::createKeyListPresenter() {
 	BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
 	return new KeyListPresenter(*this);
 }
 
-IPswdChckPresenter* IFactory::createPswdChckPresenter() {
+IPswdChckPresenter* FactoryIface::createPswdChckPresenter() {
 	return new PswdChckPresenter(*this);
 }
 

@@ -30,24 +30,24 @@
 
 #include <memory>
 
-#include "trihlavLib/trihlavIPresenter.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
-class IFactory;
-class IYubikoOtpKeyView;
+class FactoryIface;
+class YubikoOtpKeyViewIface;
 class YubikoOtpKeyConfig;
 class IStrEdit;
 
 /**
  * @brief Presents an @see YubikoOtpKeyConfig
  */
-class YubikoOtpKeyPresenter: virtual public IPresenter {
+class YubikoOtpKeyPresenter: virtual public PresenterBase {
 public:
 //    typedef std::unique_ptr<YubikoOtpKeyConfig> YubikoOtpKeyConfigPtr;
 //    typedef std::unique_ptr<IYubikoOtpKeyView> IYubikoOtpKeyViewPtr;
 
-    YubikoOtpKeyPresenter(IFactory& );
+    YubikoOtpKeyPresenter(FactoryIface& );
 
     virtual ~YubikoOtpKeyPresenter();
 
@@ -71,7 +71,7 @@ public:
 	/// @brief Accessor returns private id edit widget.
 	IStrEdit& getEdtPrivateId();
 
-	IYubikoOtpKeyView* getView();
+	YubikoOtpKeyViewIface& getView();
 
     /// @brief generate random hex encoded byte array
     static void generate(int pBytes, std::string& pTarget) ;
@@ -95,7 +95,7 @@ public:
 	std::string getDescription();
 
 private:
-    IYubikoOtpKeyView* itsView;
+    YubikoOtpKeyViewIface* itsView;
     YubikoOtpKeyConfig* itsCurCfg;
     void accepted( bool pAccepted);
 	void throwNoConfig();

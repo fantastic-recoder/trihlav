@@ -31,18 +31,18 @@
 
 #include <memory>
 
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
+#include "trihlavKeyListPresenterIface.hpp"
 
 namespace trihlav {
 
 class KeyListViewIface;
 class YubikoOtpKeyPresenter;
-class IFactory;
+class FactoryIface;
 
-class KeyListPresenter: virtual public IKeyListPresenter {
+class KeyListPresenter: virtual public KeyListPresenterIface {
 public:
 
-	KeyListPresenter( IFactory& pFactory);
+	KeyListPresenter( FactoryIface& pFactory);
 	virtual KeyListViewIface& getView();
 	virtual ~KeyListPresenter();
 	virtual void addKey();

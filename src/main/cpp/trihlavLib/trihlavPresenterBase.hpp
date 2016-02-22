@@ -33,29 +33,29 @@
 
 namespace trihlav {
 
-class IFactory;
+class FactoryIface;
 
 /**
  * Common functionality to all controllers.
  * Every controller has an view.
  */
-class IPresenter {
+class PresenterBase {
 public:
 
-	IPresenter(IFactory& pFactory) : itsFactory(pFactory) {
+	PresenterBase(FactoryIface& pFactory) : itsFactory(pFactory) {
 	}
 
-	const IFactory& getFactory() const {
+	const FactoryIface& getFactory() const {
 		return itsFactory;
 	}
 
-	IFactory& getFactory() {
+	FactoryIface& getFactory() {
 		return itsFactory;
 	}
 
-	virtual ~IPresenter(){}
+	virtual ~PresenterBase(){}
 private:
-	IFactory& itsFactory;
+	FactoryIface& itsFactory;
 };
 
 } /* namespace trihlav */

@@ -61,6 +61,7 @@ public:
 	virtual IButton&  getBtnAddKey();
 	virtual IButton&  getBtnDelKey();
 	virtual IButton&  getBtnReload();
+	virtual IButton&  getBtnEditKey();
 	virtual void clear();
 	virtual void addRow(const KeyListRow_t pRow);
 	virtual void addedAllRows();
@@ -76,6 +77,7 @@ private:
 	Wt::WTable *itsTable;
 	WtPushButton* itsBtnAdd;
 	WtPushButton* itsBtnDel;
+	WtPushButton* itsBtnEdit;
 	WtPushButton* itsBtnReload;
 	Wt::WContainerWidget* itsPanel;
 	int itsRowCounter=0;

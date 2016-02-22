@@ -32,7 +32,7 @@
 
 #include <Wt/WDialog>
 
-#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
+#include "../trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
 namespace Wt {
 	class WDialog;
@@ -44,7 +44,7 @@ class WtStrEdit;
 class WtPushButton;
 class WtSpinBox;
 
-class WtYubikoOtpKeyView: public IYubikoOtpKeyView {
+class WtYubikoOtpKeyView: public YubikoOtpKeyViewIface {
     std::unique_ptr<Wt::WDialog> itsDlg;
 	WtStrEdit* itsPublicId;
 	WtStrEdit* itsEdtDescription;

@@ -7,6 +7,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
 
+#include "../../main/cpp/trihlavLib/trihlavFactoryIface.hpp"
+#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
@@ -17,8 +19,6 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavIEdit.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
-#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 #include "trihlavLib/trihlavIButton.hpp"
 #include "trihlavLib/trihlavISpinBox.hpp"
 
@@ -77,17 +77,17 @@ TEST_F(TestYubikoOtpKey,keyManagerInit) {
 
 	NiceMock<MockFactory> myMockFactory;
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
-	MockYubikoOtpKeyView* myYubikoOtpKeyView(
-			dynamic_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
-	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyView  " << myYubikoOtpKeyView;
+	MockYubikoOtpKeyView& myYubikoOtpKeyView(
+			dynamic_cast<MockYubikoOtpKeyView&>(myPresenter.getView()));
+	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyView  " << &myYubikoOtpKeyView;
 	BOOST_LOG_TRIVIAL(debug)<< "PrivateID          '" //
-	<< myYubikoOtpKeyView->itsMockEdtPrivateId.getValue() << "'.";
-	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getValue(), 6);
-	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getMin(), 0);
-	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getMax(), 6);
-	EXPECT_EQ(myPresenter.getView()->getSbxPublicIdLen().getStep(), 1);
-	EXPECT_TRUE(myPresenter.getView()->getEdtPrivateId() .getValue().empty());
-	EXPECT_TRUE(myPresenter.getView()->getEdtPublicId().getValue().empty());
+	<< myYubikoOtpKeyView.itsMockEdtPrivateId.getValue() << "'.";
+	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getValue(), 6);
+	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getMin(), 0);
+	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getMax(), 6);
+	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getStep(), 1);
+	EXPECT_TRUE(myPresenter.getView().getEdtPrivateId() .getValue().empty());
+	EXPECT_TRUE(myPresenter.getView().getEdtPublicId().getValue().empty());
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
 }
@@ -96,22 +96,21 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	BOOST_LOG_NAMED_SCOPE("testGenerateButtons");
 	NiceMock<MockFactory> myMockFactory;
 	YubikoOtpKeyPresenter myPresenter(myMockFactory);
-	IYubikoOtpKeyView* myViewIface(myPresenter.getView());
-	MockYubikoOtpKeyView* myYubikoOtpKeyView(
-			dynamic_cast<MockYubikoOtpKeyView*>(myPresenter.getView()));
-	EXPECT_TRUE(myYubikoOtpKeyView!=0);
+	YubikoOtpKeyViewIface& myViewIface(myPresenter.getView());
+	MockYubikoOtpKeyView& myYubikoOtpKeyView(
+			dynamic_cast<MockYubikoOtpKeyView&>(myPresenter.getView()));
 	BOOST_LOG_TRIVIAL(debug)<< "Expectations...";
-	EXPECT_CALL(*myYubikoOtpKeyView, show());
+	EXPECT_CALL(myYubikoOtpKeyView, show());
 	BOOST_LOG_TRIVIAL(debug)<< "Expectations set.";
 	myPresenter.addKey();
-	myViewIface->getBtnGenPrivateId().getPressedSignal()();
-	myViewIface->getBtnGenPublicId().getPressedSignal()();
-	myViewIface->getBtnGenSecretKey().getPressedSignal()();
-	myViewIface->getAcceptedSignal()(true);
-	const string myPrivId(myViewIface->getEdtPrivateId().getValue());
-	const string myPublicId(myViewIface->getEdtPublicId().getValue());
-	const string mySecretKey(myViewIface->getEdtSecretKey().getValue());
-	const int myPubIdLen(myViewIface->getSbxPublicIdLen().getValue());
+	myViewIface.getBtnGenPrivateId().getPressedSignal()();
+	myViewIface.getBtnGenPublicId().getPressedSignal()();
+	myViewIface.getBtnGenSecretKey().getPressedSignal()();
+	myViewIface.getAcceptedSignal()(true);
+	const string myPrivId(myViewIface.getEdtPrivateId().getValue());
+	const string myPublicId(myViewIface.getEdtPublicId().getValue());
+	const string mySecretKey(myViewIface.getEdtSecretKey().getValue());
+	const int myPubIdLen(myViewIface.getSbxPublicIdLen().getValue());
 	const auto& myCfg = myPresenter.getCurCfg();
 	const path myFilename(myCfg.getFilename());
 	BOOST_LOG_TRIVIAL(debug)<< "0 myPrivId   : "<< myPrivId << ".";

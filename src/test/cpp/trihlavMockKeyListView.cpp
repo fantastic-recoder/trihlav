@@ -43,6 +43,12 @@ MockKeyListView::MockKeyListView() {
 
 	ON_CALL(*this,getBtnAddKey()) //
 	.WillByDefault(ReturnRef(itsMockBtnAddKey));
+	ON_CALL(*this,getBtnDelKey()) //
+	.WillByDefault(ReturnRef(itsMockBtnDelKey));
+	ON_CALL(*this,getBtnEditKey()) //
+	.WillByDefault(ReturnRef(itsMockBtnEditKey));
+	ON_CALL(*this,getBtnReload()) //
+	.WillByDefault(ReturnRef(itsMockBtnReloadKey));
 
 }
 

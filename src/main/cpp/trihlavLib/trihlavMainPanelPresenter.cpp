@@ -6,21 +6,21 @@
  */
 
 #include "trihlavLib/trihlavIMainPanelView.hpp"
-#include "trihlavLib/trihlavIKeyListPresenter.hpp"
 #include "trihlavLib/trihlavIPswdChckPresenter.hpp"
 
 #include "trihlavLib/trihlavMainPanelPresenter.hpp"
-#include "trihlavIFactory.hpp"
+
+#include "trihlavFactoryIface.hpp"
+#include "trihlavKeyListPresenterIface.hpp"
 
 namespace trihlav {
 
-MainPanelPresenter::MainPanelPresenter(IFactory& pFactory) :
-		IPresenter(pFactory),
+MainPanelPresenter::MainPanelPresenter(FactoryIface& pFactory) :
+		PresenterBase(pFactory),
 		itsKeyListPresenter(pFactory.createKeyListPresenter()),
 		itsPswdChckPresenter(pFactory.createPswdChckPresenter()),
 		itsMainPanelView(pFactory.createMainPanelView())
 {
-	;
 }
 
 MainPanelPresenter::~MainPanelPresenter() {
@@ -35,6 +35,7 @@ void MainPanelPresenter::setupUi() {
 	itsMainPanelView->add("Password check",myPswdChckView);
 	KeyListViewIface& myKeyListView=itsKeyListPresenter->getView();
 	itsMainPanelView->add("Key list",myKeyListView);
+	itsKeyListPresenter->reloadKeyList();
 }
 
 } /* namespace trihlav */

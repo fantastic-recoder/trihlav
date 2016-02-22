@@ -26,19 +26,25 @@ void WtKeyListView::addTableHeader() {
 
 WtKeyListView::WtKeyListView() {
 	itsPanel = new WContainerWidget;
-	WHBoxLayout* myBtnsLayout= new WHBoxLayout;
-	WVBoxLayout* myTopLayout= new WVBoxLayout;
+	WHBoxLayout* myBtnsLayout = new WHBoxLayout;
+	WVBoxLayout* myTopLayout = new WVBoxLayout;
 	itsBtnAdd = new WtPushButton("New key");
 	itsBtnDel = new WtPushButton("Delete key");
 	itsBtnReload = new WtPushButton("Reload keys");
-	myBtnsLayout->addWidget(itsBtnAdd,AlignLeft);
-	myBtnsLayout->addWidget(itsBtnDel,AlignLeft);
-	myBtnsLayout->addWidget(itsBtnReload,AlignRight);
+	itsBtnEdit = new WtPushButton("Edit key");
+	itsBtnAdd->setWidth(WLength { 6, WLength::FontEm });
+	itsBtnEdit->setWidth(WLength { 6, WLength::FontEm });
+	itsBtnDel->setWidth(WLength { 6, WLength::FontEm });
+	itsBtnReload->setWidth(WLength { 6, WLength::FontEm });
+	myBtnsLayout->addWidget(itsBtnAdd);
+	myBtnsLayout->addWidget(itsBtnEdit);
+	myBtnsLayout->addWidget(itsBtnDel);
+	myBtnsLayout->addWidget(itsBtnReload);
 	itsTable = new WTable();
 	itsTable->setHeaderCount(1);
+	itsTable->addStyleClass("table-hover");
+	itsTable->addStyleClass("table-striped");
 	itsTable->setWidth(Wt::WLength("100%"));
-
-	addTableHeader();
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
 	itsPanel->setLayout(myTopLayout);
@@ -56,6 +62,9 @@ IButton& WtKeyListView::getBtnAddKey() {
 	return *itsBtnAdd;
 }
 
+IButton& WtKeyListView::getBtnEditKey() {
+	return *itsBtnEdit;
+}
 
 IButton& trihlav::WtKeyListView::getBtnDelKey() {
 	return *itsBtnDel;
@@ -66,17 +75,23 @@ IButton& trihlav::WtKeyListView::getBtnReload() {
 }
 
 void WtKeyListView::clear() {
-	itsRowCounter=0;
+	itsRowCounter = 0;
 	itsTable->clear();
 	addTableHeader();
 }
 
 void WtKeyListView::addRow(const KeyListRow_t pRow) {
 	itsRowCounter++;
-	itsTable->elementAt(itsRowCounter,0)->addWidget(new Wt::WText(boost::lexical_cast<std::string>(pRow.get<0>())));
-	itsTable->elementAt(itsRowCounter,1)->addWidget(new Wt::WText(pRow.get<1>()));
-	itsTable->elementAt(itsRowCounter,2)->addWidget(new Wt::WText(pRow.get<2>()));
-	itsTable->elementAt(itsRowCounter,3)->addWidget(new Wt::WText(pRow.get<3>()));
+	auto myId = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<0>()));
+	myId->setTextAlignment(AlignCenter);
+	auto myDesc = new Wt::WText(pRow.get<1>());
+	myDesc->setTextAlignment(AlignCenter);
+	itsTable->elementAt(itsRowCounter, 0)->addWidget(myId);
+	itsTable->elementAt(itsRowCounter, 1)->addWidget(myDesc);
+	itsTable->elementAt(itsRowCounter, 2)->addWidget(
+			new Wt::WText(pRow.get<2>()));
+	itsTable->elementAt(itsRowCounter, 3)->addWidget(
+			new Wt::WText(pRow.get<3>()));
 }
 
 void WtKeyListView::addedAllRows() {

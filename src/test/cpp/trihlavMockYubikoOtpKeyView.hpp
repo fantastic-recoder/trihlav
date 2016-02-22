@@ -29,16 +29,16 @@
 #define TRIHLAV_MOCK_YUBIKO_OTP_KEY_VIEW_HPP_
 
 #include <gmock/gmock.h>
+#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockSpinBox.hpp"
 #include "trihlavMockStrEdit.hpp"
 
-#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 
 namespace trihlav {
 
-struct MockYubikoOtpKeyView: virtual public IYubikoOtpKeyView {
+struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 
 	MockStrEdit itsMockEdtPrivateId;
 	MockStrEdit itsMockEdtPublicId;

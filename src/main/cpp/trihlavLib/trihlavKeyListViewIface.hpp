@@ -50,6 +50,7 @@ public:
 	boost::signals2::signal<int()> selectedRow;
 	virtual IButton&  getBtnAddKey() =0;
 	virtual IButton&  getBtnDelKey() =0;
+	virtual IButton&  getBtnEditKey() =0;
 	/**
 	 * Reload the key list.
 	 */

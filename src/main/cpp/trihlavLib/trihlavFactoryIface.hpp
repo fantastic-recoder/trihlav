@@ -27,35 +27,35 @@
 
  */
 
-#ifndef TRIHLAV_I_FACTORY_HPP_
-#define TRIHLAV_I_FACTORY_HPP_
+#ifndef TRIHLAV_FACTORY_IFACE_HPP_
+#define TRIHLAV_FACTORY_IFACE_HPP_
 
 namespace trihlav {
 
 class IMainPanelView;
-class IKeyListPresenter;
+class KeyListPresenterIface;
 class KeyListViewIface;
 class IPswdChckPresenter;
 class IPswdChckView;
-class IYubikoOtpKeyView;
+class YubikoOtpKeyViewIface;
 class YubikoOtpKeyPresenterI;
 
 class KeyManager;
 
-class IFactory {
+class FactoryIface {
 public:
-	virtual ~IFactory() {
+	virtual ~FactoryIface() {
 	}
 	virtual IMainPanelView* createMainPanelView()=0;
-	virtual IKeyListPresenter* createKeyListPresenter();
+	virtual KeyListPresenterIface* createKeyListPresenter();
 	virtual KeyListViewIface* createKeyListView()=0;
 	virtual IPswdChckPresenter* createPswdChckPresenter();
 	virtual IPswdChckView* createPswdChckView() =0;
-	virtual IYubikoOtpKeyView* createYubikoOtpKeyView() =0;
+	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();
 };
 
 }  // namespace trihlav
 
-#endif /* TRIHLAV_I_FACTORY_HPP_ */
+#endif /* TRIHLAV_FACTORY_IFACE_HPP_ */

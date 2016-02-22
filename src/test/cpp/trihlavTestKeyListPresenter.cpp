@@ -34,16 +34,16 @@
 
 #include <boost/filesystem.hpp>
 
+#include "../../main/cpp/trihlavLib/trihlavFactoryIface.hpp"
 #include "../../main/cpp/trihlavLib/trihlavKeyListViewIface.hpp"
+#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
 #include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavIYubikoOtpKeyView.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 
 #include "trihlavMockButton.hpp"
@@ -84,7 +84,7 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	KeyListPresenter myKeyListPresenter(myMockFactory);
 	YubikoOtpKeyPresenter& myYubikoOtpKeyPresenter =
 			myKeyListPresenter.getYubikoOtpKeyPresenter();
-	IYubikoOtpKeyView& myView(*myYubikoOtpKeyPresenter.getView());
+	YubikoOtpKeyViewIface& myView(myYubikoOtpKeyPresenter.getView());
 	MockYubikoOtpKeyView& myMockYubikoOtpKeyView =
 			dynamic_cast<MockYubikoOtpKeyView&>(myView);
 	KeyListViewIface& myKeyListView = myKeyListPresenter.getView();

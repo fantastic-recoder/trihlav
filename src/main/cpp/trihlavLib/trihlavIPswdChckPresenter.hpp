@@ -29,15 +29,15 @@
 #ifndef TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_
 #define TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_
 
-#include "trihlavLib/trihlavIPresenter.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
 class IPswdChckView;
 
-class IPswdChckPresenter : virtual public IPresenter {
+class IPswdChckPresenter : virtual public PresenterBase {
 public:
-	IPswdChckPresenter(IFactory& pFactory) : IPresenter(pFactory) {
+	IPswdChckPresenter(FactoryIface& pFactory) : PresenterBase(pFactory) {
 	}
 
 	virtual IPswdChckView& getView() =0;

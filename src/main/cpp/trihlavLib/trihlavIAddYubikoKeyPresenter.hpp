@@ -8,11 +8,11 @@
 #ifndef TRIHLAV_I_ADD_YUBIKO_KEY_PRESENTER_HPP_
 #define TRIHLAV_I_ADD_YUBIKO_KEY_PRESENTER_HPP_
 
-#include "trihlavLib/trihlavIPresenter.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
-class IAddYubikoKeyPresenter : virtual public IPresenter {
+class IAddYubikoKeyPresenter : virtual public PresenterBase {
 };
 
 } /* namespace trihlav */

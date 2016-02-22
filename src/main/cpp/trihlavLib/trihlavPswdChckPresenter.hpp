@@ -34,13 +34,13 @@
 
 namespace trihlav {
 
-class IFactory;
+class FactoryIface;
 class IPswdChckView;
 
 class PswdChckPresenter: public IPswdChckPresenter {
 	IPswdChckView* itsView;
 public:
-	PswdChckPresenter(IFactory& pFactory);
+	PswdChckPresenter(FactoryIface& pFactory);
 	virtual ~PswdChckPresenter();
 
 	IPswdChckView& getView();

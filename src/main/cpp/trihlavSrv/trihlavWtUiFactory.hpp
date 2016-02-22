@@ -28,20 +28,20 @@
 #ifndef TRIHLAV_WT_UI_FACTORY_HPP_
 #define TRIHLAV_WT_UI_FACTORY_HPP_
 
-#include "trihlavLib/trihlavIFactory.hpp"
+#include "../trihlavLib/trihlavFactoryIface.hpp"
 
 namespace trihlav {
 
 class YubikoOtpKeyPresenterI;
 
-class WtUiFactory: virtual public IFactory {
+class WtUiFactory: virtual public FactoryIface {
 public:
 	WtUiFactory();
 	virtual ~WtUiFactory();
 	virtual IMainPanelView* createMainPanelView();
 	virtual KeyListViewIface* createKeyListView();
 	virtual IPswdChckView* createPswdChckView();
-	virtual IYubikoOtpKeyView* createYubikoOtpKeyView();
+	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView();
 
 };
 

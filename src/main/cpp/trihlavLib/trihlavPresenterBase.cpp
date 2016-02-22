@@ -5,7 +5,7 @@
  *      Author: grobap
  */
 
-#include "trihlavIPresenter.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 

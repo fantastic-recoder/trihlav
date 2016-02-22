@@ -26,15 +26,15 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavLib/trihlavIFactory.hpp"
 #include "trihlavLib/trihlavIPswdChckView.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
+#include "trihlavFactoryIface.hpp"
 
 namespace trihlav {
 
-PswdChckPresenter::PswdChckPresenter(IFactory& pFactory) :
+PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
 		IPswdChckPresenter(pFactory), //< forced by virtua inheritance
-		IPresenter(pFactory), //< has a factory
+		PresenterBase(pFactory), //< has a factory
 		itsView(0) //< initialize view
 {
 	// TODO Auto-generated constructor stub

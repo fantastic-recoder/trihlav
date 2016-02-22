@@ -29,13 +29,13 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#include "trihlavIFactory.hpp"
+#include "trihlavFactoryIface.hpp"
 
 namespace trihlav {
 	/**
 	 * Get the implementation specific UI & Co.
 	 */
-	IFactory& getUiFactory();
+	FactoryIface& getUiFactory();
 }  // namespace trihlav
 
 #endif // TRIHLAV_GET_UI_FACTORY_

@@ -25,23 +25,24 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_I_KEYLIST_PRESENTER_HPP_
-#define TRIHLAV_I_KEYLIST_PRESENTER_HPP_
+#ifndef TRIHLAV_KEY_LIST_PRESENTER_IFACE_HPP_
+#define TRIHLAV_KEY_LIST_PRESENTER_IFACE_HPP_
 
-#include "trihlavLib/trihlavIPresenter.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
 class KeyListViewIface;
 
-class IKeyListPresenter : virtual public IPresenter {
+class KeyListPresenterIface : virtual public PresenterBase {
 public:
-	IKeyListPresenter(IFactory& pFactory):IPresenter(pFactory) {}
-	virtual ~IKeyListPresenter(){}
+	KeyListPresenterIface(FactoryIface& pFactory):PresenterBase(pFactory) {}
+	virtual ~KeyListPresenterIface(){}
 	virtual KeyListViewIface& getView()=0;
 	virtual void addKey()=0;
+	virtual void reloadKeyList()=0;
 };
 
 }  // namespace trihlav
 
-#endif /* TRIHLAV_I_KEYLIST_PRESENTER_HPP_ */
+#endif /* TRIHLAV_KEY_LIST_PRESENTER_IFACE_HPP_ */
