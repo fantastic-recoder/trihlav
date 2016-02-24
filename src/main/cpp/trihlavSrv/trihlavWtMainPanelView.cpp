@@ -15,12 +15,12 @@
 #include <Wt/WText>
 #include <Wt/WContainerWidget>
 
-#include "trihlavIWtView.hpp"
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavWtPswdChckView.hpp"
 #include "trihlavWtKeyListView.hpp"
 #include "trihlavLib/trihlavCannotCastImplementation.hpp"
 #include "trihlavLib/trihlavVersion.hpp"
+#include "trihlavWtViewIface.hpp"
 
 using namespace Wt;
 using namespace std;
@@ -37,7 +37,7 @@ void WtMainPanelView::add(const string& pName,KeyListViewIface&  pKeyListView){
 	addView(pName,*myKeyListView);
 }
 
-void WtMainPanelView::add(const string& pName, IPswdChckView& pPswdChckView) {
+void WtMainPanelView::add(const string& pName, PswdChckViewIface& pPswdChckView) {
 	WtPswdChckView* myPswdChckView =
 			dynamic_cast<WtPswdChckView*>(&pPswdChckView);
 	if (myPswdChckView == 0) {
@@ -47,7 +47,7 @@ void WtMainPanelView::add(const string& pName, IPswdChckView& pPswdChckView) {
 	addView(pName,*myPswdChckView);
 }
 
-void WtMainPanelView::addView(const std::string& pName,IWtView&  pView) {
+void WtMainPanelView::addView(const std::string& pName,WtViewIface&  pView) {
 	WMenuItem* myItem = getLeftMenu()->addItem(pName.c_str(),
 			pView.getWWidget());
 	string myUrl("/"+pName);

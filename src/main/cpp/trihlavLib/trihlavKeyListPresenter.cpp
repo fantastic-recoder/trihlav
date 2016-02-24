@@ -33,9 +33,9 @@
 #include <boost/locale/message.hpp>
 #include <boost/format.hpp>
 
-#include "trihlavLib/trihlavIButton.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 
+#include "trihlavButtonIface.hpp"
 #include "trihlavFactoryIface.hpp"
 #include "trihlavKeyListPresenterIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"

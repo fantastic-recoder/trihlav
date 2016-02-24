@@ -1,4 +1,4 @@
- /*
+/*
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
@@ -25,20 +25,36 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_MOCK_STREDIT_HPP_
-#define TRIHLAV_MOCK_STREDIT_HPP_
+#ifndef TRIHLAV_EDIT_IFACE_HPP_
+#define TRIHLAV_EDIT_IFACE_HPP_
 
 #include <string>
-
-#include "trihlavMockEditIface.hpp"
+#include <boost/utility.hpp>
 
 namespace trihlav {
 
-struct MockStrEdit: virtual public MockEditIface<std::string>,
-		virtual public StrEditIface {
-	MockStrEdit():MockEditIface<std::string>("nope!"){}
+/**
+ * Interface to a UI widget, which can edit, set and get a value.
+ */
+template< typename T>
+class EditIface : virtual public boost::noncopyable {
+public:
+	/**
+	 * @return The edited value.
+	 */
+	virtual const T getValue() const = 0;
+
+	/**
+	 * @param pVal set the value, which can be edited.
+	 */
+	virtual void setValue(const T& pVal) =0;
+
+	/// Just ensure virtual destructor.
+	virtual ~EditIface(){}
 };
 
-}  // namespace trihlav
+struct StrEditIface: virtual public EditIface<std::string>{};
 
-#endif /* TRIHLAV_MOCK_STREDIT_HPP_ */
+} /* namespace trihlav */
+
+#endif /* TRIHLAV_EDIT_IFACE_HPP_ */

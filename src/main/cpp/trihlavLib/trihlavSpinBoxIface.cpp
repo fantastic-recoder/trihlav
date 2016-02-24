@@ -5,11 +5,11 @@
  *      Author: grobap
  */
 
-#include "trihlavISpinBox.hpp"
+#include "trihlavSpinBoxIface.hpp"
 
 namespace trihlav {
 
-ISpinBox::~ISpinBox() {
+SpinBoxIface::~SpinBoxIface() {
 	// TODO Auto-generated destructor stub
 }
 

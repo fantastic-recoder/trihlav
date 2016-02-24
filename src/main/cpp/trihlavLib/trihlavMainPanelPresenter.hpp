@@ -13,17 +13,17 @@
 namespace trihlav {
 
 class FactoryIface;
-class IMainPanelView;
+class MainPanelViewIface;
 class KeyListPresenterIface;
-class IPswdChckPresenter;
+class PswdChckPresenterIface;
 
 /**
  * Implementation of the top level UI presenter.
  */
 class MainPanelPresenter : virtual public PresenterBase {
-	IMainPanelView*     itsMainPanelView;
+	MainPanelViewIface*     itsMainPanelView;
 	KeyListPresenterIface*  itsKeyListPresenter;
-	IPswdChckPresenter* itsPswdChckPresenter;
+	PswdChckPresenterIface* itsPswdChckPresenter;
 public:
 	MainPanelPresenter(FactoryIface& pFactory);
 	virtual ~MainPanelPresenter();

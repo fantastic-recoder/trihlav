@@ -35,7 +35,7 @@
 
 namespace trihlav {
 
-class IButton;
+class ButtonIface;
 
 using KeyListRow_t = boost::tuple<int,std::string,std::string,std::string>;
 
@@ -48,13 +48,13 @@ public:
 	 * Should be fired by the UI when user selects a row.
 	 */
 	boost::signals2::signal<int()> selectedRow;
-	virtual IButton&  getBtnAddKey() =0;
-	virtual IButton&  getBtnDelKey() =0;
-	virtual IButton&  getBtnEditKey() =0;
+	virtual ButtonIface&  getBtnAddKey() =0;
+	virtual ButtonIface&  getBtnDelKey() =0;
+	virtual ButtonIface&  getBtnEditKey() =0;
 	/**
 	 * Reload the key list.
 	 */
-	virtual IButton&  getBtnReload() =0;
+	virtual ButtonIface&  getBtnReload() =0;
 	virtual void clear()=0;
 	virtual void addRow(const KeyListRow_t pRow)=0;
 	virtual void addedAllRows()=0;

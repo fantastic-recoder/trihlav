@@ -5,13 +5,12 @@
  *      Author: grobap
  */
 
-#include "trihlavLib/trihlavIMainPanelView.hpp"
-#include "trihlavLib/trihlavIPswdChckPresenter.hpp"
-
 #include "trihlavLib/trihlavMainPanelPresenter.hpp"
 
 #include "trihlavFactoryIface.hpp"
 #include "trihlavKeyListPresenterIface.hpp"
+#include "trihlavMainPanelViewIface.hpp"
+#include "trihlavPswdChckPresenterIface.hpp"
 
 namespace trihlav {
 
@@ -31,7 +30,7 @@ ViewIface* MainPanelPresenter::getView() {
 }
 
 void MainPanelPresenter::setupUi() {
-	IPswdChckView& myPswdChckView=itsPswdChckPresenter->getView();
+	PswdChckViewIface& myPswdChckView=itsPswdChckPresenter->getView();
 	itsMainPanelView->add("Password check",myPswdChckView);
 	KeyListViewIface& myKeyListView=itsKeyListPresenter->getView();
 	itsMainPanelView->add("Key list",myKeyListView);

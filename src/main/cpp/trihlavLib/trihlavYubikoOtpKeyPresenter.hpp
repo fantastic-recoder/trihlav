@@ -37,15 +37,13 @@ namespace trihlav {
 class FactoryIface;
 class YubikoOtpKeyViewIface;
 class YubikoOtpKeyConfig;
-class IStrEdit;
+class StrEditIface;
 
 /**
  * @brief Presents an @see YubikoOtpKeyConfig
  */
 class YubikoOtpKeyPresenter: virtual public PresenterBase {
 public:
-//    typedef std::unique_ptr<YubikoOtpKeyConfig> YubikoOtpKeyConfigPtr;
-//    typedef std::unique_ptr<IYubikoOtpKeyView> IYubikoOtpKeyViewPtr;
 
     YubikoOtpKeyPresenter(FactoryIface& );
 
@@ -69,7 +67,7 @@ public:
 	int getPublicIdLen();
 
 	/// @brief Accessor returns private id edit widget.
-	IStrEdit& getEdtPrivateId();
+	StrEditIface& getEdtPrivateId();
 
 	YubikoOtpKeyViewIface& getView();
 
@@ -77,10 +75,10 @@ public:
     static void generate(int pBytes, std::string& pTarget) ;
 
 	/// @brief Accessor returns secret key edit widget.
-	IStrEdit& getEdtSecretKey();
+	StrEditIface& getEdtSecretKey();
 
 	/// @brief Accessor returns secret key edit widget.
-	IStrEdit& getEdtPublicId();
+	StrEditIface& getEdtPublicId();
 
 	/// @brief Public ID getter.
 	std::string getPublicId();

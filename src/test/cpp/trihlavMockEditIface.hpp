@@ -26,29 +26,42 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TRIHLAV_ISPIN_BOX_HPP_
-#define TRIHLAV_ISPIN_BOX_HPP_
+#ifndef TRIHLAV_MOCK_EDIT_IFACE_HPP_
+#define TRIHLAV_MOCK_EDIT_IFACE_HPP_
 
-#include <boost/utility.hpp>
-
-#include "trihlavLib/trihlavIEdit.hpp"
+#include "../../main/cpp/trihlavLib/trihlavEditIface.hpp"
 
 namespace trihlav {
 
-class ISpinBox : virtual public boost::noncopyable {
+template<typename T>
+class MockEditIface: virtual public EditIface<T> {
 public:
-	virtual const int getValue() const=0;
-	virtual void setValue(const int& pVal)=0;
-	virtual void setMin(const int pMin)=0;
-	virtual const int getMin() const =0;
-	virtual void setMax(const int pMax)=0;
-	virtual const int getMax() const =0;
-	virtual void setStep(const int pStep)=0;
-	virtual const int getStep() const =0;
-	virtual ~ISpinBox() {
+	T itsVal;
+
+	MockEditIface(const T& pVal) : itsVal(pVal){}
+
+	/**
+	 * @brief Getter
+	 * @return a copy of it's value
+	 */
+	virtual const T getValue() const {
+		return itsVal;
 	}
+
+	/**
+	 * @brief Just sets the internal value.
+	 * @see IStrEdit::getValue
+	 * @return void
+	 */
+	virtual void setValue(const T& pVal) {
+		itsVal = pVal;
+	}
+
+	virtual ~MockEditIface(){}
 };
 
-} /* namespace trihlav */
+} // end namespace trihlav
 
-#endif /* TRIHLAV_ISPIN_BOX_HPP_ */
+
+
+#endif /* TRIHLAV_MOCK_EDIT_IFACE_HPP_ */

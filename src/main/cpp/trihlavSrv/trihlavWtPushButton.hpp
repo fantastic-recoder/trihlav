@@ -10,14 +10,15 @@
 
 #include <Wt/WPushButton>
 #include <Wt/WString>
-#include "trihlavLib/trihlavIButton.hpp"
+
+#include "../trihlavLib/trihlavButtonIface.hpp"
 
 namespace trihlav {
 
 /**
  * Implement trihlav::IButton using Wt::WPushButton.
  */
-class WtPushButton: virtual public IButton,  virtual public Wt::WPushButton {
+class WtPushButton: virtual public ButtonIface,  virtual public Wt::WPushButton {
 public:
 	/**
 	 * @param pText initial value for the label.

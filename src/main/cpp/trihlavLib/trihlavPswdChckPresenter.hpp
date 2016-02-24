@@ -30,20 +30,21 @@
 #define TRIHLAV_PSWD_CHCK_PRESENTER_HPP_
 
 #include <memory>
-#include "trihlavLib/trihlavIPswdChckPresenter.hpp"
+
+#include "trihlavPswdChckPresenterIface.hpp"
 
 namespace trihlav {
 
 class FactoryIface;
-class IPswdChckView;
+class PswdChckViewIface;
 
-class PswdChckPresenter: public IPswdChckPresenter {
-	IPswdChckView* itsView;
+class PswdChckPresenter: public PswdChckPresenterIface {
+	PswdChckViewIface* itsView;
 public:
 	PswdChckPresenter(FactoryIface& pFactory);
 	virtual ~PswdChckPresenter();
 
-	IPswdChckView& getView();
+	PswdChckViewIface& getView();
 };
 
 } /* namespace trihlav */

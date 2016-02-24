@@ -30,11 +30,12 @@
 #define TRIHLAV_WT_STR_EDIT_HPP_
 
 #include <Wt/WLineEdit>
-#include "trihlavLib/trihlavIEdit.hpp"
+
+#include "../trihlavLib/trihlavEditIface.hpp"
 
 namespace trihlav {
 
-class WtStrEdit: virtual public Wt::WLineEdit, virtual public IStrEdit {
+class WtStrEdit: virtual public Wt::WLineEdit, virtual public StrEditIface {
 public:
 	WtStrEdit();
 	virtual ~WtStrEdit();

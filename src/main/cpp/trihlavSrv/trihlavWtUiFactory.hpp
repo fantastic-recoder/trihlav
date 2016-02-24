@@ -38,9 +38,9 @@ class WtUiFactory: virtual public FactoryIface {
 public:
 	WtUiFactory();
 	virtual ~WtUiFactory();
-	virtual IMainPanelView* createMainPanelView();
+	virtual MainPanelViewIface* createMainPanelView();
 	virtual KeyListViewIface* createKeyListView();
-	virtual IPswdChckView* createPswdChckView();
+	virtual PswdChckViewIface* createPswdChckView();
 	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView();
 
 };

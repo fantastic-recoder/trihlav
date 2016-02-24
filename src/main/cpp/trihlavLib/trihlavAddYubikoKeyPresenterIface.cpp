@@ -5,7 +5,7 @@
  *      Author: grobap
  */
 
-#include "trihlavIAddYubikoKeyPresenter.hpp"
+#include "trihlavAddYubikoKeyPresenterIface.hpp"
 
 namespace trihlav {
 

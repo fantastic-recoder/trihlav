@@ -26,18 +26,47 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TRIHLAV_I_PSWD_CHECK_VIEW_HPP_
-#define TRIHLAV_I_PSWD_CHECK_VIEW_HPP_
+#ifndef TRIHLAV_BUTTON_IFACE_HPP_
+#define TRIHLAV_BUTTON_IFACE_HPP_
 
-#include "trihlavViewIface.hpp"
+#include <boost/signals2.hpp>
 
 namespace trihlav {
+	/**
+	 * Interface to push-button UI element.
+	 */
+	class ButtonIface {
+	public:
+		/// Hide the underlying boost signal.
+		typedef boost::signals2::signal<void()> PressedSignal;
 
-class IPswdChckView : virtual public ViewIface {
-public:
-	virtual ~IPswdChckView(){}
-};
+		/**
+		 * Button pressed event is signaling via this member.
+		 */
+		virtual PressedSignal& getPressedSignal(){
+			return itsPressedSignal;
+		}
+		/**
+		 * Button pressed event is signaling via this member.
+		 */
+		virtual const PressedSignal& getPressedSignal()const {
+			return itsPressedSignal;
+		}
+		virtual ~ButtonIface(){};
+		virtual void pressed() { itsPressedSignal(); }
 
-} /* namespace trihlav */
+		/**
+		 * @return Buttons label value in UTF8.
+		 */
+		virtual const std::string getText() const = 0;
 
-#endif /* TRIHLAV_I_PSWD_CHECK_VIEW_HPP_ */
+		/**
+		 * @param pText Set the button-label value in UTF8.
+		 */
+		virtual void setText( const std::string& pText) = 0;
+	private:
+		PressedSignal itsPressedSignal;
+	};
+}
+
+#endif /* TRIHLAV_BUTTON_IFACE_HPP_ */

@@ -32,11 +32,11 @@
 
 namespace trihlav {
 
-class IMainPanelView;
+class MainPanelViewIface;
 class KeyListPresenterIface;
 class KeyListViewIface;
-class IPswdChckPresenter;
-class IPswdChckView;
+class PswdChckPresenterIface;
+class PswdChckViewIface;
 class YubikoOtpKeyViewIface;
 class YubikoOtpKeyPresenterI;
 
@@ -46,11 +46,11 @@ class FactoryIface {
 public:
 	virtual ~FactoryIface() {
 	}
-	virtual IMainPanelView* createMainPanelView()=0;
+	virtual MainPanelViewIface* createMainPanelView()=0;
 	virtual KeyListPresenterIface* createKeyListPresenter();
 	virtual KeyListViewIface* createKeyListView()=0;
-	virtual IPswdChckPresenter* createPswdChckPresenter();
-	virtual IPswdChckView* createPswdChckView() =0;
+	virtual PswdChckPresenterIface* createPswdChckPresenter();
+	virtual PswdChckViewIface* createPswdChckView() =0;
 	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();

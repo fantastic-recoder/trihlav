@@ -53,35 +53,35 @@ struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 
 	MockYubikoOtpKeyView();
 
-	MOCK_CONST_METHOD0( getEdtPublicId, const IStrEdit& () );
-	MOCK_METHOD0(getEdtPublicId,IStrEdit& () );
+	MOCK_CONST_METHOD0( getEdtPublicId, const StrEditIface& () );
+	MOCK_METHOD0(getEdtPublicId,StrEditIface& () );
 
-	MOCK_METHOD0(getSbxPublicIdLen, ISpinBox& () );
-	MOCK_CONST_METHOD0(getSbxPublicIdLen, const ISpinBox& () );
+	MOCK_METHOD0(getSbxPublicIdLen, SpinBoxIface& () );
+	MOCK_CONST_METHOD0(getSbxPublicIdLen, const SpinBoxIface& () );
 
-	MOCK_CONST_METHOD0(getEdtPrivateId, const  IStrEdit& () );
-	MOCK_METHOD0(getEdtPrivateId, IStrEdit& () );
+	MOCK_CONST_METHOD0(getEdtPrivateId, const  StrEditIface& () );
+	MOCK_METHOD0(getEdtPrivateId, StrEditIface& () );
 
-	MOCK_CONST_METHOD0(getEdtSecretKey, const  IStrEdit& () );
-	MOCK_METHOD0(getEdtSecretKey, IStrEdit& () );
+	MOCK_CONST_METHOD0(getEdtSecretKey, const  StrEditIface& () );
+	MOCK_METHOD0(getEdtSecretKey, StrEditIface& () );
 
-	MOCK_CONST_METHOD0(getEdtDescription, const  IStrEdit& () );
-	MOCK_METHOD0(getEdtDescription, IStrEdit& () );
+	MOCK_CONST_METHOD0(getEdtDescription, const  StrEditIface& () );
+	MOCK_METHOD0(getEdtDescription, StrEditIface& () );
 
-	MOCK_CONST_METHOD0(getBtnGenPublicId, const  IButton& () );
-	MOCK_METHOD0(getBtnGenPublicId, IButton& () );
+	MOCK_CONST_METHOD0(getBtnGenPublicId, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnGenPublicId, ButtonIface& () );
 
-	MOCK_CONST_METHOD0(getBtnGenPrivateId, const  IButton& () );
-	MOCK_METHOD0(getBtnGenPrivateId, IButton& () );
+	MOCK_CONST_METHOD0(getBtnGenPrivateId, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnGenPrivateId, ButtonIface& () );
 
-	MOCK_CONST_METHOD0(getBtnGenSecretKey, const  IButton& () );
-	MOCK_METHOD0(getBtnGenSecretKey, IButton& () );
+	MOCK_CONST_METHOD0(getBtnGenSecretKey, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnGenSecretKey, ButtonIface& () );
 
-	MOCK_CONST_METHOD0(getBtnCancel,  const IButton& () );
-	MOCK_METHOD0(getBtnCancel, IButton& () );
+	MOCK_CONST_METHOD0(getBtnCancel,  const ButtonIface& () );
+	MOCK_METHOD0(getBtnCancel, ButtonIface& () );
 
-	MOCK_CONST_METHOD0(getBtnSave, const  IButton& () );
-	MOCK_METHOD0(getBtnSave, IButton& () );
+	MOCK_CONST_METHOD0(getBtnSave, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnSave, ButtonIface& () );
 
 	MOCK_METHOD0(show, void ());
 

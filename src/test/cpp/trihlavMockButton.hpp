@@ -30,12 +30,13 @@
 #define TRIHLAV_MOCK_BUTTON_HPP_
 
 #include <string>
-#include "trihlavLib/trihlavIButton.hpp"
+
+#include "../../main/cpp/trihlavLib/trihlavButtonIface.hpp"
 
 namespace trihlav {
 
-struct MockButton: virtual public IButton {
-	MockButton():IButton() {}
+struct MockButton: virtual public ButtonIface {
+	MockButton():ButtonIface() {}
 
 	std::string itsVal;
 	virtual const std::string getText() const {

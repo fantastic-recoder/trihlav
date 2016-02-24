@@ -29,7 +29,8 @@
 #define TRIHLAV_WT_MAIN_PANEL_VIEW_HPP_
 
 #include <string>
-#include "trihlavLib/trihlavIMainPanelView.hpp"
+
+#include "../trihlavLib/trihlavMainPanelViewIface.hpp"
 
 namespace Wt {
 class WContainerWidget;
@@ -40,17 +41,17 @@ class WStackedWidget;
 
 namespace trihlav {
 
-class IWtView;
+class WtViewIface;
 
 /**
  * WT++ implementation of IMainPanelView.
  */
-class WtMainPanelView: virtual public IMainPanelView {
+class WtMainPanelView: virtual public MainPanelViewIface {
 public:
 	WtMainPanelView();
 	virtual ~WtMainPanelView();
 	virtual Wt::WContainerWidget* getNativeView();
-	virtual void add(const std::string& pName, IPswdChckView& pPswdChckView);
+	virtual void add(const std::string& pName, PswdChckViewIface& pPswdChckView);
 	virtual void add(const std::string& pName, KeyListViewIface& pKeyListView);
 
 	const Wt::WNavigationBar* getNavigation() const {
@@ -82,7 +83,7 @@ public:
 	}
 
 protected:
-	virtual void addView(const std::string& pName, IWtView& pView);
+	virtual void addView(const std::string& pName, WtViewIface& pView);
 
 	void setNavigation(Wt::WNavigationBar* pNavigation) {
 		itsNavigation = pNavigation;

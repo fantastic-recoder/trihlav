@@ -25,29 +25,28 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
+#ifndef TRIHLAV_MAIN_PANEL_VIEW_IFACE_HPP_
+#define TRIHLAV_MAIN_PANEL_VIEW_IFACE_HPP_
 
-#ifndef TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_
-#define TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_
+#include <string>
 
-#include "trihlavPresenterBase.hpp"
+#include "trihlavViewIface.hpp"
 
 namespace trihlav {
 
-class IPswdChckView;
+class PswdChckViewIface;
+class KeyListViewIface;
 
-class IPswdChckPresenter : virtual public PresenterBase {
+/**
+ * The interface of the top level UI view, as in MVP design pattern.
+ */
+class MainPanelViewIface : public ViewIface {
 public:
-	IPswdChckPresenter(FactoryIface& pFactory) : PresenterBase(pFactory) {
-	}
-
-	virtual IPswdChckView& getView() =0;
-
-	virtual ~IPswdChckPresenter() {}
-
+	virtual void add(const std::string& pName,PswdChckViewIface& pPswdChckView)=0;
+	virtual void add(const std::string& pName,KeyListViewIface& pKeyListView)=0;
+	virtual ~MainPanelViewIface(){}
 };
 
-}  // namespace trihlav
+} // end namespace trihlav
 
-
-
-#endif /* TRIHLAV_I_PSWD_CHCK_PRESENTER_HPP_ */
+#endif /* TRIHLAV_MAIN_PANEL_VIEW_IFACE_HPP_ */

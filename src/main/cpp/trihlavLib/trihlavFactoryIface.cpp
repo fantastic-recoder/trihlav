@@ -57,7 +57,7 @@ KeyListPresenterIface* FactoryIface::createKeyListPresenter() {
 	return new KeyListPresenter(*this);
 }
 
-IPswdChckPresenter* FactoryIface::createPswdChckPresenter() {
+PswdChckPresenterIface* FactoryIface::createPswdChckPresenter() {
 	return new PswdChckPresenter(*this);
 }
 

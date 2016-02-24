@@ -58,19 +58,19 @@ Wt::WWidget* WtKeyListView::getWWidget() {
 	return itsPanel;
 }
 
-IButton& WtKeyListView::getBtnAddKey() {
+ButtonIface& WtKeyListView::getBtnAddKey() {
 	return *itsBtnAdd;
 }
 
-IButton& WtKeyListView::getBtnEditKey() {
+ButtonIface& WtKeyListView::getBtnEditKey() {
 	return *itsBtnEdit;
 }
 
-IButton& trihlav::WtKeyListView::getBtnDelKey() {
+ButtonIface& trihlav::WtKeyListView::getBtnDelKey() {
 	return *itsBtnDel;
 }
 
-IButton& trihlav::WtKeyListView::getBtnReload() {
+ButtonIface& trihlav::WtKeyListView::getBtnReload() {
 	return *itsBtnReload;
 }
 

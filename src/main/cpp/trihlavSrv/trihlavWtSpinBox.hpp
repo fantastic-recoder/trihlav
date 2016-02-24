@@ -29,11 +29,12 @@
 #define TRIHLAV_WT_SPIN_BOX_HPP_
 
 #include <Wt/WSpinBox>
-#include "trihlavLib/trihlavISpinBox.hpp"
+
+#include "../trihlavLib/trihlavSpinBoxIface.hpp"
 
 namespace trihlav {
 
-class WtSpinBox: virtual public ISpinBox, virtual public Wt::WSpinBox {
+class WtSpinBox: virtual public SpinBoxIface, virtual public Wt::WSpinBox {
 public:
 	virtual ~WtSpinBox();
 	WtSpinBox();

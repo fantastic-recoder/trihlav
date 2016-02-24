@@ -11,6 +11,7 @@
 
 #include <boost/filesystem.hpp>
 
+#include "../../main/cpp/trihlavLib/trihlavEditIface.hpp"
 #include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
@@ -22,7 +23,6 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
-#include "trihlavLib/trihlavIEdit.hpp"
 
 using namespace std;
 using namespace trihlav;

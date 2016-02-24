@@ -28,8 +28,8 @@
 #ifndef TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
 #define TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
 
-#include "trihlavLib/trihlavIPswdChckView.hpp"
-#include "trihlavIWtView.hpp"
+#include "../trihlavLib/trihlavPswdChckViewIface.hpp"
+#include "trihlavWtViewIface.hpp"
 
 namespace Wt {
 	class WContainerWidget;
@@ -38,7 +38,7 @@ namespace Wt {
 
 namespace trihlav {
 
-class WtPswdChckView: virtual public IPswdChckView, virtual public IWtView {
+class WtPswdChckView: virtual public PswdChckViewIface, virtual public WtViewIface {
 public:
 	WtPswdChckView();
 	virtual Wt::WWidget* getWWidget();

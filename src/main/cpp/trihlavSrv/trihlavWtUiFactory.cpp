@@ -24,7 +24,7 @@ WtUiFactory::~WtUiFactory() {
 	// TODO Auto-generated destructor stub
 }
 
-IMainPanelView* WtUiFactory::createMainPanelView() {
+MainPanelViewIface* WtUiFactory::createMainPanelView() {
 	return new WtMainPanelView();
 }
 
@@ -37,7 +37,7 @@ KeyListViewIface* WtUiFactory::createKeyListView() {
 	return new WtKeyListView();
 }
 
-IPswdChckView* WtUiFactory::createPswdChckView() {
+PswdChckViewIface* WtUiFactory::createPswdChckView() {
 	return new WtPswdChckView();
 }
 

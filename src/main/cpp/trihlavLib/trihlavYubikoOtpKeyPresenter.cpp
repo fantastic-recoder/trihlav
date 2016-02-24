@@ -16,12 +16,12 @@
 #include <boost/locale/message.hpp>
 #include <boost/format.hpp>
 
+#include "trihlavButtonIface.hpp"
+#include "trihlavEditIface.hpp"
 #include "trihlavFactoryIface.hpp"
-#include "trihlavLib/trihlavIButton.hpp"
-#include "trihlavLib/trihlavIEdit.hpp"
-#include "trihlavLib/trihlavISpinBox.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavKeyManager.hpp"
+#include "trihlavSpinBoxIface.hpp"
 #include "trihlavYubikoOtpKeyViewIface.hpp"
 
 using namespace std;
@@ -155,11 +155,11 @@ YubikoOtpKeyViewIface& YubikoOtpKeyPresenter::getView() {
 	return *itsView;
 }
 
-IStrEdit& YubikoOtpKeyPresenter::getEdtPrivateId() {
+StrEditIface& YubikoOtpKeyPresenter::getEdtPrivateId() {
 	return getView().getEdtPrivateId();
 }
 
-IStrEdit& YubikoOtpKeyPresenter::getEdtPublicId() {
+StrEditIface& YubikoOtpKeyPresenter::getEdtPublicId() {
 	return getView().getEdtPublicId();
 }
 
@@ -174,7 +174,7 @@ void YubikoOtpKeyPresenter::generatePublicId() {
 	getEdtPublicId().setValue(myNewId);
 }
 
-IStrEdit& YubikoOtpKeyPresenter::getEdtSecretKey() {
+StrEditIface& YubikoOtpKeyPresenter::getEdtSecretKey() {
 	return getView().getEdtSecretKey();
 }
 

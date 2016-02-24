@@ -41,10 +41,10 @@ struct MockKeyListView: virtual KeyListViewIface {
 	MockButton itsMockBtnReloadKey;
 	MockButton itsMockBtnDelKey;
 	MockKeyListView();//
-	MOCK_METHOD0(getBtnAddKey, IButton& ());//
-	MOCK_METHOD0(getBtnDelKey, IButton& ());//
-	MOCK_METHOD0(getBtnEditKey, IButton& ());//
-	MOCK_METHOD0(getBtnReload,IButton& ());//
+	MOCK_METHOD0(getBtnAddKey, ButtonIface& ());//
+	MOCK_METHOD0(getBtnDelKey, ButtonIface& ());//
+	MOCK_METHOD0(getBtnEditKey, ButtonIface& ());//
+	MOCK_METHOD0(getBtnReload,ButtonIface& ());//
 	MOCK_METHOD0(clear,void ());//
 	MOCK_METHOD1(addRow,void (const KeyListRow_t pRow));//
 	MOCK_METHOD0(addedAllRows,void ());//

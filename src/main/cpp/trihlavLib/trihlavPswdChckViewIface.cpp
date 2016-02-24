@@ -5,7 +5,7 @@
  *      Author: grobap
  */
 
-#include "trihlavIPswdChckView.hpp"
+#include "trihlavPswdChckViewIface.hpp"
 
 namespace trihlav {
 

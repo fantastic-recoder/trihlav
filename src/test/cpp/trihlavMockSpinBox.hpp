@@ -28,12 +28,12 @@
 #ifndef TRIHLAV_MOCK_SPIN_BOX_HPP_
 #define TRIHLAV_MOCK_SPIN_BOX_HPP_
 
-#include "trihlavLib/trihlavISpinBox.hpp"
-#include "trihlavMockEditI.hpp"
+#include "../../main/cpp/trihlavLib/trihlavSpinBoxIface.hpp"
+#include "trihlavMockEditIface.hpp"
 
 namespace trihlav {
 
-struct MockSpinBox: virtual public ISpinBox {
+struct MockSpinBox: virtual public SpinBoxIface {
 	int itsVal;
 	int itsMin;
 	int itsMax;

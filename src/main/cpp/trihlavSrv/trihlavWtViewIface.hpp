@@ -25,8 +25,8 @@
  Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
-#ifndef TRIHLAV_I_WT_VIEW_HPP_
-#define TRIHLAV_I_WT_VIEW_HPP_
+#ifndef TRIHLAV_WT_VIEW_IFACE_HPP_
+#define TRIHLAV_WT_VIEW_IFACE_HPP_
 
 namespace Wt {
 
@@ -36,12 +36,12 @@ class WWidget;
 
 namespace trihlav {
 
-class IWtView {
+class WtViewIface {
 public:
 	virtual Wt::WWidget* getWWidget()=0;
-	virtual ~IWtView(){}
+	virtual ~WtViewIface(){}
 };
 
 }  // namespace trihlav
 
-#endif /* TRIHLAV_I_WT_VIEW_HPP_ */
+#endif /* TRIHLAV_WT_VIEW_IFACE_HPP_ */

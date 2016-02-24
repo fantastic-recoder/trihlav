@@ -1,4 +1,4 @@
- /*
+/*
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
@@ -25,20 +25,29 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_MOCK_STREDIT_HPP_
-#define TRIHLAV_MOCK_STREDIT_HPP_
 
-#include <string>
+#ifndef TRIHLAV_PSWD_CHCK_PRESENTER_IFACE_HPP_
+#define TRIHLAV_PSWD_CHCK_PRESENTER_IFACE_HPP_
 
-#include "trihlavMockEditIface.hpp"
+#include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
-struct MockStrEdit: virtual public MockEditIface<std::string>,
-		virtual public StrEditIface {
-	MockStrEdit():MockEditIface<std::string>("nope!"){}
+class PswdChckViewIface;
+
+class PswdChckPresenterIface : virtual public PresenterBase {
+public:
+	PswdChckPresenterIface(FactoryIface& pFactory) : PresenterBase(pFactory) {
+	}
+
+	virtual PswdChckViewIface& getView() =0;
+
+	virtual ~PswdChckPresenterIface() {}
+
 };
 
 }  // namespace trihlav
 
-#endif /* TRIHLAV_MOCK_STREDIT_HPP_ */
+
+
+#endif /* TRIHLAV_PSWD_CHCK_PRESENTER_IFACE_HPP_ */

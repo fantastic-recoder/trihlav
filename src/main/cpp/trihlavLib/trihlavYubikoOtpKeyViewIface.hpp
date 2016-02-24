@@ -32,9 +32,9 @@
 
 namespace trihlav {
 
-class ISpinBox;
-class IStrEdit;
-class IButton;
+class SpinBoxIface;
+class StrEditIface;
+class ButtonIface;
 
 class YubikoOtpKeyViewIface : private boost::noncopyable {
 public:
@@ -43,35 +43,35 @@ public:
     AcceptedSignal& getAcceptedSignal() { return itsAcceptedSignal; }
     const AcceptedSignal& getAcceptedSignal() const { return itsAcceptedSignal; }
 
-	virtual const IStrEdit& getEdtPublicId() const = 0;
-	virtual IStrEdit& getEdtPublicId() = 0;
+	virtual const StrEditIface& getEdtPublicId() const = 0;
+	virtual StrEditIface& getEdtPublicId() = 0;
 
-	virtual IStrEdit& getEdtDescription() = 0;
-	virtual const IStrEdit& getEdtDescription() const = 0;
+	virtual StrEditIface& getEdtDescription() = 0;
+	virtual const StrEditIface& getEdtDescription() const = 0;
 
-	virtual ISpinBox& getSbxPublicIdLen() = 0;
-	virtual const ISpinBox& getSbxPublicIdLen() const = 0;
+	virtual SpinBoxIface& getSbxPublicIdLen() = 0;
+	virtual const SpinBoxIface& getSbxPublicIdLen() const = 0;
 
-	virtual const IStrEdit& getEdtPrivateId() const = 0;
-	virtual IStrEdit& getEdtPrivateId() = 0;
+	virtual const StrEditIface& getEdtPrivateId() const = 0;
+	virtual StrEditIface& getEdtPrivateId() = 0;
 
-	virtual const IStrEdit& getEdtSecretKey() const = 0;
-	virtual IStrEdit& getEdtSecretKey() = 0;
+	virtual const StrEditIface& getEdtSecretKey() const = 0;
+	virtual StrEditIface& getEdtSecretKey() = 0;
 
-	virtual const IButton&  getBtnGenPublicId() const = 0;
-	virtual IButton&  getBtnGenPublicId() = 0;
+	virtual const ButtonIface&  getBtnGenPublicId() const = 0;
+	virtual ButtonIface&  getBtnGenPublicId() = 0;
 
-	virtual const IButton&  getBtnGenPrivateId() const = 0;
-	virtual IButton&  getBtnGenPrivateId() = 0;
+	virtual const ButtonIface&  getBtnGenPrivateId() const = 0;
+	virtual ButtonIface&  getBtnGenPrivateId() = 0;
 
-	virtual const IButton&  getBtnGenSecretKey() const = 0;
-	virtual IButton&  getBtnGenSecretKey() = 0;
+	virtual const ButtonIface&  getBtnGenSecretKey() const = 0;
+	virtual ButtonIface&  getBtnGenSecretKey() = 0;
 
-	virtual const IButton&  getBtnCancel() const = 0;
-	virtual IButton&  getBtnCancel() = 0;
+	virtual const ButtonIface&  getBtnCancel() const = 0;
+	virtual ButtonIface&  getBtnCancel() = 0;
 
-	virtual const IButton&  getBtnSave() const = 0;
-	virtual IButton&  getBtnSave() = 0;
+	virtual const ButtonIface&  getBtnSave() const = 0;
+	virtual ButtonIface&  getBtnSave() = 0;
 
 	virtual void show() = 0;
 
