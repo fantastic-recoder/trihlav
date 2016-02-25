@@ -130,7 +130,7 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 				K_SEC_KEY_SZ, mySecretKey.size());
 	}
 	if (getSecretKey() != pKey) {
-		yubikey_hex_decode(reinterpret_cast<char*>(itsKey), mySecretKey.c_str(),
+		yubikey_hex_decode(reinterpret_cast<char*>(itsKey.data()), mySecretKey.c_str(),
 		YUBIKEY_KEY_SIZE);
 		itsChangedFlag = true;
 	}

@@ -11,8 +11,8 @@
 
 #include <boost/filesystem.hpp>
 
-#include "../../main/cpp/trihlavLib/trihlavEditIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavEditIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
@@ -78,10 +78,10 @@ TEST( trihlavApi, testGenerateAndParse) {
 	const uint8_t myKey[YUBIKEY_KEY_SIZE] = { 0xaa, 0xff, 0x0c, 0x00, 0xa1,
 			0xef, 0x1c, 0x10, 0xa2, 0xdf, 0x3c, 0x30, 0xa3, 0xff, 0xcc, 0x60 };
 	const char K_Y_UID[YUBIKEY_UID_SIZE + 1] = "012543";
+	BOOST_LOG_TRIVIAL(debug)<< "sizeof(time_t)==%d",int(sizeof(time_t));
 	/* Generate OTP */
 	yubikey_token_st myToken, myTokenBack;
 	const size_t K_YBK_TKEN_SZ = sizeof(myToken);
-	BOOST_LOG_TRIVIAL(debug)<< "sizeof(time_t)==%d",int(sizeof(time_t));
 	UTimestamp myTstp;
 	myTstp.tstp_int = time(0);
 	memcpy(&myToken.uid, K_Y_UID, YUBIKEY_UID_SIZE);

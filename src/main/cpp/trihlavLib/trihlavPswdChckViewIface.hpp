@@ -29,12 +29,15 @@
 #ifndef TRIHLAV_PSWD_CHECK_VIEW_IFACE_HPP_
 #define TRIHLAV_PSWD_CHECK_VIEW_IFACE_HPP_
 
-#include "trihlavViewIface.hpp"
+#include "trihlavLib/trihlavViewIface.hpp"
 
 namespace trihlav {
 
+class ButtonIface;
+
 class PswdChckViewIface : virtual public ViewIface {
 public:
+	ButtonIface& getOkButton();
 	virtual ~PswdChckViewIface(){}
 };
 

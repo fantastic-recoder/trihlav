@@ -23,6 +23,7 @@ protected:
 	void zeroToken();
 
 public:
+	using SecretKeyArr=std::array<uint8_t,YUBIKEY_KEY_SIZE>;
 	/**
 	 * @brief YubikoOtpKeyConfig::YubikoOtpKeyConfig
 	 */
@@ -174,6 +175,15 @@ public:
 	}
 
 	/**
+	 * @see getSecretKey()
+	 *
+	 * @return the secret key binnary array.
+	 */
+	const SecretKeyArr& getSecretKeyArray() const {
+		return itsKey;
+	}
+
+	/**
 	 * @see setSecretKey(const std::string& pKey)
 	 *
 	 * @return the secret key, hex encoded.
@@ -222,7 +232,7 @@ private:
 	bool itsChangedFlag; //< will be set internal when something changed
 	bfs::path itsFilename; //< where to store it
 	yubikey_token_st itsToken;
-	uint8_t itsKey[YUBIKEY_KEY_SIZE];
+	SecretKeyArr itsKey;
 	std::string itsDescription; //< Users free text describing the key
 	KeyManager& itsKeyManager; //< Global functionality & data
 
