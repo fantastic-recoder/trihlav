@@ -48,3 +48,19 @@ target_link_libraries(trihlavTestKeyListPresenter
                       libgtest
     				  libgmock
                       )
+
+add_executable( trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp 
+	trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+	trihlavMockYubikoOtpKeyView.cpp
+	)
+
+add_test( NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter )
+
+target_link_libraries(trihlavTestPswdChckPresenter
+                      ${Boost_LIBRARIES}
+                      ${YUBIKEY_LIB}
+                      trihlavApi
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      libgtest
+    				  libgmock
+                      )

@@ -39,7 +39,7 @@ class FactoryIface;
 class PswdChckViewIface;
 
 class PswdChckPresenter: public PswdChckPresenterIface {
-	PswdChckViewIface* itsView;
+	mutable PswdChckViewIface* itsView;
 public:
 	PswdChckPresenter(FactoryIface& pFactory);
 	virtual ~PswdChckPresenter();
