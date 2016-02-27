@@ -34,6 +34,7 @@
 namespace trihlav {
 
 class PswdChckViewIface;
+class MessageViewIface;
 
 class PswdChckPresenterIface : virtual public PresenterBase {
 public:
@@ -41,6 +42,7 @@ public:
 	}
 
 	virtual PswdChckViewIface& getView() =0;
+	virtual MessageViewIface& getMessageView() =0;
 
 	virtual ~PswdChckPresenterIface() {}
 

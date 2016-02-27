@@ -37,6 +37,8 @@
 #include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
+#include "trihlavMockMessageView.hpp"
+#include "trihlavMockPswdCheckView.hpp"
 
 using ::testing::Return;
 using ::testing::ReturnRef;
@@ -64,6 +66,24 @@ MockFactory::MockFactory() {
 			{
 				BOOST_LOG_NAMED_SCOPE("MockFactory::createKeyListView");
 				auto myRetVal=new NiceMock<MockKeyListView>;
+				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
+				return myRetVal;
+			}));
+
+	ON_CALL(*this, createMessageView()) //
+	.WillByDefault(Invoke([]()->MessageViewIface* //
+			{
+				BOOST_LOG_NAMED_SCOPE("MockFactory::createMessageView");
+				auto myRetVal=new NiceMock<MockMessageView>;
+				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
+				return myRetVal;
+			}));
+
+	ON_CALL(*this, createPswdChckView()) //
+	.WillByDefault(Invoke([]()->PswdChckViewIface* //
+			{
+				BOOST_LOG_NAMED_SCOPE("MockFactory::createPswdChckView");
+				auto myRetVal=new NiceMock<MockPswdCheckView>;
 				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
 				return myRetVal;
 			}));

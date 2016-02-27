@@ -25,26 +25,19 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_WT_UI_FACTORY_HPP_
-#define TRIHLAV_WT_UI_FACTORY_HPP_
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/locale/message.hpp>
+#include <boost/format.hpp>
 
-#include "../trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavMessageViewIface.hpp"
 
 namespace trihlav {
 
-class YubikoOtpKeyPresenterIface;
-
-class WtUiFactory: virtual public FactoryIface {
-public:
-	WtUiFactory();
-	virtual ~WtUiFactory();
-	virtual MainPanelViewIface* createMainPanelView();
-	virtual KeyListViewIface* createKeyListView();
-	virtual PswdChckViewIface* createPswdChckView();
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView();
-	virtual MessageViewIface* createMessageView();
-};
+MessageViewIface::~MessageViewIface() {
+	BOOST_LOG_NAMED_SCOPE("MessagePresenterIface::~MessageViewIface");
+}
 
 } /* namespace trihlav */
-
-#endif /* TRIHLAV_WT_UI_FACTORY_HPP_ */

@@ -11,6 +11,7 @@
 #include "trihlavWtPswdChckView.hpp"
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavWtKeyListView.hpp"
+#include "trihlavWtMessageView.hpp"
 #include "trihlavWtYubikoOtpKeyView.hpp"
 
 namespace trihlav {
@@ -43,6 +44,10 @@ PswdChckViewIface* WtUiFactory::createPswdChckView() {
 
 YubikoOtpKeyViewIface* WtUiFactory::createYubikoOtpKeyView() {
 	return new WtYubikoOtpKeyView();
+}
+
+MessageViewIface* WtUiFactory::createMessageView() {
+	return new WtMessageView();
 }
 
 } /* namespace trihlav */

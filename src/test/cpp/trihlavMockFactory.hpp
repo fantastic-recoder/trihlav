@@ -31,7 +31,7 @@
 #include <memory>
 #include <gmock/gmock.h>
 
-#include "../../main/cpp/trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavFactoryIface.hpp"
 
 namespace trihlav {
 
@@ -47,9 +47,9 @@ struct MockFactory: virtual public FactoryIface {
 	MOCK_METHOD0(createMainPanelView,MainPanelViewIface* ());
 	MOCK_METHOD0(createKeyListPresenter,KeyListPresenterIface* () );
 	MOCK_METHOD0(createKeyListView,KeyListViewIface* () );
-	MOCK_METHOD0(createPswdChckPresenter,PswdChckPresenterIface* () );
 	MOCK_METHOD0(createPswdChckView,PswdChckViewIface* () );
 	MOCK_METHOD0(createYubikoOtpKeyView,YubikoOtpKeyViewIface* () );
+	MOCK_METHOD0(createMessageView, MessageViewIface* () );
 	MockFactory();
 	virtual ~MockFactory(){}
 };

@@ -25,26 +25,17 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_WT_UI_FACTORY_HPP_
-#define TRIHLAV_WT_UI_FACTORY_HPP_
-
-#include "../trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavMockPswdCheckView.hpp"
 
 namespace trihlav {
 
-class YubikoOtpKeyPresenterIface;
+MockPswdCheckView::MockPswdCheckView() {
+	// TODO Auto-generated constructor stub
 
-class WtUiFactory: virtual public FactoryIface {
-public:
-	WtUiFactory();
-	virtual ~WtUiFactory();
-	virtual MainPanelViewIface* createMainPanelView();
-	virtual KeyListViewIface* createKeyListView();
-	virtual PswdChckViewIface* createPswdChckView();
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView();
-	virtual MessageViewIface* createMessageView();
-};
+}
+
+MockPswdCheckView::~MockPswdCheckView() {
+	// TODO Auto-generated destructor stub
+}
 
 } /* namespace trihlav */
-
-#endif /* TRIHLAV_WT_UI_FACTORY_HPP_ */

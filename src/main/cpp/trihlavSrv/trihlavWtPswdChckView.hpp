@@ -38,14 +38,21 @@ namespace Wt {
 
 namespace trihlav {
 
+class WtPushButton;
+class WtStrEdit;
+
 class WtPswdChckView: virtual public PswdChckViewIface, virtual public WtViewIface {
 public:
 	WtPswdChckView();
 	virtual Wt::WWidget* getWWidget();
 	virtual ~WtPswdChckView();
 	virtual void setupUi();
+	virtual ButtonIface& getBtnOk() override;
+	virtual StrEditIface& getEdtPswd0() override;
 private:
 	Wt::WContainerWidget* itsMainPanel;
+	WtPushButton* itsBtnOk;
+	WtStrEdit* itsEdtPswd;
 };
 
 } /* namespace trihlav */

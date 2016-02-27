@@ -27,13 +27,14 @@
  */
 
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
-#include "trihlavFactoryIface.hpp"
-#include "trihlavPswdChckViewIface.hpp"
+#include "trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavPswdChckViewIface.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
 
 namespace trihlav {
 
 PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
-		PswdChckPresenterIface(pFactory), //< forced by virtua inheritance
+		PswdChckPresenterIface(pFactory), //< forced by virtual inheritance
 		PresenterBase(pFactory), //< has a factory
 		itsView(0) //< initialize view
 {
@@ -49,8 +50,17 @@ PswdChckViewIface& PswdChckPresenter::getView()
 	return *itsView;
 }
 
+MessageViewIface& PswdChckPresenter::getMessageView()
+{
+	if(!itsMessageView) {
+		itsMessageView=getFactory().createMessageView();
+	}
+	return *itsMessageView;
+}
+
 PswdChckPresenter::~PswdChckPresenter() {
 	delete itsView;
+	delete itsMessageView;
 }
 
 } /* namespace trihlav */

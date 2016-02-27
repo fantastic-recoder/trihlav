@@ -25,26 +25,20 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_WT_UI_FACTORY_HPP_
-#define TRIHLAV_WT_UI_FACTORY_HPP_
+#ifndef TRIHLAV_WT_MESSAGE_VIEW_HPP_
+#define TRIHLAV_WT_MESSAGE_VIEW_HPP_
 
-#include "../trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
 
 namespace trihlav {
 
-class YubikoOtpKeyPresenterIface;
-
-class WtUiFactory: virtual public FactoryIface {
+class WtMessageView: virtual public MessageViewIface {
 public:
-	WtUiFactory();
-	virtual ~WtUiFactory();
-	virtual MainPanelViewIface* createMainPanelView();
-	virtual KeyListViewIface* createKeyListView();
-	virtual PswdChckViewIface* createPswdChckView();
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView();
-	virtual MessageViewIface* createMessageView();
+	virtual void showMessage(const std::string& pHeader, const std::string& pMsg) override;
+	WtMessageView();
+	virtual ~WtMessageView();
 };
 
 } /* namespace trihlav */
 
-#endif /* TRIHLAV_WT_UI_FACTORY_HPP_ */
+#endif /* TRIHLAV_WT_MESSAGE_VIEW_HPP_ */

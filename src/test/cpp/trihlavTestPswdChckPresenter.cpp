@@ -36,9 +36,7 @@
 
 #include "trihlavLib/trihlavButtonIface.hpp"
 #include "trihlavLib/trihlavFactoryIface.hpp"
-#include "trihlavLib/trihlavKeyListViewIface.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
@@ -46,14 +44,15 @@
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavPswdChckViewIface.hpp"
+#include "trihlavLib/trihlavPswdChckPresenter.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
 #include "trihlavMockSpinBox.hpp"
 #include "trihlavMockFactory.hpp"
 #include "trihlavMockEditIface.hpp"
-
-#include "trihlavLib/trihlavPswdChckPresenter.hpp"
+#include "trihlavMockMessageView.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -106,6 +105,12 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	char myOtp0[YUBIKEY_OTP_SIZE + 1];
 	yubikey_generate(&myCfg0.getToken(), myCfg0.getSecretKeyArray().data(), myOtp0);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated key: " <<  myOtp0;
+	PswdChckPresenter myPresenter{myMockFactory};
+	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
+		(myPresenter.getMessageView());
+	EXPECT_CALL(myMockMessageView,showMessage("Password check","Password OK!"));
+	myPresenter.getView().getEdtPswd0().setValue(myOtp0);
+	myPresenter.getView().getBtnOk().getPressedSignal()();
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
 }

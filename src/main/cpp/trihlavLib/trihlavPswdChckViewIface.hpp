@@ -34,10 +34,12 @@
 namespace trihlav {
 
 class ButtonIface;
+class StrEditIface;
 
 class PswdChckViewIface : virtual public ViewIface {
 public:
-	ButtonIface& getOkButton();
+	virtual ButtonIface& getBtnOk()=0;
+	virtual StrEditIface& getEdtPswd0()=0;
 	virtual ~PswdChckViewIface(){}
 };
 

@@ -24,41 +24,23 @@
 
  Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-
  */
+#ifndef TRIHLAV_MOCK_MESSAGE_VIEW_HPP_
+#define TRIHLAV_MOCK_MESSAGE_VIEW_HPP_
 
-#ifndef TRIHLAV_FACTORY_IFACE_HPP_
-#define TRIHLAV_FACTORY_IFACE_HPP_
+#include <string>
+#include <gmock/gmock.h>
+#include "trihlavLib/trihlavMessageViewIface.hpp"
+
+#include "trihlavMockButton.hpp"
 
 namespace trihlav {
 
-class MainPanelViewIface;
-class KeyListPresenterIface;
-class KeyListViewIface;
-class PswdChckPresenterIface;
-class PswdChckViewIface;
-class YubikoOtpKeyViewIface;
-class YubikoOtpKeyPresenterIface;
-class MessagePresenterIface;
-class MessageViewIface;
-
-class KeyManager;
-
-class FactoryIface {
-public:
-	virtual ~FactoryIface() {
-	}
-	virtual MainPanelViewIface* createMainPanelView()=0;
-	virtual KeyListPresenterIface* createKeyListPresenter();
-	virtual KeyListViewIface* createKeyListView()=0;
-	virtual PswdChckPresenterIface* createPswdChckPresenter();
-	virtual PswdChckViewIface* createPswdChckView() =0;
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() =0;
-	virtual MessageViewIface* createMessageView() =0;
-	virtual const KeyManager& getKeyManager() const;
-	virtual KeyManager& getKeyManager();
+struct MockMessageView: virtual MessageViewIface, virtual boost::noncopyable {
+	MOCK_METHOD2(showMessage, void (const std::string&, const std::string&));//
 };
 
-}  // namespace trihlav
+}
+/* namespace trihlav */
 
-#endif /* TRIHLAV_FACTORY_IFACE_HPP_ */
+#endif /* TRIHLAV_MOCK_MESSAGE_VIEW_HPP_ */
