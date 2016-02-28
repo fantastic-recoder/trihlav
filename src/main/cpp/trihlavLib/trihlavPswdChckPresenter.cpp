@@ -26,10 +26,19 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+
+#include <boost/locale.hpp>
+
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
+#include "trihlavLib/trihlavButtonIface.hpp"
+
+using boost::locale::translate;
 
 namespace trihlav {
 
@@ -38,14 +47,15 @@ PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
 		PresenterBase(pFactory), //< has a factory
 		itsView(0) //< initialize view
 {
-	// TODO Auto-generated constructor stub
-
+	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::PswdChckPresenter");
 }
 
 PswdChckViewIface& PswdChckPresenter::getView()
 {
 	if(!itsView) {
+		BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::getView");
 		itsView=getFactory().createPswdChckView();
+		itsView->getBtnOk().getPressedSignal().connect([=](){okPressed();});
 	}
 	return *itsView;
 }
@@ -56,6 +66,12 @@ MessageViewIface& PswdChckPresenter::getMessageView()
 		itsMessageView=getFactory().createMessageView();
 	}
 	return *itsMessageView;
+}
+
+void
+PswdChckPresenter::okPressed() {
+	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
+	getMessageView().showMessage(translate("Trihlav message."),translate("Password not valid."));
 }
 
 PswdChckPresenter::~PswdChckPresenter() {

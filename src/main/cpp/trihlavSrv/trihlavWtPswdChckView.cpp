@@ -44,11 +44,14 @@ using boost::locale::translate;
 
 namespace trihlav {
 
-WtPswdChckView::WtPswdChckView() {
+WtPswdChckView::WtPswdChckView() //
+:itsBtnOk(new WtPushButton(translate("check")))
+,itsEdtPswd(new WtStrEdit)
+	{
 	itsMainPanel = new WContainerWidget();
 	itsMainPanel->addWidget(new WText(translate("Password 0").str()));
-	itsMainPanel->addWidget(new WtStrEdit);
-	itsMainPanel->addWidget(new WtPushButton(translate("check")));
+	itsMainPanel->addWidget(itsEdtPswd);
+	itsMainPanel->addWidget(itsBtnOk);
 }
 
 WtPswdChckView::~WtPswdChckView() {

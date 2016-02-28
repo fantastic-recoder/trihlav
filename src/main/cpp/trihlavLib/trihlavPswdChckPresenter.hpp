@@ -51,6 +51,7 @@ public:
 
 	PswdChckViewIface& getView() override;
 	MessageViewIface& getMessageView() override;
+	virtual void okPressed();
 };
 
 } /* namespace trihlav */
