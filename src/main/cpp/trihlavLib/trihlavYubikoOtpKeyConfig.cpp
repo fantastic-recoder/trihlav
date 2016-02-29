@@ -267,5 +267,19 @@ const string YubikoOtpKeyConfig::token2json() const {
 	return myOstr.str();
 }
 
+/**
+ * The Modhex encoding is described in Yubikey manual, as a start point You
+ * can read this: @link https://www.yubico.com/modhex-calculator/ .
+ *
+ * @return The public ID encoded in Modhex mode.
+ */
+const string YubikoOtpKeyConfig::getPublicIdModhex() const {
+	const unsigned long mySz=getPublicId().size()/2;
+	string myPubId(getPublicId().size()+1,'\0');
+	yubikey_modhex_encode(&myPubId[0],getPublicId().c_str(),mySz);
+	myPubId.resize(getPublicId().size());
+	return myPubId;
+}
+
 } // end namespace yuSerApi
 

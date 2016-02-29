@@ -104,7 +104,9 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 			sizeof(myCfg0.getToken()) - sizeof(myCfg0.getToken().crc));
 	char myOtp0[YUBIKEY_OTP_SIZE + 1];
 	yubikey_generate(&myCfg0.getToken(), myCfg0.getSecretKeyArray().data(), myOtp0);
-	BOOST_LOG_TRIVIAL(debug)<< "Generated key: " <<  myOtp0;
+	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (M)   : " << myCfg0.getPublicIdModhex() ;
+	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (H)   : " << myCfg0.getPublicId();
+	BOOST_LOG_TRIVIAL(debug)<< "Generated key: " << myOtp0;
 	PswdChckPresenter myPresenter{myMockFactory};
 	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
 		(myPresenter.getMessageView());

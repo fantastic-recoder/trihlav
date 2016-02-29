@@ -174,6 +174,8 @@ public:
 		this->itsPublicId = pPubId;
 	}
 
+	const std::string getPublicIdModhex() const;
+
 	/**
 	 * @see getSecretKey()
 	 *

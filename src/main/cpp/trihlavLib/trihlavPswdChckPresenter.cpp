@@ -71,6 +71,23 @@ MessageViewIface& PswdChckPresenter::getMessageView()
 void
 PswdChckPresenter::okPressed() {
 	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
+//	yubikey_token_st itsToken;
+//	yubikey_parse(reinterpret_cast<uint8_t*>(myOtp0), itsK, &myToken);
+//	logDebug_token(myToken);
+//	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
+//	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);
+//	EXPECT_TRUE(myTokenBack.use == myToken.use);
+//	EXPECT_TRUE(myTokenBack.tstph == myToken.tstph);
+//	EXPECT_TRUE(myTokenBack.tstpl == myToken.tstpl);
+//	EXPECT_TRUE(
+//			strncmp( reinterpret_cast<const char*>(&myTokenBack.uid),
+//					reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE)==0)
+//			<< "The uid-s are different!";
+//	uint16_t myCrc = yubikey_crc16(reinterpret_cast<uint8_t*>(&myToken),
+//	YUBIKEY_KEY_SIZE);
+//	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
+//	EXPECT_TRUE(yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)))
+//			<< "CRC failed!";
 	getMessageView().showMessage(translate("Trihlav message."),translate("Password not valid."));
 }
 
