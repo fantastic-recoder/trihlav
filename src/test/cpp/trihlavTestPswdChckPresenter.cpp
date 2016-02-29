@@ -74,6 +74,29 @@ public:
 	}
 };
 
+TEST_F(TestPswdChckPresenter,modhexDeAndEncoding) {
+	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::modhexDeAndEncoding");
+	const string myTstHex0("abcdef0123456789");
+	BOOST_LOG_TRIVIAL(debug)<< myTstHex0;
+	const string myTstMod0{YubikoOtpKeyConfig::hex2Modhex(myTstHex0)};
+	BOOST_LOG_TRIVIAL(debug)<< myTstMod0;
+	EXPECT_NE(myTstMod0,myTstHex0) << "Hex encoded and decoded strings should not be equal.";
+	const string myTstRes0{YubikoOtpKeyConfig::modhex2Hex(myTstMod0)};
+	BOOST_LOG_TRIVIAL(debug)<< myTstRes0;
+	EXPECT_EQ(myTstHex0,myTstRes0) << "Hex encoded and re-decoded strings should be equal.";
+}
+
+TEST_F(TestPswdChckPresenter,passwordMayNotBeEmpty) {
+	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::passwordMayNotBeEmpty");
+	NiceMock<MockFactory> myMockFactory;
+	PswdChckPresenter myPresenter{myMockFactory};
+	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
+		(myPresenter.getMessageView());
+	EXPECT_CALL(myMockMessageView,showMessage("Trihlav password check.","Password is too short!"));
+	myPresenter.getView().getEdtPswd0().setValue("");
+	myPresenter.getView().getBtnOk().getPressedSignal()();
+}
+
 static const char* K_TST_DESC0 = "Test key 1";
 static const char* K_TST_PRIV0="aabbaabbaabb";
 static const char* K_TST_PUBL0="ccddccddccdd";
@@ -111,7 +134,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
 		(myPresenter.getMessageView());
 	EXPECT_CALL(myMockMessageView,showMessage("Password check","Password OK!"));
-	myPresenter.getView().getEdtPswd0().setValue(myOtp0);
+	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicIdModhex()+myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));

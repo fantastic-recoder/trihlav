@@ -229,6 +229,10 @@ public:
 
 	const std::string token2json() const ;
 
+	static const std::string hex2Modhex(const std::string& p2Modhex);
+
+	static const std::string modhex2Hex(const std::string& p2Hex);
+
 private:
 	std::string itsPublicId; //< Keys public ID max 6 characters.
 	bool itsChangedFlag; //< will be set internal when something changed

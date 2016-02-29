@@ -26,18 +26,23 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 
 #include <boost/locale.hpp>
 
+#include <yubikey.h>
+
+#include "trihlavLib/trihlavEditIface.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
 #include "trihlavLib/trihlavButtonIface.hpp"
 
+using std::string;
 using boost::locale::translate;
 
 namespace trihlav {
@@ -50,27 +55,32 @@ PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
 	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::PswdChckPresenter");
 }
 
-PswdChckViewIface& PswdChckPresenter::getView()
-{
-	if(!itsView) {
+PswdChckViewIface& PswdChckPresenter::getView() {
+	if (!itsView) {
 		BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::getView");
-		itsView=getFactory().createPswdChckView();
-		itsView->getBtnOk().getPressedSignal().connect([=](){okPressed();});
+		itsView = getFactory().createPswdChckView();
+		itsView->getBtnOk().getPressedSignal().connect([=]() {okPressed();});
 	}
 	return *itsView;
 }
 
-MessageViewIface& PswdChckPresenter::getMessageView()
-{
-	if(!itsMessageView) {
-		itsMessageView=getFactory().createMessageView();
+MessageViewIface& PswdChckPresenter::getMessageView() {
+	if (!itsMessageView) {
+		itsMessageView = getFactory().createMessageView();
 	}
 	return *itsMessageView;
 }
 
-void
-PswdChckPresenter::okPressed() {
+void PswdChckPresenter::okPressed() {
 	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
+	string myPswd0(getView().getEdtPswd0().getValue());
+	if (myPswd0.size() < YUBIKEY_OTP_SIZE) {
+		getView().getEdtPswd0().setValue("");
+		getMessageView().showMessage( //
+				translate("Trihlav password check."), //
+				translate("Password is too short!"));
+		return;
+	}
 //	yubikey_token_st itsToken;
 //	yubikey_parse(reinterpret_cast<uint8_t*>(myOtp0), itsK, &myToken);
 //	logDebug_token(myToken);
@@ -88,7 +98,8 @@ PswdChckPresenter::okPressed() {
 //	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
 //	EXPECT_TRUE(yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)))
 //			<< "CRC failed!";
-	getMessageView().showMessage(translate("Trihlav message."),translate("Password not valid."));
+	getMessageView().showMessage(translate("Trihlav message."),
+			translate("Password is not valid."));
 }
 
 PswdChckPresenter::~PswdChckPresenter() {

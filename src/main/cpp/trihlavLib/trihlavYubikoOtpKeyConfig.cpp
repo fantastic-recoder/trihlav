@@ -2,6 +2,7 @@
 #include <iostream>
 #include <exception>
 #include <sstream>
+#include <vector>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -22,6 +23,8 @@ using std::cout;
 using std::ostringstream;
 using std::string;
 using std::out_of_range;
+using std::vector;
+
 using boost::trim;
 using boost::format;
 using boost::property_tree::ptree;
@@ -130,8 +133,9 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 				K_SEC_KEY_SZ, mySecretKey.size());
 	}
 	if (getSecretKey() != pKey) {
-		yubikey_hex_decode(reinterpret_cast<char*>(itsKey.data()), mySecretKey.c_str(),
-		YUBIKEY_KEY_SIZE);
+		yubikey_hex_decode(reinterpret_cast<char*>(itsKey.data()),
+				mySecretKey.c_str(),
+				YUBIKEY_KEY_SIZE);
 		itsChangedFlag = true;
 	}
 }
@@ -223,7 +227,7 @@ void YubikoOtpKeyConfig::save() {
 bool YubikoOtpKeyConfig::operator ==(const YubikoOtpKeyConfig& pOther) const {
 	if (memcmp(&this->getToken(), &pOther.getToken(), sizeof(yubikey_token_st))
 			!= 0) {
-		BOOST_LOG_TRIVIAL(debug) << "Token "
+		BOOST_LOG_TRIVIAL(debug)<< "Token "
 		<< this->token2json() << "!=" << pOther.token2json();
 		return false;
 	}
@@ -268,16 +272,44 @@ const string YubikoOtpKeyConfig::token2json() const {
 }
 
 /**
- * The Modhex encoding is described in Yubikey manual, as a start point You
- * can read this: @link https://www.yubico.com/modhex-calculator/ .
- *
  * @return The public ID encoded in Modhex mode.
  */
 const string YubikoOtpKeyConfig::getPublicIdModhex() const {
-	const unsigned long mySz=getPublicId().size()/2;
-	string myPubId(getPublicId().size()+1,'\0');
-	yubikey_modhex_encode(&myPubId[0],getPublicId().c_str(),mySz);
-	myPubId.resize(getPublicId().size());
+	return hex2Modhex(getPublicId());
+}
+
+/**
+ * The Modhex encoding is described in Yubikey manual, as a start point You
+ * can read this: @link https://www.yubico.com/modhex-calculator/ .
+ * @param p2Modhex what to encode.
+ * @return input Modhex encoded.
+ *
+ */
+const string YubikoOtpKeyConfig::hex2Modhex(const string& p2Modhex) {
+	const unsigned long mySz = p2Modhex.size();
+	const unsigned long mySz2 = mySz/2;
+	vector<uint8_t> myBytes(mySz2,uint8_t(0));
+	yubikey_hex_decode(reinterpret_cast<char*>(&myBytes[0]),p2Modhex.c_str(),mySz);
+	string myPubId(mySz + 1, '\0');
+	yubikey_modhex_encode(&myPubId[0], reinterpret_cast<char*>(&myBytes[0]), mySz2);
+	myPubId.resize(mySz);
+	return myPubId;
+}
+
+/**
+ * @see const string hex2Modhex(const string& p2Modhex) const;
+ * @param p2Hex what to decode.
+ * @return input from Modhex decoded.
+ *
+ */
+const string YubikoOtpKeyConfig::modhex2Hex(const std::string& p2Hex) {
+	const unsigned long mySz = p2Hex.size();
+	const unsigned long mySz2 = mySz/2;
+	vector<uint8_t> myBytes(mySz2,uint8_t(0));
+	yubikey_modhex_decode(reinterpret_cast<char*>(&myBytes[0]),p2Hex.c_str(),mySz2);
+	string myPubId(mySz + 1, '\0');
+	yubikey_hex_encode(&myPubId[0], reinterpret_cast<char*>(&myBytes[0]), mySz2);
+	myPubId.resize(mySz);
 	return myPubId;
 }
 
