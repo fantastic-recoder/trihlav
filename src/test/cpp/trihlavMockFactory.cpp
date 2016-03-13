@@ -33,8 +33,8 @@
 
 #include "trihlavMockFactory.hpp"
 
-#include "../../main/cpp/trihlavLib/trihlavKeyListViewIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavKeyListViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
 #include "trihlavMockMessageView.hpp"

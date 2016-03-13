@@ -145,9 +145,9 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	myCfg2.save();
 	myKeyMan.loadKeys();
 	EXPECT_EQ(3,myKeyMan.getKeyCount());
-	const YubikoOtpKeyConfig& myCfg01(myKeyMan.getKeyByPublicId(myCfg0.getPublicId()));
-	const YubikoOtpKeyConfig& myCfg11(myKeyMan.getKeyByPublicId(myCfg1.getPublicId()));
-	const YubikoOtpKeyConfig& myCfg21(myKeyMan.getKeyByPublicId(myCfg2.getPublicId()));
+	const YubikoOtpKeyConfig& myCfg01(*myKeyMan.getKeyByPublicId(myCfg0.getPublicId()));
+	const YubikoOtpKeyConfig& myCfg11(*myKeyMan.getKeyByPublicId(myCfg1.getPublicId()));
+	const YubikoOtpKeyConfig& myCfg21(*myKeyMan.getKeyByPublicId(myCfg2.getPublicId()));
 	EXPECT_EQ(myCfg0,myCfg01);
 	EXPECT_EQ(myCfg1,myCfg11);
 	EXPECT_EQ(myCfg2,myCfg21);

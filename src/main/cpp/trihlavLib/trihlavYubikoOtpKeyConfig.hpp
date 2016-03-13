@@ -233,6 +233,8 @@ public:
 
 	static const std::string modhex2Hex(const std::string& p2Hex);
 
+	/// @brief check a modhex encoded password
+	bool checkPassword(const std::string& pPswd2check);
 private:
 	std::string itsPublicId; //< Keys public ID max 6 characters.
 	bool itsChangedFlag; //< will be set internal when something changed

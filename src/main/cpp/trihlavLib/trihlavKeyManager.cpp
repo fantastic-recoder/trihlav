@@ -408,15 +408,33 @@ const YubikoOtpKeyConfig& KeyManager::getKey(const size_t pIdx) const {
 	return *(itsKeyList[pIdx]);
 }
 
-const YubikoOtpKeyConfig& KeyManager::getKeyByPublicId(
+/**
+ * @param pPubId modhex encoded public id prefix.
+ */
+const YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(
 		const string& pPubId) const {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::getKeyByPublicId const");
 	auto myKey=itsKeyMapByPublicId.find(pPubId);
 	if (myKey == itsKeyMapByPublicId.end()) {
-		throw new std::range_error(
-				(format("Key with public ID %1% is not indexed.") % pPubId).str());
+		BOOST_LOG_TRIVIAL(warning)<< "Key prefixed " << pPubId << " has not been found.";
+		return 0;
 	}
-	return *(myKey->second);
+	return myKey->second.get();
 }
+
+/**
+ * @see getKeyByPublicId(const string& pPubId) const
+ */
+YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(const string& pPubId) {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::getKeyByPublicId");
+	auto myKey=itsKeyMapByPublicId.find(pPubId);
+	if (myKey == itsKeyMapByPublicId.end()) {
+		BOOST_LOG_TRIVIAL(warning)<< "Key prefixed " << pPubId << " has not been found.";
+		return 0;
+	}
+	return myKey->second.get();
+}
+
 }
 
 /* namespace trihlav */

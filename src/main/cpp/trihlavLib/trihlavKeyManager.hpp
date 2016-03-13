@@ -53,7 +53,10 @@ public:
     const YubikoOtpKeyConfig& getKey( const size_t pIdx) const;
 
     /// @brief Access an loaded key.
-    const YubikoOtpKeyConfig& getKeyByPublicId( const std::string& pPubId) const;
+    const YubikoOtpKeyConfig* getKeyByPublicId( const std::string& pPubId) const;
+
+    /// @brief Access an loaded key.
+    YubikoOtpKeyConfig* getKeyByPublicId( const std::string& pPubId);
 
     /// @brief Get users home directory
     static const path getHome();

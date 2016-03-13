@@ -133,7 +133,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	PswdChckPresenter myPresenter{myMockFactory};
 	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
 		(myPresenter.getMessageView());
-	EXPECT_CALL(myMockMessageView,showMessage("Password check","Password OK!"));
+	EXPECT_CALL(myMockMessageView,showMessage("Trihlav password check.","Password OK!"));
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicIdModhex()+myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 	remove_all(myTestCfgFile);

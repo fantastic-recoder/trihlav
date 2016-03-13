@@ -41,6 +41,8 @@
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
 #include "trihlavLib/trihlavButtonIface.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 
 using std::string;
 using boost::locale::translate;
@@ -74,31 +76,31 @@ MessageViewIface& PswdChckPresenter::getMessageView() {
 void PswdChckPresenter::okPressed() {
 	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
 	string myPswd0(getView().getEdtPswd0().getValue());
-	if (myPswd0.size() < YUBIKEY_OTP_SIZE) {
+	const size_t myPswdSz(myPswd0.size());
+	if (myPswdSz < YUBIKEY_OTP_SIZE) {
 		getView().getEdtPswd0().setValue("");
 		getMessageView().showMessage( //
 				translate("Trihlav password check."), //
 				translate("Password is too short!"));
 		return;
 	}
-//	yubikey_token_st itsToken;
-//	yubikey_parse(reinterpret_cast<uint8_t*>(myOtp0), itsK, &myToken);
-//	logDebug_token(myToken);
-//	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
-//	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);
-//	EXPECT_TRUE(myTokenBack.use == myToken.use);
-//	EXPECT_TRUE(myTokenBack.tstph == myToken.tstph);
-//	EXPECT_TRUE(myTokenBack.tstpl == myToken.tstpl);
-//	EXPECT_TRUE(
-//			strncmp( reinterpret_cast<const char*>(&myTokenBack.uid),
-//					reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE)==0)
-//			<< "The uid-s are different!";
-//	uint16_t myCrc = yubikey_crc16(reinterpret_cast<uint8_t*>(&myToken),
-//	YUBIKEY_KEY_SIZE);
-//	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
-//	EXPECT_TRUE(yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)))
-//			<< "CRC failed!";
-	getMessageView().showMessage(translate("Trihlav message."),
+	// Find the key ...
+	if(myPswdSz==YUBIKEY_OTP_SIZE) {
+		getMessageView().showMessage( //
+				translate("Trihlav password check."), //
+				translate("Keys without public prefix are not yet supported!"));
+		return;
+	}
+	const string myPrefix=myPswd0.substr(0,myPswdSz-YUBIKEY_OTP_SIZE);
+	const string myPswdSx=myPswd0.substr(myPswdSz);
+	BOOST_LOG_TRIVIAL(info)<< "Checking " << myPrefix << ":" << myPswdSx;
+	auto& myManager=getFactory().getKeyManager();
+	const auto& myKey = myManager.getKeyByPublicId(myPrefix);
+	if(myKey->checkPassword(myPswdSx)) {
+		getMessageView().showMessage(translate("Trihlav password check."),
+				translate("Password OK."));
+	}
+	getMessageView().showMessage(translate("Trihlav password check."),
 			translate("Password is not valid."));
 }
 
