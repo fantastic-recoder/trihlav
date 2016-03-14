@@ -3,6 +3,8 @@
 #include <exception>
 #include <sstream>
 #include <vector>
+#include <array>
+
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -14,6 +16,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/format.hpp>
 
+#include "pretty.hpp"
+
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "yubikey.h"
 #include "trihlavLib/trihlavWrongConfigValue.hpp"
@@ -24,12 +28,20 @@ using std::ostringstream;
 using std::string;
 using std::out_of_range;
 using std::vector;
+using std::array;
 
 using boost::trim;
 using boost::format;
 using boost::property_tree::ptree;
 using boost::filesystem::path;
 using boost::filesystem::unique_path;
+//using pretty::decoration;
+
+#include "pretty.hpp"
+
+typedef array<uint8_t,YUBIKEY_UID_SIZE + 1> OTP_t;
+
+PRETTY_DEFAULT_DECORATION(vector<int>, "[[", "||", ">")
 
 namespace {
 static constexpr uintmax_t K_MX_KEY_FILE_SZ = 1024;
@@ -313,10 +325,17 @@ const string YubikoOtpKeyConfig::modhex2Hex(const std::string& p2Hex) {
 	return myPubId;
 }
 
+	/**
+	 * @param pPswd2check modhex encoded
+	 */
 bool YubikoOtpKeyConfig::checkPassword(
 		const std::string& pPswd2check) {
-	//	yubikey_token_st itsToken;
-	//	yubikey_parse(reinterpret_cast<uint8_t*>(myOtp0), itsK, &myToken);
+		yubikey_token_st myToken;
+		OTP_t myPswd;
+		yubikey_modhex_decode(reinterpret_cast<char*>(myPswd.data()),
+				pPswd2check.c_str(),YUBIKEY_UID_SIZE);
+		//BOOST_LOG_TRIVIAL(debug)<< "PSWD: " << pretty::decoration<decltype(myPswd)>(myPswd) ;
+		yubikey_parse(myPswd.data(), this->getSecretKeyArray().data(), &myToken);
 	//	logDebug_token(myToken);
 	//	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
 	//	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);

@@ -64,3 +64,10 @@ target_link_libraries(trihlavTestPswdChckPresenter
                       libgtest
     				  libgmock
                       )
+
+add_executable( pretty_example pretty_example.cc )
+
+target_link_libraries(pretty_example
+                      ${Boost_LIBRARIES}
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      )
