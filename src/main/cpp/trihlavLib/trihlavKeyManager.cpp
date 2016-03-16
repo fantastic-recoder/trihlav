@@ -435,6 +435,21 @@ YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(const string& pPubId) {
 	return myKey->second.get();
 }
 
+void KeyManager::update(const std::string& pPubId, YubikoOtpKeyConfig& pKey) {
+	if(!pPubId.empty()) {
+		const auto myIt=itsKeyMapByPublicId.find(pPubId);
+		if( myIt != itsKeyMapByPublicId.end()) {
+			YubikoOtpKeyConfigPtr myFoundKey=myIt->second;
+			if(myFoundKey->getPrivateId().compare(pKey.getPrivateId())==0) {
+				itsKeyMapByPublicId.erase(myIt);
+			}
+			itsKeyMapByPublicId[pKey.getPublicId()]= YubikoOtpKeyConfigPtr{&pKey};
+		} else {
+			BOOST_LOG_TRIVIAL(debug) << "Public id " << pPubId << " has not been found.";
+		}
+	}
+}
+
 }
 
 /* namespace trihlav */

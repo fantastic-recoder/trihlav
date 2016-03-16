@@ -170,9 +170,8 @@ public:
 		return itsPublicId;
 	}
 
-	void setPublicId(const std::string& pPubId) {
-		this->itsPublicId = pPubId;
-	}
+	/// @brief Set the public id and update indexes.
+	void setPublicId(const std::string& pPubId);
 
 	const std::string getPublicIdModhex() const;
 

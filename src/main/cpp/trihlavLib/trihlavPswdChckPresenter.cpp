@@ -91,16 +91,23 @@ void PswdChckPresenter::okPressed() {
 				translate("Keys without public prefix are not yet supported!"));
 		return;
 	}
-	const string myPrefix=myPswd0.substr(0,myPswdSz-YUBIKEY_OTP_SIZE);
-	const string myPswdSx=myPswd0.substr(myPswdSz);
-	BOOST_LOG_TRIVIAL(info)<< "Checking " << myPrefix << ":" << myPswdSx;
+	const size_t myPfxLen{myPswdSz-YUBIKEY_OTP_SIZE};
+	const string myPrefix=myPswd0.substr(0,myPfxLen);
+	const string myPswdSx=myPswd0.substr(myPfxLen);
+	BOOST_LOG_TRIVIAL(info)<< "Checking |" << myPrefix << ":" << myPswdSx << "|";
 	auto& myManager=getFactory().getKeyManager();
-	const auto& myKey = myManager.getKeyByPublicId(myPrefix);
-	if(myKey->checkPassword(myPswdSx)) {
-		getMessageView().showMessage(translate("Trihlav password check."),
-				translate("Password OK."));
+	YubikoOtpKeyConfig* myKey = myManager.getKeyByPublicId(myPrefix);
+	static const char* K_MSG_TITLE="Trihlav password check.";
+	if(myKey==0) {
+		getMessageView().showMessage(translate(K_MSG_TITLE),
+									 translate("Key not found."));
+	} else {
+		if (myKey->checkPassword(myPswdSx)) {
+			getMessageView().showMessage(translate(K_MSG_TITLE),
+										 translate("Password OK."));
+		}
 	}
-	getMessageView().showMessage(translate("Trihlav password check."),
+	getMessageView().showMessage(translate(K_MSG_TITLE),
 			translate("Password is not valid."));
 }
 

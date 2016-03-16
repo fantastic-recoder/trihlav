@@ -15,6 +15,6 @@ ADD_LIBRARY(trihlavApi SHARED trihlavApi.cpp trihlavWrongConfigValue.cpp
 		trihlavCannotWriteConfigDir.cpp trihlavFactoryIface.cpp 
 		trihlavPswdChckPresenter.cpp trihlavKeyListPresenter.cpp
 		trihlavYubikoOtpKeyViewIface.cpp trihlavCannotCastImplementation.cpp
-		trihlavMessageViewIface.cpp )
+		trihlavMessageViewIface.cpp trihlavEmptyPublicId.cpp )
 
 INSTALL(TARGETS trihlavApi LIBRARY DESTINATION lib)

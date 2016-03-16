@@ -17,11 +17,13 @@
 #include <boost/format.hpp>
 
 #include "pretty.hpp"
+#include "yubikey.h"
 
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
-#include "yubikey.h"
 #include "trihlavLib/trihlavWrongConfigValue.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
+#include "trihlavLib/trihlavEmptyPublicId.hpp"
+#include "trihlavLib/trihlavLog.hpp"
 
 using std::cout;
 using std::ostringstream;
@@ -38,6 +40,7 @@ using boost::filesystem::unique_path;
 //using pretty::decoration;
 
 #include "pretty.hpp"
+#include "trihlavEmptyPublicId.hpp"
 
 typedef array<uint8_t,YUBIKEY_UID_SIZE + 1> OTP_t;
 
@@ -325,6 +328,15 @@ const string YubikoOtpKeyConfig::modhex2Hex(const std::string& p2Hex) {
 	return myPubId;
 }
 
+void YubikoOtpKeyConfig::setPublicId(const std::string& pPubId) {
+	auto myOldKey = itsPublicId;
+	if(pPubId.empty()) {
+		throw new EmptyPublicId();
+	}
+	itsPublicId=pPubId;
+	itsKeyManager.update(pPubId,*this);
+}
+
 	/**
 	 * @param pPswd2check modhex encoded
 	 */
@@ -336,7 +348,7 @@ bool YubikoOtpKeyConfig::checkPassword(
 				pPswd2check.c_str(),YUBIKEY_UID_SIZE);
 		//BOOST_LOG_TRIVIAL(debug)<< "PSWD: " << pretty::decoration<decltype(myPswd)>(myPswd) ;
 		yubikey_parse(myPswd.data(), this->getSecretKeyArray().data(), &myToken);
-	//	logDebug_token(myToken);
+		logDebug_token(myToken);
 	//	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
 	//	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);
 	//	EXPECT_TRUE(myTokenBack.use == myToken.use);

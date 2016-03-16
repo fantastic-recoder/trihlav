@@ -61,6 +61,8 @@ public:
     /// @brief Get users home directory
     static const path getHome();
 
+	void update(const std::string& pPubId,YubikoOtpKeyConfig& pKey);
+
 private:
     mutable bool itsInitializedFlag;
     boost::filesystem::path itsConfigDir;

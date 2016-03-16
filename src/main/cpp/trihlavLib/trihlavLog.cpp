@@ -1,3 +1,4 @@
+#include <yubikey.h>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
@@ -39,4 +40,19 @@ void initLog() {
 	consoleSink->set_formatter(logFmt);
 }
 
+	void logDebug_token(const yubikey_token_st &pToken) {
+		BOOST_LOG_NAMED_SCOPE("logDebug_token");
+		std::__cxx11::string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
+		yubikey_hex_encode(&myUid[0], reinterpret_cast<const char*>(&pToken.uid),
+						   YUBIKEY_UID_SIZE);
+		BOOST_LOG_TRIVIAL(debug)<< "yubikey_token_st:{";
+		BOOST_LOG_TRIVIAL(debug)<< "   uid  :\""<< myUid.c_str() << "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "   ctr  :\""<< int(pToken.ctr) << "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "   use  :\""<< int(pToken.use) << "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "   rnd  :\""<< int(pToken.rnd) << "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "   tstpl:\""<< int(pToken.tstpl)<< "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "   tstph:\""<< int(pToken.tstph)<< "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "   crc  :\""<< int(pToken.crc) << "\"";
+		BOOST_LOG_TRIVIAL(debug)<< "}";
+	}
 }

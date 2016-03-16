@@ -16,13 +16,12 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
-#include "trihlavLib/trihlavLog.hpp"
-
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavLog.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -33,22 +32,6 @@ namespace attrs = boost::log::attributes;
 namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 namespace src = boost::log::sources;
-
-inline void logDebug_token(const yubikey_token_st& pToken) {
-	BOOST_LOG_NAMED_SCOPE("logDebug_token");
-	string myUid(YUBIKEY_UID_SIZE * 2 + 1, ' ');
-	yubikey_hex_encode(&myUid[0], reinterpret_cast<const char*>(&pToken.uid),
-	YUBIKEY_UID_SIZE);
-	BOOST_LOG_TRIVIAL(debug)<< "yubikey_token_st:{";
-	BOOST_LOG_TRIVIAL(debug)<< "   uid  :\""<< myUid.c_str() << "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "   ctr  :\""<< int(pToken.ctr) << "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "   use  :\""<< int(pToken.use) << "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "   rnd  :\""<< int(pToken.rnd) << "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "   tstpl:\""<< int(pToken.tstpl)<< "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "   tstph:\""<< int(pToken.tstph)<< "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "   crc  :\""<< int(pToken.crc) << "\"";
-	BOOST_LOG_TRIVIAL(debug)<< "}";
-}
 
 /**
  * Test the yubico-c library text to string calls.
@@ -144,6 +127,7 @@ TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	myTestCfg0.setRandom(44);
 	myTestCfg0.setCrc(55);
 	myTestCfg0.setUseCounter(7);
+	myTestCfg0.setPublicId("123456");
 	EXPECT_TRUE(int(myTestCfg0.getToken().uid[0]) == 1);
 	EXPECT_TRUE(int(myTestCfg0.getToken().uid[1]) == 2);
 	EXPECT_TRUE(int(myTestCfg0.getToken().uid[2]) == 3);
