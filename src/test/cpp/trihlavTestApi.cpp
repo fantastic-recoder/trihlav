@@ -155,7 +155,7 @@ TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	EXPECT_TRUE(myTestCfg0.getUseCounter() == myTestCfg1.getUseCounter());
 
 	remove_all(myTestCfgDir);
-	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg ok";
+	BOOST_LOG_TRIVIAL(debug)<< "test file removed, testLoadAndSaveKeyCfg OK";
 }
 
 int main(int argc, char **argv) {

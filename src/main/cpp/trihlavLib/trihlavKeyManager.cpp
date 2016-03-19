@@ -389,7 +389,7 @@ size_t KeyManager::loadKeys() {
 			if (myId.empty()) {
 				(myId += "generated:") += myKey->getFilename().string();
 			}
-			itsKeyMapByPublicId.emplace(KeyMap_t::value_type { myId, myKey });
+			itsKeyMapByPublicId.emplace(KeyMap_t::value_type { myId, myKey.get() });
 		}
 	}
 	return itsKeyList.size();
@@ -419,7 +419,7 @@ const YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(
 		BOOST_LOG_TRIVIAL(warning)<< "Key prefixed " << pPubId << " has not been found.";
 		return 0;
 	}
-	return myKey->second.get();
+	return myKey->second;
 }
 
 /**
@@ -432,21 +432,20 @@ YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(const string& pPubId) {
 		BOOST_LOG_TRIVIAL(warning)<< "Key prefixed " << pPubId << " has not been found.";
 		return 0;
 	}
-	return myKey->second.get();
+	return myKey->second;
 }
 
 void KeyManager::update(const std::string& pPubId, YubikoOtpKeyConfig& pKey) {
 	if(!pPubId.empty()) {
 		const auto myIt=itsKeyMapByPublicId.find(pPubId);
 		if( myIt != itsKeyMapByPublicId.end()) {
-			YubikoOtpKeyConfigPtr myFoundKey=myIt->second;
-			if(myFoundKey->getPrivateId().compare(pKey.getPrivateId())==0) {
+			if(myIt->second->getPrivateId().compare(pKey.getPrivateId())==0) {
 				itsKeyMapByPublicId.erase(myIt);
 			}
 		} else {
 			BOOST_LOG_TRIVIAL(debug) << "Public id " << pPubId << " has not been found.";
 		}
-		itsKeyMapByPublicId[pKey.getPublicId()]= YubikoOtpKeyConfigPtr{&pKey};
+		itsKeyMapByPublicId[pKey.getPublicId()]= &pKey;
 	} else {
 		BOOST_LOG_TRIVIAL(debug) << "Public id is empty.";
 	}

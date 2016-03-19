@@ -104,6 +104,29 @@ static const char* K_TST_SECU0="ddeeddeeddeeddeeddeeddeeddeeddee";
 static const int K_TST_CNTR0 = 1;
 static const int K_TST_RNDM0 = 11;
 
+TEST_F(TestPswdChckPresenter,computeCrc){
+	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::TestBody");
+	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
+	EXPECT_FALSE(exists(myTestCfgFile));
+	EXPECT_TRUE(create_directory(myTestCfgFile));
+	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
+	NiceMock<MockFactory> myMockFactory;
+	KeyManager& myKeyMan(myMockFactory.getKeyManager());
+	myKeyMan.setConfigDir(myTestCfgFile);
+	YubikoOtpKeyConfig myCfg0(myKeyMan);
+	myCfg0.setDescription(K_TST_DESC0);
+	myCfg0.setPrivateId(K_TST_PRIV0);
+	myCfg0.setPublicId(K_TST_PUBL0);
+	myCfg0.setCounter(K_TST_CNTR0);
+	myCfg0.setRandom(K_TST_RNDM0);
+	myCfg0.setSecretKey(K_TST_SECU0);
+
+	const uint16_t myCrc = ~ yubikey_crc16(reinterpret_cast<uint8_t*>(&myCfg0.getToken()),
+			sizeof(myCfg0.getToken()) - sizeof(myCfg0.getToken().crc));
+	myCfg0.computeCrc();
+	EXPECT_EQ(myCrc,myCfg0.getCrc()) <<  "Wrong CRC computation.";
+}
+
 TEST_F(TestPswdChckPresenter,checkPassword) {
 	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::checkPassword");
 	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
@@ -134,10 +157,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (H)   : " << myCfg0.getPublicId();
 	myOtp0.resize(YUBIKEY_OTP_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated key (H): " << myOtp0;
-	//string myOtp0Str=YubikoOtpKeyConfig::hex2Modhex(myOtp0);
-	//myOtp0Str.resize(myOtp0Str.size()+1);
 	PswdChckPresenter myPresenter{myMockFactory};
-	//BOOST_LOG_TRIVIAL(debug)<< "Generated key (M): " << myOtp0Str;
 	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
 		(myPresenter.getMessageView());
 	EXPECT_CALL(myMockMessageView,showMessage("Trihlav password check.","Password OK!"));

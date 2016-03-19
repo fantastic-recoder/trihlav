@@ -23,7 +23,7 @@ class KeyManager {
 public:
 	using path = boost::filesystem::path;
 	using KeyList_t = std::vector<std::shared_ptr<YubikoOtpKeyConfig>>;
-	using KeyMap_t = std::map<std::string,std::shared_ptr<YubikoOtpKeyConfig>>;
+	using KeyMap_t = std::map<std::string,YubikoOtpKeyConfig*>;
 
     /// Lazy initialization constructor.
     KeyManager(const path& pDir);

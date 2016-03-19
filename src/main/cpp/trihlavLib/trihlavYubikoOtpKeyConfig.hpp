@@ -234,6 +234,9 @@ public:
 
 	/// @brief check a modhex encoded password
 	bool checkOtp(const std::string& pPswd2check);
+
+	/// @brief Compute CRC, store it in token and return it.
+	uint16_t computeCrc();
 private:
 	std::string itsPublicId; //< Keys public ID max 6 characters.
 	bool itsChangedFlag; //< will be set internal when something changed

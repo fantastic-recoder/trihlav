@@ -105,7 +105,8 @@ void PswdChckPresenter::okPressed() {
 	} else {
 		if (myKey->checkOtp(myPswdSx)) {
 			getMessageView().showMessage(translate(K_MSG_TITLE),
-										 translate("Password OK."));
+										 translate("Password OK!"));
+			return;
 		}
 	}
 	getMessageView().showMessage(translate(K_MSG_TITLE),

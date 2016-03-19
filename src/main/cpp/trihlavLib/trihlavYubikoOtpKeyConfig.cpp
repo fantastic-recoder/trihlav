@@ -347,7 +347,8 @@ void YubikoOtpKeyConfig::setPublicId(const std::string& pPubId) {
 bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkPassword");
 	yubikey_token_st myToken;
-	yubikey_parse(reinterpret_cast<const uint8_t*>(pPswd2check.c_str()), this->getSecretKeyArray().data(), &myToken);
+	yubikey_parse(reinterpret_cast<const uint8_t*>(pPswd2check.c_str()),
+			this->getSecretKeyArray().data(), &myToken);
 	BOOST_LOG_TRIVIAL(debug)<< "Key token:";
 	logDebug_token(getToken());
 	BOOST_LOG_TRIVIAL(debug)<< "Decrypted token:";
@@ -374,4 +375,9 @@ bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 	return false;
 }
 
-} // end namespace yuSerApi
+uint16_t YubikoOtpKeyConfig::computeCrc() {
+	getToken().crc = ~ yubikey_crc16(reinterpret_cast<uint8_t*>(&getToken()),
+			sizeof(getToken()) - sizeof(getToken().crc));
+	return getCrc();
+}
+} // end namespace trihlav
