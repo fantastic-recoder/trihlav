@@ -103,7 +103,7 @@ void PswdChckPresenter::okPressed() {
 		getMessageView().showMessage(translate(K_MSG_TITLE),
 									 translate("Key not found."));
 	} else {
-		if (myKey->checkPassword(myPswdSx)) {
+		if (myKey->checkOtp(myPswdSx)) {
 			getMessageView().showMessage(translate(K_MSG_TITLE),
 										 translate("Password OK."));
 		}

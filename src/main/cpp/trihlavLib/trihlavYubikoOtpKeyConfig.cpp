@@ -344,7 +344,7 @@ void YubikoOtpKeyConfig::setPublicId(const std::string& pPubId) {
 /**
  * @param pPswd2check modhex encoded
  */
-bool YubikoOtpKeyConfig::checkPassword(const std::string& pPswd2check) {
+bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkPassword");
 	yubikey_token_st myToken;
 	yubikey_parse(reinterpret_cast<const uint8_t*>(pPswd2check.c_str()), this->getSecretKeyArray().data(), &myToken);
