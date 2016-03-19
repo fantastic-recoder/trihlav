@@ -106,7 +106,7 @@ const boost::filesystem::path KeyManager::getHome() {
 #else
 #   error "unknown platform"
 #endif
-			BOOST_LOG_TRIVIAL(debug)<< "Home: \"" << myHome<<"\"";
+			BOOST_LOG_TRIVIAL(debug)<< "Home: " << myHome<<".";
 	return myHome;
 }
 
@@ -443,10 +443,12 @@ void KeyManager::update(const std::string& pPubId, YubikoOtpKeyConfig& pKey) {
 			if(myFoundKey->getPrivateId().compare(pKey.getPrivateId())==0) {
 				itsKeyMapByPublicId.erase(myIt);
 			}
-			itsKeyMapByPublicId[pKey.getPublicId()]= YubikoOtpKeyConfigPtr{&pKey};
 		} else {
 			BOOST_LOG_TRIVIAL(debug) << "Public id " << pPubId << " has not been found.";
 		}
+		itsKeyMapByPublicId[pKey.getPublicId()]= YubikoOtpKeyConfigPtr{&pKey};
+	} else {
+		BOOST_LOG_TRIVIAL(debug) << "Public id is empty.";
 	}
 }
 

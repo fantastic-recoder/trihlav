@@ -125,16 +125,23 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	myCfg0.getToken().crc = 0;
 	myCfg0.getToken().crc = ~ yubikey_crc16(reinterpret_cast<uint8_t*>(&myCfg0.getToken()),
 			sizeof(myCfg0.getToken()) - sizeof(myCfg0.getToken().crc));
-	char myOtp0[YUBIKEY_OTP_SIZE + 1];
-	yubikey_generate(&myCfg0.getToken(), myCfg0.getSecretKeyArray().data(), myOtp0);
+	logDebug_token(myCfg0.getToken());
+	string myOtp0(YUBIKEY_OTP_SIZE+1,'\0');
+	yubikey_token_st myTkn{myCfg0.getToken()};
+	yubikey_generate(&myTkn, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
+	logDebug_token(myCfg0.getToken());
 	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (M)   : " << myCfg0.getPublicIdModhex() ;
 	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (H)   : " << myCfg0.getPublicId();
-	BOOST_LOG_TRIVIAL(debug)<< "Generated key: " << myOtp0;
+	myOtp0.resize(YUBIKEY_OTP_SIZE);
+	BOOST_LOG_TRIVIAL(debug)<< "Generated key (H): " << myOtp0;
+	//string myOtp0Str=YubikoOtpKeyConfig::hex2Modhex(myOtp0);
+	//myOtp0Str.resize(myOtp0Str.size()+1);
 	PswdChckPresenter myPresenter{myMockFactory};
+	//BOOST_LOG_TRIVIAL(debug)<< "Generated key (M): " << myOtp0Str;
 	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
 		(myPresenter.getMessageView());
 	EXPECT_CALL(myMockMessageView,showMessage("Trihlav password check.","Password OK!"));
-	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicIdModhex()+myOtp0);
+	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId()+myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));

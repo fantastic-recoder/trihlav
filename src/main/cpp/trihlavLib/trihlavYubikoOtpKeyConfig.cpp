@@ -42,7 +42,7 @@ using boost::filesystem::unique_path;
 #include "pretty.hpp"
 #include "trihlavEmptyPublicId.hpp"
 
-typedef array<uint8_t,YUBIKEY_UID_SIZE + 1> OTP_t;
+typedef array<uint8_t, YUBIKEY_UID_SIZE + 1> OTP_t;
 
 PRETTY_DEFAULT_DECORATION(vector<int>, "[[", "||", ">")
 
@@ -302,11 +302,13 @@ const string YubikoOtpKeyConfig::getPublicIdModhex() const {
  */
 const string YubikoOtpKeyConfig::hex2Modhex(const string& p2Modhex) {
 	const unsigned long mySz = p2Modhex.size();
-	const unsigned long mySz2 = mySz/2;
-	vector<uint8_t> myBytes(mySz2,uint8_t(0));
-	yubikey_hex_decode(reinterpret_cast<char*>(&myBytes[0]),p2Modhex.c_str(),mySz);
+	const unsigned long mySz2 = mySz / 2;
+	vector<uint8_t> myBytes(mySz2, uint8_t(0));
+	yubikey_hex_decode(reinterpret_cast<char*>(&myBytes[0]), p2Modhex.c_str(),
+			mySz);
 	string myPubId(mySz + 1, '\0');
-	yubikey_modhex_encode(&myPubId[0], reinterpret_cast<char*>(&myBytes[0]), mySz2);
+	yubikey_modhex_encode(&myPubId[0], reinterpret_cast<char*>(&myBytes[0]),
+			mySz2);
 	myPubId.resize(mySz);
 	return myPubId;
 }
@@ -319,36 +321,37 @@ const string YubikoOtpKeyConfig::hex2Modhex(const string& p2Modhex) {
  */
 const string YubikoOtpKeyConfig::modhex2Hex(const std::string& p2Hex) {
 	const unsigned long mySz = p2Hex.size();
-	const unsigned long mySz2 = mySz/2;
-	vector<uint8_t> myBytes(mySz2,uint8_t(0));
-	yubikey_modhex_decode(reinterpret_cast<char*>(&myBytes[0]),p2Hex.c_str(),mySz2);
+	const unsigned long mySz2 = mySz / 2;
+	vector<uint8_t> myBytes(mySz2, uint8_t(0));
+	yubikey_modhex_decode(reinterpret_cast<char*>(&myBytes[0]), p2Hex.c_str(),
+			mySz2);
 	string myPubId(mySz + 1, '\0');
-	yubikey_hex_encode(&myPubId[0], reinterpret_cast<char*>(&myBytes[0]), mySz2);
+	yubikey_hex_encode(&myPubId[0], reinterpret_cast<char*>(&myBytes[0]),
+			mySz2);
 	myPubId.resize(mySz);
 	return myPubId;
 }
 
 void YubikoOtpKeyConfig::setPublicId(const std::string& pPubId) {
 	auto myOldKey = itsPublicId;
-	if(pPubId.empty()) {
+	if (pPubId.empty()) {
 		throw new EmptyPublicId();
 	}
-	itsPublicId=pPubId;
-	itsKeyManager.update(pPubId,*this);
+	itsPublicId = pPubId;
+	itsKeyManager.update(pPubId, *this);
 }
 
-	/**
-	 * @param pPswd2check modhex encoded
-	 */
-bool YubikoOtpKeyConfig::checkPassword(
-		const std::string& pPswd2check) {
-		yubikey_token_st myToken;
-		OTP_t myPswd;
-		yubikey_modhex_decode(reinterpret_cast<char*>(myPswd.data()),
-				pPswd2check.c_str(),YUBIKEY_UID_SIZE);
-		//BOOST_LOG_TRIVIAL(debug)<< "PSWD: " << pretty::decoration<decltype(myPswd)>(myPswd) ;
-		yubikey_parse(myPswd.data(), this->getSecretKeyArray().data(), &myToken);
-		logDebug_token(myToken);
+/**
+ * @param pPswd2check modhex encoded
+ */
+bool YubikoOtpKeyConfig::checkPassword(const std::string& pPswd2check) {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkPassword");
+	yubikey_token_st myToken;
+	yubikey_parse(reinterpret_cast<const uint8_t*>(pPswd2check.c_str()), this->getSecretKeyArray().data(), &myToken);
+	BOOST_LOG_TRIVIAL(debug)<< "Key token:";
+	logDebug_token(getToken());
+	BOOST_LOG_TRIVIAL(debug)<< "Decrypted token:";
+	logDebug_token(myToken);
 	//	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
 	//	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);
 	//	EXPECT_TRUE(myTokenBack.use == myToken.use);
@@ -363,6 +366,11 @@ bool YubikoOtpKeyConfig::checkPassword(
 	//	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
 	//	EXPECT_TRUE(yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)))
 	//			<< "CRC failed!";
+	if (strncmp(reinterpret_cast<const char*>(&getToken().uid),
+			reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE) == 0) {
+		BOOST_LOG_TRIVIAL(debug)<< "OTP OK!";
+		return true;
+	}
 	return false;
 }
 

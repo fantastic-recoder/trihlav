@@ -91,6 +91,7 @@ void PswdChckPresenter::okPressed() {
 				translate("Keys without public prefix are not yet supported!"));
 		return;
 	}
+	//myPswd0=YubikoOtpKeyConfig::modhex2Hex(myPswd0);
 	const size_t myPfxLen{myPswdSz-YUBIKEY_OTP_SIZE};
 	const string myPrefix=myPswd0.substr(0,myPfxLen);
 	const string myPswdSx=myPswd0.substr(myPfxLen);
