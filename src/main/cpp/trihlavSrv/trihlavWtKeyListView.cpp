@@ -18,7 +18,8 @@ using namespace Wt;
 namespace trihlav {
 
 void WtKeyListView::addTableHeader() {
-	itsTable->elementAt(0, 0)->addWidget(new Wt::WText("#"));
+	auto myRecId = new Wt::WText("Record ID");
+	itsTable->elementAt(0, 0)->addWidget(myRecId);
 	itsTable->elementAt(0, 1)->addWidget(new Wt::WText("Public ID"));
 	itsTable->elementAt(0, 2)->addWidget(new Wt::WText("Description"));
 	itsTable->elementAt(0, 3)->addWidget(new Wt::WText("Private ID"));
@@ -42,7 +43,6 @@ WtKeyListView::WtKeyListView() {
 	myBtnsLayout->addWidget(itsBtnReload);
 	itsTable = new WTable();
 	itsTable->setHeaderCount(1);
-	itsTable->addStyleClass("table-hover");
 	itsTable->addStyleClass("table-striped");
 	itsTable->setWidth(Wt::WLength("100%"));
 	myTopLayout->addLayout(myBtnsLayout);
@@ -83,15 +83,17 @@ void WtKeyListView::clear() {
 void WtKeyListView::addRow(const KeyListRow_t pRow) {
 	itsRowCounter++;
 	auto myId = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<0>()));
-	myId->setTextAlignment(AlignCenter);
-	auto myDesc = new Wt::WText(pRow.get<1>());
-	myDesc->setTextAlignment(AlignCenter);
+	auto myPrivId = new Wt::WText(pRow.get<1>());
+	auto myDescription = new Wt::WText(pRow.get<2>());
+	auto myPubId = new Wt::WText(pRow.get<3>());
 	itsTable->elementAt(itsRowCounter, 0)->addWidget(myId);
-	itsTable->elementAt(itsRowCounter, 1)->addWidget(myDesc);
-	itsTable->elementAt(itsRowCounter, 2)->addWidget(
-			new Wt::WText(pRow.get<2>()));
-	itsTable->elementAt(itsRowCounter, 3)->addWidget(
-			new Wt::WText(pRow.get<3>()));
+	itsTable->elementAt(itsRowCounter, 1)->addWidget(myPrivId);
+	itsTable->elementAt(itsRowCounter, 2)->addWidget(myDescription);
+	itsTable->elementAt(itsRowCounter, 3)->addWidget(myPubId);
+	itsTable->elementAt(itsRowCounter, 0)->setContentAlignment( Wt::AlignCenter );
+	itsTable->elementAt(itsRowCounter, 1)->setContentAlignment( Wt::AlignCenter );
+	itsTable->elementAt(itsRowCounter, 2)->setContentAlignment( Wt::AlignCenter );
+	itsTable->elementAt(itsRowCounter, 3)->setContentAlignment( Wt::AlignCenter );
 }
 
 void WtKeyListView::addedAllRows() {

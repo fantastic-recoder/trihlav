@@ -25,14 +25,8 @@ namespace trihlav {
 App::App(const WEnvironment& pEnv) :
 		WApplication(pEnv) {
 	setTitle("Trihlav server");               // application title
-	useStyleSheet("style/everywidget.css");
-	useStyleSheet("style/dragdrop.css");
-	useStyleSheet("style/combostyle.css");
-	useStyleSheet("style/pygments.css");
-	useStyleSheet("style/layout.css");
-	//useStyleSheet("style/CSSexample.css");
 	setTheme(new WBootstrapTheme(this));
-
+	useStyleSheet("trihlav.css");
 	itsMainPanelCntrl=new MainPanelPresenter(getUiFactory());
 	trihlav::ViewIface* myIMainPanelView = itsMainPanelCntrl->getView();
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>
