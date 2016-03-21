@@ -49,6 +49,10 @@ using boost::locale::translate;
 
 namespace trihlav {
 
+const char* PswdChckPresenter::K_MSG_TITLE="Trihlav password check.";
+const char* PswdChckPresenter::K_PSWD_NOT_OK="Password is not valid.";
+const char* PswdChckPresenter::K_PSWD_OK="Password OK!";
+
 PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
 		PswdChckPresenterIface(pFactory), //< forced by virtual inheritance
 		PresenterBase(pFactory), //< has a factory
@@ -98,19 +102,18 @@ void PswdChckPresenter::okPressed() {
 	BOOST_LOG_TRIVIAL(info)<< "Checking |" << myPrefix << ":" << myPswdSx << "|";
 	auto& myManager=getFactory().getKeyManager();
 	YubikoOtpKeyConfig* myKey = myManager.getKeyByPublicId(myPrefix);
-	static const char* K_MSG_TITLE="Trihlav password check.";
 	if(myKey==0) {
 		getMessageView().showMessage(translate(K_MSG_TITLE),
 									 translate("Key not found."));
 	} else {
 		if (myKey->checkOtp(myPswdSx)) {
 			getMessageView().showMessage(translate(K_MSG_TITLE),
-										 translate("Password OK!"));
+										 translate(K_PSWD_OK));
 			return;
 		}
 	}
 	getMessageView().showMessage(translate(K_MSG_TITLE),
-			translate("Password is not valid."));
+			translate(K_PSWD_NOT_OK));
 }
 
 PswdChckPresenter::~PswdChckPresenter() {

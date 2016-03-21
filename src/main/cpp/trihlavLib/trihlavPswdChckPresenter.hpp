@@ -52,6 +52,10 @@ public:
 	PswdChckViewIface& getView() override;
 	MessageViewIface& getMessageView() override;
 	virtual void okPressed();
+
+	static const char* K_MSG_TITLE;
+	static const char* K_PSWD_NOT_OK;
+	static const char* K_PSWD_OK;
 };
 
 } /* namespace trihlav */

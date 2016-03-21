@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <array>
+#include <sstream>
 
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
@@ -15,6 +16,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/format.hpp>
+#include <boost/date_time.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "pretty.hpp"
 #include "yubikey.h"
@@ -31,13 +34,16 @@ using std::string;
 using std::out_of_range;
 using std::vector;
 using std::array;
+using std::stringstream;
 
 using boost::trim;
 using boost::format;
 using boost::property_tree::ptree;
 using boost::filesystem::path;
 using boost::filesystem::unique_path;
-//using pretty::decoration;
+using boost::date_time::date;
+using boost::date_time::day_clock;
+using namespace boost::posix_time;
 
 #include "pretty.hpp"
 #include "trihlavEmptyPublicId.hpp"
@@ -169,7 +175,13 @@ const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 			const string myMsg = (format("File %1% already exists.")
 					% getFilename()).str();
 			BOOST_LOG_TRIVIAL(error)<< myMsg;
-			throw new out_of_range(myMsg);
+			ptime myTime= microsec_clock::universal_time();
+			stringstream myStrStr;
+			myStrStr << "." << myTime;
+			path myBackup(getFilename());
+			myBackup+=(myStrStr.str());
+			BOOST_LOG_TRIVIAL(debug)<< "Moving "<< getFilename() << " to "<<myBackup;
+			rename(getFilename(), myBackup);
 		}
 		myRetVal = getFilename().native();
 	} else {
@@ -358,26 +370,32 @@ bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 	//	EXPECT_TRUE(myTokenBack.use == myToken.use);
 	//	EXPECT_TRUE(myTokenBack.tstph == myToken.tstph);
 	//	EXPECT_TRUE(myTokenBack.tstpl == myToken.tstpl);
-	//	EXPECT_TRUE(
-	//			strncmp( reinterpret_cast<const char*>(&myTokenBack.uid),
-	//					reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE)==0)
-	//			<< "The uid-s are different!";
-	//	uint16_t myCrc = yubikey_crc16(reinterpret_cast<uint8_t*>(&myToken),
-	//	YUBIKEY_KEY_SIZE);
-	//	BOOST_LOG_TRIVIAL(debug)<< "crc1="<<myCrc <<" - "<<YUBIKEY_CRC_OK_RESIDUE;
-	//	EXPECT_TRUE(yubikey_crc_ok_p(reinterpret_cast<uint8_t*>(&myToken)))
-	//			<< "CRC failed!";
 	if (strncmp(reinterpret_cast<const char*>(&getToken().uid),
 			reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE) == 0) {
+		BOOST_LOG_TRIVIAL(debug)<< "UID is same.";
+		uint16_t myComputedCrc = computeCrc(myToken);
+		if(myToken.crc!=myComputedCrc) {
+			BOOST_LOG_TRIVIAL(debug)<< "Decrypted CRC is wrong: "
+			<< myComputedCrc <<"!=" << myToken.crc;
+			return false;
+		}
+		if(myToken.ctr <= getToken().ctr) {
+			BOOST_LOG_TRIVIAL(debug)<< "Decrypted counter is wrong: "
+			<< myToken.ctr <<"<=" << getToken().ctr;
+			return false;
+		}
+		setCounter(myToken.ctr);
+		computeCrc();
+		save();
 		BOOST_LOG_TRIVIAL(debug)<< "OTP OK!";
 		return true;
 	}
 	return false;
 }
 
-uint16_t YubikoOtpKeyConfig::computeCrc() {
-	getToken().crc = ~ yubikey_crc16(reinterpret_cast<uint8_t*>(&getToken()),
-			sizeof(getToken()) - sizeof(getToken().crc));
-	return getCrc();
+uint16_t YubikoOtpKeyConfig::computeCrc(const yubikey_token_st& pToken) {
+	return ~yubikey_crc16(reinterpret_cast<const uint8_t*>(&pToken),
+			sizeof(pToken) - sizeof(pToken.crc));
 }
+
 } // end namespace trihlav

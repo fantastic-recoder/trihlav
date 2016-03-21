@@ -235,8 +235,16 @@ public:
 	/// @brief check a modhex encoded password
 	bool checkOtp(const std::string& pPswd2check);
 
-	/// @brief Compute CRC, store it in token and return it.
-	uint16_t computeCrc();
+	/**
+	 *  @brief Compute CRC, store it in token and return it.
+	 *  @return the newly computed CRC.
+	 */
+	uint16_t computeCrc() {
+		setCrc(computeCrc(getToken()));
+		return getCrc();
+	}
+
+	static uint16_t computeCrc(const yubikey_token_st& pToken);
 private:
 	std::string itsPublicId; //< Keys public ID max 6 characters.
 	bool itsChangedFlag; //< will be set internal when something changed

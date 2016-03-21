@@ -78,33 +78,36 @@ TEST_F(TestPswdChckPresenter,modhexDeAndEncoding) {
 	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::modhexDeAndEncoding");
 	const string myTstHex0("abcdef0123456789");
 	BOOST_LOG_TRIVIAL(debug)<< myTstHex0;
-	const string myTstMod0{YubikoOtpKeyConfig::hex2Modhex(myTstHex0)};
+	const string myTstMod0 { YubikoOtpKeyConfig::hex2Modhex(myTstHex0) };
 	BOOST_LOG_TRIVIAL(debug)<< myTstMod0;
-	EXPECT_NE(myTstMod0,myTstHex0) << "Hex encoded and decoded strings should not be equal.";
-	const string myTstRes0{YubikoOtpKeyConfig::modhex2Hex(myTstMod0)};
+	EXPECT_NE(myTstMod0,myTstHex0)
+			<< "Hex encoded and decoded strings should not be equal.";
+	const string myTstRes0 { YubikoOtpKeyConfig::modhex2Hex(myTstMod0) };
 	BOOST_LOG_TRIVIAL(debug)<< myTstRes0;
-	EXPECT_EQ(myTstHex0,myTstRes0) << "Hex encoded and re-decoded strings should be equal.";
+	EXPECT_EQ(myTstHex0,myTstRes0)
+			<< "Hex encoded and re-decoded strings should be equal.";
 }
 
 TEST_F(TestPswdChckPresenter,passwordMayNotBeEmpty) {
 	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::passwordMayNotBeEmpty");
 	NiceMock<MockFactory> myMockFactory;
-	PswdChckPresenter myPresenter{myMockFactory};
-	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
-		(myPresenter.getMessageView());
-	EXPECT_CALL(myMockMessageView,showMessage("Trihlav password check.","Password is too short!"));
+	PswdChckPresenter myPresenter { myMockFactory };
+	MockMessageView& myMockMessageView =
+			dynamic_cast<MockMessageView&>(myPresenter.getMessageView());
+	EXPECT_CALL(myMockMessageView,
+			showMessage("Trihlav password check.","Password is too short!"));
 	myPresenter.getView().getEdtPswd0().setValue("");
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 }
 
 static const char* K_TST_DESC0 = "Test key 1";
-static const char* K_TST_PRIV0="aabbaabbaabb";
-static const char* K_TST_PUBL0="ccddccddccdd";
-static const char* K_TST_SECU0="ddeeddeeddeeddeeddeeddeeddeeddee";
+static const char* K_TST_PRIV0 = "aabbaabbaabb";
+static const char* K_TST_PUBL0 = "ccddccddccdd";
+static const char* K_TST_SECU0 = "ddeeddeeddeeddeeddeeddeeddeeddee";
 static const int K_TST_CNTR0 = 1;
 static const int K_TST_RNDM0 = 11;
 
-TEST_F(TestPswdChckPresenter,computeCrc){
+TEST_F(TestPswdChckPresenter,computeCrc) {
 	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::TestBody");
 	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
 	EXPECT_FALSE(exists(myTestCfgFile));
@@ -121,10 +124,11 @@ TEST_F(TestPswdChckPresenter,computeCrc){
 	myCfg0.setRandom(K_TST_RNDM0);
 	myCfg0.setSecretKey(K_TST_SECU0);
 
-	const uint16_t myCrc = ~ yubikey_crc16(reinterpret_cast<uint8_t*>(&myCfg0.getToken()),
+	const uint16_t myCrc = ~yubikey_crc16(
+			reinterpret_cast<uint8_t*>(&myCfg0.getToken()),
 			sizeof(myCfg0.getToken()) - sizeof(myCfg0.getToken().crc));
 	myCfg0.computeCrc();
-	EXPECT_EQ(myCrc,myCfg0.getCrc()) <<  "Wrong CRC computation.";
+	EXPECT_EQ(myCrc,myCfg0.getCrc()) << "Wrong CRC computation.";
 }
 
 TEST_F(TestPswdChckPresenter,checkPassword) {
@@ -144,29 +148,32 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	myCfg0.setRandom(K_TST_RNDM0);
 	myCfg0.setSecretKey(K_TST_SECU0);
 	myCfg0.save();
-
-	myCfg0.getToken().crc = 0;
-	myCfg0.getToken().crc = ~ yubikey_crc16(reinterpret_cast<uint8_t*>(&myCfg0.getToken()),
-			sizeof(myCfg0.getToken()) - sizeof(myCfg0.getToken().crc));
+	myCfg0.computeCrc();
 	logDebug_token(myCfg0.getToken());
-	string myOtp0(YUBIKEY_OTP_SIZE+1,'\0');
-	yubikey_token_st myTkn{myCfg0.getToken()};
+	string myOtp0(YUBIKEY_OTP_SIZE + 1, '\0');
+	yubikey_token_st myTkn { myCfg0.getToken() };
+	myTkn.ctr++;
+	myTkn.crc = YubikoOtpKeyConfig::computeCrc(myTkn);
 	yubikey_generate(&myTkn, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
 	logDebug_token(myCfg0.getToken());
-	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (M)   : " << myCfg0.getPublicIdModhex() ;
+	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (M)   : " << myCfg0.getPublicIdModhex();
 	BOOST_LOG_TRIVIAL(debug)<< "Pub ID (H)   : " << myCfg0.getPublicId();
 	myOtp0.resize(YUBIKEY_OTP_SIZE);
 	BOOST_LOG_TRIVIAL(debug)<< "Generated key (H): " << myOtp0;
-	PswdChckPresenter myPresenter{myMockFactory};
-	MockMessageView& myMockMessageView= dynamic_cast<MockMessageView&>
-		(myPresenter.getMessageView());
-	EXPECT_CALL(myMockMessageView,showMessage("Trihlav password check.","Password OK!"));
-	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId()+myOtp0);
+	PswdChckPresenter myPresenter { myMockFactory };
+	MockMessageView& myMockMessageView =
+			dynamic_cast<MockMessageView&>(myPresenter.getMessageView());
+	EXPECT_CALL(myMockMessageView,
+			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_OK));
+	EXPECT_CALL(myMockMessageView,
+			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_NOT_OK));
+	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
+	myPresenter.getView().getBtnOk().getPressedSignal()();
+	// try to check the same password again.
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
 }
-
 
 int main(int argc, char **argv) {
 	initLog();
