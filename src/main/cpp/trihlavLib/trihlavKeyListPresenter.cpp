@@ -75,6 +75,7 @@ void KeyListPresenter::addKey() {
 YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
 	if(itsYubikoOtpKeyPresenter==0) {
 		itsYubikoOtpKeyPresenter=new YubikoOtpKeyPresenter(getFactory());
+		itsYubikoOtpKeyPresenter->saved.connect([=]{reloadKeyList();});
 	}
 	return *itsYubikoOtpKeyPresenter;
 }
@@ -86,7 +87,13 @@ void KeyListPresenter::reloadKeyList() {
 	getView().clear();
 	for (int myRow = 0; myRow < myKeySz; ++myRow) {
 		const auto& myKey=myKeyMan.getKey(myRow);
-		getView().addRow(KeyListRow_t(myRow,myKey.getPublicId(),myKey.getDescription(),myKey.getPrivateId()));
+		getView().addRow(KeyListRow_t(
+				myRow,//< row id
+				myKey.getPublicId(),//<  public id
+				myKey.getDescription(), //< description
+				myKey.getPrivateId(), //< private id
+				myKey.getUseCounter(), //< my use
+				myKey.getCounter())); //< counter
 	}
 	getView().addedAllRows();
 }

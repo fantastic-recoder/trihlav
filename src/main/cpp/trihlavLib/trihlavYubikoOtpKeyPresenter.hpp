@@ -29,6 +29,7 @@
 #define TRIHLAV_YUBIKO_OPT_KEY_PRESENTER_HPP_
 
 #include <memory>
+#include <boost/signals2.hpp>
 
 #include "trihlavPresenterBase.hpp"
 
@@ -39,13 +40,15 @@ class YubikoOtpKeyViewIface;
 class YubikoOtpKeyConfig;
 class StrEditIface;
 
+using signal_t=boost::signals2::signal<void()>;
+
 /**
  * @brief Presents an @see YubikoOtpKeyConfig
  */
 class YubikoOtpKeyPresenter: virtual public PresenterBase {
 public:
 
-    YubikoOtpKeyPresenter(FactoryIface& );
+    YubikoOtpKeyPresenter(FactoryIface&);
 
     virtual ~YubikoOtpKeyPresenter();
 
@@ -92,6 +95,7 @@ public:
 	/// @brief Description getter.
 	std::string getDescription();
 
+	signal_t saved;
 private:
     YubikoOtpKeyViewIface* itsView;
     YubikoOtpKeyConfig* itsCurCfg;

@@ -15,11 +15,13 @@
 #include <Wt/WText>
 #include <Wt/WContainerWidget>
 
+#include "trihlavLib/trihlavCannotCastImplementation.hpp"
+#include "trihlavLib/trihlavVersion.hpp"
+
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavWtPswdChckView.hpp"
 #include "trihlavWtKeyListView.hpp"
-#include "trihlavLib/trihlavCannotCastImplementation.hpp"
-#include "trihlavLib/trihlavVersion.hpp"
+
 #include "trihlavWtViewIface.hpp"
 
 using namespace Wt;
@@ -75,14 +77,17 @@ WtMainPanelView::WtMainPanelView():itsView ( new WContainerWidget()) {
 	getNavigation()->addMenu(rightMenu, Wt::AlignRight);
 	// Create a popup submenu for the Help menu.
 	Wt::WPopupMenu* popup = new Wt::WPopupMenu();
+	const string myHelpText = "Showing Help: {1}\n"
+			"Build version: "+Version::getVersion();
 	popup->addItem("Contents");
 	popup->addItem("Index");
 	popup->addSeparator();
-	popup->addItem("About");
+	popup->addItem(new WMenuItem("About"));
 	popup->itemSelected().connect(
 			std::bind(
 					[=](Wt::WMenuItem* item) {
-						Wt::WMessageBox* messageBox = new Wt::WMessageBox("Help", Wt::WString::fromUTF8("<p>Showing Help: {1}</p>").arg(item->text()), Wt::Information, Wt::Ok);
+						Wt::WMessageBox* messageBox = new Wt::WMessageBox("Help",
+								Wt::WString::fromUTF8(myHelpText).arg(item->text()), Wt::Information, Wt::Ok);
 						messageBox->buttonClicked().connect(std::bind([=]() {
 											delete messageBox;
 										}

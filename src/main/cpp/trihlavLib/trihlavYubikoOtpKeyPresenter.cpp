@@ -115,6 +115,7 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 		getCurCfg().setPublicId(getPublicId());
 		getCurCfg().setDescription(getDescription());
 		getCurCfg().save();
+		saved();
 	}
 }
 

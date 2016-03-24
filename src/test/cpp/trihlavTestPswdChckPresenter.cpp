@@ -152,7 +152,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	logDebug_token(myCfg0.getToken());
 	string myOtp0(YUBIKEY_OTP_SIZE + 1, '\0');
 	yubikey_token_st myTkn { myCfg0.getToken() };
-	myTkn.ctr++;
+	myTkn.use++;
 	myTkn.crc = YubikoOtpKeyConfig::computeCrc(myTkn);
 	yubikey_generate(&myTkn, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
 	logDebug_token(myCfg0.getToken());

@@ -379,12 +379,20 @@ bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 			<< myComputedCrc <<"!=" << myToken.crc;
 			return false;
 		}
-		if(myToken.ctr <= getToken().ctr) {
+		if(myToken.use <= getToken().use) {
+			BOOST_LOG_TRIVIAL(debug)<< "Decrypted use counter is wrong: "
+			<< myToken.use <<"<=" << getToken().use;
+			return false;
+		}
+		if(myToken.ctr != getToken().ctr) {
 			BOOST_LOG_TRIVIAL(debug)<< "Decrypted counter is wrong: "
-			<< myToken.ctr <<"<=" << getToken().ctr;
+			<< myToken.ctr <<"!=" << getToken().ctr;
 			return false;
 		}
 		setCounter(myToken.ctr);
+		setUseCounter(myToken.use);
+		getToken().tstph=myToken.tstph;
+		getToken().tstpl=myToken.tstpl;
 		computeCrc();
 		save();
 		BOOST_LOG_TRIVIAL(debug)<< "OTP OK!";

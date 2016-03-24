@@ -37,7 +37,7 @@ namespace trihlav {
 
 class ButtonIface;
 
-using KeyListRow_t = boost::tuple<int,std::string,std::string,std::string>;
+using KeyListRow_t = boost::tuple<int,std::string,std::string,std::string,int,int>;
 
 /**
  * Interface of the key list UI.
