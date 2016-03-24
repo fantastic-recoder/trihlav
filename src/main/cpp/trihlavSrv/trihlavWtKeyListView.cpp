@@ -57,8 +57,10 @@ void WtKeyListView::addTableHeader() {
 	itsTable->elementAt(0, 2)->addWidget(myDescription);
 	WText* myPrivateId = new WText(translate("Private ID").str());
 	itsTable->elementAt(0, 3)->addWidget(myPrivateId);
+	WText* myUseCounter = new WText(translate("Use counter").str());
+	itsTable->elementAt(0, 4)->addWidget(myUseCounter);
 	WText* myCounter = new WText(translate("Counter").str());
-	itsTable->elementAt(0, 4)->addWidget(myCounter);
+	itsTable->elementAt(0, 5)->addWidget(myCounter);
 }
 
 WtKeyListView::WtKeyListView() {
