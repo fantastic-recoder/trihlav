@@ -1,3 +1,6 @@
 [submodule "src/main/cpp/FakeIt"]
 	path = src/main/cpp/FakeIt
 	url = https://github.com/eranpeer/FakeIt.git
+[submodule "docker-containers-build"]
+	path = docker/docker-containers-build
+	url = https://github.com/openSUSE/docker-containers-build.git
