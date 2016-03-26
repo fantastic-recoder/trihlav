@@ -9,4 +9,4 @@ RUN mkdir $INSTDIR && rm -rfv $INSTDIR/*
 COPY trihlav-0.0.1-Linux.rpm $INSTDIR
 RUN zypper in -y /tmp/trihlav-inst/trihlav-0.0.1-Linux.rpm
 RUN zypper up -y
-
+CMD /usr/bin/trihlavsrv
