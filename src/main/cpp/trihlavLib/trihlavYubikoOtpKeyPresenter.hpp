@@ -77,6 +77,9 @@ public:
     /// @brief generate random hex encoded byte array
     static void generate(int pBytes, std::string& pTarget) ;
 
+    /// @brief generate random modhex encoded byte array
+    static void generateModhex(int pBytes, std::string& pTarget) ;
+
 	/// @brief Accessor returns secret key edit widget.
 	StrEditIface& getEdtSecretKey();
 
