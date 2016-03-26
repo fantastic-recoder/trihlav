@@ -28,7 +28,7 @@
 #ifndef TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
 #define TRIHLAV_WT_PSWD_CHCK_VIEW_HPP_
 
-#include "../trihlavLib/trihlavPswdChckViewIface.hpp"
+#include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavWtViewIface.hpp"
 
 namespace Wt {

@@ -28,6 +28,7 @@
 #include <Wt/WPanel>
 #include <Wt/WWidget>
 #include <Wt/WText>
+#include <Wt/WLength>
 #include <Wt/WLineEdit>
 #include <Wt/WContainerWidget>
 
@@ -40,6 +41,7 @@
 using Wt::WContainerWidget;
 using Wt::WText;
 using Wt::WWidget;
+using Wt::WLength;
 using boost::locale::translate;
 
 namespace trihlav {
@@ -47,9 +49,15 @@ namespace trihlav {
 WtPswdChckView::WtPswdChckView() //
 :itsBtnOk(new WtPushButton(translate("check")))
 ,itsEdtPswd(new WtStrEdit)
-	{
+{
+	itsBtnOk->setWidth(WLength(7.0,WLength::FontEm));
+	itsEdtPswd->setWidth(WLength(32.0,WLength::FontEm));
+	itsEdtPswd->setMargin(WLength(16.0,WLength::Pixel));
 	itsMainPanel = new WContainerWidget();
-	itsMainPanel->addWidget(new WText(translate("Password 0").str()));
+	itsMainPanel->setWidth(WLength(100.0,WLength::Percentage));
+	itsMainPanel->setHeight(WLength(7.0,WLength::FontEm));
+	itsMainPanel->setContentAlignment(Wt::AlignCenter|Wt::AlignBottom);
+	itsMainPanel->addWidget(new WText(translate("One time password").str()));
 	itsMainPanel->addWidget(itsEdtPswd);
 	itsMainPanel->addWidget(itsBtnOk);
 }
