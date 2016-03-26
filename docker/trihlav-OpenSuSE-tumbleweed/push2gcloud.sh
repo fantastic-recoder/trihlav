@@ -1,2 +1,2 @@
 #!/bin/bash
-gcloud docker push gcr.io/trihlav-1/trihlav-1-node:v1
+gcloud docker push gcr.io/trihlav-1/trihlav-1-node:v4
