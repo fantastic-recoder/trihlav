@@ -4,3 +4,6 @@
 [submodule "docker-containers-build"]
 	path = docker/docker-containers-build
 	url = https://github.com/openSUSE/docker-containers-build.git
+[submodule "src/main/docker/docker-containers-build"]
+	path = src/main/docker/docker-containers-build
+	url = https://github.com/openSUSE/docker-containers-build.git
