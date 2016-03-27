@@ -26,7 +26,7 @@ App::App(const WEnvironment& pEnv) :
 		WApplication(pEnv) {
 	setTitle("Trihlav server");               // application title
 	setTheme(new WBootstrapTheme(this));
-	useStyleSheet("trihlav.css");
+	useStyleSheet("style/trihlav.css");
 	itsMainPanelCntrl=new MainPanelPresenter(getUiFactory());
 	trihlav::ViewIface* myIMainPanelView = itsMainPanelCntrl->getView();
 	WtMainPanelView* myMainPanelView = dynamic_cast<WtMainPanelView*>

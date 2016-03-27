@@ -72,8 +72,10 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 	{
 		itsGenPublicIdentityBtn->setWidth(WLength(9.0,U::FontEm));
 		itsPublicId->setWidth(WLength(13.0,U::FontEm));
+		itsPublicId->setInputMask("<aa aa aa aa aa aa");
+		itsPublicId->addStyleClass("console-font");
 		itsPublicIdLen->setWidth(WLength(2.0,U::FontEm));
-		Wt::WLabel* myLbl = new WLabel(translate("Public ID").str());
+		Wt::WLabel* myLbl = new WLabel(translate("Public ID (modhex)").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,1,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
 		myTopLayout->addWidget(itsPublicId,1,1,1,3,Wt::AlignMiddle);
@@ -83,6 +85,8 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 	{
 		itsGenPrivateIdentityBtn->setWidth(WLength(9.0,U::FontEm));
 		itsPrivateId->setWidth(WLength(18.0,U::FontEm));
+		itsPrivateId->setInputMask("<hh hh hh hh hh hh");
+		itsPrivateId->addStyleClass("console-font");
 		Wt::WLabel* myLbl = new WLabel(translate("Private ID").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
@@ -92,6 +96,8 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 	{
 		itsGenSecretKeyBtn->setWidth(WLength(9.0,U::FontEm));
 		itsSecretKey->setWidth(WLength(18.0,U::FontEm));
+		itsSecretKey->setInputMask("<hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh");
+		itsSecretKey->addStyleClass("console-font");
 		Wt::WText* myLbl = new WText(translate("Secret key").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,3,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
