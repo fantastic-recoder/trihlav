@@ -167,14 +167,36 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	MockMessageView& myMockMessageView =
 			dynamic_cast<MockMessageView&>(myPresenter.getMessageView());
 	EXPECT_CALL(myMockMessageView,
-			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_OK));
-	EXPECT_CALL(myMockMessageView,
 			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_NOT_OK));
+	EXPECT_CALL(myMockMessageView,
+			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_OK)).Times(3);
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
-	// try to check the same password again.
+	BOOST_LOG_TRIVIAL(debug)<< " try to check the same password again.";
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
+	BOOST_LOG_TRIVIAL(debug)<< "Simulate re-initialization.";
+	myOtp0.resize(YUBIKEY_OTP_SIZE+1);
+	yubikey_token_st myTkn1 { myCfg0.getToken() };
+	myTkn1.ctr++;
+	myTkn1.use=0;
+	myTkn1.tstpl-=77;
+	myTkn1.crc = YubikoOtpKeyConfig::computeCrc(myTkn1);
+	yubikey_token_st myTkn2 { myTkn1 };
+	yubikey_generate(&myTkn1, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
+	myOtp0.resize(YUBIKEY_OTP_SIZE);
+	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
+	myPresenter.getView().getBtnOk().getPressedSignal()();
+	BOOST_LOG_TRIVIAL(debug)<< "And again after re-initialization.";
+	myTkn2.use++;
+	myTkn2.tstpl++;
+	myTkn2.crc = YubikoOtpKeyConfig::computeCrc(myTkn2);
+	myOtp0.resize(YUBIKEY_OTP_SIZE+1);
+	yubikey_generate(&myTkn2, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
+	myOtp0.resize(YUBIKEY_OTP_SIZE);
+	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
+	myPresenter.getView().getBtnOk().getPressedSignal()();
+
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
 }

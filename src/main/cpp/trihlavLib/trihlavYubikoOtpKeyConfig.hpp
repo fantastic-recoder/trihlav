@@ -21,6 +21,7 @@ class YubikoOtpKeyConfig {
 protected:
 	void setFilename(const std::string &value);
 	void zeroToken();
+	void copyAndSaveToken(const yubikey_token_st& pToken);
 
 public:
 	using SecretKeyArr=std::array<uint8_t,YUBIKEY_KEY_SIZE>;
