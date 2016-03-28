@@ -29,7 +29,7 @@
 #ifndef TRIHLAV_MOCK_EDIT_IFACE_HPP_
 #define TRIHLAV_MOCK_EDIT_IFACE_HPP_
 
-#include "../../main/cpp/trihlavLib/trihlavEditIface.hpp"
+#include "trihlavLib/trihlavEditIface.hpp"
 
 namespace trihlav {
 
@@ -44,7 +44,7 @@ public:
 	 * @brief Getter
 	 * @return a copy of it's value
 	 */
-	virtual const T getValue() const {
+	virtual const T getValue() const  override {
 		return itsVal;
 	}
 
@@ -53,8 +53,14 @@ public:
 	 * @see IStrEdit::getValue
 	 * @return void
 	 */
-	virtual void setValue(const T& pVal) {
+	virtual void setValue(const T& pVal)  override {
 		itsVal = pVal;
+	}
+
+	/**
+	 * A do nothing implementation.
+	 */
+	virtual void setFocus(bool pB) override {
 	}
 
 	virtual ~MockEditIface(){}

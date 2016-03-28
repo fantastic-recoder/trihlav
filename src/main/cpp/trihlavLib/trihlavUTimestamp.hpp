@@ -47,7 +47,7 @@ namespace trihlav {
             uint16_t tstpl;
         } tstp;
 		/** Access timestamp as an integer. */
-		int tstp_int;
+		unsigned int tstp_int;
 
         UTimestamp() :tstp_int(0){}
         UTimestamp(const int pAsInt) :tstp_int(pAsInt){}

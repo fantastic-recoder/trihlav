@@ -42,15 +42,19 @@ public:
 	/**
 	 * @return The edited value.
 	 */
-	virtual const std::string getValue() const {
+	virtual const std::string getValue() const override {
 		return text().toUTF8();
 	}
 
 	/**
 	 * @param pVal set the value, which can be edited.
 	 */
-	virtual void setValue(const std::string& pVal) {
+	virtual void setValue(const std::string& pVal) override {
 		setText(Wt::WString::fromUTF8(pVal));
+	}
+
+	virtual void setFocus(bool pFlag) override {
+		Wt::WLineEdit::setFocus(pFlag);
 	}
 
 };

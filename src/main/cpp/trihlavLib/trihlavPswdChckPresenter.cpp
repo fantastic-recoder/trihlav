@@ -80,6 +80,7 @@ MessageViewIface& PswdChckPresenter::getMessageView() {
 void PswdChckPresenter::okPressed() {
 	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
 	string myPswd0(getView().getEdtPswd0().getValue());
+	getView().getEdtPswd0().setValue("");
 	const size_t myPswdSz(myPswd0.size());
 	if (myPswdSz < YUBIKEY_OTP_SIZE) {
 		getView().getEdtPswd0().setValue("");
@@ -109,11 +110,12 @@ void PswdChckPresenter::okPressed() {
 		if (myKey->checkOtp(myPswdSx)) {
 			getMessageView().showMessage(translate(K_MSG_TITLE),
 										 translate(K_PSWD_OK));
-			return;
+		} else {
+			getMessageView().showMessage(translate(K_MSG_TITLE),
+					translate(K_PSWD_NOT_OK));
 		}
 	}
-	getMessageView().showMessage(translate(K_MSG_TITLE),
-			translate(K_PSWD_NOT_OK));
+	getView().getEdtPswd0().setFocus(true);
 }
 
 PswdChckPresenter::~PswdChckPresenter() {

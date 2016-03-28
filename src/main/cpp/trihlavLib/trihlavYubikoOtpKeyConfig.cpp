@@ -175,11 +175,11 @@ const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 			const string myMsg = (format("File %1% already exists.")
 					% getFilename()).str();
 			BOOST_LOG_TRIVIAL(error)<< myMsg;
-			ptime myTime= microsec_clock::universal_time();
+			ptime myTime = microsec_clock::universal_time();
 			stringstream myStrStr;
 			myStrStr << "." << myTime;
 			path myBackup(getFilename());
-			myBackup+=(myStrStr.str());
+			myBackup += (myStrStr.str());
 			BOOST_LOG_TRIVIAL(debug)<< "Moving "<< getFilename() << " to "<<myBackup;
 			rename(getFilename(), myBackup);
 		}
@@ -365,11 +365,6 @@ bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 	logDebug_token(getToken());
 	BOOST_LOG_TRIVIAL(debug)<< "Decrypted token:";
 	logDebug_token(myToken);
-	//	EXPECT_TRUE(myTokenBack.ctr == myToken.ctr);
-	//	EXPECT_TRUE(myTokenBack.rnd == myToken.rnd);
-	//	EXPECT_TRUE(myTokenBack.use == myToken.use);
-	//	EXPECT_TRUE(myTokenBack.tstph == myToken.tstph);
-	//	EXPECT_TRUE(myTokenBack.tstpl == myToken.tstpl);
 	if (strncmp(reinterpret_cast<const char*>(&getToken().uid),
 			reinterpret_cast<char*>(&myToken.uid), YUBIKEY_UID_SIZE) == 0) {
 		BOOST_LOG_TRIVIAL(debug)<< "UID is same.";
@@ -379,15 +374,30 @@ bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 			<< myComputedCrc <<"!=" << myToken.crc;
 			return false;
 		}
-		if(myToken.use <= getToken().use) {
+		if(myToken.ctr > getToken().ctr) {
+			BOOST_LOG_TRIVIAL(debug)<< "Decrypted counter is bigger than stored value: "
+			<< int(myToken.ctr) <<">" << int(getToken().ctr) << " reseting use counter & clock.";
+			getToken().use= myToken.use;
+		} else if(myToken.ctr < getToken().ctr) {
+			BOOST_LOG_TRIVIAL(debug)<< "Decrypted counter is smaller than stored value: "
+			<< int(myToken.ctr) <<"<" << int(getToken().ctr) << " returning false.";
+			return false;
+		} else if(myToken.use <= getToken().use) {
 			BOOST_LOG_TRIVIAL(debug)<< "Decrypted use counter is wrong: "
-			<< myToken.use <<"<=" << getToken().use;
+			<< int(myToken.use) <<"<=" << int(getToken().use);
 			return false;
-		}
-		if(myToken.ctr != getToken().ctr) {
-			BOOST_LOG_TRIVIAL(debug)<< "Decrypted counter is wrong: "
-			<< myToken.ctr <<"!=" << getToken().ctr;
-			return false;
+		} else {
+			UTimestamp myTstmp;
+			myTstmp.tstp.tstph=myToken.tstph;
+			myTstmp.tstp.tstpl=myToken.tstpl;
+			if(myTstmp.tstp_int<=getTimestamp().tstp_int) {
+				BOOST_LOG_TRIVIAL(debug)<< "Decrypted timer is smaller than stored value: "
+				<< myTstmp.tstp_int <<"<=" << getTimestamp().tstp_int << " returning false.";
+				return false;
+			} else {
+				BOOST_LOG_TRIVIAL(debug)<< "Decrypted timer int value: "
+				<< myTstmp.tstp_int <<".";
+			}
 		}
 		setCounter(myToken.ctr);
 		setUseCounter(myToken.use);

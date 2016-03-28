@@ -49,6 +49,11 @@ public:
 	 */
 	virtual void setValue(const T& pVal) =0;
 
+	/**
+	 * Set the focus in widgets editor.
+	 */
+	virtual void setFocus(bool) = 0;
+
 	/// Just ensure virtual destructor.
 	virtual ~EditIface(){}
 };

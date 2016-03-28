@@ -137,6 +137,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	EXPECT_FALSE(exists(myTestCfgFile));
 	EXPECT_TRUE(create_directory(myTestCfgFile));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
+	int myTimer=333;
 	NiceMock<MockFactory> myMockFactory;
 	KeyManager& myKeyMan(myMockFactory.getKeyManager());
 	myKeyMan.setConfigDir(myTestCfgFile);
@@ -147,12 +148,14 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	myCfg0.setCounter(K_TST_CNTR0);
 	myCfg0.setRandom(K_TST_RNDM0);
 	myCfg0.setSecretKey(K_TST_SECU0);
+	myCfg0.setTimestamp(myTimer);
 	myCfg0.save();
 	myCfg0.computeCrc();
 	logDebug_token(myCfg0.getToken());
 	string myOtp0(YUBIKEY_OTP_SIZE + 1, '\0');
 	yubikey_token_st myTkn { myCfg0.getToken() };
 	myTkn.use++;
+	myTkn.tstpl++;
 	myTkn.crc = YubikoOtpKeyConfig::computeCrc(myTkn);
 	yubikey_generate(&myTkn, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
 	logDebug_token(myCfg0.getToken());
@@ -170,6 +173,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 	// try to check the same password again.
+	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
 	myPresenter.getView().getBtnOk().getPressedSignal()();
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
