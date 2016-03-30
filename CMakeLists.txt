@@ -173,7 +173,7 @@ INCLUDE(CPack)
 FIND_PACKAGE( Wt REQUIRED )
 SET (WT_CONNECTOR "wtfcgi" CACHE STRING "Connector used (wthttp or wtfcgi)")
 # Find Wt resources
-FIND_PATH(WT_RESOURCES NAMES ajax-loading.gif PATHS /usr/share/wt/resources /opt/wt/resources )
+FIND_PATH(WT_RESOURCES NAMES ajax-loading.gif PATHS /usr/share/wt/resources /opt/wt/resources /usr/share/Wt/resources )
 IF(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
    MESSAGE( FATAL_ERROR "Wt resource directory not found." )
 ELSE(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
