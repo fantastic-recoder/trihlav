@@ -11,12 +11,12 @@ add_executable( trihlavTestApi trihlavTestApi.cpp )
 add_test( NAME trihlavTestApi COMMAND trihlavTestApi )
 
 target_link_libraries(trihlavTestApi
-                      ${Boost_LIBRARIES}
                       ${YUBIKEY_LIB}
                       trihlavApi
                       ${CMAKE_THREAD_LIBS_INIT}
                       libgtest
     				  libgmock
+                      ${Boost_LIBRARIES}
                       )
 
 add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp 
@@ -26,12 +26,12 @@ trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp)
 add_test( NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey )
 
 target_link_libraries(trihlavTestYubikoOtpKey
-                      	${Boost_LIBRARIES}
-                      	${YUBIKEY_LIB}
                       	trihlavApi
                       	${CMAKE_THREAD_LIBS_INIT}
                         libgtest
     					libgmock
+                      	${YUBIKEY_LIB}
+                      	${Boost_LIBRARIES}
                       )
 
 add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp 
@@ -41,12 +41,12 @@ add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp
 add_test( NAME trihlavTestKeyListPresenter COMMAND trihlavTestKeyListPresenter )
 
 target_link_libraries(trihlavTestKeyListPresenter
-                      ${Boost_LIBRARIES}
-                      ${YUBIKEY_LIB}
                       trihlavApi
                       ${CMAKE_THREAD_LIBS_INIT}
                       libgtest
     				  libgmock
+                      ${YUBIKEY_LIB}
+                      ${Boost_LIBRARIES}
                       )
 
 add_executable( trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp 
@@ -57,17 +57,17 @@ add_executable( trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp
 add_test( NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter )
 
 target_link_libraries(trihlavTestPswdChckPresenter
-                      ${Boost_LIBRARIES}
-                      ${YUBIKEY_LIB}
                       trihlavApi
                       ${CMAKE_THREAD_LIBS_INIT}
                       libgtest
     				  libgmock
+                      ${YUBIKEY_LIB}
+                      ${Boost_LIBRARIES}
                       )
 
 add_executable( pretty_example pretty_example.cc )
 
 target_link_libraries(pretty_example
-                      ${Boost_LIBRARIES}
                       ${CMAKE_THREAD_LIBS_INIT}
+                      ${Boost_LIBRARIES}
                       )

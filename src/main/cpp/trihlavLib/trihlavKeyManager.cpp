@@ -6,7 +6,9 @@
  */
 
 #include <string>
+#include <ios>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
