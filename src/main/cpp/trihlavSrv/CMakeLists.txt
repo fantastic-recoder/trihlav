@@ -8,13 +8,13 @@ add_executable(trihlavsrv main.cpp trihlavApp.cpp trihlavWtUiFactory.cpp
 
 TARGET_LINK_LIBRARIES( trihlavsrv
 	trihlavApi
+    ${Boost_LIBRARIES}
     #${Wt_DEBUG_LIBRARY}        
     ${Wt_LIBRARY}
     #${Wt_HTTP_DEBUG_LIBRARY}   
     ${Wt_HTTP_LIBRARY}
     ${YUBIKEY_LIB}
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${Boost_LIBRARIES}
+    #${CMAKE_THREAD_LIBS_INIT}
 )
 
 INSTALL(TARGETS trihlavsrv RUNTIME DESTINATION bin)
