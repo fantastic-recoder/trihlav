@@ -6,6 +6,8 @@
  */
 
 #include <iostream>
+#include <stdexcept>
+#include <string>
 
 #include "trihlavYubikoOtpKeyPresenter.hpp"
 
@@ -20,6 +22,7 @@
 #include "trihlavEditIface.hpp"
 #include "trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
 #include "trihlavKeyManager.hpp"
 #include "trihlavSpinBoxIface.hpp"
 #include "trihlavYubikoOtpKeyViewIface.hpp"
@@ -64,9 +67,19 @@ YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 	delete itsCurCfg;
 }
 
-void YubikoOtpKeyPresenter::addKey() {
-	getCurCfg();
+void YubikoOtpKeyPresenter::showCurrentConfig() {
+	getView().getEdtDescription().setValue(getCurCfg().getDescription());
+	getView().getEdtPrivateId().setValue(getCurCfg().getPrivateId());
+	getView().getEdtPublicId().setValue(getCurCfg().getPublicId());
+	getView().getEdtSecretKey().setValue(getCurCfg().getSecretKey());
 	getView().show();
+}
+
+void YubikoOtpKeyPresenter::addKey() {
+	delete itsCurCfg;
+	itsCurCfg=0;
+	getCurCfg();
+	showCurrentConfig();
 }
 
 YubikoOtpKeyConfig& YubikoOtpKeyPresenter::getCurCfg() {
@@ -84,7 +97,7 @@ void YubikoOtpKeyPresenter::deleteKey() {
 				auto myErrMsg = format(translate("Failed to delete file %1%."))
 						% myFilename.native();
 				BOOST_LOG_TRIVIAL(error)<< myErrMsg;
-				throw new std::runtime_error(myErrMsg.str());
+				throw std::runtime_error(myErrMsg.str());
 			}
 		} else {
 			BOOST_LOG_TRIVIAL(warning)<< "Filename " << myFilename
@@ -100,7 +113,12 @@ void YubikoOtpKeyPresenter::throwNoConfig() {
 			translate(
 					"Internal error, YubikoOtpKeyPresenter has no YubikoOtpKeyConfigPtr.");
 	BOOST_LOG_TRIVIAL(error)<< myErrMsg;
-	throw new std::runtime_error(myErrMsg);
+	throw std::runtime_error(myErrMsg);
+}
+
+inline string deleteSpaces( std::string pStr) {
+	pStr.erase(remove(pStr.begin(), pStr.end(), ' '), pStr.end());
+	return pStr;
 }
 
 void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
@@ -110,12 +128,27 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 		if (itsCurCfg == 0) {
 			throwNoConfig();
 		}
-		getCurCfg().setPrivateId(getPrivateId());
-		getCurCfg().setSecretKey(getSecretKey());
-		getCurCfg().setPublicId(getPublicId());
-		getCurCfg().setDescription(getDescription());
-		getCurCfg().save();
-		saved();
+		try {
+			string myPrivateId{deleteSpaces(getPrivateId())};
+			getCurCfg().setPrivateId(myPrivateId);
+
+			string mySecretKey{deleteSpaces(getSecretKey())};
+			getCurCfg().setSecretKey(mySecretKey);
+
+			string myPublicId{deleteSpaces(getPublicId())};
+			getCurCfg().setPublicId(myPublicId);
+
+			getCurCfg().setDescription(getDescription());
+
+			getCurCfg().save();
+			saved();
+		} catch (const std::exception& pExc) {
+			getFactory().createMessageView()->showMessage(translate("Trihlav error!"),
+					pExc.what());
+		} catch(...) {
+			getFactory().createMessageView()->showMessage(translate("Trihlav error!"),
+					translate("Unknown exception caught!"));
+		}
 	}
 }
 

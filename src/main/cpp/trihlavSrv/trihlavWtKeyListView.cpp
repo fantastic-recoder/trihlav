@@ -30,6 +30,10 @@
 #include <array>
 #include <boost/locale.hpp>
 
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+
 #include <Wt/WTableView>
 #include <Wt/WPushButton>
 #include <Wt/WContainerWidget>
@@ -176,7 +180,7 @@ WtKeyListView::WtKeyListView() {
 	itsTable->setAlternatingRowColors(true);
 	itsTable->setCanReceiveFocus(true);
 	itsTable->setColumnResizeEnabled(true);
-	itsTable->setColumnWidth(2,WLength("60em"));
+	itsTable->setColumnWidth(2,"400px");
 	itsTable->setSelectionMode(Wt::SingleSelection);
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
@@ -213,28 +217,11 @@ void WtKeyListView::clear() {
 
 void WtKeyListView::addRow(const KeyListRow_t pRow) {
 	itsDtaMdl->addRow(pRow);
-//	auto myId = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<0>()));
-//	auto myPrivId = new Wt::WText(pRow.get<1>());
-//	auto myDescription = new Wt::WText(pRow.get<2>());
-//	auto myPubId = new Wt::WText(pRow.get<3>());
-//	auto myCounter = new Wt::WText(
-//			boost::lexical_cast<std::string>(pRow.get<5>()));
-//	auto myUse = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<4>()));
-//	itsTable->elementAt(itsRowCounter, 0)->addWidget(myId);
-//	itsTable->elementAt(itsRowCounter, 1)->addWidget(myPrivId);
-//	itsTable->elementAt(itsRowCounter, 2)->addWidget(myDescription);
-//	itsTable->elementAt(itsRowCounter, 3)->addWidget(myPubId);
-//	itsTable->elementAt(itsRowCounter, 4)->addWidget(myUse);
-//	itsTable->elementAt(itsRowCounter, 5)->addWidget(myCounter);
-//	itsTable->elementAt(itsRowCounter, 0)->setContentAlignment( Wt::AlignCenter );
-//	itsTable->elementAt(itsRowCounter, 1)->setContentAlignment( Wt::AlignCenter );
-//	itsTable->elementAt(itsRowCounter, 2)->setContentAlignment( Wt::AlignCenter );
-//	itsTable->elementAt(itsRowCounter, 3)->setContentAlignment( Wt::AlignCenter );
-//	itsTable->elementAt(itsRowCounter, 4)->setContentAlignment( Wt::AlignCenter );
-//	itsTable->elementAt(itsRowCounter, 5)->setContentAlignment( Wt::AlignCenter );
 }
 
 void WtKeyListView::addedAllRows() {
+	BOOST_LOG_TRIVIAL(debug)<< "We have " << itsDtaMdl->rowCount();
+	itsTable->setModel(itsDtaMdl);
 }
 
 } /* namespace trihlav */

@@ -126,8 +126,8 @@ void YubikoOtpKeyConfig::setPrivateId(const string &pPrivateId) {
 	string myPrivateId(pPrivateId);
 	trim(myPrivateId);
 	if (myPrivateId.size() != K_YBK_PRIVATE_ID_LEN) {
-		throw new WrongConfigValue(WrongConfigValue::EYbkPrivateId,
-				K_YBK_PRIVATE_ID_LEN, myPrivateId.size());
+		throw WrongConfigValue(WrongConfigValue::EYbkPrivateId,
+				K_YBK_PRIVATE_ID_LEN, myPrivateId);
 	}
 	if (getPrivateId() != pPrivateId) {
 		yubikey_hex_decode(reinterpret_cast<char*>(itsToken.uid),
@@ -150,8 +150,8 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 	string mySecretKey(pKey);
 	trim(mySecretKey);
 	if (mySecretKey.size() != K_SEC_KEY_SZ) {
-		throw new WrongConfigValue(WrongConfigValue::EYbkSecretKey,
-				K_SEC_KEY_SZ, mySecretKey.size());
+		throw WrongConfigValue(WrongConfigValue::EYbkSecretKey,
+				K_SEC_KEY_SZ, mySecretKey);
 	}
 	if (getSecretKey() != pKey) {
 		yubikey_hex_decode(reinterpret_cast<char*>(itsKey.data()),
@@ -168,7 +168,7 @@ const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 		const string myMsg =
 				(format("File %1% is a directory.") % getFilename()).str();
 		BOOST_LOG_TRIVIAL(error)<< myMsg;
-		throw new out_of_range(myMsg);
+		throw out_of_range(myMsg);
 	}
 	if (pIsOut) {
 		if (exists(getFilename())) {
@@ -189,14 +189,14 @@ const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
 			const string myMsg = (format("Couldn't open save file %1%.")
 					% getFilename()).str();
 			BOOST_LOG_TRIVIAL(error)<< myMsg;
-			throw new out_of_range(myMsg);
+			throw out_of_range(myMsg);
 		}
 		uintmax_t myFSz = file_size(getFilename());
 		if (myFSz > K_MX_KEY_FILE_SZ) {
 			const string myMsg = (format("File %1% is too big: %2%.")
 					% getFilename() % myFSz).str();
 			BOOST_LOG_TRIVIAL(error)<< myMsg;
-			throw new out_of_range(myMsg);
+			throw out_of_range(myMsg);
 		}
 		myRetVal = getFilename().native();
 	}
@@ -347,7 +347,7 @@ const string YubikoOtpKeyConfig::modhex2Hex(const std::string& p2Hex) {
 void YubikoOtpKeyConfig::setPublicId(const std::string& pPubId) {
 	auto myOldKey = itsPublicId;
 	if (pPubId.empty()) {
-		throw new EmptyPublicId();
+		throw EmptyPublicId();
 	}
 	itsPublicId = pPubId;
 	itsKeyManager.update(pPubId, *this);

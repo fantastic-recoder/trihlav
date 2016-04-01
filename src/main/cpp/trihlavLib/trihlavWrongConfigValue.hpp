@@ -20,13 +20,13 @@ public:
         ENoReasonSet
     };
 
-    WrongConfigValue(const EValNames pValName, const size_t pExpected, const size_t pReal );
+    WrongConfigValue(const EValNames pValName, const size_t pExpected, const std::string& pReal );
 
     size_t getExpected() const;
 
     void setExpected(const size_t &value);
 
-    size_t getReal() const;
+    const std::string& getReal() const;
 
     void setReal(const size_t &value);
 
@@ -49,7 +49,7 @@ private:
     EValNames itsValName;
     EReason itsReason;
     size_t itsExpected;
-    size_t itsReal;
+    std::string itsReal;
     std::string itsMsg;
 };
 

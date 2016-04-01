@@ -77,7 +77,7 @@ void WrongConfigValue::setExpected(const size_t &value) {
     itsExpected = value;
 }
 
-size_t WrongConfigValue::getReal() const {
+const string& WrongConfigValue::getReal() const {
     return itsReal;
 }
 
@@ -102,7 +102,7 @@ void WrongConfigValue::setReason(const WrongConfigValue::EReason &value) {
 }
 
 WrongConfigValue::WrongConfigValue(const WrongConfigValue::EValNames pValName,
-                                   const size_t pExpected, const size_t pReal) :
+                                   const size_t pExpected, const std::string& pReal) :
     itsValName(pValName), itsReason(EWrongSize), itsExpected(pExpected), itsReal(
         pReal),invalid_argument(K_FAILED_FORMAT_MSG.c_str())
 {
@@ -110,7 +110,7 @@ WrongConfigValue::WrongConfigValue(const WrongConfigValue::EValNames pValName,
         itsMsg=string("Config value \"")
                + WrongConfigValue::getValNameStr(itsValName)
                + "\" has wrong size, expected " + to_string(int(itsExpected))
-               + ", but got " + to_string(int(itsReal));
+               + ", but got " + to_string(int(itsReal.size()))+"(\""+itsReal+"\")";
     } catch (...) {
         itsMsg=K_FAILED_FORMAT_MSG.c_str();
     }

@@ -97,6 +97,7 @@ public:
 
 	/// @brief Description getter.
 	std::string getDescription();
+	void showCurrentConfig();
 
 	signal_t saved;
 private:

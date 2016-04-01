@@ -34,7 +34,7 @@ void WtMainPanelView::add(const string& pName,KeyListViewIface&  pKeyListView){
 			dynamic_cast<WtKeyListView*>(&pKeyListView);
 	if (myKeyListView== 0) {
 		//TODO add rtti of the base type to the err msg
-		throw new CannotCastImplementation("WtKeyListView");
+		throw CannotCastImplementation("WtKeyListView");
 	}
 	addView(pName,*myKeyListView);
 }
@@ -44,7 +44,7 @@ void WtMainPanelView::add(const string& pName, PswdChckViewIface& pPswdChckView)
 			dynamic_cast<WtPswdChckView*>(&pPswdChckView);
 	if (myPswdChckView == 0) {
 		//TODO add rtti of the base type to the err msg
-		throw new CannotCastImplementation("WtPswdChckView");
+		throw CannotCastImplementation("WtPswdChckView");
 	}
 	addView(pName,*myPswdChckView);
 }

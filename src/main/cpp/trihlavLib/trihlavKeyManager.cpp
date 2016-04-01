@@ -72,12 +72,12 @@ KeyManager::getConfigDir() const {
 		if(exists(itsConfigDir)) {
 			const perms &myPerms = status(itsConfigDir).permissions();
 			if(!myPerms & perms::owner_write) {
-				throw new CannotWriteConfigDir(itsConfigDir);
+				throw CannotWriteConfigDir(itsConfigDir);
 			}
 		} else {
 			BOOST_LOG_TRIVIAL(debug)<< "Creating config dir " << itsConfigDir << ".";
 			if(!create_directories(itsConfigDir)) {
-				throw new FailedCreateConfigDir(itsConfigDir);
+				throw FailedCreateConfigDir(itsConfigDir);
 			}
 		}
 		itsInitializedFlag=true;
@@ -347,7 +347,7 @@ const path KeyManager::detectConfigDir() const {
 		if(myWriteable) {
 			BOOST_LOG_TRIVIAL(debug)<< ": "<< myDefPath << " is writable.";
 		} else {
-			throw new FailedCreateConfigDir(itsConfigDir);
+			throw FailedCreateConfigDir(itsConfigDir);
 		}
 	}
 	return myDefPath;
@@ -363,7 +363,7 @@ void KeyManager::setConfigDir(const path& pConfigDir) {
 	if (myWriteable) {
 		BOOST_LOG_TRIVIAL(debug)<< ": "<< pConfigDir << " is writable.";
 	} else {
-		throw new FailedCreateConfigDir(itsConfigDir);
+		throw FailedCreateConfigDir(itsConfigDir);
 	}
 	itsConfigDir = pConfigDir;
 }
@@ -404,7 +404,7 @@ const size_t KeyManager::getKeyCount() const {
 
 const YubikoOtpKeyConfig& KeyManager::getKey(const size_t pIdx) const {
 	if (pIdx < 0 || itsKeyList.size() < pIdx) {
-		throw new std::range_error(
+		throw std::range_error(
 				(format("Key index %1% is out of range <0,%2%>.") % pIdx
 						% itsKeyList.size()).str());
 	}

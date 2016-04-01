@@ -15,6 +15,7 @@ Yubikey OTP support
 5. WT
 
 ## TODO
+0. Check all ranges when creating a key.
 1. Add PIN as a second factor.
 2. Configure user ID. 
 3. Implement PAM module.
