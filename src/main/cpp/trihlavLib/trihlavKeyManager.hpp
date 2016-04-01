@@ -9,6 +9,7 @@
 #define TRIHLAV_KEY_MANAGER_HPP_
 
 #include <map>
+#include <vector>
 #include <string>
 #include <boost/filesystem.hpp>
 
@@ -22,7 +23,7 @@ class YubikoOtpKeyConfig;
 class KeyManager {
 public:
 	using path = boost::filesystem::path;
-	using KeyList_t = std::vector<std::shared_ptr<YubikoOtpKeyConfig>>;
+	using KeyList_t = std::vector<std::shared_ptr<YubikoOtpKeyConfig> >;
 	using KeyMap_t = std::map<std::string,YubikoOtpKeyConfig*>;
 
     /// Lazy initialization constructor.

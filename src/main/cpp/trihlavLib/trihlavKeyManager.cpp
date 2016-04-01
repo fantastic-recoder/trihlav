@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <memory>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
 #include <boost/filesystem.hpp>

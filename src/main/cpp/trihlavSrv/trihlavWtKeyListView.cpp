@@ -1,69 +1,160 @@
 /*
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
-	der GNU General Public License, wie von der Free Software Foundation,
-	Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
-	veröffentlichten Version, weiterverbreiten und/oder modifizieren.
+ Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
+ der GNU General Public License, wie von der Free Software Foundation,
+ Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
+ veröffentlichten Version, weiterverbreiten und/oder modifizieren.
 
-	Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
-	OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
-	Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
-	Siehe die GNU General Public License für weitere Details.
+ Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
+ OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+ Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+ Siehe die GNU General Public License für weitere Details.
 
-	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
-	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-*/
+ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+ */
 
 #include <string>
+#include <array>
 #include <boost/locale.hpp>
 
-#include <Wt/WTable>
+#include <Wt/WTableView>
 #include <Wt/WPushButton>
 #include <Wt/WContainerWidget>
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
+#include <Wt/WAbstractTableModel>
+#include <Wt/WModelIndex>
 #include "trihlavWtPushButton.hpp"
 #include "trihlavWtKeyListView.hpp"
 
 using std::string;
+using std::array;
 using boost::locale::translate;
+using boost::any;
 using Wt::WText;
 using Wt::WContainerWidget;
 using Wt::WHBoxLayout;
 using Wt::WVBoxLayout;
 using Wt::WLength;
-using Wt::WTable;
+using Wt::WTableView;
+using Wt::WAbstractTableModel;
+using Wt::WModelIndex;
+using Wt::Orientation;
+using Wt::DisplayRole;
+using std::vector;
 
 namespace trihlav {
 
+class WtKeyListModel: public WAbstractTableModel {
+	typedef vector<KeyListRow_t> RowList_t;
+	RowList_t itsRows;
+	const vector<string> itsCaptions { { translate("Record ID") }, { translate(
+			"Public ID") }, { translate("Description") }, { translate(
+			"Private ID") }, { translate("Use counter") }, { translate(
+			"Counter") } };
+public:
+	/**
+	 * @brief Returns the table row count (only for the invalid parent!)
+	 */
+	virtual int rowCount(const WModelIndex &pParent = Wt::WModelIndex()) const
+			override {
+		if (!pParent.isValid())
+			return itsRows.size();
+		return 0;
+	}
+
+	/**
+	 * @brief Returns the table column count (only for the invalid parent!)
+	 */
+	int columnCount(const WModelIndex &pParent = Wt::WModelIndex()) const
+			override {
+		if (!pParent.isValid())
+			return itsCaptions.size();
+		return 0;
+	}
+
+	virtual any data(const WModelIndex& pIndex, int pRole = DisplayRole) const {
+		if (pRole == DisplayRole) {
+			switch (pIndex.column()) {
+			case 0:
+				return itsRows[pIndex.row()].get<0>();
+			case 1:
+				return itsRows[pIndex.row()].get<1>();
+			case 2:
+				return itsRows[pIndex.row()].get<2>();
+			case 3:
+				return itsRows[pIndex.row()].get<3>();
+			case 4:
+				return itsRows[pIndex.row()].get<4>();
+			case 5:
+				return itsRows[pIndex.row()].get<5>();
+			default:
+				return any();
+			}
+		}
+		return any();
+	}
+
+	/**
+	 * @brief Returns the header data for a column
+	 */
+	any headerData(int pSection, Orientation pOrientation = Wt::Horizontal,
+			int pRole = DisplayRole) const override {
+		if (pOrientation == Wt::Horizontal) {
+			switch (pRole) {
+			case Wt::DisplayRole:
+				if (pSection > itsCaptions.size()) {
+					return any("-");
+				}
+				return itsCaptions[pSection];
+			default:
+				return boost::any();
+
+			}
+		}
+		return boost::any();
+	}
+
+	void addRow(const KeyListRow_t pRow) {
+		itsRows.push_back(pRow);
+	}
+
+	virtual void clear() {
+		itsRows.clear();
+	}
+}
+;
+
 void WtKeyListView::addTableHeader() {
-	WText* myRecId = new WText(translate("Record ID").str());
-	itsTable->elementAt(0, 0)->addWidget(myRecId);
-	WText* myPublicId = new WText(translate("Public ID").str());
-	itsTable->elementAt(0, 1)->addWidget(myPublicId);
-	WText* myDescription = new WText(translate("Description").str());
-	itsTable->elementAt(0, 2)->addWidget(myDescription);
-	WText* myPrivateId = new WText(translate("Private ID").str());
-	itsTable->elementAt(0, 3)->addWidget(myPrivateId);
-	WText* myUseCounter = new WText(translate("Use counter").str());
-	itsTable->elementAt(0, 4)->addWidget(myUseCounter);
-	WText* myCounter = new WText(translate("Counter").str());
-	itsTable->elementAt(0, 5)->addWidget(myCounter);
+//	WText* myRecId = new WText(translate("Record ID").str());
+//	itsTable->elementAt(0, 0)->addWidget(myRecId);
+//	WText* myPublicId = new WText(translate("Public ID").str());
+//	itsTable->elementAt(0, 1)->addWidget(myPublicId);
+//	WText* myDescription = new WText(translate("Description").str());
+//	itsTable->elementAt(0, 2)->addWidget(myDescription);
+//	WText* myPrivateId = new WText(translate("Private ID").str());
+//	itsTable->elementAt(0, 3)->addWidget(myPrivateId);
+//	WText* myUseCounter = new WText(translate("Use counter").str());
+//	itsTable->elementAt(0, 4)->addWidget(myUseCounter);
+//	WText* myCounter = new WText(translate("Counter").str());
+//	itsTable->elementAt(0, 5)->addWidget(myCounter);
 }
 
 WtKeyListView::WtKeyListView() {
+	itsDtaMdl = new WtKeyListModel;
 	itsPanel = new WContainerWidget;
 	WHBoxLayout* myBtnsLayout = new WHBoxLayout;
 	WVBoxLayout* myTopLayout = new WVBoxLayout;
@@ -79,10 +170,14 @@ WtKeyListView::WtKeyListView() {
 	myBtnsLayout->addWidget(itsBtnEdit);
 	myBtnsLayout->addWidget(itsBtnDel);
 	myBtnsLayout->addWidget(itsBtnReload);
-	itsTable = new WTable();
-	itsTable->setHeaderCount(1);
-	itsTable->addStyleClass("table-striped");
-	itsTable->setWidth(Wt::WLength("100%"));
+	itsTable = new WTableView();
+	itsTable->setModel(itsDtaMdl);
+	//itsTable->setWidth(WLength("100%"));
+	itsTable->setAlternatingRowColors(true);
+	itsTable->setCanReceiveFocus(true);
+	itsTable->setColumnResizeEnabled(true);
+	itsTable->setColumnWidth(2,WLength("60em"));
+	itsTable->setSelectionMode(Wt::SingleSelection);
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
 	itsPanel->setLayout(myTopLayout);
@@ -112,31 +207,31 @@ ButtonIface& trihlav::WtKeyListView::getBtnReload() {
 }
 
 void WtKeyListView::clear() {
-	itsRowCounter = 0;
-	itsTable->clear();
+	itsDtaMdl->clear();
 	addTableHeader();
 }
 
 void WtKeyListView::addRow(const KeyListRow_t pRow) {
-	itsRowCounter++;
-	auto myId = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<0>()));
-	auto myPrivId = new Wt::WText(pRow.get<1>());
-	auto myDescription = new Wt::WText(pRow.get<2>());
-	auto myPubId = new Wt::WText(pRow.get<3>());
-	auto myCounter = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<5>()));
-	auto myUse = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<4>()));
-	itsTable->elementAt(itsRowCounter, 0)->addWidget(myId);
-	itsTable->elementAt(itsRowCounter, 1)->addWidget(myPrivId);
-	itsTable->elementAt(itsRowCounter, 2)->addWidget(myDescription);
-	itsTable->elementAt(itsRowCounter, 3)->addWidget(myPubId);
-	itsTable->elementAt(itsRowCounter, 4)->addWidget(myUse);
-	itsTable->elementAt(itsRowCounter, 5)->addWidget(myCounter);
-	itsTable->elementAt(itsRowCounter, 0)->setContentAlignment( Wt::AlignCenter );
-	itsTable->elementAt(itsRowCounter, 1)->setContentAlignment( Wt::AlignCenter );
-	itsTable->elementAt(itsRowCounter, 2)->setContentAlignment( Wt::AlignCenter );
-	itsTable->elementAt(itsRowCounter, 3)->setContentAlignment( Wt::AlignCenter );
-	itsTable->elementAt(itsRowCounter, 4)->setContentAlignment( Wt::AlignCenter );
-	itsTable->elementAt(itsRowCounter, 5)->setContentAlignment( Wt::AlignCenter );
+	itsDtaMdl->addRow(pRow);
+//	auto myId = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<0>()));
+//	auto myPrivId = new Wt::WText(pRow.get<1>());
+//	auto myDescription = new Wt::WText(pRow.get<2>());
+//	auto myPubId = new Wt::WText(pRow.get<3>());
+//	auto myCounter = new Wt::WText(
+//			boost::lexical_cast<std::string>(pRow.get<5>()));
+//	auto myUse = new Wt::WText(boost::lexical_cast<std::string>(pRow.get<4>()));
+//	itsTable->elementAt(itsRowCounter, 0)->addWidget(myId);
+//	itsTable->elementAt(itsRowCounter, 1)->addWidget(myPrivId);
+//	itsTable->elementAt(itsRowCounter, 2)->addWidget(myDescription);
+//	itsTable->elementAt(itsRowCounter, 3)->addWidget(myPubId);
+//	itsTable->elementAt(itsRowCounter, 4)->addWidget(myUse);
+//	itsTable->elementAt(itsRowCounter, 5)->addWidget(myCounter);
+//	itsTable->elementAt(itsRowCounter, 0)->setContentAlignment( Wt::AlignCenter );
+//	itsTable->elementAt(itsRowCounter, 1)->setContentAlignment( Wt::AlignCenter );
+//	itsTable->elementAt(itsRowCounter, 2)->setContentAlignment( Wt::AlignCenter );
+//	itsTable->elementAt(itsRowCounter, 3)->setContentAlignment( Wt::AlignCenter );
+//	itsTable->elementAt(itsRowCounter, 4)->setContentAlignment( Wt::AlignCenter );
+//	itsTable->elementAt(itsRowCounter, 5)->setContentAlignment( Wt::AlignCenter );
 }
 
 void WtKeyListView::addedAllRows() {

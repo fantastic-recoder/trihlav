@@ -29,13 +29,13 @@
 #ifndef TRIHLAV_WT_KEY_LIST_VIEW_HPP_
 #define TRIHLAV_WT_KEY_LIST_VIEW_HPP_
 
-#include "../trihlavLib/trihlavKeyListViewIface.hpp"
+#include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavWtViewIface.hpp"
 
 namespace Wt {
 
 class WWidget;
-class WTable;
+class WTableView;
 class WContainerWidget;
 
 }  // namespace Wt
@@ -43,6 +43,7 @@ class WContainerWidget;
 namespace trihlav {
 
 class WtPushButton;
+class WtKeyListModel;
 
 class WtKeyListView: virtual public KeyListViewIface, virtual public WtViewIface {
 public:
@@ -50,11 +51,11 @@ public:
 	virtual ~WtKeyListView();
 	virtual Wt::WWidget* getWWidget();
 
-	const Wt::WTable* getTable() const {
+	const Wt::WTableView* getTable() const {
 		return itsTable;
 	}
 
-	Wt::WTable* getTable() {
+	Wt::WTableView* getTable() {
 		return itsTable;
 	}
 
@@ -65,22 +66,21 @@ public:
 	virtual void clear();
 	virtual void addRow(const KeyListRow_t pRow);
 	virtual void addedAllRows();
-
 protected:
-	void setTable(Wt::WTable* myTable) {
-		itsTable = myTable;
+	void setTable(Wt::WTableView* pTable) {
+		itsTable = pTable;
 	}
 
 	void addTableHeader();
 
 private:
-	Wt::WTable *itsTable;
+	Wt::WTableView *itsTable;
 	WtPushButton* itsBtnAdd;
 	WtPushButton* itsBtnDel;
 	WtPushButton* itsBtnEdit;
 	WtPushButton* itsBtnReload;
 	Wt::WContainerWidget* itsPanel;
-	int itsRowCounter=0;
+	WtKeyListModel* itsDtaMdl;
 };
 
 } /* namespace trihlav */
