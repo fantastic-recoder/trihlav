@@ -36,7 +36,6 @@
 
 #include <Wt/WTableView>
 #include <Wt/WPushButton>
-#include <Wt/WContainerWidget>
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WAbstractTableModel>
@@ -142,24 +141,12 @@ public:
 }
 ;
 
-void WtKeyListView::addTableHeader() {
-//	WText* myRecId = new WText(translate("Record ID").str());
-//	itsTable->elementAt(0, 0)->addWidget(myRecId);
-//	WText* myPublicId = new WText(translate("Public ID").str());
-//	itsTable->elementAt(0, 1)->addWidget(myPublicId);
-//	WText* myDescription = new WText(translate("Description").str());
-//	itsTable->elementAt(0, 2)->addWidget(myDescription);
-//	WText* myPrivateId = new WText(translate("Private ID").str());
-//	itsTable->elementAt(0, 3)->addWidget(myPrivateId);
-//	WText* myUseCounter = new WText(translate("Use counter").str());
-//	itsTable->elementAt(0, 4)->addWidget(myUseCounter);
-//	WText* myCounter = new WText(translate("Counter").str());
-//	itsTable->elementAt(0, 5)->addWidget(myCounter);
+void WtKeyListView::layoutSizeChanged(int pW, int pH) {
+	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
 }
 
 WtKeyListView::WtKeyListView() {
 	itsDtaMdl = new WtKeyListModel;
-	itsPanel = new WContainerWidget;
 	WHBoxLayout* myBtnsLayout = new WHBoxLayout;
 	WVBoxLayout* myTopLayout = new WVBoxLayout;
 	itsBtnAdd = new WtPushButton(translate("New key").str());
@@ -184,14 +171,15 @@ WtKeyListView::WtKeyListView() {
 	itsTable->setSelectionMode(Wt::SingleSelection);
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
-	itsPanel->setLayout(myTopLayout);
+	setLayout(myTopLayout);
+	setLayoutSizeAware(true);
 }
 
 WtKeyListView::~WtKeyListView() {
 }
 
 Wt::WWidget* WtKeyListView::getWWidget() {
-	return itsPanel;
+	return this;
 }
 
 ButtonIface& WtKeyListView::getBtnAddKey() {
@@ -212,7 +200,6 @@ ButtonIface& trihlav::WtKeyListView::getBtnReload() {
 
 void WtKeyListView::clear() {
 	itsDtaMdl->clear();
-	addTableHeader();
 }
 
 void WtKeyListView::addRow(const KeyListRow_t pRow) {

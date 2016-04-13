@@ -29,6 +29,8 @@
 #ifndef TRIHLAV_WT_KEY_LIST_VIEW_HPP_
 #define TRIHLAV_WT_KEY_LIST_VIEW_HPP_
 
+#include <Wt/WContainerWidget>
+
 #include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavWtViewIface.hpp"
 
@@ -36,7 +38,6 @@ namespace Wt {
 
 class WWidget;
 class WTableView;
-class WContainerWidget;
 
 }  // namespace Wt
 
@@ -45,7 +46,7 @@ namespace trihlav {
 class WtPushButton;
 class WtKeyListModel;
 
-class WtKeyListView: virtual public KeyListViewIface, virtual public WtViewIface {
+class WtKeyListView: virtual public KeyListViewIface, virtual public WtViewIface, virtual public Wt::WContainerWidget {
 public:
 	WtKeyListView();
 	virtual ~WtKeyListView();
@@ -67,11 +68,11 @@ public:
 	virtual void addRow(const KeyListRow_t pRow);
 	virtual void addedAllRows();
 protected:
+	virtual void layoutSizeChanged(int,int) override;
+
 	void setTable(Wt::WTableView* pTable) {
 		itsTable = pTable;
 	}
-
-	void addTableHeader();
 
 private:
 	Wt::WTableView *itsTable;
@@ -79,7 +80,6 @@ private:
 	WtPushButton* itsBtnDel;
 	WtPushButton* itsBtnEdit;
 	WtPushButton* itsBtnReload;
-	Wt::WContainerWidget* itsPanel;
 	WtKeyListModel* itsDtaMdl;
 };
 

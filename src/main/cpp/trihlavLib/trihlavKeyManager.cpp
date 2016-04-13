@@ -381,9 +381,9 @@ size_t KeyManager::loadKeys() {
 			it != recursive_directory_iterator(); it++) {
 		boost::smatch matchProd;
 		const path myFName(it->path().native());
-		BOOST_LOG_TRIVIAL(debug)<< "Found key file " << myFName << ".";
 		if (!is_directory(it->path())
 				&& regex_match(myFName.string(), matchProd, K_KEY_FILTER)) {
+			BOOST_LOG_TRIVIAL(debug)<< "Found key file " << myFName << ".";
 			YubikoOtpKeyConfig* myCfg = new YubikoOtpKeyConfig(*this, myFName);
 			myCfg->load();
 			YubikoOtpKeyConfigPtr myKey { myCfg };
@@ -393,6 +393,8 @@ size_t KeyManager::loadKeys() {
 				(myId += "generated:") += myKey->getFilename().string();
 			}
 			itsKeyMapByPublicId.emplace(KeyMap_t::value_type { myId, myKey.get() });
+		} else {
+			BOOST_LOG_TRIVIAL(debug)<< "Skipping file  " << myFName << ".";
 		}
 	}
 	return itsKeyList.size();
