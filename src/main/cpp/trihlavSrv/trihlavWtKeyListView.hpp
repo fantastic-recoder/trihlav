@@ -81,6 +81,7 @@ private:
 	WtPushButton* itsBtnEdit;
 	WtPushButton* itsBtnReload;
 	WtKeyListModel* itsDtaMdl;
+    static const int K_TBL_V_MARGIN;
 };
 
 } /* namespace trihlav */

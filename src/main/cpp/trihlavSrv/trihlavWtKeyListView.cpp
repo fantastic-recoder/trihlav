@@ -60,7 +60,9 @@ using Wt::DisplayRole;
 using std::vector;
 
 namespace trihlav {
-
+/**
+ * @brief The WtKeyListModel class holds the data supplyed by the presenter.
+ */
 class WtKeyListModel: public WAbstractTableModel {
 	typedef vector<KeyListRow_t> RowList_t;
 	RowList_t itsRows;
@@ -143,7 +145,17 @@ public:
 
 void WtKeyListView::layoutSizeChanged(int pW, int pH) {
 	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
+    const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
+    for (int i = 0; i < itsTable->model()->columnCount(); ++i) {
+        if(i==2) {
+            itsTable->setColumnWidth(i,K_TBL_W-5*WIDTH-44);
+        } else {
+            itsTable->setColumnWidth(i, 120);
+        }
+    }
 }
+
+const int WtKeyListView::K_TBL_V_MARGIN = 12;
 
 WtKeyListView::WtKeyListView() {
 	itsDtaMdl = new WtKeyListModel;
@@ -163,7 +175,6 @@ WtKeyListView::WtKeyListView() {
 	myBtnsLayout->addWidget(itsBtnReload);
 	itsTable = new WTableView();
 	itsTable->setModel(itsDtaMdl);
-	//itsTable->setWidth(WLength("100%"));
 	itsTable->setAlternatingRowColors(true);
 	itsTable->setCanReceiveFocus(true);
 	itsTable->setColumnResizeEnabled(true);
@@ -171,6 +182,8 @@ WtKeyListView::WtKeyListView() {
 	itsTable->setSelectionMode(Wt::SingleSelection);
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
+    myTopLayout->setContentsMargins(K_TBL_V_MARGIN,K_TBL_V_MARGIN,K_TBL_V_MARGIN,K_TBL_V_MARGIN);
+    myTopLayout->setSpacing(K_TBL_V_MARGIN);
 	setLayout(myTopLayout);
 	setLayoutSizeAware(true);
 }
