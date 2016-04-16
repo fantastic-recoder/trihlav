@@ -146,9 +146,11 @@ public:
 void WtKeyListView::layoutSizeChanged(int pW, int pH) {
 	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
     const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
-    for (int i = 0; i < itsTable->model()->columnCount(); ++i) {
+    const int K_COL_CNT=itsTable->model()->columnCount();
+    const int K_TBL_INT_M=7*K_COL_CNT+2;
+    for (int i = 0; i < K_COL_CNT; ++i) {
         if(i==2) {
-            itsTable->setColumnWidth(i,K_TBL_W-5*WIDTH-44);
+            itsTable->setColumnWidth(i,K_TBL_W-5*WIDTH-K_TBL_INT_M);
         } else {
             itsTable->setColumnWidth(i, 120);
         }
