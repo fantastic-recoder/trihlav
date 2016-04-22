@@ -1,7 +1,5 @@
-#include "trihlavWidgetIface.hpp"
+#include "trihlavLib/trihlavWidgetIface.hpp"
 
-WidgetIface::WidgetIface()
-{
+namespace trihlav {
 
-}
-
+} // end namespace trihlav

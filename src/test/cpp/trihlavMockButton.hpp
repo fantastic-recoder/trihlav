@@ -35,7 +35,8 @@
 
 namespace trihlav {
 
-struct MockButton: virtual public ButtonIface {
+class  MockButton: virtual public ButtonIface {
+public:
 	MockButton():ButtonIface() {}
 
 	std::string itsVal;
@@ -44,8 +45,20 @@ struct MockButton: virtual public ButtonIface {
 	}
 
 	virtual void setText(const std::string& pVal) {
-		itsVal = pVal;
-	}
+            if(isEnabled()) {
+                itsVal = pVal;
+            }
+        }
+
+        virtual bool isEnabled() const override {
+            return itsEnabled;
+        }
+
+        virtual void setEnabled(bool pEnabled) override {
+            itsEnabled=pEnabled;
+        }
+private:
+        bool itsEnabled=true;
 };
 
 

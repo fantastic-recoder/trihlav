@@ -59,6 +59,8 @@ KeyListViewIface& KeyListPresenter::getView() {
 		itsKeyListView=getFactory().createKeyListView();
 		getView().getBtnAddKey().getPressedSignal().connect([=]{addKey();});
 		getView().getBtnReload().getPressedSignal().connect([=]{reloadKeyList();});
+        getView().getBtnDelKey().setEnabled(false);
+        getView().getBtnEditKey().setEnabled(false);
 	}
 	return *itsKeyListView;
 }

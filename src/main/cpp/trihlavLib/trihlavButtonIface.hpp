@@ -31,11 +31,13 @@
 
 #include <boost/signals2.hpp>
 
+#include "trihlavLib/trihlavWidgetIface.hpp"
+
 namespace trihlav {
 	/**
 	 * Interface to push-button UI element.
 	 */
-	class ButtonIface {
+        class ButtonIface : virtual public WidgetIface {
 	public:
 		/// Hide the underlying boost signal.
 		typedef boost::signals2::signal<void()> PressedSignal;

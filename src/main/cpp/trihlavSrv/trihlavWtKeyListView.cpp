@@ -60,6 +60,9 @@ using Wt::DisplayRole;
 using std::vector;
 
 namespace trihlav {
+
+const int WtKeyListView::K_TBL_V_MARGIN = 12;
+
 /**
  * @brief The WtKeyListModel class holds the data supplyed by the presenter.
  */
@@ -156,8 +159,6 @@ void WtKeyListView::layoutSizeChanged(int pW, int pH) {
         }
     }
 }
-
-const int WtKeyListView::K_TBL_V_MARGIN = 12;
 
 WtKeyListView::WtKeyListView() {
 	itsDtaMdl = new WtKeyListModel;

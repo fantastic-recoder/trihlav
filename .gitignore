@@ -13,6 +13,8 @@
 /install_manifest.txt
 /trihlavsrv.cbp
 .settings
+/build/
+/.vscode/
 /.idea/
 /trihlav.config
 /trihlav.creator

@@ -27,14 +27,21 @@ public:
 	WtPushButton(const std::string& pText);
 	virtual ~WtPushButton();
 
-	virtual const std::string getText() const {
+    virtual const std::string getText() const override {
 		return text().toUTF8();
 	}
 
-	virtual void setText( const std::string& pText) {
+    virtual void setText( const std::string& pText) override {
 		Wt::WPushButton::setText(Wt::WString::fromUTF8(pText));
-	}
+    }
 
+    virtual void setEnabled( bool pEnabled) override {
+        Wt::WPushButton::setEnabled(pEnabled);
+    }
+
+    virtual bool isEnabled() const override {
+        return Wt::WPushButton::isEnabled();
+    }
 };
 
 } /* namespace trihlav */
