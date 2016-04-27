@@ -92,6 +92,17 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	myKeyListView.getBtnAddKey().getPressedSignal()();
 }
 
+TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
+	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::buttonsAreInCorrectState");
+	NiceMock<MockFactory> myMockFactory;
+	KeyListPresenter myKeyListPresenter(myMockFactory);
+	KeyListViewIface& myView{myKeyListPresenter.getView()};
+	ASSERT_TRUE(myView.getBtnAddKey().isEnabled());
+	ASSERT_FALSE(myView.getBtnDelKey().isEnabled());
+	ASSERT_FALSE(myView.getBtnEditKey().isEnabled());
+	ASSERT_TRUE(myView.getBtnAddKey().isEnabled());
+}
+
 static const char* K_TST_DESC0 = "Test key 1";
 static const char* K_TST_PRIV0="aabbaabbaabb";
 static const char* K_TST_PUBL0="ccddccddccdd";

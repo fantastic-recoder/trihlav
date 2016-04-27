@@ -48,15 +48,24 @@ public:
 	 * Should be fired by the UI when user selects a row.
 	 */
 	boost::signals2::signal<int()> selectedRow;
+	/// @brief add a new key
 	virtual ButtonIface&  getBtnAddKey() =0;
+	/// @brief Delete key accessor
 	virtual ButtonIface&  getBtnDelKey() =0;
+	/// @brief Edit current key button accessor
 	virtual ButtonIface&  getBtnEditKey() =0;
-	/**
-	 * Reload the key list.
-	 */
+	/// @brief Reload the key list.
 	virtual ButtonIface&  getBtnReload() =0;
+	/// @brief Unselect all keys in the list
+	virtual void unselectAll()=0;
+	/// @brief remove all items from the list
 	virtual void clear()=0;
+	/// @brief add a row/key to the list
 	virtual void addRow(const KeyListRow_t pRow)=0;
+	/** 
+	 * @brief will be called by the presenter when 
+	 * all keys has been added.
+	 */
 	virtual void addedAllRows()=0;
 };
 

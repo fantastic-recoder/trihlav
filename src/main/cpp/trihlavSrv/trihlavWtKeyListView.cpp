@@ -57,6 +57,7 @@ using Wt::WAbstractTableModel;
 using Wt::WModelIndex;
 using Wt::Orientation;
 using Wt::DisplayRole;
+using Wt::WModelIndexSet;
 using std::vector;
 
 namespace trihlav {
@@ -227,4 +228,8 @@ void WtKeyListView::addedAllRows() {
 	itsTable->setModel(itsDtaMdl);
 }
 
+void WtKeyListView::unselectAll() {
+	WModelIndexSet mySelected{itsTable->selectedIndexes()};
+	
+}
 } /* namespace trihlav */
