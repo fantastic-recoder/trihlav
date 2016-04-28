@@ -14,17 +14,15 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Add files.
-ADD /usr/local /usr/local
+ADD /usr/local /usr
 ADD trihlav-0.0.1-Linux.deb /root
 # Set environment variables.
 ENV HOME /root
 
 # Define working directory.
 WORKDIR /root
+RUN dpkg -i trihlav-0.0.1-Linux.deb
+EXPOSE 32899
 
 # Define default command.
-CMD ["bash"]
-RUN ["/bin/bash", "-c", "echo hello"]
-
-
-
+CMD ["/usr/bin/trihlavsrv"]
