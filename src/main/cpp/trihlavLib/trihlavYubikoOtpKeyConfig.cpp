@@ -19,7 +19,6 @@
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include "pretty.hpp"
 #include "yubikey.h"
 
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
@@ -35,6 +34,7 @@ using std::out_of_range;
 using std::vector;
 using std::array;
 using std::stringstream;
+using std::invalid_argument;
 
 using boost::trim;
 using boost::format;
@@ -71,6 +71,7 @@ static const string K_NM_RANDOM("random");
 static const string K_NM_CRC("crc");
 static const string K_NM_DESC("description");
 static const string K_NM_VERS("version");
+static const string K_NM_SYS_USER("sysUser");
 static const string K_VL_VERS("0.0.1");
 
 void YubikoOtpKeyConfig::zeroToken() {
@@ -220,6 +221,9 @@ void YubikoOtpKeyConfig::load() {
 	setRandom(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_RANDOM));
 	setUseCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_USE_CNTR));
 	setDescription(myTree.get<string>(K_NM_DOC_NM + K_NM_DESC));
+	const string mySysUser{myTree.get<string>(K_NM_DOC_NM + K_NM_SYS_USER)};
+	if(!mySysUser.empty())
+		setSysUser(mySysUser);
 	itsChangedFlag = false;
 }
 
@@ -240,6 +244,7 @@ void YubikoOtpKeyConfig::save() {
 	myTree.put(K_NM_DOC_NM + K_NM_RANDOM /*---->*/, getRandom());
 	myTree.put(K_NM_DOC_NM + K_NM_USE_CNTR /*-->*/, getUseCounter());
 	myTree.put(K_NM_DOC_NM + K_NM_DESC /*------>*/, getDescription());
+	myTree.put(K_NM_DOC_NM + K_NM_SYS_USER /*-->*/, getSysUser());
 	myTree.put(K_NM_DOC_NM + K_NM_VERS /*------>*/, K_VL_VERS);
 	write_json(myOutFile, myTree);
 	itsChangedFlag = false;
@@ -424,6 +429,13 @@ bool YubikoOtpKeyConfig::checkOtp(const std::string& pPswd2check) {
 uint16_t YubikoOtpKeyConfig::computeCrc(const yubikey_token_st& pToken) {
 	return ~yubikey_crc16(reinterpret_cast<const uint8_t*>(&pToken),
 			sizeof(pToken) - sizeof(pToken.crc));
+}
+
+void YubikoOtpKeyConfig::setSysUser( const string& pSysUser) {
+	if(pSysUser.empty() || pSysUser.size()>K_MAX_SYS_USER_LEN) {
+		throw invalid_argument{"System user is empty or too long:\""+pSysUser+"\""};
+	}
+	itsSysUser=pSysUser;
 }
 
 } // end namespace trihlav

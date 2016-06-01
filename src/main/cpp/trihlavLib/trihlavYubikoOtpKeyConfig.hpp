@@ -18,12 +18,9 @@ class KeyManager;
  * @brief Store, load and provide the APIs configuration.
  */
 class YubikoOtpKeyConfig {
-protected:
-	void setFilename(const std::string &value);
-	void zeroToken();
-	void copyAndSaveToken(const yubikey_token_st& pToken);
-
 public:
+	static const size_t K_MAX_SYS_USER_LEN = 1024;
+
 	using SecretKeyArr=std::array<uint8_t,YUBIKEY_KEY_SIZE>;
 	/**
 	 * @brief YubikoOtpKeyConfig::YubikoOtpKeyConfig
@@ -227,7 +224,7 @@ public:
 	/// @brief compare two configurations
 	bool operator ==(const YubikoOtpKeyConfig& pOther) const;
 
-	const std::string token2json() const ;
+	const std::string token2json() const;
 
 	static const std::string hex2Modhex(const std::string& p2Modhex);
 
@@ -245,15 +242,28 @@ public:
 		return getCrc();
 	}
 
+	const std::string& getSysUser() const {
+		return itsSysUser;
+	}
+
+	void setSysUser(const std::string& pSysUser);
+
 	static uint16_t computeCrc(const yubikey_token_st& pToken);
+
+protected:
+	void setFilename(const std::string &value);
+	void zeroToken();
+	void copyAndSaveToken(const yubikey_token_st& pToken);
+
 private:
-	std::string itsPublicId; //< Keys public ID max 6 characters.
-	bool itsChangedFlag; //< will be set internal when something changed
-	bfs::path itsFilename; //< where to store it
+	std::string itsPublicId;    //< Keys public ID max 6 characters.
+	bool itsChangedFlag;        //< will be set internal when something changed
+	bfs::path itsFilename;      //< where to store it
 	yubikey_token_st itsToken;
 	SecretKeyArr itsKey;
 	std::string itsDescription; //< Users free text describing the key
-	KeyManager& itsKeyManager; //< Global functionality & data
+	KeyManager& itsKeyManager;  //< Global functionality & data
+	std::string itsSysUser;     //< assotiated system user
 
 	const std::string checkFileName(bool pIsOut);
 

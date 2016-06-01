@@ -107,18 +107,21 @@ static const char* K_TST_DESC0 = "Test key 1";
 static const char* K_TST_PRIV0="aabbaabbaabb";
 static const char* K_TST_PUBL0="ccddccddccdd";
 static const char* K_TST_SECU0="ddeeddeeddeeddeeddeeddeeddeeddee";
+static const string K_TST_SYS_USER0{"user0"};
 static const int K_TST_CNTR0 = 1;
 static const int K_TST_RNDM0 = 11;
 static const char* K_TST_DESC1 = "Test key 2";
 static const char* K_TST_PRIV1="aabbaabbaabc";
 static const char* K_TST_PUBL1="ccddccddccde";
 static const char* K_TST_SECU1="ddeeddeeddeeddeeddeeddeeddeeddef";
+static const string K_TST_SYS_USER1{"user1"};
 static const int K_TST_CNTR1 = 2;
 static const int K_TST_RNDM1 = 12;
 static const char* K_TST_DESC2 = "Test key 3";
 static const char* K_TST_PRIV2="aabbaabbaabd";
 static const char* K_TST_PUBL2="ccddccddccdf";
 static const char* K_TST_SECU2="ddeeddeeddeeddeeddeeddeeddeeddec";
+static const string K_TST_SYS_USER2{"user2"};
 static const int K_TST_CNTR2 = 3;
 static const int K_TST_RNDM2 = 13;
 
@@ -139,6 +142,7 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	myCfg0.setCounter(K_TST_CNTR0);
 	myCfg0.setRandom(K_TST_RNDM0);
 	myCfg0.setSecretKey(K_TST_SECU0);
+	myCfg0.setSysUser(K_TST_SYS_USER0);
 	myCfg0.save();
 	myCfg1.setDescription(K_TST_DESC1);
 	myCfg1.setPrivateId(K_TST_PRIV1);
@@ -146,6 +150,7 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	myCfg1.setCounter(K_TST_CNTR1);
 	myCfg1.setRandom(K_TST_RNDM1);
 	myCfg1.setSecretKey(K_TST_SECU1);
+	myCfg1.setSysUser(K_TST_SYS_USER1);
 	myCfg1.save();
 	myCfg2.setDescription(K_TST_DESC2);
 	myCfg2.setPrivateId(K_TST_PRIV2);
@@ -153,6 +158,7 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	myCfg2.setCounter(K_TST_CNTR2);
 	myCfg2.setRandom(K_TST_RNDM2);
 	myCfg2.setSecretKey(K_TST_SECU2);
+	myCfg2.setSysUser(K_TST_SYS_USER2);
 	myCfg2.save();
 	myKeyMan.loadKeys();
 	EXPECT_EQ(3,myKeyMan.getKeyCount());
@@ -169,6 +175,7 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	EXPECT_EQ(K_TST_CNTR0, myCfg01.getCounter());
 	EXPECT_EQ(K_TST_RNDM0, myCfg01.getRandom());
 	EXPECT_EQ(K_TST_SECU0, myCfg01.getSecretKey());
+	EXPECT_EQ(K_TST_SYS_USER0, myCfg01.getSysUser());
 
 	EXPECT_EQ(K_TST_DESC1, myCfg11.getDescription());
 	EXPECT_EQ(K_TST_PRIV1, myCfg11.getPrivateId());
@@ -176,6 +183,7 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	EXPECT_EQ(K_TST_CNTR1, myCfg11.getCounter());
 	EXPECT_EQ(K_TST_RNDM1, myCfg11.getRandom());
 	EXPECT_EQ(K_TST_SECU1, myCfg11.getSecretKey());
+	EXPECT_EQ(K_TST_SYS_USER1, myCfg11.getSysUser());
 
 	EXPECT_EQ(K_TST_DESC2, myCfg21.getDescription());
 	EXPECT_EQ(K_TST_PRIV2, myCfg21.getPrivateId());
@@ -183,6 +191,7 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	EXPECT_EQ(K_TST_CNTR2, myCfg21.getCounter());
 	EXPECT_EQ(K_TST_RNDM2, myCfg21.getRandom());
 	EXPECT_EQ(K_TST_SECU2, myCfg21.getSecretKey());
+	EXPECT_EQ(K_TST_SYS_USER2, myCfg21.getSysUser());
 
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));

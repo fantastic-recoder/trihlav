@@ -85,7 +85,7 @@ TEST_F(TestYubikoOtpKey,keyManagerInit) {
 	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getMin(), 0);
 	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getMax(), 6);
 	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getStep(), 1);
-	EXPECT_TRUE(myPresenter.getView().getEdtPrivateId() .getValue().empty());
+	EXPECT_TRUE(myPresenter.getView().getEdtPrivateId().getValue().empty());
 	EXPECT_TRUE(myPresenter.getView().getEdtPublicId().getValue().empty());
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
@@ -126,6 +126,25 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	EXPECT_TRUE(mySecretKey.compare(myCfg.getSecretKey()) == 0);
 	myPresenter.deleteKey();
 	EXPECT_FALSE(exists(myFilename));
+}
+
+TEST_F(TestYubikoOtpKey,throwsExceptionOnWrongSysUser) {
+	BOOST_LOG_NAMED_SCOPE("throwsExceptionOnWrongSysUser");
+	KeyManager myKMan(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
+	YubikoOtpKeyConfig myCfg(myKMan);
+	try {
+		myCfg.setSysUser("");
+		FAIL()<<"Failed to throw on empty system user parameter!";
+	} catch (invalid_argument& ex) {
+		BOOST_LOG_TRIVIAL(debug)<<ex.what();
+	}
+	string myLongPar(2048, 'X');
+	try {
+		myCfg.setSysUser(myLongPar);
+		FAIL()<<"Failed to throw on long system user parameter!";
+	} catch (invalid_argument& ex) {
+		BOOST_LOG_TRIVIAL(debug)<<ex.what();
+	}
 }
 
 const int K_TST_STR_L = 8;
