@@ -151,8 +151,8 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 	string mySecretKey(pKey);
 	trim(mySecretKey);
 	if (mySecretKey.size() != K_SEC_KEY_SZ) {
-		throw WrongConfigValue(WrongConfigValue::EYbkSecretKey,
-				K_SEC_KEY_SZ, mySecretKey);
+		throw WrongConfigValue(WrongConfigValue::EYbkSecretKey, K_SEC_KEY_SZ,
+				mySecretKey);
 	}
 	if (getSecretKey() != pKey) {
 		yubikey_hex_decode(reinterpret_cast<char*>(itsKey.data()),
@@ -221,8 +221,8 @@ void YubikoOtpKeyConfig::load() {
 	setRandom(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_RANDOM));
 	setUseCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_USE_CNTR));
 	setDescription(myTree.get<string>(K_NM_DOC_NM + K_NM_DESC));
-	const string mySysUser{myTree.get<string>(K_NM_DOC_NM + K_NM_SYS_USER)};
-	if(!mySysUser.empty())
+	const string mySysUser { myTree.get<string>(K_NM_DOC_NM + K_NM_SYS_USER) };
+	if (!mySysUser.empty())
 		setSysUser(mySysUser);
 	itsChangedFlag = false;
 }
@@ -431,11 +431,12 @@ uint16_t YubikoOtpKeyConfig::computeCrc(const yubikey_token_st& pToken) {
 			sizeof(pToken) - sizeof(pToken.crc));
 }
 
-void YubikoOtpKeyConfig::setSysUser( const string& pSysUser) {
-	if(pSysUser.empty() || pSysUser.size()>K_MAX_SYS_USER_LEN) {
-		throw invalid_argument{"System user is empty or too long:\""+pSysUser+"\""};
+void YubikoOtpKeyConfig::setSysUser(const string& pSysUser) {
+	if (pSysUser.empty() || pSysUser.size() > K_MAX_SYS_USER_LEN) {
+		throw invalid_argument { "System user is empty or too long:\""
+				+ pSysUser + "\"" };
 	}
-	itsSysUser=pSysUser;
+	itsSysUser = pSysUser;
 }
 
 } // end namespace trihlav

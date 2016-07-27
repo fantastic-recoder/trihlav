@@ -41,6 +41,7 @@ class YubikoOtpKeyViewIface;
 class YubikoOtpKeyPresenterIface;
 class MessagePresenterIface;
 class MessageViewIface;
+class OsIface;
 
 class KeyManager;
 
@@ -57,6 +58,10 @@ public:
 	virtual MessageViewIface* createMessageView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();
+	/// OS System interface singleton (const version)
+	virtual const OsIface& getOsIface() const;
+	/// OS System interface singleton
+	virtual OsIface& getOsIface();
 };
 
 }  // namespace trihlav

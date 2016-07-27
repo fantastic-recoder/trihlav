@@ -34,7 +34,9 @@
 
 #include <boost/locale.hpp>
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::to_string;
 
 namespace trihlav {
 

@@ -28,6 +28,8 @@
 
 #include "trihlavFactoryIface.hpp"
 
+#include <memory>
+
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
@@ -37,6 +39,11 @@
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
+
+namespace {
+std::unique_ptr<trihlav::OsIface> theOsIface;
+}
 
 namespace trihlav {
 
@@ -59,6 +66,21 @@ KeyListPresenterIface* FactoryIface::createKeyListPresenter() {
 
 PswdChckPresenterIface* FactoryIface::createPswdChckPresenter() {
 	return new PswdChckPresenter(*this);
+}
+
+OsIface& getOrInstantiateOsIface() {
+	if (!theOsIface) {
+		theOsIface.reset(new OsIface { });
+	}
+	return *theOsIface;
+}
+
+const OsIface& FactoryIface::getOsIface() const {
+	return getOrInstantiateOsIface();
+}
+
+OsIface& FactoryIface::getOsIface() {
+	return getOrInstantiateOsIface();
 }
 
 }  // namespace trihlav

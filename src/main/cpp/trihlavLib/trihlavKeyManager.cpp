@@ -93,7 +93,7 @@ KeyManager::~KeyManager() {
 
 /**
  * 	the most portable way would have to be getenv("HOME")
- on Unix and concatenating the results of
+ *  on Unix and concatenating the results of
  *	getenv("HOMEDRIVE") and getenv("HOMEPATH") on Windows.
  *
  */
