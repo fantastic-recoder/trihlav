@@ -34,11 +34,12 @@
 
 #include <boost/filesystem.hpp>
 
-#include "../../main/cpp/trihlavLib/trihlavButtonIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavFactoryIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavKeyListViewIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavButtonIface.hpp"
+#include "trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavKeyListViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 
@@ -55,6 +56,8 @@
 
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
+
 #include "trihlavMockEditIface.hpp"
 
 using namespace std;

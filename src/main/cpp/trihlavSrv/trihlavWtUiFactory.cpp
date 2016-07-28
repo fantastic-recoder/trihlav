@@ -6,6 +6,7 @@
  */
 
 #include "trihlavLib/trihlavGetUiFactory.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
 
 #include "trihlavWtUiFactory.hpp"
 #include "trihlavWtPswdChckView.hpp"

@@ -25,56 +25,56 @@
  Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
-
-#include "trihlavLib/trihlavFactoryIface.hpp"
-
+#include <string>
+#include <yubikey.h>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
+#include <boost/log/expressions.hpp>
 
-#include "trihlavLib/trihlavLog.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavPswdChckPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
-#include "trihlavLib/trihlavKeyManager.hpp"
+#include <boost/filesystem.hpp>
+
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"  // Brings in Google Mock.
+
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavLog.hpp"
 
-namespace {
-}
 
-namespace trihlav {
+using ::testing::Return;
+using ::testing::NiceMock;
+using ::trihlav::initLog;
 
-KeyManager& FactoryIface::getKeyManager() {
-	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
-	static KeyManager theKeyManager;
-	return theKeyManager;
-}
-
-const KeyManager& FactoryIface::getKeyManager() const {
-	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
-	static KeyManager theKeyManager;
-	return theKeyManager;
-}
-
-KeyListPresenterIface* FactoryIface::createKeyListPresenter() {
-	BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
-	return new KeyListPresenter(*this);
-}
-
-PswdChckPresenterIface* FactoryIface::createPswdChckPresenter() {
-	return new PswdChckPresenter(*this);
-}
-
-OsIface& FactoryIface::getOsIface() {
-	if (!itsOsIface) {
-		itsOsIface.reset(new OsIface { });
+class TestOsIface: public ::testing::Test {
+public:
+	virtual void SetUp() {
+		BOOST_LOG_NAMED_SCOPE("TestOsIface::SetUp");
 	}
-	return *itsOsIface;
+
+	// Tears down the test fixture.
+	virtual void TearDown() {
+		BOOST_LOG_NAMED_SCOPE("TestOsIface::TearDown");
+	}
+};
+
+TEST_F(TestOsIface,validateUser) {
+	BOOST_LOG_NAMED_SCOPE("TestOsIface::validateUser");
+//	const string myTstHex0("abcdef0123456789");
+//	BOOST_LOG_TRIVIAL(debug)<< myTstHex0;
+//	const string myTstMod0 { YubikoOtpKeyConfig::hex2Modhex(myTstHex0) };
+//	BOOST_LOG_TRIVIAL(debug)<< myTstMod0;
+//	EXPECT_NE(myTstMod0,myTstHex0)
+//			<< "Hex encoded and decoded strings should not be equal.";
+//	const string myTstRes0 { YubikoOtpKeyConfig::modhex2Hex(myTstMod0) };
+//	BOOST_LOG_TRIVIAL(debug)<< myTstRes0;
+//	EXPECT_EQ(myTstHex0,myTstRes0)
+//			<< "Hex encoded and re-decoded strings should be equal.";
 }
 
-FactoryIface::~FactoryIface() {
 
+int main(int argc, char **argv) {
+	initLog();
+	::testing::InitGoogleTest(&argc, argv);
+	int ret = RUN_ALL_TESTS();
+	return ret;
 }
-
-}  // namespace trihlav
-

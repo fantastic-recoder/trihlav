@@ -35,6 +35,8 @@
 
 #include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
+
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
 #include "trihlavMockMessageView.hpp"

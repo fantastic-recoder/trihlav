@@ -65,6 +65,19 @@ target_link_libraries(trihlavTestPswdChckPresenter
                       ${Boost_LIBRARIES}
                       )
 
+add_executable( trihlavTestOsIface trihlavTestOsIface.cpp )
+
+add_test( NAME trihlavTestOsIface COMMAND trihlavTestOsIface )
+
+target_link_libraries(trihlavTestOsIface
+                      trihlavApi
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      libgtest
+    				  libgmock
+                      ${YUBIKEY_LIB}
+                      ${Boost_LIBRARIES}
+                      )
+                      
 add_executable( pretty_example pretty_example.cc )
 
 target_link_libraries(pretty_example

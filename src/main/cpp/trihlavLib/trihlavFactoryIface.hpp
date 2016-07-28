@@ -30,6 +30,8 @@
 #ifndef TRIHLAV_FACTORY_IFACE_HPP_
 #define TRIHLAV_FACTORY_IFACE_HPP_
 
+#include <memory>
+
 namespace trihlav {
 
 class MainPanelViewIface;
@@ -47,8 +49,7 @@ class KeyManager;
 
 class FactoryIface {
 public:
-	virtual ~FactoryIface() {
-	}
+	virtual ~FactoryIface();
 	virtual MainPanelViewIface* createMainPanelView()=0;
 	virtual KeyListPresenterIface* createKeyListPresenter();
 	virtual KeyListViewIface* createKeyListView()=0;
@@ -58,10 +59,10 @@ public:
 	virtual MessageViewIface* createMessageView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();
-	/// OS System interface singleton (const version)
-	virtual const OsIface& getOsIface() const;
 	/// OS System interface singleton
 	virtual OsIface& getOsIface();
+private:
+	std::unique_ptr<OsIface> itsOsIface;
 };
 
 }  // namespace trihlav

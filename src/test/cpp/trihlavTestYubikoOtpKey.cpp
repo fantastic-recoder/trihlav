@@ -7,11 +7,13 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
 
-#include "../../main/cpp/trihlavLib/trihlavButtonIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavEditIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavFactoryIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavSpinBoxIface.hpp"
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavButtonIface.hpp"
+#include "trihlavLib/trihlavEditIface.hpp"
+#include "trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavSpinBoxIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
+
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
 

@@ -34,11 +34,12 @@
 
 #include <boost/filesystem.hpp>
 
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"  // Brings in Google Mock.
+
 #include "trihlavLib/trihlavButtonIface.hpp"
 #include "trihlavLib/trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"  // Brings in Google Mock.
 
 #include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
@@ -46,6 +47,7 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
