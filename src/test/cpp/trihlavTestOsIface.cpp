@@ -44,6 +44,7 @@
 using ::testing::Return;
 using ::testing::NiceMock;
 using ::trihlav::initLog;
+using ::trihlav::OsIface;
 
 class TestOsIface: public ::testing::Test {
 public:
@@ -59,6 +60,10 @@ public:
 
 TEST_F(TestOsIface,validateUser) {
 	BOOST_LOG_NAMED_SCOPE("TestOsIface::validateUser");
+	OsIface myOsIface;
+	EXPECT_EQ(myOsIface.checkOsPswd("trihlav_tst_usr0","trihlav_tst_pswd0"),true)<<
+			"To be able to pass this test ensure, that running system has an test "
+			"user \"trihlav_tst_usr0\" with password \"trihlav_tst_pswd0\".";
 //	const string myTstHex0("abcdef0123456789");
 //	BOOST_LOG_TRIVIAL(debug)<< myTstHex0;
 //	const string myTstMod0 { YubikoOtpKeyConfig::hex2Modhex(myTstHex0) };

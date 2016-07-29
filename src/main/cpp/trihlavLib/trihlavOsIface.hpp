@@ -13,7 +13,9 @@
 namespace trihlav {
 
 class OsIface {
-	bool checkOsPswd(const std::string& p_strUName, const std::string& p_strPswd);
+public:
+	/// Uses PAM on Linux to auth the user
+	virtual bool checkOsPswd(const std::string& p_strUName, const std::string& p_strPswd);
 };
 
 } /* namespace trihlav */

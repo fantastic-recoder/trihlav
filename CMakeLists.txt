@@ -7,7 +7,7 @@ IF(POLICY CMP0048)
    CMAKE_POLICY(SET CMP0048 NEW)
 ENDIF(POLICY CMP0048)
 PROJECT(trihlav VERSION 0.0.1)
-LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cmake")
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cmake" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 INCLUDE(GetGitRevisionDescription)
 ###############################################################################
@@ -25,6 +25,14 @@ FIND_PACKAGE(Boost 1.54.0 COMPONENTS  log log_setup date_time filesystem system 
 ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
 ADD_DEFINITIONS(-D_REENTRANT -DBOOST_SPIRIT_THREADSAFE)
+###############################################################################
+
+###############################################################################
+#
+# Find PAM
+#
+SET(PAM_FIND_REQUIRED 1)
+include(FindPAM)
 ###############################################################################
 
 ###############################################################################
