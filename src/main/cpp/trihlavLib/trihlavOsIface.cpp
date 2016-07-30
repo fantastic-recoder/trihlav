@@ -43,7 +43,7 @@ bool OsIface::checkOsPswd(const string& p_strUName, const string& p_strPswd) {
 
 	int aRetVal;
 //	aRetVal = pam_start("common-auth", p_strUName.c_str(), NULL, &local_auth_handle);
-	aRetVal = pam_start("common-auth", p_strUName.c_str(), &local_conversation, &local_auth_handle);
+	aRetVal = pam_start("runuser", p_strUName.c_str(), &local_conversation, &local_auth_handle);
 //	pam_set_item( local_auth_handle, PAM_AUTHTOK, p_strPswd.c_str());
 	if (aRetVal != PAM_SUCCESS) {
 		BOOST_LOG_TRIVIAL(info) << "pam_start returned: " << aRetVal << " for user " << p_strUName;

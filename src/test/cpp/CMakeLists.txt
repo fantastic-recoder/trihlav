@@ -89,3 +89,8 @@ target_link_libraries(pretty_example
                       ${CMAKE_THREAD_LIBS_INIT}
                       ${Boost_LIBRARIES}
                       )
+
+add_executable( trihlavPamTester trihlavPamTester.cpp )
+target_link_libraries(trihlavPamTester ${PAM_LIBRARIES}
+                      )
+                      
