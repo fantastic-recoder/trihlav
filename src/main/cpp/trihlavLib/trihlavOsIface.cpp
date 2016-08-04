@@ -10,6 +10,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __unix__
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <errno.h>
+#include <stdlib.h>
+#elif
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#endif
 
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -39,14 +50,14 @@ bool OsIface::checkOsPswd(const string& p_strUName, const string& p_strPswd) {
 	BOOST_LOG_NAMED_SCOPE("OsIface::checkOsPswd");
 
 	const struct pam_conv local_conversation = { function_conversation, NULL };
-	pam_handle_t *local_auth_handle = NULL; // this gets set by pam_start
+	pam_handle_t *local_auth_handle = nullptr; // this gets set by pam_start
 
 	int aRetVal;
-//	aRetVal = pam_start("common-auth", p_strUName.c_str(), NULL, &local_auth_handle);
-	aRetVal = pam_start("runuser", p_strUName.c_str(), &local_conversation, &local_auth_handle);
+	aRetVal = pam_start("common-auth", p_strUName.c_str(), &local_conversation,
+			&local_auth_handle);
 //	pam_set_item( local_auth_handle, PAM_AUTHTOK, p_strPswd.c_str());
 	if (aRetVal != PAM_SUCCESS) {
-		BOOST_LOG_TRIVIAL(info) << "pam_start returned: " << aRetVal << " for user " << p_strUName;
+		BOOST_LOG_TRIVIAL(info)<< "pam_start returned: " << aRetVal << " for user " << p_strUName;
 		return false;
 	}
 
@@ -58,22 +69,74 @@ bool OsIface::checkOsPswd(const string& p_strUName, const string& p_strPswd) {
 
 	if (aRetVal != PAM_SUCCESS) {
 		if (aRetVal == PAM_AUTH_ERR) {
-			BOOST_LOG_TRIVIAL(info) << "Authentication failure for user " << p_strUName;
+			BOOST_LOG_TRIVIAL(info)<< "Authentication failure for user " << p_strUName;
 		} else {
 			BOOST_LOG_TRIVIAL(info) << "pam_authenticate returned: " << aRetVal << " for user " << p_strUName;
 		}
 		return false;
 	}
-	BOOST_LOG_TRIVIAL(info) << "Authenticated user " << p_strUName;
+	BOOST_LOG_TRIVIAL(info)<< "Authenticated user " << p_strUName;
 
 	aRetVal = pam_end(local_auth_handle, aRetVal);
 
 	if (aRetVal != PAM_SUCCESS) {
-		BOOST_LOG_TRIVIAL(info) << "pam_authenticate returned: " << aRetVal << " for user " << p_strUName;
+		BOOST_LOG_TRIVIAL(info)<< "pam_authenticate returned: " << aRetVal << " for user " << p_strUName;
 		return false;
 	}
 
 	return true;
+}
+
+int OsIface::execute(const std::string& p_strPathFilename,
+		const std::string& p_strP0) {
+	int myRetVal = 0;
+#ifdef __unix__
+	pid_t pid;
+	int status;
+	pid_t ret;
+	const char * const args[3] = { p_strPathFilename.c_str(), p_strP0.c_str(), 0 };
+	char **env;
+	extern char **environ;
+
+	/* ... Sanitize arguments ... */
+
+	pid = fork();
+	if (pid == -1) {
+		/* Handle error */
+	} else if (pid != 0) {
+		while ((ret = waitpid(pid, &status, 0)) == -1) {
+			if (errno != EINTR) {
+				/* Handle error */
+				break;
+			}
+		}
+		if ((ret != -1) && (!WIFEXITED(status) || !WEXITSTATUS(status))) {
+			/* Report unexpected child status */
+		}
+	} else {
+		/* ... Initialize env as a sanitized copy of environ ... */
+		if (execve(p_strPathFilename.c_str(), const_cast<char*const*>(args), env) == -1) {
+			/* Handle error */
+			_Exit(127);
+		}
+	}
+#elif
+#ifdef __WINDOWS__
+	STARTUPINFO si = {0};
+	PROCESS_INFORMATION pi;
+	si.cb = sizeof(si);
+	if (!CreateProcess(TEXT(p_strPathFilename.c_str()), p_strP0.c_str(), NULL, NULL, FALSE,
+					0, 0, 0, &si, &pi)) {
+		/* Handle error */
+	}
+	CloseHandle(pi.hThread);
+	CloseHandle(pi.hProcess);
+#endif
+#endif
+	return myRetVal;
+}
+
+OsIface::~OsIface() {
 }
 
 } /* namespace trihlav */

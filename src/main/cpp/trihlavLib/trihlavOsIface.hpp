@@ -15,7 +15,13 @@ namespace trihlav {
 class OsIface {
 public:
 	/// Uses PAM on Linux to auth the user
-	virtual bool checkOsPswd(const std::string& p_strUName, const std::string& p_strPswd);
+	virtual bool checkOsPswd(const std::string& p_strUName,
+			const std::string& p_strPswd);
+	/// Execute a programm and pass a parameter
+	virtual int execute(const std::string& p_strPathFilename,
+			const std::string& p_strP0);
+	/// We not need it yet, but we are prepared ...
+	virtual ~OsIface();
 };
 
 } /* namespace trihlav */
