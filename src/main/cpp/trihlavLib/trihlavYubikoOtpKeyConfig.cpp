@@ -60,7 +60,7 @@ static constexpr uintmax_t K_SEC_KEY_SZ = YUBIKEY_KEY_SIZE * 2;
 namespace trihlav {
 
 static constexpr size_t K_YBK_PRIVATE_ID_LEN(YUBIKEY_UID_SIZE * 2);
-static const string K_NM_DOC_NM("yubikey.");
+static const string K_NM_DOC("yubikey.");
 static const string K_NM_PRIV_ID("privateId");
 static const string K_NM_PUB_ID("publicId");
 static const string K_NM_TIMESTAMP("timestamp");
@@ -73,6 +73,18 @@ static const string K_NM_DESC("description");
 static const string K_NM_VERS("version");
 static const string K_NM_SYS_USER("sysUser");
 static const string K_VL_VERS("0.0.2");
+
+static const string K_NM_DOC_VERS      =K_NM_DOC + K_NM_VERS      ;
+static const string K_NM_DOC_PUB_ID    =K_NM_DOC + K_NM_PUB_ID    ;
+static const string K_NM_DOC_TIMESTAMP =K_NM_DOC + K_NM_TIMESTAMP ;
+static const string K_NM_DOC_SES_CNTR  =K_NM_DOC + K_NM_SES_CNTR  ;
+static const string K_NM_DOC_PRIV_ID   =K_NM_DOC + K_NM_PRIV_ID   ;
+static const string K_NM_DOC_USE_CNTR  =K_NM_DOC + K_NM_USE_CNTR  ;
+static const string K_NM_DOC_SEC_KEY   =K_NM_DOC + K_NM_SEC_KEY   ;
+static const string K_NM_DOC_RANDOM    =K_NM_DOC + K_NM_RANDOM    ;
+static const string K_NM_DOC_CRC       =K_NM_DOC + K_NM_CRC       ;
+static const string K_NM_DOC_DESC      =K_NM_DOC + K_NM_DESC      ;
+static const string K_NM_DOC_SYS_USER  =K_NM_DOC + K_NM_SYS_USER  ;
 
 void YubikoOtpKeyConfig::zeroToken() {
 	memset(&itsToken, 0, sizeof(yubikey_token_st));
@@ -209,20 +221,20 @@ void YubikoOtpKeyConfig::load() {
 	const string myInFile = checkFileName(false);
 	ptree myTree;
 	read_json(myInFile, myTree);
-	const string myVer(myTree.get<string>(K_NM_DOC_NM + K_NM_VERS));
+	const string myVer(myTree.get<string>(K_NM_DOC_VERS));
 	BOOST_LOG_TRIVIAL(info)<< K_NM_VERS << ":" << myVer;
-	setPrivateId(myTree.get<string>(K_NM_DOC_NM + K_NM_PRIV_ID));
-	setPublicId(myTree.get<string>(K_NM_DOC_NM + K_NM_PUB_ID));
-	setSecretKey(myTree.get<string>(K_NM_DOC_NM + K_NM_SEC_KEY));
+	setPrivateId(myTree.get<string>(K_NM_DOC_PRIV_ID));
+	setPublicId(myTree.get<string>(K_NM_DOC_PUB_ID));
+	setSecretKey(myTree.get<string>(K_NM_DOC_SEC_KEY));
 	setTimestamp(
-			UTimestamp(myTree.get<uint64_t>(K_NM_DOC_NM + K_NM_TIMESTAMP)));
-	setCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_SES_CNTR));
-	setCrc(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_CRC));
-	setRandom(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_RANDOM));
-	setUseCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_USE_CNTR));
-	setDescription(myTree.get<string>(K_NM_DOC_NM + K_NM_DESC));
+			UTimestamp(myTree.get<uint64_t>(K_NM_DOC_TIMESTAMP)));
+	setCounter(myTree.get<uint8_t>(K_NM_DOC_SES_CNTR));
+	setCrc(myTree.get<uint16_t>(K_NM_DOC_CRC));
+	setRandom(myTree.get<uint16_t>(K_NM_DOC_RANDOM));
+	setUseCounter(myTree.get<uint8_t>(K_NM_DOC_USE_CNTR));
+	setDescription(myTree.get<string>(K_NM_DOC_DESC));
 	if (myVer != "0.0.1") {
-		const string mySysUser { myTree.get<string>(K_NM_DOC_NM + K_NM_SYS_USER) };
+		const string mySysUser { myTree.get<string>(K_NM_DOC_SYS_USER) };
 		if (!mySysUser.empty())
 			setSysUser(mySysUser);
 	}
@@ -237,17 +249,17 @@ void YubikoOtpKeyConfig::save() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::save");
 	const string myOutFile = checkFileName(true);
 	ptree myTree;
-	myTree.put(K_NM_DOC_NM + K_NM_PRIV_ID /*--->*/, getPrivateId());
-	myTree.put(K_NM_DOC_NM + K_NM_PUB_ID /*---->*/, getPublicId());
-	myTree.put(K_NM_DOC_NM + K_NM_SEC_KEY /*--->*/, getSecretKey());
-	myTree.put(K_NM_DOC_NM + K_NM_TIMESTAMP /*->*/, getTimestamp().tstp_int);
-	myTree.put(K_NM_DOC_NM + K_NM_SES_CNTR /*-->*/, getCounter());
-	myTree.put(K_NM_DOC_NM + K_NM_CRC /*------->*/, getCrc());
-	myTree.put(K_NM_DOC_NM + K_NM_RANDOM /*---->*/, getRandom());
-	myTree.put(K_NM_DOC_NM + K_NM_USE_CNTR /*-->*/, getUseCounter());
-	myTree.put(K_NM_DOC_NM + K_NM_DESC /*------>*/, getDescription());
-	myTree.put(K_NM_DOC_NM + K_NM_SYS_USER /*-->*/, getSysUser());
-	myTree.put(K_NM_DOC_NM + K_NM_VERS /*------>*/, K_VL_VERS);
+	myTree.put(K_NM_DOC_PRIV_ID /*--->*/, getPrivateId());
+	myTree.put(K_NM_DOC_PUB_ID /*---->*/, getPublicId());
+	myTree.put(K_NM_DOC_SEC_KEY /*--->*/, getSecretKey());
+	myTree.put(K_NM_DOC_TIMESTAMP /*->*/, getTimestamp().tstp_int);
+	myTree.put(K_NM_DOC_SES_CNTR /*-->*/, getCounter());
+	myTree.put(K_NM_DOC_CRC /*------->*/, getCrc());
+	myTree.put(K_NM_DOC_RANDOM /*---->*/, getRandom());
+	myTree.put(K_NM_DOC_USE_CNTR /*-->*/, getUseCounter());
+	myTree.put(K_NM_DOC_DESC /*------>*/, getDescription());
+	myTree.put(K_NM_DOC_SYS_USER /*-->*/, getSysUser());
+	myTree.put(K_NM_DOC_VERS /*------>*/, K_VL_VERS);
 	write_json(myOutFile, myTree);
 	itsChangedFlag = false;
 }
