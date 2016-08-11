@@ -72,7 +72,7 @@ static const string K_NM_CRC("crc");
 static const string K_NM_DESC("description");
 static const string K_NM_VERS("version");
 static const string K_NM_SYS_USER("sysUser");
-static const string K_VL_VERS("0.0.1");
+static const string K_VL_VERS("0.0.2");
 
 void YubikoOtpKeyConfig::zeroToken() {
 	memset(&itsToken, 0, sizeof(yubikey_token_st));
@@ -221,9 +221,11 @@ void YubikoOtpKeyConfig::load() {
 	setRandom(myTree.get<uint16_t>(K_NM_DOC_NM + K_NM_RANDOM));
 	setUseCounter(myTree.get<uint8_t>(K_NM_DOC_NM + K_NM_USE_CNTR));
 	setDescription(myTree.get<string>(K_NM_DOC_NM + K_NM_DESC));
-	const string mySysUser { myTree.get<string>(K_NM_DOC_NM + K_NM_SYS_USER) };
-	if (!mySysUser.empty())
-		setSysUser(mySysUser);
+	if (myVer != "0.0.1") {
+		const string mySysUser { myTree.get<string>(K_NM_DOC_NM + K_NM_SYS_USER) };
+		if (!mySysUser.empty())
+			setSysUser(mySysUser);
+	}
 	itsChangedFlag = false;
 }
 
