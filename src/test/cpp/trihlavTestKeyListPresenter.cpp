@@ -200,6 +200,11 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	EXPECT_FALSE(exists(myTestCfgFile));
 }
 
+TEST_F(TestKeyListPresenter,canSurviveIllformedKeyfile) {
+	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canSurviveIllformedKeyfile");
+	FAIL() << "Implement the test.";
+}
+
 int main(int argc, char **argv) {
 	initLog();
 	::testing::InitGoogleTest(&argc, argv);

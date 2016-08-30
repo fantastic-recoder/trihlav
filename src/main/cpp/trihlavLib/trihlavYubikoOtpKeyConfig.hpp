@@ -250,6 +250,8 @@ public:
 
 	static uint16_t computeCrc(const yubikey_token_st& pToken);
 
+	const std::string checkFileName(bool pIsOut) const;
+
 protected:
 	void setFilename(const std::string &value);
 	void zeroToken();
@@ -265,7 +267,6 @@ private:
 	KeyManager& itsKeyManager;  //< Global functionality & data
 	std::string itsSysUser;     //< assotiated system user
 
-	const std::string checkFileName(bool pIsOut);
 
 };
 

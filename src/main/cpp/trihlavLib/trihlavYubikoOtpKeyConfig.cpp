@@ -174,7 +174,7 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 	}
 }
 
-const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) {
+const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) const {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkFileName");
 	std::string myRetVal;
 	if (is_directory(getFilename())) {
