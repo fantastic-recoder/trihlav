@@ -10,17 +10,26 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef __unix__
+
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
+
 #elif
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
+
 #endif
+
+#include <regex>
+
+#include <boost/filesystem/fstream.hpp>
 
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -46,7 +55,8 @@ int function_conversation(int num_msg, const struct pam_message **msg,
 
 namespace trihlav {
 
-bool OsIface::checkOsPswd(const string& p_strUName, const string& p_strPswd) {
+bool OsIface::checkOsPswd(const string& p_strUName,
+		const string& p_strPswd) const {
 	BOOST_LOG_NAMED_SCOPE("OsIface::checkOsPswd");
 
 	const struct pam_conv local_conversation = { function_conversation, NULL };
@@ -88,13 +98,14 @@ bool OsIface::checkOsPswd(const string& p_strUName, const string& p_strPswd) {
 }
 
 int OsIface::execute(const std::string& p_strPathFilename,
-		const std::string& p_strP0) {
+		const std::string& p_strP0) const {
 	int myRetVal = 0;
 #ifdef __unix__
 	pid_t pid;
 	int status;
 	pid_t ret;
-	const char * const args[3] = { p_strPathFilename.c_str(), p_strP0.c_str(), 0 };
+	const char * const args[3] =
+			{ p_strPathFilename.c_str(), p_strP0.c_str(), 0 };
 	char **env;
 	extern char **environ;
 
@@ -115,7 +126,8 @@ int OsIface::execute(const std::string& p_strPathFilename,
 		}
 	} else {
 		/* ... Initialize env as a sanitized copy of environ ... */
-		if (execve(p_strPathFilename.c_str(), const_cast<char*const*>(args), env) == -1) {
+		if (execve(p_strPathFilename.c_str(), const_cast<char* const *>(args),
+				env) == -1) {
 			/* Handle error */
 			_Exit(127);
 		}
@@ -137,6 +149,39 @@ int OsIface::execute(const std::string& p_strPathFilename,
 }
 
 OsIface::~OsIface() {
+}
+
+/**
+ * Can consume time and io, when needed offten, cache results.
+ *
+ * @return The operating system users in a STL container.
+ */
+const SysUsers OsIface::getSysUsers() const {
+	BOOST_LOG_NAMED_SCOPE("OsIface::getSysUsers");
+	SysUsers myUsers;
+#ifdef __unix__
+	static const std::regex K_PSWD_LN(
+			"^((#.*|[a-z]*):([^:]*):([0-9]*):([0-9]*):([^:]*):(/[^:]*):(/[^:]*))$");
+	boost::filesystem::ifstream myPswdFile(K_ETC_PASSWD);
+	if (myPswdFile) {
+		string aReadLine;
+		while (getline(myPswdFile, aReadLine)) {
+			std::smatch myMatches;
+			if (regex_match(aReadLine, myMatches, K_PSWD_LN)) {
+				SysUser myUser{myMatches[2],myMatches[6]};
+				myUsers.push_back(myUser);
+			} else {
+				BOOST_LOG_TRIVIAL(warning)<<"Line did not match: " << aReadLine;
+			}
+		}
+	} else {
+		BOOST_LOG_TRIVIAL(error)<<"Could not open '" << K_ETC_PASSWD << "'.";
+	}
+#endif
+#ifdef __WINDOWS__
+	BOOST_LOG_TRIVIAL(error)<<"OsIface::getSysUsers() is not yet implemented on windows.";
+#endif
+	return myUsers;
 }
 
 } /* namespace trihlav */

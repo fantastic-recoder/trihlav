@@ -76,6 +76,14 @@ TEST_F(TestOsIface,validateUser) {
 //			<< "Hex encoded and re-decoded strings should be equal.";
 }
 
+TEST_F(TestOsIface,parseSysUsers){
+	BOOST_LOG_NAMED_SCOPE("TestOsIface::parseSysUsers");
+	OsIface myOsIface;
+	const trihlav::SysUsers myUsers{myOsIface.getSysUsers()};
+	for ( const trihlav::SysUser& myUsr : myUsers ) {
+		BOOST_LOG_TRIVIAL(debug)<< myUsr;
+	}
+}
 
 int main(int argc, char **argv) {
 	initLog();
