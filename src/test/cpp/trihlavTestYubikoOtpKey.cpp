@@ -13,6 +13,7 @@
 #include "trihlavLib/trihlavSpinBoxIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavSysUserListViewIface.hpp"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.

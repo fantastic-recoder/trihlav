@@ -39,6 +39,7 @@
 #include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavSysUserListViewIface.hpp"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.

@@ -48,6 +48,7 @@
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavSysUserListViewIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"

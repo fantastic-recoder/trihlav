@@ -30,8 +30,6 @@
 
 #include <memory>
 
-#include <Wt/WDialog>
-
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
 namespace Wt {

@@ -5,6 +5,8 @@
  *      Author: grobap
  */
 
+#include <Wt/WDialog>
+
 #include "trihlavLib/trihlavGetUiFactory.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
 
@@ -52,8 +54,8 @@ MessageViewIface* WtUiFactory::createMessageView() {
 	return new WtMessageView();
 }
 
-SysUserListViewIface* WtUiFactory::createSysUserListView() {
-	return new WtSysUserListView();
+SysUserListViewIfacePtr WtUiFactory::createSysUserListView() {
+	return SysUserListViewIfacePtr(new WtSysUserListView());
 }
 
 } /* namespace trihlav */

@@ -43,7 +43,7 @@ using namespace std;
 using namespace boost;
 using boost::locale::translate;
 
-typedef Wt::WLength::Unit U;
+using U = Wt::WLength::Unit;
 
 namespace trihlav {
 

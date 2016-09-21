@@ -95,7 +95,7 @@ public:
 		return 0;
 	}
 
-	virtual any data(const WModelIndex& pIndex, int pRole = DisplayRole) const {
+	virtual any data(const WModelIndex& pIndex, int pRole = DisplayRole) const override {
 		if (pRole == DisplayRole) {
 			switch (pIndex.column()) {
 			case 0:
@@ -230,6 +230,6 @@ void WtKeyListView::addedAllRows() {
 
 void WtKeyListView::unselectAll() {
 	WModelIndexSet mySelected{itsTable->selectedIndexes()};
-	
 }
+
 } /* namespace trihlav */

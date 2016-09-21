@@ -48,6 +48,8 @@ class SysUserListViewIface;
 
 class KeyManager;
 
+using SysUserListViewIfacePtr = std::shared_ptr<SysUserListViewIface>;
+
 class FactoryIface {
 public:
 	virtual ~FactoryIface();
@@ -65,7 +67,7 @@ public:
 	virtual OsIface& getOsIface();
 
 	/// @brief Select a operating system user
-	virtual SysUserListViewIface* createSysUserListView() =0;
+	virtual SysUserListViewIfacePtr createSysUserListView() =0;
 private:
 	std::unique_ptr<OsIface> itsOsIface;
 };

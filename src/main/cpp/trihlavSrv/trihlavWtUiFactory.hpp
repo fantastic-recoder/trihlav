@@ -28,7 +28,7 @@
 #ifndef TRIHLAV_WT_UI_FACTORY_HPP_
 #define TRIHLAV_WT_UI_FACTORY_HPP_
 
-#include "../trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavFactoryIface.hpp"
 
 namespace trihlav {
 
@@ -43,7 +43,7 @@ public:
 	virtual PswdChckViewIface* createPswdChckView() override;
 	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() override;
 	virtual MessageViewIface* createMessageView() override;
-	virtual SysUserListViewIface* createSysUserListView() override;
+	virtual SysUserListViewIfacePtr createSysUserListView() override;
 };
 
 } /* namespace trihlav */
