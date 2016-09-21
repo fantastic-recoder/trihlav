@@ -38,11 +38,12 @@ class WtUiFactory: virtual public FactoryIface {
 public:
 	WtUiFactory();
 	virtual ~WtUiFactory();
-	virtual MainPanelViewIface* createMainPanelView();
-	virtual KeyListViewIface* createKeyListView();
-	virtual PswdChckViewIface* createPswdChckView();
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView();
-	virtual MessageViewIface* createMessageView();
+	virtual MainPanelViewIface* createMainPanelView() override;
+	virtual KeyListViewIface* createKeyListView() override;
+	virtual PswdChckViewIface* createPswdChckView() override;
+	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() override;
+	virtual MessageViewIface* createMessageView() override;
+	virtual SysUserListViewIface* createSysUserListView() override;
 };
 
 } /* namespace trihlav */

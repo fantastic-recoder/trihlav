@@ -32,7 +32,7 @@
 
 #include <Wt/WDialog>
 
-#include "../trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
 namespace Wt {
 	class WDialog;

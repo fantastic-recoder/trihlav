@@ -44,6 +44,7 @@ class YubikoOtpKeyPresenterIface;
 class MessagePresenterIface;
 class MessageViewIface;
 class OsIface;
+class SysUserListViewIface;
 
 class KeyManager;
 
@@ -59,8 +60,12 @@ public:
 	virtual MessageViewIface* createMessageView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();
-	/// OS System interface singleton
+
+	/// @brief OS System interface singleton
 	virtual OsIface& getOsIface();
+
+	/// @brief Select a operating system user
+	virtual SysUserListViewIface* createSysUserListView() =0;
 private:
 	std::unique_ptr<OsIface> itsOsIface;
 };

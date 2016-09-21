@@ -14,6 +14,7 @@
 #include "trihlavWtKeyListView.hpp"
 #include "trihlavWtMessageView.hpp"
 #include "trihlavWtYubikoOtpKeyView.hpp"
+#include "trihlavWtSysUserListIface.hpp"
 
 namespace trihlav {
 
@@ -49,6 +50,10 @@ YubikoOtpKeyViewIface* WtUiFactory::createYubikoOtpKeyView() {
 
 MessageViewIface* WtUiFactory::createMessageView() {
 	return new WtMessageView();
+}
+
+SysUserListViewIface* WtUiFactory::createSysUserListView() {
+	return new WtSysUserListView();
 }
 
 } /* namespace trihlav */
