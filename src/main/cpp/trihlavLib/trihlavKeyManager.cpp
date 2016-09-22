@@ -11,6 +11,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <memory>
+#include <list>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
@@ -33,6 +34,7 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 
 using std::string;
+using std::list;
 using boost::filesystem::path;
 using boost::filesystem::recursive_directory_iterator;
 using boost::filesystem::perms;
@@ -275,21 +277,41 @@ bool isCurrentUserLocalAdministrator(void)
 }
 #endif
 
+void KeyManager::renameMallformedKeyFile(const path& pKeyFileFName) {
+	BOOST_LOG_NAMED_SCOPE("KeyManager::renameMallformedKeyFile");
+	path myNewFName;
+	try {
+		if (exists(pKeyFileFName)) {
+			path myPath = pKeyFileFName.parent_path();
+			path myFName = pKeyFileFName.filename();
+			myNewFName = myPath / (path("damaged-") += myFName);
+			BOOST_LOG_TRIVIAL(debug)<<"Going to rename "<< pKeyFileFName << " into " << myNewFName << ".";
+			rename(pKeyFileFName, myNewFName);
+		} else {
+			BOOST_LOG_TRIVIAL(debug)<<"File "<< pKeyFileFName << " does not exist.";
+		}
+	} catch (const std::exception& myExc) {
+		BOOST_LOG_TRIVIAL(error)<<"Failed to rename "<< pKeyFileFName << " into " << myNewFName << "because - " << myExc.what();
+	} catch(...) {
+		BOOST_LOG_TRIVIAL(error)<<"Failed to rename "<< pKeyFileFName << " into " << myNewFName << ".";
+	}
+}
+
 void KeyManager::checkPath(const path& pPath, bool &readable,
 		bool &writable) const {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::checkPath()");
 	path filePath = pPath / "test.txt";
 
-	// remove a possibly existing test file
+// remove a possibly existing test file
 	remove(filePath);
 
-	// check that the path exists
+// check that the path exists
 	if (!is_directory(pPath)) {
 		readable = writable = false;
 		return;
 	}
 
-	// try to write in the location
+// try to write in the location
 	std::ofstream outfile(filePath.native());
 	outfile << "I can write!" << std::endl;
 	outfile.close();
@@ -298,7 +320,7 @@ void KeyManager::checkPath(const path& pPath, bool &readable,
 		writable = true;
 	}
 
-	// look for a file to read
+// look for a file to read
 	std::ifstream::pos_type size;
 	char * memblock;
 	for (auto it = recursive_directory_iterator(pPath);
@@ -328,13 +350,13 @@ void KeyManager::checkPath(const path& pPath, bool &readable,
 		}
 	}
 
-	// delete the test file
+// delete the test file
 	remove(filePath);
 }
 
 const path KeyManager::detectConfigDir() const {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::detectConfigDir()");
-	// try to open
+// try to open
 	path myDefPath("/etc/trihlav/keys");
 	bool myWriteable, myReadable;
 	checkPath(myDefPath, myWriteable, myReadable);
@@ -377,6 +399,7 @@ size_t KeyManager::loadKeys() {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::loadKeys");
 	itsKeyList.resize(0);
 	itsKeyMapByPublicId.clear();
+	list<path> myRenamedFiles;
 	for (auto it = recursive_directory_iterator(getConfigDir());
 			it != recursive_directory_iterator(); it++) {
 		boost::smatch matchProd;
@@ -384,18 +407,29 @@ size_t KeyManager::loadKeys() {
 		if (!is_directory(it->path())
 				&& regex_match(myFName.string(), matchProd, K_KEY_FILTER)) {
 			BOOST_LOG_TRIVIAL(debug)<< "Found key file " << myFName << ".";
-			YubikoOtpKeyConfig* myCfg = new YubikoOtpKeyConfig(*this, myFName);
-			myCfg->load();
-			YubikoOtpKeyConfigPtr myKey { myCfg };
-			itsKeyList.emplace_back(myKey);
-			string myId(myKey->getPublicId());
-			if (myId.empty()) {
-				(myId += "generated:") += myKey->getFilename().string();
+			try {
+				YubikoOtpKeyConfig* myCfg = new YubikoOtpKeyConfig(*this, myFName);
+				myCfg->load();
+				YubikoOtpKeyConfigPtr myKey {myCfg};
+				itsKeyList.emplace_back(myKey);
+				string myId(myKey->getPublicId());
+				if (myId.empty()) {
+					(myId += "generated:") += myKey->getFilename().string();
+				}
+				itsKeyMapByPublicId.emplace(KeyMap_t::value_type {myId, myKey.get()});
+			} catch( std::exception& myExc ) {
+				BOOST_LOG_TRIVIAL(error)<<"Exception caugh while loading key file \"" << myFName << "\" - "<< myExc.what();
+				myRenamedFiles.push_back(myFName);
+			} catch(...) {
+				BOOST_LOG_TRIVIAL(error)<<"Unknown exception caugh while loading key file \"" << myFName << "\".";
+				myRenamedFiles.push_back(myFName);
 			}
-			itsKeyMapByPublicId.emplace(KeyMap_t::value_type { myId, myKey.get() });
 		} else {
 			BOOST_LOG_TRIVIAL(debug)<< "Skipping file  " << myFName << ".";
 		}
+	}
+	for( path myFName : myRenamedFiles) {
+		renameMallformedKeyFile(myFName);
 	}
 	return itsKeyList.size();
 }
@@ -419,7 +453,7 @@ const YubikoOtpKeyConfig& KeyManager::getKey(const size_t pIdx) const {
 const YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(
 		const string& pPubId) const {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::getKeyByPublicId const");
-	auto myKey=itsKeyMapByPublicId.find(pPubId);
+	auto myKey = itsKeyMapByPublicId.find(pPubId);
 	if (myKey == itsKeyMapByPublicId.end()) {
 		BOOST_LOG_TRIVIAL(warning)<< "Key prefixed " << pPubId << " has not been found.";
 		return 0;
@@ -432,7 +466,7 @@ const YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(
  */
 YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(const string& pPubId) {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::getKeyByPublicId");
-	auto myKey=itsKeyMapByPublicId.find(pPubId);
+	auto myKey = itsKeyMapByPublicId.find(pPubId);
 	if (myKey == itsKeyMapByPublicId.end()) {
 		BOOST_LOG_TRIVIAL(warning)<< "Key prefixed " << pPubId << " has not been found.";
 		return 0;
@@ -441,18 +475,19 @@ YubikoOtpKeyConfig* KeyManager::getKeyByPublicId(const string& pPubId) {
 }
 
 void KeyManager::update(const std::string& pPubId, YubikoOtpKeyConfig& pKey) {
-	if(!pPubId.empty()) {
-		const auto myIt=itsKeyMapByPublicId.find(pPubId);
-		if( myIt != itsKeyMapByPublicId.end()) {
-			if(myIt->second->getPrivateId().compare(pKey.getPrivateId())==0) {
+	if (!pPubId.empty()) {
+		const auto myIt = itsKeyMapByPublicId.find(pPubId);
+		if (myIt != itsKeyMapByPublicId.end()) {
+			if (myIt->second->getPrivateId().compare(pKey.getPrivateId())
+					== 0) {
 				itsKeyMapByPublicId.erase(myIt);
 			}
 		} else {
-			BOOST_LOG_TRIVIAL(debug) << "Public id " << pPubId << " has not been found.";
+			BOOST_LOG_TRIVIAL(debug)<< "Public id " << pPubId << " has not been found.";
 		}
-		itsKeyMapByPublicId[pKey.getPublicId()]= &pKey;
+		itsKeyMapByPublicId[pKey.getPublicId()] = &pKey;
 	} else {
-		BOOST_LOG_TRIVIAL(debug) << "Public id is empty.";
+		BOOST_LOG_TRIVIAL(debug)<<"Public id is empty.";
 	}
 }
 

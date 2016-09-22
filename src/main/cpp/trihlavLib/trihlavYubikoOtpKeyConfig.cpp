@@ -74,17 +74,17 @@ static const string K_NM_VERS("version");
 static const string K_NM_SYS_USER("sysUser");
 static const string K_VL_VERS("0.0.2");
 
-static const string K_NM_DOC_VERS      =K_NM_DOC + K_NM_VERS      ;
-static const string K_NM_DOC_PUB_ID    =K_NM_DOC + K_NM_PUB_ID    ;
-static const string K_NM_DOC_TIMESTAMP =K_NM_DOC + K_NM_TIMESTAMP ;
-static const string K_NM_DOC_SES_CNTR  =K_NM_DOC + K_NM_SES_CNTR  ;
-static const string K_NM_DOC_PRIV_ID   =K_NM_DOC + K_NM_PRIV_ID   ;
-static const string K_NM_DOC_USE_CNTR  =K_NM_DOC + K_NM_USE_CNTR  ;
-static const string K_NM_DOC_SEC_KEY   =K_NM_DOC + K_NM_SEC_KEY   ;
-static const string K_NM_DOC_RANDOM    =K_NM_DOC + K_NM_RANDOM    ;
-static const string K_NM_DOC_CRC       =K_NM_DOC + K_NM_CRC       ;
-static const string K_NM_DOC_DESC      =K_NM_DOC + K_NM_DESC      ;
-static const string K_NM_DOC_SYS_USER  =K_NM_DOC + K_NM_SYS_USER  ;
+static const string K_NM_DOC_VERS = K_NM_DOC + K_NM_VERS;
+static const string K_NM_DOC_PUB_ID = K_NM_DOC + K_NM_PUB_ID;
+static const string K_NM_DOC_TIMESTAMP = K_NM_DOC + K_NM_TIMESTAMP;
+static const string K_NM_DOC_SES_CNTR = K_NM_DOC + K_NM_SES_CNTR;
+static const string K_NM_DOC_PRIV_ID = K_NM_DOC + K_NM_PRIV_ID;
+static const string K_NM_DOC_USE_CNTR = K_NM_DOC + K_NM_USE_CNTR;
+static const string K_NM_DOC_SEC_KEY = K_NM_DOC + K_NM_SEC_KEY;
+static const string K_NM_DOC_RANDOM = K_NM_DOC + K_NM_RANDOM;
+static const string K_NM_DOC_CRC = K_NM_DOC + K_NM_CRC;
+static const string K_NM_DOC_DESC = K_NM_DOC + K_NM_DESC;
+static const string K_NM_DOC_SYS_USER = K_NM_DOC + K_NM_SYS_USER;
 
 void YubikoOtpKeyConfig::zeroToken() {
 	memset(&itsToken, 0, sizeof(yubikey_token_st));
@@ -111,9 +111,7 @@ YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager,
 YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager) :
 		itsKeyManager(pKeyManager), itsChangedFlag(false) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
-	path myFilename = itsKeyManager.getConfigDir()
-			/ "%%-%%-%%.trihlav-key.json";
-	itsFilename = unique_path(myFilename);
+	generateFilename();
 	zeroToken();
 }
 /**
@@ -174,6 +172,15 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 	}
 }
 
+void YubikoOtpKeyConfig::generateFilename() {
+	if(itsKeyManager.getConfigDir().empty()) {
+		throw std::runtime_error("YubikoOtpKeyConfig::generateFilename()==\"\"");
+	}
+	path myFilename = itsKeyManager.getConfigDir()
+			/ "%%-%%-%%.trihlav-key.json";
+	itsFilename=unique_path(myFilename);
+}
+
 const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) const {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::checkFileName");
 	std::string myRetVal;
@@ -226,8 +233,7 @@ void YubikoOtpKeyConfig::load() {
 	setPrivateId(myTree.get<string>(K_NM_DOC_PRIV_ID));
 	setPublicId(myTree.get<string>(K_NM_DOC_PUB_ID));
 	setSecretKey(myTree.get<string>(K_NM_DOC_SEC_KEY));
-	setTimestamp(
-			UTimestamp(myTree.get<uint64_t>(K_NM_DOC_TIMESTAMP)));
+	setTimestamp(UTimestamp(myTree.get<uint64_t>(K_NM_DOC_TIMESTAMP)));
 	setCounter(myTree.get<uint8_t>(K_NM_DOC_SES_CNTR));
 	setCrc(myTree.get<uint16_t>(K_NM_DOC_CRC));
 	setRandom(myTree.get<uint16_t>(K_NM_DOC_RANDOM));

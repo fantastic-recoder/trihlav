@@ -142,13 +142,12 @@ public:
 	 */
 	virtual ~YubikoOtpKeyConfig();
 
-	/**
-	 * @brief Getter.
-	 * @return The filename of the of the keys config file.
-	 */
+	/// @brief Getter.
 	const bfs::path& getFilename() const {
 		return itsFilename;
 	}
+
+	void generateFilename();
 
 	/**
 	 * @return The Yubikey constant token.
