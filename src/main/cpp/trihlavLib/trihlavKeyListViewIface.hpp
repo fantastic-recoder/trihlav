@@ -55,7 +55,7 @@ public:
 	/**
 	 * Should be fired by the UI when user selects a row. The ids of the rows are passed.
 	 */
-	boost::signals2::signal<void(std::list<int>)> selectionChangedSig;
+	boost::signals2::signal<void(int)> selectionChangedSig;
 	/// @brief add a new key
 	virtual ButtonIface& getBtnAddKey() =0;
 	/// @brief Delete key accessor

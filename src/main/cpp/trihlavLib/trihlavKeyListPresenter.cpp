@@ -57,8 +57,7 @@ KeyListViewIface& KeyListPresenter::getView() {
 		getView().getBtnAddKey().getPressedSignal().connect([=] {addKey();});
 		getView().getBtnReload().getPressedSignal().connect(
 				[=] {reloadKeyList();});
-		getView().getBtnDelKey().setEnabled(false);
-		getView().getBtnEditKey().setEnabled(false);
+		getView().selectionChangedSig.connect([=](int pIdx){selectionChanged(pIdx);});
 	}
 	return *itsKeyListView;
 }
@@ -90,6 +89,18 @@ void KeyListPresenter::reloadKeyList() {
 		getView().addRow(getView().createRow(myRow, myKey));
 	}
 	getView().addedAllRows();
+	getView().selectionChangedSig(-1);
+}
+
+void KeyListPresenter::selectionChanged(int pIdx) {
+	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::selectionChange");
+	if(pIdx==-1) {
+		getView().getBtnDelKey().setEnabled(false);
+		getView().getBtnEditKey().setEnabled(false);
+	} else {
+		getView().getBtnDelKey().setEnabled(true);
+		getView().getBtnEditKey().setEnabled(true);
+	}
 }
 
 } /* namespace trihlav */

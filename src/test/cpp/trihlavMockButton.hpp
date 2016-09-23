@@ -31,7 +31,7 @@
 
 #include <string>
 
-#include "../../main/cpp/trihlavLib/trihlavButtonIface.hpp"
+#include "trihlavLib/trihlavButtonIface.hpp"
 
 namespace trihlav {
 

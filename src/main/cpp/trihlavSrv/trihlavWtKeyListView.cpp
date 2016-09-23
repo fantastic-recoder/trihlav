@@ -241,18 +241,18 @@ void WtKeyListView::addedAllRows() {
 
 void WtKeyListView::unselectAll() {
 	itsTable->clearSelection();
+	this->selectionChangedSig(-1);
 }
 
 /**
  * @return a list of ids of the selected keys.
  */
-list<int> WtKeyListView::getSelected() {
+int WtKeyListView::getSelected() {
 	WModelIndexSet mySelected{itsTable->selectedIndexes()};
-	list<int> myRetVal;
-	for(WModelIndex myIdx:mySelected) {
-		int myKeyId=itsDtaMdl->getIdOfRow(myIdx.row());
-		myRetVal.push_back(myKeyId);
+	if(mySelected.empty()) {
+		return -1;
 	}
+	return mySelected.begin()->row();
 }
 
 const KeyListRow_t& WtKeyListView::getRow(int pId) {

@@ -102,6 +102,7 @@ using ::trihlav::KeyListViewIface;
 using ::trihlav::MockKeyListView;
 using ::trihlav::YubikoOtpKeyPresenter;
 using ::trihlav::MockYubikoOtpKeyView;
+using ::trihlav::MockButton;
 using ::boost::filesystem::path;
 using ::boost::filesystem::unique_path;
 
@@ -147,6 +148,7 @@ TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
 	NiceMock<MockFactory> myMockFactory;
 	KeyListPresenter myKeyListPresenter(myMockFactory);
 	KeyListViewIface& myView { myKeyListPresenter.getView() };
+	myKeyListPresenter.reloadKeyList();
 	ASSERT_TRUE(myView.getBtnAddKey().isEnabled());
 	ASSERT_FALSE(myView.getBtnDelKey().isEnabled());
 	ASSERT_FALSE(myView.getBtnEditKey().isEnabled());
@@ -297,11 +299,14 @@ TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
 	const KeyListRow_t myRow0 = myKeyListView.createRow(0, myCfg0);
 	const KeyListRow_t myRow1 = myKeyListView.createRow(1, myCfg1);
 	const KeyListRow_t myRow2 = myKeyListView.createRow(2, myCfg2);
+	MockButton& myDelBtn = dynamic_cast<MockButton&>(myKeyListView.getBtnDelKey());
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow0)));
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow1)));
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow2)));
 	BOOST_LOG_TRIVIAL(debug)<<"Execute presenter.";
 	myKeyListPresenter.reloadKeyList();
+	myKeyListView.selectionChangedSig(2);
+	EXPECT_TRUE(myDelBtn.isEnabled());
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
 }
 

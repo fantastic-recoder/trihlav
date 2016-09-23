@@ -70,7 +70,7 @@ public:
 	virtual void unselectAll() override;
 	virtual const KeyListRow_t& getRow(int pId) override;
 protected:
-	virtual std::list<int> getSelected();
+	virtual int getSelected();
 	virtual void layoutSizeChanged(int,int) override;
 
 	void setTable(Wt::WTableView* pTable) {

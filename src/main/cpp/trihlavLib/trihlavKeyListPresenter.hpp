@@ -52,6 +52,7 @@ public:
 	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
 
 private:
+	void selectionChanged(int pIdx);
 	KeyListViewIface* itsKeyListView;
 	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
 };
