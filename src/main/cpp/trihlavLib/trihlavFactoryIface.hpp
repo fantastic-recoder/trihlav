@@ -41,7 +41,6 @@ class PswdChckPresenterIface;
 class PswdChckViewIface;
 class YubikoOtpKeyViewIface;
 class YubikoOtpKeyPresenterIface;
-class MessagePresenterIface;
 class MessageViewIface;
 class OsIface;
 class SysUserListViewIface;

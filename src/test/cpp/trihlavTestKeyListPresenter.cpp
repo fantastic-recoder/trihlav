@@ -34,19 +34,23 @@
 
 #include <boost/filesystem.hpp>
 
+#include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavButtonIface.hpp"
 #include "trihlavLib/trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
+#include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
+
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
-
-#include "trihlavLib/trihlavLog.hpp"
-#include "trihlavLib/trihlavKeyListPresenter.hpp"
-#include "trihlavLib/trihlavKeyManager.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
@@ -54,11 +58,7 @@
 #include "trihlavMockFactory.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
-
-#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
-#include "trihlavLib/trihlavOsIface.hpp"
-
+#include "trihlavMockMessageView.hpp"
 #include "trihlavMockEditIface.hpp"
 
 namespace trihlav {
@@ -103,6 +103,7 @@ using ::trihlav::MockKeyListView;
 using ::trihlav::YubikoOtpKeyPresenter;
 using ::trihlav::MockYubikoOtpKeyView;
 using ::trihlav::MockButton;
+using ::trihlav::MockMessageView;
 using ::boost::filesystem::path;
 using ::boost::filesystem::unique_path;
 
@@ -140,7 +141,7 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 			dynamic_cast<MockYubikoOtpKeyView&>(myView);
 	KeyListViewIface& myKeyListView = myKeyListPresenter.getView();
 	EXPECT_CALL(myMockYubikoOtpKeyView, show());
-	myKeyListView.getBtnAddKey().getPressedSignal()();
+	myKeyListView.getBtnAddKey().pressedSig();
 }
 
 TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
@@ -308,6 +309,57 @@ TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
 	myKeyListView.selectionChangedSig(2);
 	EXPECT_TRUE(myDelBtn.isEnabled());
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
+	remove_all(myKeyMan.getConfigDir());
+	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+}
+
+TEST_F(TestKeyListPresenter,canEditYubikoKey) {
+	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canAddYubikoKey");
+	NiceMock<MockFactory> myMockFactory;
+	KeyManager& myKeyMan { createKeyManager(myMockFactory) };
+	YubikoOtpKeyConfig myCfg0(myKeyMan), myCfg1(myKeyMan), myCfg2(myKeyMan);
+	createTestKeyConfigs(myKeyMan, myCfg0, myCfg1, myCfg2);
+	BOOST_LOG_TRIVIAL(debug)<<"Going 2 instantiate the presenter";
+
+	KeyListPresenter myKeyListPresenter(myMockFactory);
+	YubikoOtpKeyPresenter& myYubikoOtpKeyPresenter =
+			myKeyListPresenter.getYubikoOtpKeyPresenter();
+	YubikoOtpKeyViewIface& myView(myYubikoOtpKeyPresenter.getView());
+	MockYubikoOtpKeyView& myMockYubikoOtpKeyView =
+			dynamic_cast<MockYubikoOtpKeyView&>(myView);
+	KeyListViewIface& myKeyListView = myKeyListPresenter.getView();
+	EXPECT_CALL(myMockYubikoOtpKeyView, show());
+	myKeyListView.selectionChangedSig(1);
+	myKeyListView.getBtnEditKey().pressedSig();
+	remove_all(myKeyMan.getConfigDir());
+	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+}
+
+TEST_F(TestKeyListPresenter,canDeleteYubikoKey) {
+	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canAddYubikoKey");
+	NiceMock<MockFactory> myMockFactory;
+	KeyManager& myKeyMan { createKeyManager(myMockFactory) };
+	YubikoOtpKeyConfig myCfg0(myKeyMan), myCfg1(myKeyMan), myCfg2(myKeyMan);
+	createTestKeyConfigs(myKeyMan, myCfg0, myCfg1, myCfg2);
+	BOOST_LOG_TRIVIAL(debug)<<"Going 2 instantiate the presenter";
+
+	KeyListPresenter myKeyListPresenter(myMockFactory);
+	YubikoOtpKeyPresenter& myYubikoOtpKeyPresenter =
+			myKeyListPresenter.getYubikoOtpKeyPresenter();
+	YubikoOtpKeyViewIface& myView(myYubikoOtpKeyPresenter.getView());
+	MockYubikoOtpKeyView& myMockYubikoOtpKeyView =
+			dynamic_cast<MockYubikoOtpKeyView&>(myView);
+
+	MockMessageView& myMockMessageView =
+			dynamic_cast<MockMessageView&>(myYubikoOtpKeyPresenter.getMessageView());
+
+	KeyListViewIface& myKeyListView = myKeyListPresenter.getView();
+	EXPECT_CALL(myMockMessageView,ask(_,_)).WillOnce(Return(true));
+	myKeyListView.selectionChangedSig(1);
+	myKeyListView.getBtnDelKey().pressedSig();
+	EXPECT_EQ(2, myKeyMan.getKeyCount());
+	remove_all(myKeyMan.getConfigDir());
+	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
 }
 
 int main(int argc, char **argv) {

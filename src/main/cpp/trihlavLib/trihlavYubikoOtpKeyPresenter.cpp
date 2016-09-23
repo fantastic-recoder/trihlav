@@ -45,13 +45,13 @@ void YubikoOtpKeyPresenter::initUi() {
 	getView().getAcceptedSignal().connect([this](const bool pAccepted) {
 		accepted(pAccepted);
 	});
-	getView().getBtnGenPrivateId().getPressedSignal().connect([this]() {
+	getView().getBtnGenPrivateId().pressedSig.connect([this]() {
 		generatePrivateId();
 	});
-	getView().getBtnGenPublicId().getPressedSignal().connect([this]() {
+	getView().getBtnGenPublicId().pressedSig.connect([this]() {
 		generatePublicId();
 	});
-	getView().getBtnGenSecretKey().getPressedSignal().connect([this]() {
+	getView().getBtnGenSecretKey().pressedSig.connect([this]() {
 		generateSecretKey();
 	});
 }
@@ -77,8 +77,30 @@ void YubikoOtpKeyPresenter::showCurrentConfig() {
 
 void YubikoOtpKeyPresenter::addKey() {
 	delete itsCurCfg;
-	itsCurCfg=0;
+	itsCurCfg = 0;
 	getCurCfg();
+	itsMode = Add;
+	showCurrentConfig();
+}
+
+void YubikoOtpKeyPresenter::deleteKey(const YubikoOtpKeyConfig& pKeyCfg) {
+	delete itsCurCfg;
+	itsCurCfg = new YubikoOtpKeyConfig { pKeyCfg };
+	itsMode = Delete;
+	if (getMessageView().ask(translate("Trihlav question"),
+			translate(
+					"Really delete key \"" + itsCurCfg->getDescription()
+							+ "\"."))) {
+		deleteKey();
+		saved();
+		itsMode = None;
+	}
+}
+
+void YubikoOtpKeyPresenter::editKey(const YubikoOtpKeyConfig& pKeyCfg) {
+	delete itsCurCfg;
+	itsCurCfg = new YubikoOtpKeyConfig { pKeyCfg };
+	itsMode = Edit;
 	showCurrentConfig();
 }
 
@@ -93,12 +115,7 @@ void YubikoOtpKeyPresenter::deleteKey() {
 	if (itsCurCfg) {
 		const path myFilename = getCurCfg().getFilename();
 		if (exists(myFilename)) {
-			if (!remove(myFilename)) {
-				auto myErrMsg = format(translate("Failed to delete file %1%."))
-						% myFilename.native();
-				BOOST_LOG_TRIVIAL(error)<< myErrMsg;
-				throw std::runtime_error(myErrMsg.str());
-			}
+			getFactory().getKeyManager().prefixKeyFile(myFilename, "deleted");
 		} else {
 			BOOST_LOG_TRIVIAL(warning)<< "Filename " << myFilename
 			<< " does not exist.";
@@ -116,7 +133,7 @@ void YubikoOtpKeyPresenter::throwNoConfig() {
 	throw std::runtime_error(myErrMsg);
 }
 
-inline string deleteSpaces( std::string pStr) {
+inline string deleteSpaces(std::string pStr) {
 	pStr.erase(remove(pStr.begin(), pStr.end(), ' '), pStr.end());
 	return pStr;
 }
@@ -129,26 +146,30 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 			throwNoConfig();
 		}
 		try {
-			string myPrivateId{deleteSpaces(getPrivateId())};
-			getCurCfg().setPrivateId(myPrivateId);
+			if (itsMode == Add || itsMode == Edit) {
+				string myPrivateId { deleteSpaces(getPrivateId()) };
+				getCurCfg().setPrivateId(myPrivateId);
 
-			string mySecretKey{deleteSpaces(getSecretKey())};
-			getCurCfg().setSecretKey(mySecretKey);
+				string mySecretKey { deleteSpaces(getSecretKey()) };
+				getCurCfg().setSecretKey(mySecretKey);
 
-			string myPublicId{deleteSpaces(getPublicId())};
-			getCurCfg().setPublicId(myPublicId);
+				string myPublicId { deleteSpaces(getPublicId()) };
+				getCurCfg().setPublicId(myPublicId);
 
-			getCurCfg().setDescription(getDescription());
+				getCurCfg().setDescription(getDescription());
 
-			getCurCfg().save();
+				getCurCfg().save();
+			}
 			saved();
 		} catch (const std::exception& pExc) {
-			getFactory().createMessageView()->showMessage(translate("Trihlav error!"),
-					pExc.what());
-		} catch(...) {
-			getFactory().createMessageView()->showMessage(translate("Trihlav error!"),
+			getFactory().createMessageView()->showMessage(
+					translate("Trihlav error!"), pExc.what());
+		} catch (...) {
+			getFactory().createMessageView()->showMessage(
+					translate("Trihlav error!"),
 					translate("Unknown exception caught!"));
 		}
+		itsMode = None;
 	}
 }
 
@@ -253,4 +274,12 @@ void YubikoOtpKeyPresenter::generateModhex(int pBytes, string& pTarget) {
 	generate_n(pTarget.begin(), myLen, randchar);
 }
 
+MessageViewIface& YubikoOtpKeyPresenter::getMessageView() {
+	if(!itsMessageView) {
+		itsMessageView.reset(getFactory().createMessageView());
+	}
+	return *itsMessageView;
+}
+
 }/* namespace trihlav */
+

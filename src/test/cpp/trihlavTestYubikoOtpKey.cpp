@@ -105,9 +105,9 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	EXPECT_CALL(myYubikoOtpKeyView, show());
 	BOOST_LOG_TRIVIAL(debug)<< "Expectations set.";
 	myPresenter.addKey();
-	myViewIface.getBtnGenPrivateId().getPressedSignal()();
-	myViewIface.getBtnGenPublicId().getPressedSignal()();
-	myViewIface.getBtnGenSecretKey().getPressedSignal()();
+	myViewIface.getBtnGenPrivateId().pressedSig();
+	myViewIface.getBtnGenPublicId().pressedSig();
+	myViewIface.getBtnGenSecretKey().pressedSig();
 	myViewIface.getAcceptedSignal()(true);
 	const string myPrivId(myViewIface.getEdtPrivateId().getValue());
 	const string myPublicId(myViewIface.getEdtPublicId().getValue());

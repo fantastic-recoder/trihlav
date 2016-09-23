@@ -35,6 +35,7 @@ namespace trihlav {
 class WtMessageView: virtual public MessageViewIface {
 public:
 	virtual void showMessage(const std::string& pHeader, const std::string& pMsg) override;
+	virtual bool ask(const std::string& pHeader, const std::string& pMsg) override;
 	WtMessageView();
 	virtual ~WtMessageView();
 };

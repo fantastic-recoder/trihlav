@@ -65,7 +65,7 @@ PswdChckViewIface& PswdChckPresenter::getView() {
 	if (!itsView) {
 		BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::getView");
 		itsView = getFactory().createPswdChckView();
-		itsView->getBtnOk().getPressedSignal().connect([=]() {okPressed();});
+		itsView->getBtnOk().pressedSig.connect([=]() {okPressed();});
 	}
 	return *itsView;
 }

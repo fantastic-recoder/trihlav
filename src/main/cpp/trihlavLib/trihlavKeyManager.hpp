@@ -64,8 +64,8 @@ public:
 
 	void update(const std::string& pPubId,YubikoOtpKeyConfig& pKey);
 
+	void prefixKeyFile(const path& pKyFileFName, const std::string& pPrefix) const;
 private:
-	void renameMallformedKeyFile(const path& pKyFileFName);
     mutable bool itsInitializedFlag;
     boost::filesystem::path itsConfigDir;
     KeyList_t itsKeyList;

@@ -37,7 +37,7 @@
 namespace trihlav {
 
 MessageViewIface::~MessageViewIface() {
-	BOOST_LOG_NAMED_SCOPE("MessagePresenterIface::~MessageViewIface");
+	BOOST_LOG_NAMED_SCOPE("MessageViewIface::~MessageViewIface");
 }
 
 } /* namespace trihlav */

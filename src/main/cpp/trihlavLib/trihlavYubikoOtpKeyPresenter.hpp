@@ -39,6 +39,7 @@ class FactoryIface;
 class YubikoOtpKeyViewIface;
 class YubikoOtpKeyConfig;
 class StrEditIface;
+class MessageViewIface;
 
 using signal_t=boost::signals2::signal<void()>;
 
@@ -47,6 +48,8 @@ using signal_t=boost::signals2::signal<void()>;
  */
 class YubikoOtpKeyPresenter: virtual public PresenterBase {
 public:
+
+	enum EMode {None,Edit,Add,Delete};
 
     YubikoOtpKeyPresenter(FactoryIface&);
 
@@ -58,14 +61,21 @@ public:
     /// @brief delete current key being edited.
     virtual void deleteKey();
 
+    void deleteKey(const YubikoOtpKeyConfig& pKeyCfg );
+
+    void editKey(const YubikoOtpKeyConfig& pKeyCfg );
+
     virtual YubikoOtpKeyConfig& getCurCfg();
 
     /// @brief generate random private id
     virtual void generatePrivateId();
+
     /// @brief generate random public id
     virtual void generatePublicId();
+
     /// @brief generate random secret key
     virtual void generateSecretKey();
+
     /// @brief get the length of public id.
 	int getPublicIdLen();
 
@@ -97,15 +107,20 @@ public:
 
 	/// @brief Description getter.
 	std::string getDescription();
+
 	void showCurrentConfig();
+
+	MessageViewIface& getMessageView();
 
 	signal_t saved;
 private:
+	EMode itsMode=None;
     YubikoOtpKeyViewIface* itsView;
     YubikoOtpKeyConfig* itsCurCfg;
     void accepted( bool pAccepted);
 	void throwNoConfig();
 	void initUi();
+	std::unique_ptr<MessageViewIface> itsMessageView;
 };
 
 } /* namespace trihlavApi */

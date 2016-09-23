@@ -45,17 +45,14 @@ namespace trihlav {
 		/**
 		 * Button pressed event is signaling via this member.
 		 */
-		virtual PressedSignal& getPressedSignal(){
-			return itsPressedSignal;
-		}
-		/**
-		 * Button pressed event is signaling via this member.
-		 */
-		virtual const PressedSignal& getPressedSignal()const {
-			return itsPressedSignal;
-		}
+		PressedSignal pressedSig;
+
 		virtual ~ButtonIface(){};
-		virtual void pressed() { itsPressedSignal(); }
+
+		/**
+		 * Trigger button-pressed signal.
+		 */
+		virtual void pressed() { pressedSig(); }
 
 		/**
 		 * @return Buttons label value in UTF8.
@@ -67,7 +64,6 @@ namespace trihlav {
 		 */
 		virtual void setText( const std::string& pText) = 0;
 	private:
-		PressedSignal itsPressedSignal;
 	};
 }
 

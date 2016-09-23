@@ -38,6 +38,7 @@ namespace trihlav {
 
 struct MockMessageView: virtual MessageViewIface, virtual boost::noncopyable {
 	MOCK_METHOD2(showMessage, void (const std::string&, const std::string&));//
+	MOCK_METHOD2(ask, bool (const std::string&, const std::string&));//
 };
 
 }

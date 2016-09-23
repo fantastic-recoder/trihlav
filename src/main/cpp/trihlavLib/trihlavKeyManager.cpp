@@ -277,14 +277,14 @@ bool isCurrentUserLocalAdministrator(void)
 }
 #endif
 
-void KeyManager::renameMallformedKeyFile(const path& pKeyFileFName) {
+void KeyManager::prefixKeyFile(const path& pKeyFileFName, const std::string& pPrefix) const {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::renameMallformedKeyFile");
 	path myNewFName;
 	try {
 		if (exists(pKeyFileFName)) {
 			path myPath = pKeyFileFName.parent_path();
 			path myFName = pKeyFileFName.filename();
-			myNewFName = myPath / (path("damaged-") += myFName);
+			myNewFName = myPath / (path(pPrefix+"-") += myFName);
 			BOOST_LOG_TRIVIAL(debug)<<"Going to rename "<< pKeyFileFName << " into " << myNewFName << ".";
 			rename(pKeyFileFName, myNewFName);
 		} else {
@@ -390,7 +390,7 @@ void KeyManager::setConfigDir(const path& pConfigDir) {
 	itsConfigDir = pConfigDir;
 }
 
-const boost::regex K_KEY_FILTER(".*\\.trihlav-key\\.json");
+const boost::regex K_KEY_FILTER("[a-z0-9]{2,2}-[a-z0-9]{2,2}-[a-z0-9]{2,2}\\.trihlav-key\\.json");
 
 /**
  * @return the loaded keys count.
@@ -403,12 +403,13 @@ size_t KeyManager::loadKeys() {
 	for (auto it = recursive_directory_iterator(getConfigDir());
 			it != recursive_directory_iterator(); it++) {
 		boost::smatch matchProd;
-		const path myFName(it->path().native());
+		const path myFNameWithPath(it->path().native());
+		const path myFName(it->path().filename().native());
 		if (!is_directory(it->path())
 				&& regex_match(myFName.string(), matchProd, K_KEY_FILTER)) {
 			BOOST_LOG_TRIVIAL(debug)<< "Found key file " << myFName << ".";
 			try {
-				YubikoOtpKeyConfig* myCfg = new YubikoOtpKeyConfig(*this, myFName);
+				YubikoOtpKeyConfig* myCfg = new YubikoOtpKeyConfig(*this, myFNameWithPath);
 				myCfg->load();
 				YubikoOtpKeyConfigPtr myKey {myCfg};
 				itsKeyList.emplace_back(myKey);
@@ -419,17 +420,17 @@ size_t KeyManager::loadKeys() {
 				itsKeyMapByPublicId.emplace(KeyMap_t::value_type {myId, myKey.get()});
 			} catch( std::exception& myExc ) {
 				BOOST_LOG_TRIVIAL(error)<<"Exception caugh while loading key file \"" << myFName << "\" - "<< myExc.what();
-				myDamagedFiles.push_back(myFName);
+				myDamagedFiles.push_back(myFNameWithPath);
 			} catch(...) {
 				BOOST_LOG_TRIVIAL(error)<<"Unknown exception caugh while loading key file \"" << myFName << "\".";
-				myDamagedFiles.push_back(myFName);
+				myDamagedFiles.push_back(myFNameWithPath);
 			}
 		} else {
 			BOOST_LOG_TRIVIAL(debug)<< "Skipping file  " << myFName << ".";
 		}
 	}
 	for( path myFName : myDamagedFiles) {
-		renameMallformedKeyFile(myFName);
+		prefixKeyFile(myFName,"damaged");
 	}
 	return itsKeyList.size();
 }

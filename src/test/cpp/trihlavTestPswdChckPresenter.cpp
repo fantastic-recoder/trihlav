@@ -100,7 +100,7 @@ TEST_F(TestPswdChckPresenter,passwordMayNotBeEmpty) {
 	EXPECT_CALL(myMockMessageView,
 			showMessage("Trihlav password check.","Password is too short!"));
 	myPresenter.getView().getEdtPswd0().setValue("");
-	myPresenter.getView().getBtnOk().getPressedSignal()();
+	myPresenter.getView().getBtnOk().pressedSig();
 }
 
 static const char* K_TST_DESC0 = "Test key 1";
@@ -174,10 +174,10 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	EXPECT_CALL(myMockMessageView,
 			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_OK)).Times(3);
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
-	myPresenter.getView().getBtnOk().getPressedSignal()();
+	myPresenter.getView().getBtnOk().pressedSig();
 	BOOST_LOG_TRIVIAL(debug)<< " try to check the same password again.";
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
-	myPresenter.getView().getBtnOk().getPressedSignal()();
+	myPresenter.getView().getBtnOk().pressedSig();
 	BOOST_LOG_TRIVIAL(debug)<< "Simulate re-initialization.";
 	myOtp0.resize(YUBIKEY_OTP_SIZE+1);
 	yubikey_token_st myTkn1 { myCfg0.getToken() };
@@ -189,7 +189,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	yubikey_generate(&myTkn1, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
 	myOtp0.resize(YUBIKEY_OTP_SIZE);
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
-	myPresenter.getView().getBtnOk().getPressedSignal()();
+	myPresenter.getView().getBtnOk().pressedSig();
 	BOOST_LOG_TRIVIAL(debug)<< "And again after re-initialization.";
 	myTkn2.use++;
 	myTkn2.tstpl++;
@@ -198,7 +198,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	yubikey_generate(&myTkn2, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
 	myOtp0.resize(YUBIKEY_OTP_SIZE);
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
-	myPresenter.getView().getBtnOk().getPressedSignal()();
+	myPresenter.getView().getBtnOk().pressedSig();
 
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));

@@ -9,6 +9,7 @@
 
 using Wt::WMessageBox;
 using Wt::Ok;
+using Wt::Cancel;
 
 namespace trihlav {
 
@@ -20,6 +21,12 @@ void WtMessageView::showMessage(const std::string& pHeader,
 		const std::string& pMsg) {
 	BOOST_LOG_NAMED_SCOPE("WtMessageView::showMessage");
 	WMessageBox::show(pHeader.c_str(),pMsg.c_str(),Ok);
+}
+
+bool WtMessageView::ask(const std::string& pHeader,
+		const std::string& pMsg) {
+	BOOST_LOG_NAMED_SCOPE("WtMessageView::ask");
+	return WMessageBox::show(pHeader.c_str(),pMsg.c_str(),Ok|Cancel)==Ok;
 }
 
 WtMessageView::~WtMessageView() {

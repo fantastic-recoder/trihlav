@@ -43,9 +43,20 @@ class KeyListPresenter: virtual public KeyListPresenterIface {
 public:
 
 	KeyListPresenter( FactoryIface& pFactory);
-	virtual KeyListViewIface& getView();
+
+	virtual KeyListViewIface& getView() override;
+
 	virtual ~KeyListPresenter();
-	virtual void addKey();
+
+	/// @brief add a new key
+	virtual void addKey() override;
+
+	/// @brief edit currently selected key
+	virtual void editKey() override;
+
+	/// @brief delete currently selected key
+	virtual void deleteKey() override;
+
 	/// @brief reload current key list
 	void reloadKeyList();
 
@@ -53,8 +64,10 @@ public:
 
 private:
 	void selectionChanged(int pIdx);
+	bool checkSelection() const;
 	KeyListViewIface* itsKeyListView;
 	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
+	int itsSelectedKey= -1;
 };
 
 } /* namespace trihlav */

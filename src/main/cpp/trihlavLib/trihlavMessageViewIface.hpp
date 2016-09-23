@@ -35,6 +35,7 @@ namespace trihlav {
 class MessageViewIface {
 public:
 	virtual void showMessage(const std::string& pHeader, const std::string& pMsg) =0;
+	virtual bool ask(const std::string& pHeader, const std::string& pMsg) =0;
 	virtual ~MessageViewIface();
 };
 
