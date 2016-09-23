@@ -61,13 +61,52 @@
 
 #include "trihlavMockEditIface.hpp"
 
-using namespace std;
-using namespace trihlav;
-using namespace boost;
-using namespace boost::filesystem;
+namespace trihlav {
 
+bool operator==(const trihlav::KeyListRow_t& pLeft,
+		const trihlav::KeyListRow_t& pRight) {
+	return //
+	(pLeft.get<0>() == pRight.get<0>()) && //
+			(pLeft.get<1>() == pRight.get<1>()) && //
+			(pLeft.get<2>() == pRight.get<2>()) && //
+			(pLeft.get<3>() == pRight.get<3>()) && //
+			(pLeft.get<4>() == pRight.get<4>()) && //
+			(pLeft.get<5>() == pRight.get<5>()) //
+	;
+}
+
+std::ostream& operator <<(std::ostream& pOstr,
+		const trihlav::KeyListRow_t& pRow) {
+	pOstr << "KeyListRow{ idx=\"" << pRow.get<0>() << "\", pubId=\"" << pRow.get<1>() << "\", desc=\""
+			<< pRow.get<2>() << "\", key=\"" << pRow.get<3>() << "\", use=\"" << pRow.get<4>()
+			<< "\", cntr=\"" <<  pRow.get<5>() << "}";
+	return pOstr;
+}
+}
+
+using ::std::string;
 using ::testing::Return;
 using ::testing::NiceMock;
+using ::testing::Eq;
+using ::testing::_;
+using ::testing::NiceMock;
+using ::trihlav::KeyListRow_t;
+//using ::trihlav::operator==;
+using ::trihlav::initLog;
+using ::trihlav::MockFactory;
+using ::trihlav::KeyManager;
+using ::trihlav::YubikoOtpKeyConfig;
+using ::trihlav::YubikoOtpKeyViewIface;
+using ::trihlav::KeyListPresenter;
+using ::trihlav::KeyListViewIface;
+using ::trihlav::MockKeyListView;
+using ::trihlav::YubikoOtpKeyPresenter;
+using ::trihlav::MockYubikoOtpKeyView;
+using ::boost::filesystem::path;
+using ::boost::filesystem::unique_path;
+
+//bool operator== (boost::tuples::tuple<int, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, int, int>,
+//		const boost::tuples::tuple<int, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, int, int>);
 
 class TestKeyListPresenter: public ::testing::Test {
 public:
@@ -75,11 +114,18 @@ public:
 		BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::SetUp");
 	}
 
-	// Tears down the test fixture.
+// Tears down the test fixture.
 	virtual void TearDown() {
 		BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::TearDown");
 	}
 };
+
+TEST_F(TestKeyListPresenter,keyListRow) {
+	KeyListRow_t r0(0, "1", "2", "3", 4, 5), r1 { r0 };
+	EXPECT_TRUE(r0 == r1);
+	r1.get<1>() = "---";
+	EXPECT_FALSE(r0 == r1);
+}
 
 TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canAddYubikoKey");
@@ -162,16 +208,23 @@ static void createTestKeyConfigs( //
 	pKeyMan.loadKeys();
 }
 
-TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
-	BOOST_LOG_NAMED_SCOPE(
-			"TestKeyListPresenter_canReadTheConfigDir_Test::TestBody");
-	NiceMock<MockFactory> myMockFactory;
+static KeyManager& createKeyManager(NiceMock<MockFactory>& pMockFactory) {
 	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
 	EXPECT_FALSE(exists(myTestCfgFile));
 	EXPECT_TRUE(create_directory(myTestCfgFile));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
-	KeyManager& myKeyMan(myMockFactory.getKeyManager());
+	KeyManager& myKeyMan(pMockFactory.getKeyManager());
 	myKeyMan.setConfigDir(myTestCfgFile);
+	return myKeyMan;
+}
+
+TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
+	BOOST_LOG_NAMED_SCOPE(
+			"TestKeyListPresenter_canReadTheConfigDir_Test::TestBody");
+	NiceMock<MockFactory> myMockFactory;
+
+	KeyManager& myKeyMan { createKeyManager(myMockFactory) };
+
 	YubikoOtpKeyConfig myCfg0(myKeyMan), myCfg1(myKeyMan), myCfg2(myKeyMan);
 	createTestKeyConfigs(myKeyMan, myCfg0, myCfg1, myCfg2);
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
@@ -209,29 +262,47 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	EXPECT_EQ(K_TST_SECU2, myCfg21.getSecretKey());
 	EXPECT_EQ(K_TST_SYS_USER2, myCfg21.getSysUser());
 
-	remove_all (myKeyMan.getConfigDir());
+	remove_all(myKeyMan.getConfigDir());
 	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
 }
 
 TEST_F(TestKeyListPresenter,canSurviveIllformedKeyfile) {
 	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canSurviveIllformedKeyfile");
 	NiceMock<MockFactory> myMockFactory;
-	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
-	EXPECT_FALSE(exists(myTestCfgFile));
-	EXPECT_TRUE(create_directory(myTestCfgFile));
-	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
-	KeyManager& myKeyMan(myMockFactory.getKeyManager());
-	myKeyMan.setConfigDir(myTestCfgFile);
+	KeyManager& myKeyMan { createKeyManager(myMockFactory) };
 	YubikoOtpKeyConfig myCfg0(myKeyMan), myCfg1(myKeyMan), myCfg2(myKeyMan);
 	createTestKeyConfigs(myKeyMan, myCfg0, myCfg1, myCfg2);
 	YubikoOtpKeyConfig myIllCfg(myKeyMan);
 	myIllCfg.save();
 	myKeyMan.loadKeys();
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
-
-	remove_all (myKeyMan.getConfigDir());
+	const trihlav::KeyManager::path myConfigDir = myKeyMan.getConfigDir();
+	BOOST_LOG_TRIVIAL(debug)<< "Clean up. Remove " << myConfigDir;
+	remove_all(myConfigDir);
 	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
 
+}
+
+TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
+	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::selectingAKeyAllowsEditButton");
+	NiceMock<MockFactory> myMockFactory;
+	KeyManager& myKeyMan { createKeyManager(myMockFactory) };
+	YubikoOtpKeyConfig myCfg0(myKeyMan), myCfg1(myKeyMan), myCfg2(myKeyMan);
+	createTestKeyConfigs(myKeyMan, myCfg0, myCfg1, myCfg2);
+	BOOST_LOG_TRIVIAL(debug)<<"Going 2 instantiate the presenter";
+	KeyListPresenter myKeyListPresenter(myMockFactory);
+	BOOST_LOG_TRIVIAL(debug)<<"Preparing expectations.";
+	MockKeyListView& myKeyListView =
+			dynamic_cast<MockKeyListView&>(myKeyListPresenter.getView());
+	const KeyListRow_t myRow0 = myKeyListView.createRow(0, myCfg0);
+	const KeyListRow_t myRow1 = myKeyListView.createRow(1, myCfg1);
+	const KeyListRow_t myRow2 = myKeyListView.createRow(2, myCfg2);
+	EXPECT_CALL(myKeyListView, addRow(Eq(myRow0)));
+	EXPECT_CALL(myKeyListView, addRow(Eq(myRow1)));
+	EXPECT_CALL(myKeyListView, addRow(Eq(myRow2)));
+	BOOST_LOG_TRIVIAL(debug)<<"Execute presenter.";
+	myKeyListPresenter.reloadKeyList();
+	EXPECT_EQ(3, myKeyMan.getKeyCount());
 }
 
 int main(int argc, char **argv) {

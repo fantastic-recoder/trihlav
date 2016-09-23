@@ -49,6 +49,8 @@ struct MockKeyListView: virtual KeyListViewIface {
 	MOCK_METHOD0(clear,void ());//
 	MOCK_METHOD1(addRow,void (const KeyListRow_t pRow));//
 	MOCK_METHOD0(addedAllRows,void ());//
+	MOCK_METHOD1(getRow, KeyListRow_t& (int pId));//
+
 };
 
 }

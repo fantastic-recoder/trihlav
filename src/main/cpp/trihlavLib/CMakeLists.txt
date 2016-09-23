@@ -13,7 +13,7 @@ ADD_LIBRARY(trihlavApi SHARED trihlavApi.cpp trihlavWrongConfigValue.cpp
 	trihlavFailedCreateConfigDir.cpp trihlavCannotWriteConfigDir.cpp
 	trihlavLog.cpp trihlavPresenterBase.cpp trihlavMainPanelPresenter.cpp
 	trihlavCannotWriteConfigDir.cpp trihlavFactoryIface.cpp 
-	trihlavPswdChckPresenter.cpp trihlavKeyListPresenter.cpp
+	trihlavPswdChckPresenter.cpp trihlavKeyListPresenter.cpp trihlavKeyListViewIface.cpp
 	trihlavYubikoOtpKeyViewIface.cpp trihlavCannotCastImplementation.cpp
     trihlavMessageViewIface.cpp trihlavEmptyPublicId.cpp trihlavWidgetIface.cpp
     trihlavOsIface.cpp trihlavSysUserListPresenter.cpp )

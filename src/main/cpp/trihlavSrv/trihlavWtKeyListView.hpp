@@ -60,21 +60,24 @@ public:
 		return itsTable;
 	}
 
-	virtual ButtonIface&  getBtnAddKey() override;
-	virtual ButtonIface&  getBtnDelKey() override;
-	virtual ButtonIface&  getBtnReload() override;
-	virtual ButtonIface&  getBtnEditKey() override;
+	virtual ButtonIface& getBtnAddKey() override;
+	virtual ButtonIface& getBtnDelKey() override;
+	virtual ButtonIface& getBtnReload() override;
+	virtual ButtonIface& getBtnEditKey() override;
 	virtual void clear() override;
 	virtual void addRow(const KeyListRow_t pRow) override;
 	virtual void addedAllRows() override;
 	virtual void unselectAll() override;
-
+	virtual const KeyListRow_t& getRow(int pId) override;
 protected:
+	virtual std::list<int> getSelected();
 	virtual void layoutSizeChanged(int,int) override;
 
 	void setTable(Wt::WTableView* pTable) {
 		itsTable = pTable;
 	}
+
+	void selectionChanged();
 
 private:
 	Wt::WTableView *itsTable;

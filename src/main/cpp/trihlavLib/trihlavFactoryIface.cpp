@@ -44,12 +44,18 @@ namespace {
 
 namespace trihlav {
 
+/**
+ * @return a reference to the key manager singleton.
+ */
 KeyManager& FactoryIface::getKeyManager() {
 	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
 	static KeyManager theKeyManager;
 	return theKeyManager;
 }
 
+/**
+ * @brief A constant variant of  FactoryIface::getKeyManager()
+ */
 const KeyManager& FactoryIface::getKeyManager() const {
 	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
 	static KeyManager theKeyManager;

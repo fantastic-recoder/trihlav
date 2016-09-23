@@ -28,6 +28,7 @@
 
 #include <string>
 #include <array>
+#include <list>
 #include <boost/locale.hpp>
 
 #include <boost/log/core.hpp>
@@ -45,6 +46,7 @@
 
 using std::string;
 using std::array;
+using std::list;
 using boost::locale::translate;
 using boost::any;
 using Wt::WText;
@@ -117,6 +119,10 @@ public:
 		return any();
 	}
 
+	int getIdOfRow(size_t pRow) {
+		return itsRows[pRow].get<0>();
+	}
+
 	/**
 	 * @brief Returns the header data for a column
 	 */
@@ -139,6 +145,10 @@ public:
 
 	void addRow(const KeyListRow_t pRow) {
 		itsRows.push_back(pRow);
+	}
+
+	const KeyListRow_t& getRow(int pId) {
+		return itsRows[pId];
 	}
 
 	virtual void clear() {
@@ -190,6 +200,7 @@ WtKeyListView::WtKeyListView() {
     myTopLayout->setSpacing(K_TBL_V_MARGIN);
 	setLayout(myTopLayout);
 	setLayoutSizeAware(true);
+	itsTable->selectionChanged().connect(this, &WtKeyListView::selectionChanged);
 }
 
 WtKeyListView::~WtKeyListView() {
@@ -229,7 +240,28 @@ void WtKeyListView::addedAllRows() {
 }
 
 void WtKeyListView::unselectAll() {
+	itsTable->clearSelection();
+}
+
+/**
+ * @return a list of ids of the selected keys.
+ */
+list<int> WtKeyListView::getSelected() {
 	WModelIndexSet mySelected{itsTable->selectedIndexes()};
+	list<int> myRetVal;
+	for(WModelIndex myIdx:mySelected) {
+		int myKeyId=itsDtaMdl->getIdOfRow(myIdx.row());
+		myRetVal.push_back(myKeyId);
+	}
+}
+
+const KeyListRow_t& WtKeyListView::getRow(int pId) {
+	return itsDtaMdl->getRow(pId);
+}
+
+void WtKeyListView::selectionChanged() {
+	BOOST_LOG_NAMED_SCOPE("WtKeyListView::selectionChanged");
+	this->selectionChangedSig(getSelected());
 }
 
 } /* namespace trihlav */

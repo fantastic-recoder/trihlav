@@ -399,7 +399,7 @@ size_t KeyManager::loadKeys() {
 	BOOST_LOG_NAMED_SCOPE("KeyManager::loadKeys");
 	itsKeyList.resize(0);
 	itsKeyMapByPublicId.clear();
-	list<path> myRenamedFiles;
+	list<path> myDamagedFiles;
 	for (auto it = recursive_directory_iterator(getConfigDir());
 			it != recursive_directory_iterator(); it++) {
 		boost::smatch matchProd;
@@ -419,16 +419,16 @@ size_t KeyManager::loadKeys() {
 				itsKeyMapByPublicId.emplace(KeyMap_t::value_type {myId, myKey.get()});
 			} catch( std::exception& myExc ) {
 				BOOST_LOG_TRIVIAL(error)<<"Exception caugh while loading key file \"" << myFName << "\" - "<< myExc.what();
-				myRenamedFiles.push_back(myFName);
+				myDamagedFiles.push_back(myFName);
 			} catch(...) {
 				BOOST_LOG_TRIVIAL(error)<<"Unknown exception caugh while loading key file \"" << myFName << "\".";
-				myRenamedFiles.push_back(myFName);
+				myDamagedFiles.push_back(myFName);
 			}
 		} else {
 			BOOST_LOG_TRIVIAL(debug)<< "Skipping file  " << myFName << ".";
 		}
 	}
-	for( path myFName : myRenamedFiles) {
+	for( path myFName : myDamagedFiles) {
 		renameMallformedKeyFile(myFName);
 	}
 	return itsKeyList.size();
