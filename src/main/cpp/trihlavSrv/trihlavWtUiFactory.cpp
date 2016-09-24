@@ -15,8 +15,8 @@
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavWtKeyListView.hpp"
 #include "trihlavWtMessageView.hpp"
+#include "trihlavWtSysUserListIView.hpp"
 #include "trihlavWtYubikoOtpKeyView.hpp"
-#include "trihlavWtSysUserListIface.hpp"
 
 namespace trihlav {
 

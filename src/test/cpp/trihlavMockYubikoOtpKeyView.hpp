@@ -49,7 +49,7 @@ struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 	MockButton itsMockBtnGenPrivateId;
 	MockButton itsMockBtnGenPublicId;
 	MockButton itsMockBtnGenSecretKey;
-	MockButton itsMockSelectSysUser;
+	MockButton itsMockBtnSelectSysUser;
 	MockButton itsMockBtnSave;
 	MockButton itsMockBtnCancel;
 

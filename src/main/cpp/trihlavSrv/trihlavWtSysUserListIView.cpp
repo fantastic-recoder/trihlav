@@ -5,14 +5,15 @@
  *      Author: grobap
  */
 
+
 #include <boost/locale.hpp>
 
 #include <Wt/WDialog>
 #include <Wt/WTable>
 #include <Wt/WGridLayout>
 
-#include "trihlavWtSysUserListIface.hpp"
 #include "trihlavWtPushButton.hpp"
+#include "trihlavWtSysUserListIView.hpp"
 
 
 namespace trihlav {
