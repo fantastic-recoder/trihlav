@@ -29,6 +29,7 @@
 #define TRIHLAV_WT_YUBIKO_OTP_KEY_VIEW_HPP_
 
 #include <memory>
+#include <string>
 
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
@@ -49,44 +50,53 @@ class WtYubikoOtpKeyView: public YubikoOtpKeyViewIface {
 	WtSpinBox* itsPublicIdLen;
 	WtStrEdit* itsPrivateId;
 	WtStrEdit* itsSecretKey;
+	WtStrEdit* itsEdtSysUser;
 	WtPushButton* itsGenPublicIdentityBtn;
 	WtPushButton* itsGenPrivateIdentityBtn;
 	WtPushButton* itsCancelBtn;
 	WtPushButton* itsSaveBtn;
 	WtPushButton* itsGenSecretKeyBtn;
+	WtPushButton* itsBtnSelectSysUser;
+	std::string   itsSysUserLogin;
 public:
 	WtYubikoOtpKeyView();
 	virtual ~WtYubikoOtpKeyView();
 
-	virtual const StrEditIface& getEdtPublicId() const;
-	virtual StrEditIface& getEdtPublicId();
+	virtual const StrEditIface& getEdtPublicId() const override;
+	virtual StrEditIface& getEdtPublicId() override;
 
-	virtual SpinBoxIface& getSbxPublicIdLen();
-	virtual const SpinBoxIface& getSbxPublicIdLen() const;
+	virtual SpinBoxIface& getSbxPublicIdLen() override;
+	virtual const SpinBoxIface& getSbxPublicIdLen() const override;
 
-	virtual const StrEditIface& getEdtPrivateId() const;
-	virtual StrEditIface& getEdtPrivateId();
+	virtual const StrEditIface& getEdtPrivateId() const override;
+	virtual StrEditIface& getEdtPrivateId() override;
 
-	virtual const StrEditIface& getEdtSecretKey() const;
-	virtual StrEditIface& getEdtSecretKey();
+	virtual const StrEditIface& getEdtSecretKey() const override;
+	virtual StrEditIface& getEdtSecretKey() override;
 
-	virtual const ButtonIface&  getBtnGenPublicId() const;
-	virtual ButtonIface&  getBtnGenPublicId();
+	virtual const ButtonIface&  getBtnGenPublicId() const override;
+	virtual ButtonIface&  getBtnGenPublicId() override;
 
-	virtual const ButtonIface&  getBtnGenPrivateId() const;
-	virtual ButtonIface&  getBtnGenPrivateId();
+	virtual const ButtonIface&  getBtnGenPrivateId() const override;
+	virtual ButtonIface&  getBtnGenPrivateId() override;
 
-	virtual const ButtonIface&  getBtnGenSecretKey() const;
-	virtual ButtonIface&  getBtnGenSecretKey();
+	virtual const ButtonIface&  getBtnGenSecretKey() const override;
+	virtual ButtonIface&  getBtnGenSecretKey() override;
 
-	virtual const ButtonIface&  getBtnCancel() const;
-	virtual ButtonIface&  getBtnCancel();
+	virtual const StrEditIface& getEdtSysUser() const  override;
+	virtual StrEditIface& getEdtSysUser()  override;
 
-	virtual const ButtonIface&  getBtnSave() const;
-	virtual ButtonIface&  getBtnSave();
+	virtual const ButtonIface&  getBtnSelectSysUser() const  override;
+	virtual ButtonIface&  getBtnSelectSysUser()  override;
 
-	virtual StrEditIface& getEdtDescription() ;
-	virtual const StrEditIface& getEdtDescription() const ;
+	virtual const ButtonIface&  getBtnCancel() const override;
+	virtual ButtonIface&  getBtnCancel() override;
+
+	virtual const ButtonIface&  getBtnSave() const override;
+	virtual ButtonIface&  getBtnSave() override;
+
+	virtual StrEditIface& getEdtDescription()  override;
+	virtual const StrEditIface& getEdtDescription() const  override;
 
 	virtual void show();
 

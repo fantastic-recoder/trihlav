@@ -24,6 +24,9 @@ class WtPushButton;
 class WtSysUserListView: public SysUserListViewIface {
 public:
 	WtSysUserListView();
+	virtual void show(const SysUsers& pUsers) override;
+    virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
+
 private:
 	Wt::WTable* itsSysUserTable;
 	WtPushButton* itsCancelBtn;

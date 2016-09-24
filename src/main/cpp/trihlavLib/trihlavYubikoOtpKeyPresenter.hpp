@@ -40,6 +40,7 @@ class YubikoOtpKeyViewIface;
 class YubikoOtpKeyConfig;
 class StrEditIface;
 class MessageViewIface;
+class SysUserListPresenter;
 
 using signal_t=boost::signals2::signal<void()>;
 
@@ -112,6 +113,12 @@ public:
 
 	MessageViewIface& getMessageView();
 
+	SysUserListPresenter& getSysUserListPresenter();
+
+	void selectSystemUser();
+
+	void systemUserSelected();
+
 	signal_t saved;
 private:
 	EMode itsMode=None;
@@ -121,6 +128,7 @@ private:
 	void throwNoConfig();
 	void initUi();
 	std::unique_ptr<MessageViewIface> itsMessageView;
+	std::unique_ptr<SysUserListPresenter> itsSysUserListPresenter;
 };
 
 } /* namespace trihlavApi */

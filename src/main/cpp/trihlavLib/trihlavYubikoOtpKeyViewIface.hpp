@@ -40,10 +40,9 @@ class YubikoOtpKeyViewIface : private boost::noncopyable {
 public:
     typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
 
-    AcceptedSignal& getAcceptedSignal() { return itsAcceptedSignal; }
-    const AcceptedSignal& getAcceptedSignal() const { return itsAcceptedSignal; }
+    AcceptedSignal acceptedSig;
 
-	virtual const StrEditIface& getEdtPublicId() const = 0;
+    virtual const StrEditIface& getEdtPublicId() const = 0;
 	virtual StrEditIface& getEdtPublicId() = 0;
 
 	virtual StrEditIface& getEdtDescription() = 0;
@@ -55,6 +54,9 @@ public:
 	virtual const StrEditIface& getEdtPrivateId() const = 0;
 	virtual StrEditIface& getEdtPrivateId() = 0;
 
+	virtual const StrEditIface& getEdtSysUser() const = 0;
+	virtual StrEditIface& getEdtSysUser() = 0;
+
 	virtual const StrEditIface& getEdtSecretKey() const = 0;
 	virtual StrEditIface& getEdtSecretKey() = 0;
 
@@ -63,6 +65,9 @@ public:
 
 	virtual const ButtonIface&  getBtnGenPrivateId() const = 0;
 	virtual ButtonIface&  getBtnGenPrivateId() = 0;
+
+	virtual const ButtonIface&  getBtnSelectSysUser() const = 0;
+	virtual ButtonIface&  getBtnSelectSysUser() = 0;
 
 	virtual const ButtonIface&  getBtnGenSecretKey() const = 0;
 	virtual ButtonIface&  getBtnGenSecretKey() = 0;
@@ -77,7 +82,6 @@ public:
 
 	virtual ~YubikoOtpKeyViewIface();
 private:
-    AcceptedSignal itsAcceptedSignal;
 };
 
 } /* namespace trihlavApi */

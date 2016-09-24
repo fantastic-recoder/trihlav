@@ -35,8 +35,6 @@ itsOkBtn(new WtPushButton(translate("ok")))//
 	itsDlg->setWidth(WLength(56, U::FontEm));
 	WGridLayout* myTopLayout = new WGridLayout;
 	{
-		itsSysUserTable->elementAt(0, 0)->addWidget(new Wt::WText("login"));
-		itsSysUserTable->elementAt(0, 1)->addWidget(new Wt::WText("Full name"));
 		myTopLayout->addWidget(itsSysUserTable,0,0,3,8,Wt::AlignCenter|Wt::AlignMiddle);
 	}
 	{
@@ -46,9 +44,26 @@ itsOkBtn(new WtPushButton(translate("ok")))//
 		itsOkBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
 	}
 	itsDlg->contents()->setLayout(myTopLayout);
-//	itsDlg->finished().connect(this, &WtYubikoOtpKeyView::finishedSlot);
-//	itsCancelBtn->clicked().connect(itsDlg.get(), &WDialog::reject);
-//	itsSaveBtn->clicked().connect(itsDlg.get(), &WDialog::accept);
+	itsDlg->finished().connect(this, &WtSysUserListView::finishedSlot);
+	itsCancelBtn->clicked().connect(itsDlg.get(), &WDialog::reject);
+	itsOkBtn->clicked().connect(itsDlg.get(), &WDialog::accept);
+}
+
+void WtSysUserListView::show(const SysUsers& pUsers) {
+	int myCnt=0;
+	itsSysUserTable->clear();
+	itsSysUserTable->elementAt(0, 0)->addWidget(new Wt::WText("login"));
+	itsSysUserTable->elementAt(0, 1)->addWidget(new Wt::WText("Full name"));
+	for(const SysUser& myUser : pUsers) {
+		myCnt++;
+		itsSysUserTable->elementAt(myCnt, 0)->addWidget(new Wt::WText(myUser.itsLogin));
+		itsSysUserTable->elementAt(myCnt, 1)->addWidget(new Wt::WText(myUser.itsFullName));
+	}
+	itsDlg->show();
+}
+
+void WtSysUserListView::finishedSlot(WDialog::DialogCode pCode) {
+	acceptedSig(pCode == WDialog::DialogCode::Accepted);
 }
 
 }

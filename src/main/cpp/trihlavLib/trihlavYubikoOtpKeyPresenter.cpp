@@ -9,8 +9,6 @@
 #include <stdexcept>
 #include <string>
 
-#include "trihlavYubikoOtpKeyPresenter.hpp"
-
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
@@ -18,14 +16,16 @@
 #include <boost/locale/message.hpp>
 #include <boost/format.hpp>
 
-#include "trihlavButtonIface.hpp"
-#include "trihlavEditIface.hpp"
-#include "trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavButtonIface.hpp"
+#include "trihlavLib/trihlavEditIface.hpp"
+#include "trihlavLib/trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
-#include "trihlavKeyManager.hpp"
-#include "trihlavSpinBoxIface.hpp"
-#include "trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavKeyManager.hpp"
+#include "trihlavLib/trihlavSpinBoxIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavSysUserListPresenter.hpp"
 
 using namespace std;
 using namespace boost;
@@ -42,7 +42,7 @@ void YubikoOtpKeyPresenter::initUi() {
 	getView().getSbxPublicIdLen().setMin(0);
 	getView().getSbxPublicIdLen().setMax(6);
 	getView().getSbxPublicIdLen().setStep(1);
-	getView().getAcceptedSignal().connect([this](const bool pAccepted) {
+	getView().acceptedSig.connect([this](const bool pAccepted) {
 		accepted(pAccepted);
 	});
 	getView().getBtnGenPrivateId().pressedSig.connect([this]() {
@@ -54,6 +54,19 @@ void YubikoOtpKeyPresenter::initUi() {
 	getView().getBtnGenSecretKey().pressedSig.connect([this]() {
 		generateSecretKey();
 	});
+	getView().getBtnSelectSysUser().pressedSig.connect([this]() {
+		selectSystemUser();
+	});
+}
+
+void YubikoOtpKeyPresenter::selectSystemUser() {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::selectSystemUser");
+	getSysUserListPresenter().show();
+}
+
+void YubikoOtpKeyPresenter::systemUserSelected() {
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::systemUserSelected");
+	getView().getEdtSysUser().setValue(getSysUserListPresenter().getSelectedSysUser());
 }
 
 YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(FactoryIface& pFactory) :
@@ -281,5 +294,13 @@ MessageViewIface& YubikoOtpKeyPresenter::getMessageView() {
 	return *itsMessageView;
 }
 
-}/* namespace trihlav */
+SysUserListPresenter& YubikoOtpKeyPresenter::getSysUserListPresenter() {
+	if(!itsSysUserListPresenter) {
+		itsSysUserListPresenter.reset( new SysUserListPresenter(getFactory()));
+		itsSysUserListPresenter->userSelectedSig.connect([this](){systemUserSelected();});
+	}
+	return *itsSysUserListPresenter;
+}
 
+
+}/* namespace trihlav */

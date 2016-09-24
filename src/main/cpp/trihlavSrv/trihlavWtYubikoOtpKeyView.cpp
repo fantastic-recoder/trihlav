@@ -56,6 +56,8 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		itsEdtDescription(new WtStrEdit), //
 		itsGenPublicIdentityBtn(new WtPushButton(translate("Generate"))), //
 		itsGenPrivateIdentityBtn(new WtPushButton(translate("Generate"))), //
+		itsEdtSysUser(new WtStrEdit), //
+		itsBtnSelectSysUser(new WtPushButton(translate("Select system user"))), //
 		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
 		itsSaveBtn(new WtPushButton(translate("Save"))), //
 		itsGenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
@@ -105,8 +107,18 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		myTopLayout->addWidget(itsGenSecretKeyBtn,3,5,1,1,Wt::AlignTop);
 	}
 	{
-		myTopLayout->addWidget(itsCancelBtn,4,1,1,1,Wt::AlignCenter|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsSaveBtn,4,4,1,1,Wt::AlignCenter|Wt::AlignMiddle);
+		itsBtnSelectSysUser->setWidth(WLength(9.0,U::FontEm));
+		itsEdtSysUser->setWidth(WLength(18.0,U::FontEm));
+		itsEdtSysUser->setReadOnly(true);
+		Wt::WText* myLbl = new WText(translate("Operating system user").str());
+		myLbl->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(myLbl,4,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsEdtSysUser,4,1,1,3,Wt::AlignMiddle);
+		myTopLayout->addWidget(itsBtnSelectSysUser,4,4,1,2,Wt::AlignTop);
+	}
+	{
+		myTopLayout->addWidget(itsCancelBtn,5,1,1,1,Wt::AlignCenter|Wt::AlignMiddle);
+		myTopLayout->addWidget(itsSaveBtn,5,4,1,1,Wt::AlignCenter|Wt::AlignMiddle);
 		itsCancelBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
 		itsSaveBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
 	}
@@ -196,8 +208,24 @@ void WtYubikoOtpKeyView::show() {
 	itsDlg->show();
 }
 
+const StrEditIface& WtYubikoOtpKeyView::getEdtSysUser() const {
+	return *itsEdtSysUser;
+}
+
+StrEditIface& WtYubikoOtpKeyView::getEdtSysUser() {
+	return *itsEdtSysUser;
+}
+
+const ButtonIface& WtYubikoOtpKeyView::getBtnSelectSysUser() const {
+	return *itsBtnSelectSysUser;
+}
+
+ButtonIface& WtYubikoOtpKeyView::getBtnSelectSysUser() {
+	return *itsBtnSelectSysUser;
+}
+
 void WtYubikoOtpKeyView::finishedSlot(WDialog::DialogCode pCode) {
-	getAcceptedSignal()(pCode == WDialog::DialogCode::Accepted);
+	acceptedSig(pCode == WDialog::DialogCode::Accepted);
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtDescription() {
