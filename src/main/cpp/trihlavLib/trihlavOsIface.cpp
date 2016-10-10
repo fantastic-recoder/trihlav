@@ -161,7 +161,7 @@ const SysUsers OsIface::getSysUsers() const {
 	SysUsers myUsers;
 #ifdef __unix__
 	static const std::regex K_PSWD_LN(
-			"^((#.*|[a-z]*):([^:]*):([0-9]*):([0-9]*):([^:]*):(/[^:]*):(/[^:]*))$");
+			"^((#.*|[a-z\\-_0-9]*):([^:]*):([0-9]*):([0-9]*):([^:]*):(/[^:]*):(/[^:]*))$");
 	boost::filesystem::ifstream myPswdFile(K_ETC_PASSWD);
 	if (myPswdFile) {
 		string aReadLine;

@@ -49,8 +49,9 @@ const string& SysUserListPresenter::getSelectedSysUser() const {
 
 void SysUserListPresenter::show() {
 	OsIface& myOs { getFactory().getOsIface() };
-	SysUsers myUsers { myOs.getSysUsers() };
+	const SysUsers myUsers { myOs.getSysUsers() };
 	itsSysUsers->clear();
+	itsSysUsers->resize(myUsers.size());
 	copy(myUsers.begin(), myUsers.end(), itsSysUsers->begin());
 	itsCurrentUser=itsSysUsers->end();
 	getView().show(*itsSysUsers);
