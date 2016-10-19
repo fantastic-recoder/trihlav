@@ -47,9 +47,9 @@ struct MockKeyListView: virtual KeyListViewIface {
 	MOCK_METHOD0(getBtnReload,ButtonIface& ());//
 	MOCK_METHOD0(unselectAll,void ());//
 	MOCK_METHOD0(clear,void ());//
-	MOCK_METHOD1(addRow,void (const KeyListRow_t pRow));//
+	MOCK_METHOD1(addRow,void (const ::trihlav::KeyListViewIface::KeyRow_t& pRow));//
 	MOCK_METHOD0(addedAllRows,void ());//
-	MOCK_METHOD1(getRow, KeyListRow_t& (int pId));//
+	MOCK_CONST_METHOD1(getRow, const ::trihlav::KeyListViewIface::KeyRow_t& (int pId));//
 
 };
 

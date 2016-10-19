@@ -43,11 +43,11 @@
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
-
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
@@ -63,23 +63,27 @@
 
 namespace trihlav {
 
-bool operator==(const trihlav::KeyListRow_t& pLeft,
-		const trihlav::KeyListRow_t& pRight) {
+bool operator==(const KeyListViewIface::KeyRow_t& pLeft,
+		const KeyListViewIface::KeyRow_t& pRight) {
 	return //
-	(pLeft.get<0>() == pRight.get<0>()) && //
-			(pLeft.get<1>() == pRight.get<1>()) && //
-			(pLeft.get<2>() == pRight.get<2>()) && //
-			(pLeft.get<3>() == pRight.get<3>()) && //
-			(pLeft.get<4>() == pRight.get<4>()) && //
-			(pLeft.get<5>() == pRight.get<5>()) //
+	(std::get < 0 > (pLeft) == std::get < 0 > (pRight)) && //
+			(std::get < 1 > (pLeft) == std::get < 1 > (pRight)) && //
+			(std::get < 2 > (pLeft) == std::get < 2 > (pRight)) && //
+			(std::get < 3 > (pLeft) == std::get < 3 > (pRight)) && //
+			(std::get < 4 > (pLeft) == std::get < 4 > (pRight)) && //
+			(std::get < 5 > (pLeft) == std::get < 5 > (pRight)) //
 	;
 }
 
 std::ostream& operator <<(std::ostream& pOstr,
-		const trihlav::KeyListRow_t& pRow) {
-	pOstr << "KeyListRow{ idx=\"" << pRow.get<0>() << "\", pubId=\"" << pRow.get<1>() << "\", desc=\""
-			<< pRow.get<2>() << "\", key=\"" << pRow.get<3>() << "\", use=\"" << pRow.get<4>()
-			<< "\", cntr=\"" <<  pRow.get<5>() << "}";
+		const KeyListViewIface::KeyRow_t& pRow) {
+	pOstr << "KeyListRow{ idx=\"" //
+			<< std::get < 0 > (pRow) << "\", pubId=\"" //
+			<< std::get < 1 > (pRow) << "\", desc=\"" //
+			<< std::get < 2 > (pRow) << "\", key=\"" //
+			<< std::get < 3 > (pRow) << "\", use=\"" //
+			<< std::get < 4 > (pRow) << "\", cntr=\"" //
+			<< std::get < 5 > (pRow) << "}";
 	return pOstr;
 }
 }
@@ -90,7 +94,7 @@ using ::testing::NiceMock;
 using ::testing::Eq;
 using ::testing::_;
 using ::testing::NiceMock;
-using ::trihlav::KeyListRow_t;
+using ::trihlav::KeyListViewIface;
 //using ::trihlav::operator==;
 using ::trihlav::initLog;
 using ::trihlav::MockFactory;
@@ -123,9 +127,9 @@ public:
 };
 
 TEST_F(TestKeyListPresenter,keyListRow) {
-	KeyListRow_t r0(0, "1", "2", "3", 4, 5), r1 { r0 };
+	KeyListViewIface::KeyRow_t r0(0, "1", "2", "3", 4, 5), r1 { r0 };
 	EXPECT_TRUE(r0 == r1);
-	r1.get<1>() = "---";
+	std::get<1>(r1)= "---";
 	EXPECT_FALSE(r0 == r1);
 }
 
@@ -297,10 +301,11 @@ TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
 	BOOST_LOG_TRIVIAL(debug)<<"Preparing expectations.";
 	MockKeyListView& myKeyListView =
 			dynamic_cast<MockKeyListView&>(myKeyListPresenter.getView());
-	const KeyListRow_t myRow0 = myKeyListView.createRow(0, myCfg0);
-	const KeyListRow_t myRow1 = myKeyListView.createRow(1, myCfg1);
-	const KeyListRow_t myRow2 = myKeyListView.createRow(2, myCfg2);
-	MockButton& myDelBtn = dynamic_cast<MockButton&>(myKeyListView.getBtnDelKey());
+	const KeyListViewIface::KeyRow_t myRow0 = myKeyListView.createRow(0, myCfg0);
+	const KeyListViewIface::KeyRow_t myRow1 = myKeyListView.createRow(1, myCfg1);
+	const KeyListViewIface::KeyRow_t myRow2 = myKeyListView.createRow(2, myCfg2);
+	MockButton& myDelBtn =
+			dynamic_cast<MockButton&>(myKeyListView.getBtnDelKey());
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow0)));
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow1)));
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow2)));

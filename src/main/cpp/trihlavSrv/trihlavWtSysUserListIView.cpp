@@ -49,6 +49,7 @@ WtSysUserListView::WtSysUserListView() :
 		itsOkBtn(new WtPushButton(translate("ok"))) //
 
 {
+	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::WtSysUserListView");
 	itsDlg->setCaption(translate("Add key").str());
 	itsDlg->setObjectName("WtSysUserListView");
 	itsDlg->resize(K_DLG_W, K_DLG_H);

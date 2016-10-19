@@ -46,7 +46,9 @@ namespace trihlav {
 class WtPushButton;
 class WtKeyListModel;
 
-class WtKeyListView: virtual public KeyListViewIface, virtual public WtViewIface, virtual public Wt::WContainerWidget {
+class WtKeyListView: virtual public KeyListViewIface, //
+		virtual public WtViewIface, //
+		virtual public Wt::WContainerWidget {
 public:
 	WtKeyListView();
 	virtual ~WtKeyListView();
@@ -65,13 +67,13 @@ public:
 	virtual ButtonIface& getBtnReload() override;
 	virtual ButtonIface& getBtnEditKey() override;
 	virtual void clear() override;
-	virtual void addRow(const KeyListRow_t pRow) override;
+	virtual void addRow(const KeyRow_t& pRow) override;
 	virtual void addedAllRows() override;
 	virtual void unselectAll() override;
-	virtual const KeyListRow_t& getRow(int pId) override;
+	virtual const KeyRow_t& getRow(int pId) const override;
 protected:
 	virtual int getSelected();
-	virtual void layoutSizeChanged(int,int) override;
+	virtual void layoutSizeChanged(int, int) override;
 
 	void setTable(Wt::WTableView* pTable) {
 		itsTable = pTable;
@@ -86,7 +88,7 @@ private:
 	WtPushButton* itsBtnEdit;
 	WtPushButton* itsBtnReload;
 	WtKeyListModel* itsDtaMdl;
-    static const int K_TBL_V_MARGIN;
+	static const int K_TBL_V_MARGIN;
 };
 
 } /* namespace trihlav */

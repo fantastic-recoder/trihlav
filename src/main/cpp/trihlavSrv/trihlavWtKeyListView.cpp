@@ -39,14 +39,14 @@
 #include <Wt/WPushButton>
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
-#include <Wt/WAbstractTableModel>
-#include <Wt/WModelIndex>
 #include "trihlavWtPushButton.hpp"
 #include "trihlavWtKeyListView.hpp"
+#include "trihlavWtListModel.hpp"
 
 using std::string;
 using std::array;
 using std::list;
+using std::vector;
 using boost::locale::translate;
 using boost::any;
 using Wt::WText;
@@ -69,106 +69,31 @@ const int WtKeyListView::K_TBL_V_MARGIN = 12;
 /**
  * @brief The WtKeyListModel class holds the data supplyed by the presenter.
  */
-class WtKeyListModel: public WAbstractTableModel {
-	typedef vector<KeyListRow_t> RowList_t;
-	RowList_t itsRows;
-	const vector<string> itsCaptions { { translate("Record ID") }, { translate(
-			"Public ID") }, { translate("Description") }, { translate(
-			"Private ID") }, { translate("Use counter") }, { translate(
-			"Counter") } };
+class WtKeyListModel: public WtListModel<int, std::string, std::string,
+		std::string, int, int> {
 public:
-	/**
-	 * @brief Returns the table row count (only for the invalid parent!)
-	 */
-	virtual int rowCount(const WModelIndex &pParent = Wt::WModelIndex()) const
-			override {
-		if (!pParent.isValid())
-			return itsRows.size();
-		return 0;
-	}
-
-	/**
-	 * @brief Returns the table column count (only for the invalid parent!)
-	 */
-	int columnCount(const WModelIndex &pParent = Wt::WModelIndex()) const
-			override {
-		if (!pParent.isValid())
-			return itsCaptions.size();
-		return 0;
-	}
-
-	virtual any data(const WModelIndex& pIndex, int pRole = DisplayRole) const override {
-		if (pRole == DisplayRole) {
-			switch (pIndex.column()) {
-			case 0:
-				return itsRows[pIndex.row()].get<0>();
-			case 1:
-				return itsRows[pIndex.row()].get<1>();
-			case 2:
-				return itsRows[pIndex.row()].get<2>();
-			case 3:
-				return itsRows[pIndex.row()].get<3>();
-			case 4:
-				return itsRows[pIndex.row()].get<4>();
-			case 5:
-				return itsRows[pIndex.row()].get<5>();
-			default:
-				return any();
-			}
-		}
-		return any();
-	}
-
-	int getIdOfRow(size_t pRow) {
-		return itsRows[pRow].get<0>();
-	}
-
-	/**
-	 * @brief Returns the header data for a column
-	 */
-	any headerData(int pSection, Orientation pOrientation = Wt::Horizontal,
-			int pRole = DisplayRole) const override {
-		if (pOrientation == Wt::Horizontal) {
-			switch (pRole) {
-			case Wt::DisplayRole:
-				if (pSection > itsCaptions.size()) {
-					return any("-");
-				}
-				return itsCaptions[pSection];
-			default:
-				return boost::any();
-
-			}
-		}
-		return boost::any();
-	}
-
-	void addRow(const KeyListRow_t pRow) {
-		itsRows.push_back(pRow);
-	}
-
-	const KeyListRow_t& getRow(int pId) {
-		return itsRows[pId];
-	}
-
-	virtual void clear() {
-		itsRows.clear();
+	WtKeyListModel() :
+			WtListModel<int, std::string, std::string, std::string, int, int>( {
+					{ translate("Record ID") }, { translate("Public ID") }, {
+							translate("Description") }, { translate(
+							"Private ID") }, { translate("Use counter") }, {
+							translate("Counter") } }) {
 	}
 }
 ;
 
 void WtKeyListView::layoutSizeChanged(int pW, int pH) {
 	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
-    const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
-    const int K_COL_CNT=itsTable->model()->columnCount();
-    const int K_TBL_INT_M=7*K_COL_CNT+2;
-    for (int i = 0; i < K_COL_CNT; ++i) {
-        if(i==2) {
-            itsTable->setColumnWidth(i,K_TBL_W-5*WIDTH-K_TBL_INT_M);
-        } else {
-            itsTable->setColumnWidth(i, 120);
-        }
-    }
+	const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
+	const int K_COL_CNT=itsTable->model()->columnCount();
+	const int K_TBL_INT_M=7*K_COL_CNT+2;
+	for (int i = 0; i < K_COL_CNT; ++i) {
+		if(i==2) {
+			itsTable->setColumnWidth(i,K_TBL_W-5*WIDTH-K_TBL_INT_M);
+		} else {
+			itsTable->setColumnWidth(i, 120);
+		}
+	}
 }
 
 WtKeyListView::WtKeyListView() {
@@ -192,15 +117,17 @@ WtKeyListView::WtKeyListView() {
 	itsTable->setAlternatingRowColors(true);
 	itsTable->setCanReceiveFocus(true);
 	itsTable->setColumnResizeEnabled(true);
-	itsTable->setColumnWidth(2,"400px");
+	itsTable->setColumnWidth(2, "400px");
 	itsTable->setSelectionMode(Wt::SingleSelection);
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
-    myTopLayout->setContentsMargins(K_TBL_V_MARGIN,K_TBL_V_MARGIN,K_TBL_V_MARGIN,K_TBL_V_MARGIN);
-    myTopLayout->setSpacing(K_TBL_V_MARGIN);
+	myTopLayout->setContentsMargins(K_TBL_V_MARGIN, K_TBL_V_MARGIN,
+			K_TBL_V_MARGIN, K_TBL_V_MARGIN);
+	myTopLayout->setSpacing(K_TBL_V_MARGIN);
 	setLayout(myTopLayout);
 	setLayoutSizeAware(true);
-	itsTable->selectionChanged().connect(this, &WtKeyListView::selectionChanged);
+	itsTable->selectionChanged().connect(this,
+			&WtKeyListView::selectionChanged);
 }
 
 WtKeyListView::~WtKeyListView() {
@@ -230,7 +157,7 @@ void WtKeyListView::clear() {
 	itsDtaMdl->clear();
 }
 
-void WtKeyListView::addRow(const KeyListRow_t pRow) {
+void WtKeyListView::addRow(const KeyRow_t& pRow) {
 	itsDtaMdl->addRow(pRow);
 }
 
@@ -248,14 +175,14 @@ void WtKeyListView::unselectAll() {
  * @return a list of ids of the selected keys.
  */
 int WtKeyListView::getSelected() {
-	WModelIndexSet mySelected{itsTable->selectedIndexes()};
-	if(mySelected.empty()) {
+	WModelIndexSet mySelected { itsTable->selectedIndexes() };
+	if (mySelected.empty()) {
 		return -1;
 	}
 	return mySelected.begin()->row();
 }
 
-const KeyListRow_t& WtKeyListView::getRow(int pId) {
+const WtKeyListView::KeyRow_t& WtKeyListView::getRow(int pId) const {
 	return itsDtaMdl->getRow(pId);
 }
 

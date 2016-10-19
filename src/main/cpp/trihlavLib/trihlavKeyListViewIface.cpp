@@ -10,10 +10,10 @@
 
 namespace trihlav {
 
-KeyListRow_t KeyListViewIface::createRow( //
+KeyListViewIface::KeyRow_t KeyListViewIface::createRow( //
 		int pRowIdx, //
 		const YubikoOtpKeyConfig& pFromKey) const {
-	return KeyListRow_t(pRowIdx, //< Row index
+	return KeyRow_t(pRowIdx, //< Row index
 			pFromKey.getPublicId(), //< keys public id
 			pFromKey.getDescription(), //< description
 			pFromKey.getPrivateId(), //< private id

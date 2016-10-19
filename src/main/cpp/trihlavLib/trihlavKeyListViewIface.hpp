@@ -29,7 +29,7 @@
 #define TRIHLAV_I_KEY_LIST_VIEW_IFACE_HPP_
 #include <list>
 #include <boost/signals2.hpp>
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 #include "trihlavViewIface.hpp"
 
@@ -38,47 +38,50 @@ namespace trihlav {
 class ButtonIface;
 class YubikoOtpKeyConfig;
 
-struct KeyListRow_t: public boost::tuple<int, std::string, std::string,
-		std::string, int, int> {
-	KeyListRow_t(int p0, std::string p1, std::string p2, std::string p3, int p4,
-			int p5) :
-			boost::tuple<int, std::string, std::string, std::string, int, int>(
-					p0, p1, p2, p3, p4, p5) {
-	}
-};
-
 /**
  * Interface of the key list UI.
  */
 class KeyListViewIface: virtual public ViewIface {
 public:
+
+	typedef std::tuple<int, std::string, std::string, std::string, int, int> KeyRow_t;
+
 	/**
 	 * Should be fired by the UI when user selects a row. The ids of the rows are passed.
 	 */
 	boost::signals2::signal<void(int)> selectionChangedSig;
+
 	/// @brief add a new key
 	virtual ButtonIface& getBtnAddKey() =0;
+
 	/// @brief Delete key accessor
 	virtual ButtonIface& getBtnDelKey() =0;
+
 	/// @brief Edit current key button accessor
 	virtual ButtonIface& getBtnEditKey() =0;
+
 	/// @brief Reload the key list.
 	virtual ButtonIface& getBtnReload() =0;
+
 	/// @brief Unselect all keys in the list
 	virtual void unselectAll()=0;
+
 	/// @brief remove all items from the list
 	virtual void clear()=0;
+
 	/// @brief add a row/key to the list
-	virtual void addRow(const KeyListRow_t pRow)=0;
+	virtual void addRow(const KeyRow_t& pRow)=0;
+
 	/// @brief get an row identified by an id
-	virtual const KeyListRow_t& getRow(int pId) =0;
+	virtual const KeyRow_t& getRow(int pId) const =0;
+
 	/** 
 	 * @brief will be called by the presenter when 
 	 * all keys has been added.
 	 */
 	virtual void addedAllRows()=0;
 
-	KeyListRow_t createRow(int pRowIdx,
+	KeyRow_t createRow(int pRowIdx,
 			const YubikoOtpKeyConfig& pFromKey) const;
 };
 
