@@ -99,3 +99,15 @@ target_link_libraries(trihlavPamTester
                       ${PAM_LIBRARIES}
                       )
                       
+add_executable( trihlavTestTupleList trihlavTestTupleList.cpp )
+add_test( NAME trihlavTestTupleList COMMAND trihlavTestTupleList )
+target_link_libraries(trihlavTestTupleList
+                      trihlavApi
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      libgtest
+    				  libgmock
+                      ${YUBIKEY_LIB}
+                      ${Boost_LIBRARIES}
+                      ${PAM_LIBRARIES}
+                      )
+                      

@@ -30,13 +30,12 @@
 #define TRIHLAV_WT_LIST_MODEL_HPP_
 
 #include <string>
-#include <vector>
-#include <tuple>
-
-#include <boost/variant.hpp>
 
 #include <Wt/WAbstractTableModel>
 #include <Wt/WModelIndex>
+
+#include "trihlavLib/trihlavRec2StrVisitor.hpp"
+#include "trihlavLib/trihlavTupleList.hpp"
 
 namespace trihlav {
 
@@ -47,11 +46,10 @@ namespace trihlav {
  *
  */
 template<typename ... Columns_t>
-class WtListModel: public Wt::WAbstractTableModel {
+class WtListModel: public Wt::WAbstractTableModel, public TupleList< Columns_t ... > {
 public:
-	typedef std::tuple<Columns_t...> Row_t;
-	typedef std::vector<Row_t> RowList_t;
 	typedef std::vector<std::string> Captions_t;
+	typedef TupleList<Columns_t...> TupleList_t;
 
 	/**
 	 *
@@ -67,7 +65,7 @@ public:
 	virtual int rowCount(const Wt::WModelIndex &pParent =
 			Wt::WModelIndex()) const override {
 		if (!pParent.isValid())
-			return itsRows.size();
+			return TupleList_t::getRowCount();
 		return 0;
 	}
 
@@ -78,7 +76,7 @@ public:
 			override {
 		if (!pParent.isValid())
 			return itsCaptions.size();
-		return sizeof ... (Columns_t);
+		return sizeof...(Columns_t);
 	}
 
 	/**
@@ -90,18 +88,18 @@ public:
 			Wt::DisplayRole) const override {
 		const int myColumn = pIndex.column();
 		if (pRole == Wt::DisplayRole) {
-			auto myRow = itsRows[pIndex.row()];
 			if (myColumn > sizeof ... (Columns_t)) {
 				return boost::any();
 			} else {
-				return get_intern<0>(myColumn, myRow);
+				return boost::apply_visitor(Rec2StrVisitor(),
+						TupleList_t::get(pIndex.row(),myColumn));
 			}
 		}
 		return boost::any();
 	}
 
 	int getIdOfRow(size_t pRow) {
-		return std::get < 0 > (itsRows[pRow]);
+		return TupleList_t::get(0,pRow);
 	}
 
 	/**
@@ -111,12 +109,12 @@ public:
 			Wt::Horizontal, int pRole = Wt::DisplayRole) const override {
 		if (pOrientation == Wt::Horizontal) {
 			switch (pRole) {
-			case Wt::DisplayRole:
+				case Wt::DisplayRole:
 				if (pSection > itsCaptions.size()) {
 					return boost::any("-");
 				}
 				return itsCaptions[pSection];
-			default:
+				default:
 				return boost::any();
 
 			}
@@ -124,33 +122,12 @@ public:
 		return boost::any();
 	}
 
-	void addRow(const Row_t pRow) {
-		itsRows.push_back(pRow);
-	}
-
-	const Row_t& getRow(int pId) {
-		return itsRows[pId];
-	}
-
 	virtual void clear() {
-		itsRows.clear();
+		TupleList_t::clear();
 	}
 
 private:
-	template<int I>
-	boost::variant<Columns_t ...> get_intern(int pI,
-			const std::tuple<Columns_t ...>& pRow) const {
-		if (pI == I) {
-			return std::get < I > (pRow);
-		} else if (I == sizeof...(Columns_t) - 1) {
-			throw std::out_of_range("Tuple element out of range.");
-		}
-		return this->get_intern<(I < sizeof...(Columns_t)-1 ? I+1 : 0)>(pI, pRow);
- }
-
-RowList_t itsRows;
-const Captions_t itsCaptions;
-
+	const Captions_t itsCaptions;
 };
 
 }
