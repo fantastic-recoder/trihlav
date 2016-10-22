@@ -21,7 +21,7 @@ namespace trihlav {
 struct SysUser {
 	std::string itsLogin;
 	std::string itsFullName;
-
+	const std::string str() const { return itsLogin+" [ " + itsFullName + " ]"; }
 };
 
 inline std::ostream& operator << ( std::ostream& pOstr, const SysUser& pUser )  {

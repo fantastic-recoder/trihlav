@@ -33,6 +33,10 @@ public:
 	virtual ~SysUserListPresenter();
 
 	SysUserListViewIface& getView();
+
+	void selectedUser(int pIdx);
+
+	void accepted();
 private:
 	using SysUsersIt=SysUsers::const_iterator;
 

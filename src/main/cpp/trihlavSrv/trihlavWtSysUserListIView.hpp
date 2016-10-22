@@ -27,8 +27,13 @@ public:
 	WtSysUserListView();
 	virtual void show(const SysUsers& pUsers) override;
     virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
+    virtual int getSelected() override;
+    virtual const UserRow_t& getRow(int pId) const override;
 
 private:
+
+	void selectionChanged();
+
 	Wt::WTableView* itsSysUserTable;
 	WtSysUserListModel* itsDtaMdl;   ///< Data model for the view.
 	WtPushButton* itsCancelBtn;

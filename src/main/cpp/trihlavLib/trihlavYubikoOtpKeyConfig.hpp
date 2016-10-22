@@ -265,8 +265,6 @@ private:
 	std::string itsDescription; //< Users free text describing the key
 	KeyManager& itsKeyManager;  //< Global functionality & data
 	std::string itsSysUser;     //< assotiated system user
-
-
 };
 
 } // end namespace trihlavApi

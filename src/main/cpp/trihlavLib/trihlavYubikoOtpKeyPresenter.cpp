@@ -57,6 +57,9 @@ void YubikoOtpKeyPresenter::initUi() {
 	getView().getBtnSelectSysUser().pressedSig.connect([this]() {
 		selectSystemUser();
 	});
+//	getSysUserListPresenter().userSelectedSig.connect([this]() {
+//		systemUserSelected();
+//	});
 }
 
 void YubikoOtpKeyPresenter::selectSystemUser() {
@@ -66,7 +69,8 @@ void YubikoOtpKeyPresenter::selectSystemUser() {
 
 void YubikoOtpKeyPresenter::systemUserSelected() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::systemUserSelected");
-	getView().getEdtSysUser().setValue(getSysUserListPresenter().getSelectedSysUser());
+	std::string mySelectedUser{getSysUserListPresenter().getSelectedSysUser()};
+	getView().getEdtSysUser().setValue(mySelectedUser);
 }
 
 YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(FactoryIface& pFactory) :
