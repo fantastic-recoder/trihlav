@@ -8,7 +8,7 @@
 #include <boost/locale.hpp>
 
 #include <Wt/WDialog>
-#include <Wt/WTable>
+#include <Wt/WTableView>
 #include <Wt/WFitLayout>
 #include <Wt/WGridLayout>
 #include <Wt/WScrollArea>
@@ -19,17 +19,19 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 
+#include "trihlavWtListModel.hpp"
+
 #include "trihlavWtPushButton.hpp"
 #include "trihlavWtSysUserListIView.hpp"
 
 namespace {
-	static const Wt::WLength K_DLG_H(42.0, Wt::WLength::Unit::FontEm);
-	static const Wt::WLength K_DLG_W(32.0, Wt::WLength::Unit::FontEm);
+	static const Wt::WLength K_DLG_H(40.0, Wt::WLength::Unit::FontEm);
+	static const Wt::WLength K_DLG_W(30.0, Wt::WLength::Unit::FontEm);
 }
 
 namespace trihlav {
 
-using Wt::WTable;
+using Wt::WTableView;
 using Wt::WDialog;
 using Wt::WLength;
 using Wt::WGridLayout;
@@ -42,9 +44,21 @@ using Wt::WVBoxLayout;
 using boost::locale::translate;
 using U = Wt::WLength::Unit;
 
+/**
+ * Holds the operating system user list data.
+ */
+class WtSysUserListModel: public WtListModel<std::string, std::string> {
+public:
+	WtSysUserListModel() :
+		WtListModel< std::string, std::string >( {
+					{ translate("System login") }, { translate("Full name") } }) {
+	}
+};
+
 WtSysUserListView::WtSysUserListView() :
 		itsDlg(new WDialog), //
-		itsSysUserTable(new WTable), //
+		itsDtaMdl(new WtSysUserListModel), //
+		itsSysUserTable(new WTableView), //
 		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
 		itsOkBtn(new WtPushButton(translate("ok"))) //
 
@@ -52,12 +66,15 @@ WtSysUserListView::WtSysUserListView() :
 	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::WtSysUserListView");
 	itsDlg->setCaption(translate("Add key").str());
 	itsDlg->setObjectName("WtSysUserListView");
-	itsDlg->resize(K_DLG_W, K_DLG_H);
 	WVBoxLayout* myContentLayout = new WVBoxLayout;
 	{
 		itsSysUserTable->setObjectName("SysUserTable");
-		itsSysUserTable->setHeaderCount(1, Wt::Orientation::Horizontal);
-		myContentLayout->setStretchFactor(itsSysUserTable, 1);
+
+		itsSysUserTable->setModel(itsDtaMdl);
+		itsSysUserTable->setAlternatingRowColors(true);
+		itsSysUserTable->setCanReceiveFocus(true);
+		itsSysUserTable->setColumnResizeEnabled(true);
+		itsSysUserTable->setSelectionMode(Wt::SingleSelection);
 		myContentLayout->addWidget(itsSysUserTable);
 	}
 	WHBoxLayout* myBtnLayout = new WHBoxLayout;
@@ -68,6 +85,7 @@ WtSysUserListView::WtSysUserListView() :
 		myBtnLayout->addWidget(itsCancelBtn);
 	}
 	itsDlg->contents()->setLayout(myContentLayout);
+	itsDlg->contents()->setOverflow(Wt::WContainerWidget::OverflowHidden);
 	itsDlg->footer()->setLayout(myBtnLayout);
 	itsDlg->setResizable(true);
 	itsDlg->finished().connect(this, &WtSysUserListView::finishedSlot);
@@ -78,22 +96,17 @@ WtSysUserListView::WtSysUserListView() :
 void WtSysUserListView::show(const SysUsers& pUsers) {
 	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::show");
 	int myCnt = 0;
-	itsSysUserTable->clear();
-	itsSysUserTable->elementAt(0, 0)->addWidget(
-			new Wt::WText(translate("System login").str()));
-	itsSysUserTable->elementAt(0, 1)->addWidget(
-			new Wt::WText(translate("Full name").str()));
+	itsDtaMdl->clear();
 	for (const SysUser& myUser : pUsers) {
 		myCnt++;
-		itsSysUserTable->elementAt(myCnt, 0)->addWidget(
-				new Wt::WText(myUser.itsLogin));
-		itsSysUserTable->elementAt(myCnt, 1)->addWidget(
-				new Wt::WText(myUser.itsFullName));
+		BOOST_LOG_TRIVIAL(debug)<<"User: " << myUser.itsLogin;
+		itsDtaMdl->addRow(WtSysUserListModel::Row_t(std::string(myUser.itsLogin),
+				std::string(myUser.itsFullName)));
 	}
 	BOOST_LOG_TRIVIAL(debug)<<"System users loaded.";
 	itsDlg->setModal(true);
-	itsDlg->resize(K_DLG_W, K_DLG_H);
 	itsDlg->show();
+	itsDlg->resize(K_DLG_W, K_DLG_H);
 }
 
 void WtSysUserListView::finishedSlot(WDialog::DialogCode pCode) {

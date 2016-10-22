@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace Wt {
-	class WTable;
+	class WTableView;
 	class WDialog;
 }
 
@@ -20,6 +20,7 @@ namespace Wt {
 namespace trihlav {
 
 class WtPushButton;
+class WtSysUserListModel;
 
 class WtSysUserListView: public SysUserListViewIface {
 public:
@@ -28,7 +29,8 @@ public:
     virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
 
 private:
-	Wt::WTable* itsSysUserTable;
+	Wt::WTableView* itsSysUserTable;
+	WtSysUserListModel* itsDtaMdl;   ///< Data model for the view.
 	WtPushButton* itsCancelBtn;
 	WtPushButton* itsOkBtn;
     std::unique_ptr<Wt::WDialog> itsDlg;

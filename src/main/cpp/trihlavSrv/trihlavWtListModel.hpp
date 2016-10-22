@@ -110,7 +110,7 @@ public:
 		if (pOrientation == Wt::Horizontal) {
 			switch (pRole) {
 				case Wt::DisplayRole:
-				if (pSection > itsCaptions.size()) {
+				if (pSection >= itsCaptions.size()) {
 					return boost::any("-");
 				}
 				return itsCaptions[pSection];
