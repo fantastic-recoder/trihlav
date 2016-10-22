@@ -26,7 +26,7 @@ public:
 
 	SysUserListPresenter(FactoryIface& pFactory);
 
-	const std::string& getSelectedSysUser() const;
+	const std::string getSelectedSysUser() const;
 
 	void show();
 

@@ -39,11 +39,11 @@ SysUserListViewIface& SysUserListPresenter::getView() {
 	return *itsView;
 }
 
-const string& SysUserListPresenter::getSelectedSysUser() const {
+const string SysUserListPresenter::getSelectedSysUser() const {
 	BOOST_LOG_NAMED_SCOPE("SysUserListPresenter::getSelectedSysUser");
 	static const string K_EMPTY;
 	if (itsCurrentUser != itsSysUsers->end()) {
-		itsCurrentUser->str();
+		return itsCurrentUser->str();
 	}
 	return K_EMPTY;
 }
