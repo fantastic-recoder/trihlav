@@ -30,13 +30,15 @@
 
 #include <boost/signals2.hpp>
 
+#include "trihlavLib/trihlavViewIface.hpp"
+
 namespace trihlav {
 
 class SpinBoxIface;
 class StrEditIface;
 class ButtonIface;
 
-class YubikoOtpKeyViewIface : private boost::noncopyable {
+class YubikoOtpKeyViewIface : virtual public ViewIface {
 public:
     typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
 
