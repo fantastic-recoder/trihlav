@@ -5,6 +5,7 @@
 #include <Wt/WServer>
 
 #include "trihlavApp.hpp"
+#include "trihlavWtAuthResource.hpp"
 
 #if defined(__unix__)
 #include <signal.h>
@@ -35,6 +36,9 @@ int main(int argc, char **argv) {
 		// add a single entry point, at the default location (as determined
 		// by the server configuration's deploy-path)
 		server.addEntryPoint(Wt::Application, App::createApplication);
+		// create the auth REST resource
+		WtAuthResource myAuthResource;
+		server.addResource(&myAuthResource,"/auth");
 		if (server.start()) {
 			int sig = WServer::waitForShutdown(argv[0]);
 			std::cerr << "Shutdown (signal = " << sig << ")" << std::endl;
