@@ -29,6 +29,8 @@
 #ifndef TRIHLAV_DIALOG_VIEW_IFACE_HPP_
 #define TRIHLAV_DIALOG_VIEW_IFACE_HPP_
 
+#include <boost/signals2.hpp>
+
 #include "trihlavLib/trihlavViewIface.hpp"
 
 namespace trihlav {
@@ -40,7 +42,13 @@ class ButtonIface;
  */
 class DialogViewIface: public virtual ViewIface {
 
-	/// @brief Cancel button constant interface.
+public:
+
+    typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
+
+    AcceptedSignal acceptedSig;
+
+    /// @brief Cancel button constant interface.
 	virtual const ButtonIface&  getBtnCancel() const = 0;
 	/// @brief Cancel button interface.
 	virtual ButtonIface&  getBtnCancel() = 0;
@@ -50,6 +58,13 @@ class DialogViewIface: public virtual ViewIface {
 	/// @brief ok button interface.
 	virtual ButtonIface&  getBtnOk() = 0;
 
+	/// @brief Shortcut to set ok button label
+	virtual void setOkLabel( const std::string& pNewLabel);
+
+    /// @brief Show the dialog.
+    virtual void show() = 0;
+
+    virtual ~DialogViewIface();
 };
 
 } /* namespace trihlav */

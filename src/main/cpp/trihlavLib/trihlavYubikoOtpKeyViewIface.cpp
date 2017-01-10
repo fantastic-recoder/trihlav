@@ -26,16 +26,13 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
-#include "trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavLogApi.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/expressions.hpp>
 namespace trihlav {
 
 YubikoOtpKeyViewIface::~YubikoOtpKeyViewIface() {
-	BOOST_LOG_NAMED_SCOPE("IYubikoOtpKeyView::~IYubikoOtpKeyView");
+	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyViewIface::~YubikoOtpKeyViewIface");
 }
 
 

@@ -17,12 +17,14 @@ namespace Wt {
 
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
 
+#include "trihlavWtDialogView.hpp"
+
 namespace trihlav {
 
 class WtPushButton;
 class WtSysUserListModel;
 
-class WtSysUserListView: public SysUserListViewIface {
+class WtSysUserListView: virtual public WtDialogView, virtual public SysUserListViewIface {
 public:
 	WtSysUserListView();
 	virtual void show(const SysUsers& pUsers) override;
@@ -36,9 +38,6 @@ private:
 
 	Wt::WTableView* itsSysUserTable;
 	WtSysUserListModel* itsDtaMdl;   ///< Data model for the view.
-	WtPushButton* itsCancelBtn;
-	WtPushButton* itsOkBtn;
-    std::unique_ptr<Wt::WDialog> itsDlg;
 };
 
 } /* namespace trihlav */

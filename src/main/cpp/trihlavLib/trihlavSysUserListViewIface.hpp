@@ -12,10 +12,11 @@
 #include <boost/signals2.hpp>
 
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavDialogViewIface.hpp"
 
 namespace trihlav {
 
-class SysUserListViewIface {
+class SysUserListViewIface : virtual public DialogViewIface {
 public:
     using AcceptedSignal= ::boost::signals2::signal<void()>;
     using SelectionChangedSignal= ::boost::signals2::signal<void(int)>;

@@ -33,18 +33,15 @@
 
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
-namespace Wt {
-	class WDialog;
-}
+#include "trihlavWtDialogView.hpp"
+
 
 namespace trihlav {
 
 class WtStrEdit;
-class WtPushButton;
 class WtSpinBox;
 
-class WtYubikoOtpKeyView: public YubikoOtpKeyViewIface {
-    std::unique_ptr<Wt::WDialog> itsDlg;
+class WtYubikoOtpKeyView: virtual public WtDialogView, virtual public YubikoOtpKeyViewIface {
 	WtStrEdit* itsPublicId;
 	WtStrEdit* itsEdtDescription;
 	WtSpinBox* itsPublicIdLen;
@@ -53,8 +50,6 @@ class WtYubikoOtpKeyView: public YubikoOtpKeyViewIface {
 	WtStrEdit* itsEdtSysUser;
 	WtPushButton* itsGenPublicIdentityBtn;
 	WtPushButton* itsGenPrivateIdentityBtn;
-	WtPushButton* itsCancelBtn;
-	WtPushButton* itsSaveBtn;
 	WtPushButton* itsGenSecretKeyBtn;
 	WtPushButton* itsBtnSelectSysUser;
 	std::string   itsSysUserLogin;
@@ -89,19 +84,9 @@ public:
 	virtual const ButtonIface&  getBtnSelectSysUser() const  override;
 	virtual ButtonIface&  getBtnSelectSysUser()  override;
 
-	virtual const ButtonIface&  getBtnCancel() const override;
-	virtual ButtonIface&  getBtnCancel() override;
-
-	virtual const ButtonIface&  getBtnSave() const override;
-	virtual ButtonIface&  getBtnSave() override;
-
 	virtual StrEditIface& getEdtDescription()  override;
 	virtual const StrEditIface& getEdtDescription() const  override;
 
-	virtual void show();
-
-private:
-    virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
 };
 
 } /* namespace trihlav */

@@ -79,17 +79,13 @@ public:
 };
 
 WtSysUserListView::WtSysUserListView() :
-		itsDlg(new WDialog), //
 		itsDtaMdl(new WtSysUserListModel), //
-		itsSysUserTable(new WTableView), //
-		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
-		itsOkBtn(new WtPushButton(translate("ok"))) //
-
+		itsSysUserTable(new WTableView) //
 {
 	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::WtSysUserListView");
-	itsDlg->setCaption(translate("Add key").str());
-	itsDlg->setObjectName("WtSysUserListView");
-	itsDlg->resize(K_DLG_W, K_DLG_H);
+	getDlg().setCaption(translate("Add key").str());
+	getDlg().setObjectName("WtSysUserListView");
+	getDlg().resize(K_DLG_W, K_DLG_H);
 	WVBoxLayout* myContentLayout = new WVBoxLayout;
 	{
 		itsSysUserTable->setObjectName("SysUserTable");
@@ -104,20 +100,10 @@ WtSysUserListView::WtSysUserListView() :
 				&WtSysUserListView::selectionChanged);
 
 	}
-	WHBoxLayout* myBtnLayout = new WHBoxLayout;
-	{
-		itsCancelBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		itsOkBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		myBtnLayout->addWidget(itsOkBtn);
-		myBtnLayout->addWidget(itsCancelBtn);
-	}
-	itsDlg->contents()->setLayout(myContentLayout);
-	itsDlg->contents()->setOverflow(Wt::WContainerWidget::OverflowHidden);
-	itsDlg->footer()->setLayout(myBtnLayout);
-	itsDlg->setResizable(true);
-	itsDlg->finished().connect(this, &WtSysUserListView::finishedSlot);
-	itsCancelBtn->clicked().connect(itsDlg.get(), &WDialog::reject);
-	itsOkBtn->clicked().connect(itsDlg.get(), &WDialog::accept);
+	getDlg().contents()->setLayout(myContentLayout);
+	getDlg().contents()->setOverflow(Wt::WContainerWidget::OverflowHidden);
+	getDlg().setResizable(true);
+	getDlg().finished().connect(this, &WtSysUserListView::finishedSlot);
 }
 
 void WtSysUserListView::show(const SysUsers& pUsers) {
@@ -132,8 +118,8 @@ void WtSysUserListView::show(const SysUsers& pUsers) {
 						std::string(myUser.itsFullName)));
 	}
 	BOOST_LOG_TRIVIAL(debug)<<"System users loaded.";
-	itsDlg->setModal(true);
-	itsDlg->show();
+	getDlg().setModal(true);
+	getDlg().show();
 }
 
 void WtSysUserListView::finishedSlot(WDialog::DialogCode pCode) {

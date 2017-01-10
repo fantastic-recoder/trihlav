@@ -66,7 +66,7 @@ void MockYubikoOtpKeyView::setupDefaultOnCallHandlers() {
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getSbxPublicIdLen()).WillByDefault(
 			ReturnRef(itsMockSbxPublicIdLen));
 
-	ON_CALL(*this,getBtnSave()).WillByDefault(ReturnRef(itsMockBtnSave));
+	ON_CALL(*this,getBtnOk()).WillByDefault(ReturnRef(itsMockBtnOk));
 
 	ON_CALL(*this,getEdtSysUser()).WillByDefault(
 			ReturnRef(itsMockEdtSysUser));

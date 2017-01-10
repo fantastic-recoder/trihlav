@@ -22,3 +22,8 @@
 /trihlav.creator.user
 /trihlav.includes
 /trihlav.kdev4
+/cmake-build-debug/
+/gtest/
+/CTestTestfile.cmake
+/trihlav.cbp
+/Doxyfile

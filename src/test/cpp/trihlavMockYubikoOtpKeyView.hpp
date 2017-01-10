@@ -50,7 +50,7 @@ struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 	MockButton itsMockBtnGenPublicId;
 	MockButton itsMockBtnGenSecretKey;
 	MockButton itsMockBtnSelectSysUser;
-	MockButton itsMockBtnSave;
+	MockButton itsMockBtnOk;
 	MockButton itsMockBtnCancel;
 
 	MockYubikoOtpKeyView();
@@ -85,8 +85,8 @@ struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 	MOCK_CONST_METHOD0(getBtnSelectSysUser, const  ButtonIface& () );
 	MOCK_METHOD0(getBtnSelectSysUser, ButtonIface& () );
 
-	MOCK_CONST_METHOD0(getBtnSave, const  ButtonIface& () );
-	MOCK_METHOD0(getBtnSave, ButtonIface& () );
+	MOCK_CONST_METHOD0(getBtnOk, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnOk, ButtonIface& () );
 
 	MOCK_CONST_METHOD0(getBtnCancel, const  ButtonIface& () );
 	MOCK_METHOD0(getBtnCancel, ButtonIface& () );

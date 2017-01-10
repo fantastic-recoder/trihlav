@@ -48,7 +48,6 @@ using U = Wt::WLength::Unit;
 namespace trihlav {
 
 WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
-		itsDlg(new WDialog), //
 		itsPublicId(new WtStrEdit), //
 		itsPublicIdLen(new WtSpinBox), //
 		itsPrivateId(new WtStrEdit), //
@@ -58,12 +57,10 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		itsGenPrivateIdentityBtn(new WtPushButton(translate("Generate"))), //
 		itsEdtSysUser(new WtStrEdit), //
 		itsBtnSelectSysUser(new WtPushButton(translate("Select system user"))), //
-		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
-		itsSaveBtn(new WtPushButton(translate("Save"))), //
 		itsGenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
 {
-	itsDlg->setCaption(translate("Add key").str());
-	itsDlg->setWidth(WLength(64, U::FontEm));
+	getDlg().setCaption(translate("Add key").str());
+	getDlg().setWidth(WLength(64, U::FontEm));
 	WGridLayout* myTopLayout = new WGridLayout;
 	{
 		Wt::WLabel* myLbl = new WLabel(translate("Description").str());
@@ -116,16 +113,7 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		myTopLayout->addWidget(itsEdtSysUser,4,1,1,3,Wt::AlignMiddle);
 		myTopLayout->addWidget(itsBtnSelectSysUser,4,4,1,2,Wt::AlignTop);
 	}
-	{
-		myTopLayout->addWidget(itsCancelBtn,5,1,1,1,Wt::AlignCenter|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsSaveBtn,5,4,1,1,Wt::AlignCenter|Wt::AlignMiddle);
-		itsCancelBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
-		itsSaveBtn->resize(WLength(11.0,U::FontEm),WLength(2.0,U::FontEm));
-	}
-	itsDlg->contents()->setLayout(myTopLayout);
-	itsDlg->finished().connect(this, &WtYubikoOtpKeyView::finishedSlot);
-	itsCancelBtn->clicked().connect(itsDlg.get(), &WDialog::reject);
-	itsSaveBtn->clicked().connect(itsDlg.get(), &WDialog::accept);
+	getDlg().contents()->setLayout(myTopLayout);
 }
 
 WtYubikoOtpKeyView::~WtYubikoOtpKeyView() {
@@ -188,26 +176,6 @@ ButtonIface& WtYubikoOtpKeyView::getBtnGenSecretKey() {
 	return *itsGenSecretKeyBtn;
 }
 
-const ButtonIface& WtYubikoOtpKeyView::getBtnCancel() const {
-	return *itsCancelBtn;
-}
-
-ButtonIface& WtYubikoOtpKeyView::getBtnCancel() {
-	return *itsCancelBtn;
-}
-
-const ButtonIface& WtYubikoOtpKeyView::getBtnSave() const {
-	return *itsSaveBtn;
-}
-
-ButtonIface& WtYubikoOtpKeyView::getBtnSave() {
-	return *itsSaveBtn;
-}
-
-void WtYubikoOtpKeyView::show() {
-	itsDlg->show();
-}
-
 const StrEditIface& WtYubikoOtpKeyView::getEdtSysUser() const {
 	return *itsEdtSysUser;
 }
@@ -222,10 +190,6 @@ const ButtonIface& WtYubikoOtpKeyView::getBtnSelectSysUser() const {
 
 ButtonIface& WtYubikoOtpKeyView::getBtnSelectSysUser() {
 	return *itsBtnSelectSysUser;
-}
-
-void WtYubikoOtpKeyView::finishedSlot(WDialog::DialogCode pCode) {
-	acceptedSig(pCode == WDialog::DialogCode::Accepted);
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtDescription() {

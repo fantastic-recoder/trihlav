@@ -35,6 +35,7 @@ using boost::filesystem::path;
 namespace trihlav {
 
 void YubikoOtpKeyPresenter::initUi() {
+	getView().setOkLabel(translate("Save"));
 	getView().getEdtPrivateId().setValue("");
 	getView().getEdtSecretKey().setValue("");
 	getView().getEdtPublicId().setValue("");

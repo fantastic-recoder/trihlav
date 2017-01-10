@@ -26,16 +26,13 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavLib/trihlavButtonIface.hpp"
-#include "trihlavLib/trihlavDialogViewIface.hpp"
 
-namespace trihlav {
-    void DialogViewIface::setOkLabel(const std::string &pNewLabel) {
-        getBtnOk().setText(pNewLabel);
-    }
+#ifndef TRIHLAV_TRIHLAVLOGAPI_HPP
+#define TRIHLAV_TRIHLAVLOGAPI_HPP
 
-    DialogViewIface::~DialogViewIface() {
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/expressions.hpp>
 
-    }
-
-} /* namespace trihlav */
+#endif //TRIHLAV_TRIHLAVLOGAPI_HPP

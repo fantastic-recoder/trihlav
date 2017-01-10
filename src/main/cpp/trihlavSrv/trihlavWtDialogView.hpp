@@ -26,16 +26,47 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavLib/trihlavButtonIface.hpp"
+#ifndef TRIHLAV_WT_DIALOG_VIEW_HPP_
+#define TRIHLAV_WT_DIALOG_VIEW_HPP_
+
 #include "trihlavLib/trihlavDialogViewIface.hpp"
 
+namespace Wt {
+    class WDialog;
+}
+
 namespace trihlav {
-    void DialogViewIface::setOkLabel(const std::string &pNewLabel) {
-        getBtnOk().setText(pNewLabel);
-    }
 
-    DialogViewIface::~DialogViewIface() {
+    class WtPushButton;
 
-    }
+    class WtDialogView : virtual public DialogViewIface {
+    private:
+        WtPushButton *itsCancelBtn;
+        WtPushButton *itsOkBtn;
+        std::unique_ptr<Wt::WDialog> itsDlg;
+    public:
+        WtDialogView();
 
-} /* namespace trihlav */
+        virtual const ButtonIface &getBtnCancel() const override;
+
+        const Wt::WDialog &getDlg() const {
+            return *itsDlg;
+        }
+
+        virtual Wt::WDialog &getDlg();
+
+        virtual ButtonIface &getBtnCancel() override;
+
+        virtual const ButtonIface &getBtnOk() const override;
+
+        virtual ButtonIface &getBtnOk() override;
+
+        virtual void show() override;
+
+    private:
+        virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
+
+    };
+}
+
+#endif //TRIHLAV_WT_DIALOG_VIEW_HPP_

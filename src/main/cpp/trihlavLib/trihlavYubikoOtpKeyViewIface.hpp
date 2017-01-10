@@ -28,9 +28,8 @@
 #ifndef TRIHLAV_I_YUBIKO_OTP_KEY_VIEW_HPP_
 #define TRIHLAV_I_YUBIKO_OTP_KEY_VIEW_HPP_
 
-#include <boost/signals2.hpp>
-
 #include "trihlavLib/trihlavViewIface.hpp"
+#include "trihlavLib/trihlavDialogViewIface.hpp"
 
 namespace trihlav {
 
@@ -38,12 +37,8 @@ class SpinBoxIface;
 class StrEditIface;
 class ButtonIface;
 
-class YubikoOtpKeyViewIface : virtual public ViewIface {
+class YubikoOtpKeyViewIface : virtual public DialogViewIface {
 public:
-    typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
-
-    AcceptedSignal acceptedSig;
-
     virtual const StrEditIface& getEdtPublicId() const = 0;
 	virtual StrEditIface& getEdtPublicId() = 0;
 
@@ -73,14 +68,6 @@ public:
 
 	virtual const ButtonIface&  getBtnGenSecretKey() const = 0;
 	virtual ButtonIface&  getBtnGenSecretKey() = 0;
-
-	virtual const ButtonIface&  getBtnCancel() const = 0;
-	virtual ButtonIface&  getBtnCancel() = 0;
-
-	virtual const ButtonIface&  getBtnSave() const = 0;
-	virtual ButtonIface&  getBtnSave() = 0;
-
-	virtual void show() = 0;
 
 	virtual ~YubikoOtpKeyViewIface();
 private:
