@@ -25,31 +25,64 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_TRIHLAV_APP_HPP_
-#define TRIHLAV_TRIHLAV_APP_HPP_
 
-#include <memory>
-#include <Wt/WApplication>
+#ifndef TRIHLAV_SETTINGS_HPP_
+#define TRIHLAV_SETTINGS_HPP_
 
-namespace Wt {
-	class WEnvironment;
-	class WLineEdit;
-	class WText;
-}
+#include <string>
+#include <boost/filesystem.hpp>
 
 namespace trihlav {
 
-class MainPanelPresenter;
+    /**
+     * Global settings.
+     */
+    class Settings {
+    public:
+        Settings( const boost::filesystem::path& pArchFilename);
 
-class App : public Wt::WApplication {
-public:
-	App(const Wt::WEnvironment& pEnv);
-	virtual ~App();
-	static App *createApplication(const Wt::WEnvironment& pEnv);
-private:
-	std::unique_ptr<MainPanelPresenter> itsMainPanelCntrl;
-};
+        /**
+         * Allow superuser?
+         * @return Settings#itsAllowRoot.
+         */
+        bool isAllowRoot() const {
+            return itsAllowRoot;
+        }
 
-} /* namespace trihlav */
+        /**
+         * Allow superuser?
+         * @return Settings#itsAllowRoot.
+         */
+        bool& isAllowRoot() {
+            return itsAllowRoot;
+        }
 
-#endif /* TRIHLAV_TRIHLAV_APP_HPP_ */
+        /**
+         * On UNIX systems will allow select user from this value.
+         * @return Settings#itsMinUser .
+         */
+        int getMinUser() const {
+            return itsMinUser;
+        }
+
+        /**
+         * On UNIX systems will allow select user from this value.
+         * @return Settings#itsMinUser .
+         */
+        int& getMinUser() {
+            return itsMinUser;
+        }
+
+        void save();
+
+        void load();
+    private:
+        const boost::filesystem::path& itsArchFilename;
+
+        bool itsAllowRoot=true;
+        int  itsMinUser=1000;
+    };
+}
+
+
+#endif //TRIHLAV_SETTINGS_HPP_

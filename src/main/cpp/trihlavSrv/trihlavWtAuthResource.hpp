@@ -10,7 +10,7 @@
 namespace trihlav {
 
     /**
-     * Authenticate an "one time password" (OTP) as a REST API call
+     * Authenticate an "one time password" (OTP) as a REST API call.
      */
     class WtAuthResource : public Wt::WResource {
     public:

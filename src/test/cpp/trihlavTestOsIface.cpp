@@ -39,12 +39,13 @@
 
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavLog.hpp"
-
+#include "trihlavLib/trihlavSettings.hpp"
 
 using ::testing::Return;
 using ::testing::NiceMock;
 using ::trihlav::initLog;
 using ::trihlav::OsIface;
+using ::trihlav::Settings;
 
 class TestOsIface: public ::testing::Test {
 public:
@@ -71,7 +72,8 @@ TEST_F(TestOsIface,validateUser) {
 TEST_F(TestOsIface,parseSysUsers){
 	BOOST_LOG_NAMED_SCOPE("TestOsIface::parseSysUsers");
 	OsIface myOsIface;
-	const trihlav::SysUsers myUsers{myOsIface.getSysUsers()};
+	Settings mySettings(""); ///< dummy settings filled with defaults
+	const trihlav::SysUsers myUsers{myOsIface.getSysUsers(mySettings)};
 	for ( const trihlav::SysUser& myUsr : myUsers ) {
 		BOOST_LOG_TRIVIAL(debug)<< myUsr;
 	}

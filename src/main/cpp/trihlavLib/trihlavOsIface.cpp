@@ -1,8 +1,29 @@
 /*
- * trihlavOsIface.cpp
- *
- *  Created on: Jul 27, 2016
- *      Author: grobap
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
+ der GNU General Public License, wie von der Free Software Foundation,
+ Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
+ veröffentlichten Version, weiterverbreiten und/oder modifizieren.
+
+ Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
+ OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+ Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+ Siehe die GNU General Public License für weitere Details.
+
+ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
 #include <stdio.h>
@@ -37,6 +58,7 @@
 #include <boost/log/expressions.hpp>
 
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
 
 using std::string;
 
@@ -152,11 +174,11 @@ OsIface::~OsIface() {
 }
 
 /**
- * Can consume time and io, when needed offten, cache results.
+ * Can consume time and IO, when needed often, cache results.
  *
  * @return The operating system users in a STL container.
  */
-const SysUsers OsIface::getSysUsers() const {
+const SysUsers OsIface::getSysUsers(const Settings& pSettings) const {
 	BOOST_LOG_NAMED_SCOPE("OsIface::getSysUsers");
 	SysUsers myUsers;
 #ifdef __unix__
@@ -168,8 +190,10 @@ const SysUsers OsIface::getSysUsers() const {
 		while (getline(myPswdFile, aReadLine)) {
 			std::smatch myMatches;
 			if (regex_match(aReadLine, myMatches, K_PSWD_LN)) {
-				SysUser myUser{myMatches[2],myMatches[6]};
-				myUsers.push_back(myUser);
+				SysUser myUser{myMatches[2],myMatches[6],std::stol(myMatches[4])};
+				if(pSettings.getMinUser()<=myUser.itsId) {
+					myUsers.push_back(myUser);
+				}
 			} else {
 				BOOST_LOG_TRIVIAL(warning)<<"Line did not match: " << aReadLine;
 			}

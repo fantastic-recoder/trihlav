@@ -51,7 +51,7 @@ const string SysUserListPresenter::getSelectedSysUser() const {
 void SysUserListPresenter::show() {
 	BOOST_LOG_NAMED_SCOPE("SysUserListPresenter::show");
 	OsIface& myOs { getFactory().getOsIface() };
-	const SysUsers myUsers { myOs.getSysUsers() };
+	const SysUsers myUsers { myOs.getSysUsers(getFactory().getSettings()) };
 	itsSysUsers->clear();
 	itsSysUsers->resize(myUsers.size());
 	copy(myUsers.begin(), myUsers.end(), itsSysUsers->begin());

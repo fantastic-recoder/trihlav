@@ -25,31 +25,47 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_TRIHLAV_APP_HPP_
-#define TRIHLAV_TRIHLAV_APP_HPP_
 
-#include <memory>
-#include <Wt/WApplication>
+#include <fstream>
+// include headers that implement a archive in simple text format
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
-namespace Wt {
-	class WEnvironment;
-	class WLineEdit;
-	class WText;
+#include "trihlavSettings.hpp"
+
+namespace boost {
+    namespace serialization {
+
+        template<class Archive>
+        void serialize(Archive &pArch, trihlav::Settings &pSettings, const unsigned int pVersion) {
+            pArch & pSettings.getMinUser();
+            pArch & pSettings.isAllowRoot();
+        }
+
+    } // namespace serialization
+} // namespace boost
+
+void trihlav::Settings::load() {
+
+    // create and open an archive for input
+    std::ifstream myIfs(itsArchFilename.native());
+    boost::archive::text_iarchive myIa(myIfs);
+    // read class state from archive
+    myIa >> (*this);
+    // archive and stream closed when destructors are called
 }
 
-namespace trihlav {
+void trihlav::Settings::save() {
+    // create and open a character archive for output
+    std::ofstream myOfs(itsArchFilename.native());
+    boost::archive::text_oarchive myOa(myOfs);
+    // write class instance to archive
+    myOa << (*this);
+    // archive and stream closed when destructors are called
+}
 
-class MainPanelPresenter;
+trihlav::Settings::Settings(const boost::filesystem::path&  pArchFilename) ://
+        itsArchFilename(pArchFilename) {
 
-class App : public Wt::WApplication {
-public:
-	App(const Wt::WEnvironment& pEnv);
-	virtual ~App();
-	static App *createApplication(const Wt::WEnvironment& pEnv);
-private:
-	std::unique_ptr<MainPanelPresenter> itsMainPanelCntrl;
-};
+}
 
-} /* namespace trihlav */
-
-#endif /* TRIHLAV_TRIHLAV_APP_HPP_ */

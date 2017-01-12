@@ -38,6 +38,7 @@
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
 
 namespace {
 }
@@ -80,6 +81,10 @@ OsIface& FactoryIface::getOsIface() {
 
 FactoryIface::~FactoryIface() {
 
+}
+
+Settings& FactoryIface::getSettings() {
+	static Settings theSettings(getKeyManager().getConfigDir()/"settings.hpp");
 }
 
 }  // namespace trihlav

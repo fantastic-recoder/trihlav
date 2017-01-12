@@ -5,12 +5,16 @@
  *      Author: grobap
  */
 
+#include <boost/locale.hpp>
+
 #include "trihlavLib/trihlavMainPanelPresenter.hpp"
 
 #include "trihlavFactoryIface.hpp"
 #include "trihlavKeyListPresenterIface.hpp"
 #include "trihlavMainPanelViewIface.hpp"
 #include "trihlavPswdChckPresenterIface.hpp"
+
+using boost::locale::translate;
 
 namespace trihlav {
 
@@ -25,15 +29,15 @@ MainPanelPresenter::MainPanelPresenter(FactoryIface& pFactory) :
 MainPanelPresenter::~MainPanelPresenter() {
 }
 
-ViewIface* MainPanelPresenter::getView() {
-	return itsMainPanelView;
+ViewIface& MainPanelPresenter::getView() {
+	return *itsMainPanelView;
 }
 
 void MainPanelPresenter::setupUi() {
 	PswdChckViewIface& myPswdChckView=itsPswdChckPresenter->getView();
-	itsMainPanelView->add("Password check",myPswdChckView);
+	itsMainPanelView->add(translate("Password check"),myPswdChckView);
 	KeyListViewIface& myKeyListView=itsKeyListPresenter->getView();
-	itsMainPanelView->add("Key list",myKeyListView);
+	itsMainPanelView->add(translate("Key list"),myKeyListView);
 	itsKeyListPresenter->reloadKeyList();
 }
 

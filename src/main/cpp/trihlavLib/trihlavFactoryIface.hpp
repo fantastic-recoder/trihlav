@@ -44,7 +44,7 @@ class YubikoOtpKeyPresenterIface;
 class MessageViewIface;
 class OsIface;
 class SysUserListViewIface;
-
+class Settings;
 class KeyManager;
 
 using SysUserListViewIfacePtr = std::shared_ptr<SysUserListViewIface>;
@@ -64,6 +64,9 @@ public:
 
 	/// @brief OS System interface singleton
 	virtual OsIface& getOsIface();
+
+	/// @brief Global settings.
+	virtual Settings& getSettings();
 
 	/// @brief Select a operating system user
 	virtual SysUserListViewIfacePtr createSysUserListView() =0;
