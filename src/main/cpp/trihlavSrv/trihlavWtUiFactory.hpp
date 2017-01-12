@@ -44,6 +44,8 @@ public:
 	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() override;
 	virtual MessageViewIface* createMessageView() override;
 	virtual SysUserListViewIfacePtr createSysUserListView() override;
+	virtual LoginViewIfacePtr createLoginView() override;
+
 };
 
 } /* namespace trihlav */

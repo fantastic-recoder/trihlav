@@ -29,14 +29,14 @@
 #ifndef TRIHLAV_SPIN_BOX_IFACE_HPP_
 #define TRIHLAV_SPIN_BOX_IFACE_HPP_
 
-#include <boost/utility.hpp>
-
 #include "trihlavEditIface.hpp"
 
 namespace trihlav {
 
-class SpinBoxIface : virtual public boost::noncopyable {
+class SpinBoxIface {
 public:
+	SpinBoxIface(){}
+	SpinBoxIface (SpinBoxIface &) = delete;
 	virtual const int getValue() const=0;
 	virtual void setValue(const int& pVal)=0;
 	virtual void setMin(const int pMin)=0;

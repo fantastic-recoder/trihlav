@@ -26,17 +26,13 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#include "trihlavMockDialogView.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
+MockDialogView::MockDialogView() {
 	// TODO Auto-generated constructor stub
 
-}
-
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
 }
 
 } /* namespace trihlav */

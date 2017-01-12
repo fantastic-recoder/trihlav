@@ -29,6 +29,8 @@
 #ifndef TRIHLAV_WT_DIALOG_VIEW_HPP_
 #define TRIHLAV_WT_DIALOG_VIEW_HPP_
 
+#include <Wt/WDialog>
+
 #include "trihlavLib/trihlavDialogViewIface.hpp"
 
 namespace Wt {

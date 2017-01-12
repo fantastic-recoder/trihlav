@@ -26,17 +26,16 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#ifndef TRIHLAV_GLOBALS_HPP_
+#define TRIHLAV_GLOBALS_HPP_
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+class LoginViewIface;
+using LoginViewIfacePtr = std::unique_ptr<LoginViewIface>;
 
-}
+}  // namespace trihlav
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
 
-} /* namespace trihlav */
+
+#endif /* TRIHLAV_GLOBALS_HPP_ */

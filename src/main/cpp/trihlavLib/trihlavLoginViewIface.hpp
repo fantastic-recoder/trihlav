@@ -26,17 +26,25 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+
+#ifndef TRIHLAV_LOGIN_VIEW_IFACE_HPP_
+#define TRIHLAV_LOGIN_VIEW_IFACE_HPP_
+
+#include "trihlavLib/trihlavDialogViewIface.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+class StrEditIface;
+class LabelIface;
 
-}
-
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+class LoginViewIface: virtual public DialogViewIface {
+public:
+	virtual StrEditIface& getEdtUserName() =0;
+	virtual StrEditIface& getEdtPassword() =0;
+	virtual LabelIface& getLblUserName() =0;
+	virtual LabelIface& getLblPassword() =0;
+};
 
 } /* namespace trihlav */
+
+#endif /* TRIHLAV_LOGIN_VIEW_IFACE_HPP_ */

@@ -48,44 +48,47 @@ namespace trihlav {
 /**
  * @return a reference to the key manager singleton.
  */
-KeyManager& FactoryIface::getKeyManager() {
-	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
-	static KeyManager theKeyManager;
-	return theKeyManager;
-}
+    KeyManager &FactoryIface::getKeyManager() {
+        BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
+        return *itsKeyManager;
+    }
 
 /**
  * @brief A constant variant of  FactoryIface::getKeyManager()
  */
-const KeyManager& FactoryIface::getKeyManager() const {
-	BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
-	static KeyManager theKeyManager;
-	return theKeyManager;
-}
+    const KeyManager &FactoryIface::getKeyManager() const {
+        BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
+        return *itsKeyManager;
+    }
 
-KeyListPresenterIface* FactoryIface::createKeyListPresenter() {
-	BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
-	return new KeyListPresenter(*this);
-}
+    KeyListPresenterIface *FactoryIface::createKeyListPresenter() {
+        BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
+        return new KeyListPresenter(*this);
+    }
 
-PswdChckPresenterIface* FactoryIface::createPswdChckPresenter() {
-	return new PswdChckPresenter(*this);
-}
+    PswdChckPresenterIface *FactoryIface::createPswdChckPresenter() {
+        return new PswdChckPresenter(*this);
+    }
 
-OsIface& FactoryIface::getOsIface() {
-	if (!itsOsIface) {
-		itsOsIface.reset(new OsIface { });
-	}
-	return *itsOsIface;
-}
+    OsIface &FactoryIface::getOsIface() {
+        if (!itsOsIface) {
+            itsOsIface.reset(new OsIface{});
+        }
+        return *itsOsIface;
+    }
 
-FactoryIface::~FactoryIface() {
+    FactoryIface::~FactoryIface() {
 
-}
+    }
 
-Settings& FactoryIface::getSettings() {
-	static Settings theSettings(getKeyManager().getConfigDir()/"settings.hpp");
-}
+    Settings &FactoryIface::getSettings() {
+        static Settings theSettings;
+        return theSettings;
+    }
+
+    FactoryIface::FactoryIface() : itsKeyManager(new KeyManager(getSettings())) {
+
+    }
 
 }  // namespace trihlav
 

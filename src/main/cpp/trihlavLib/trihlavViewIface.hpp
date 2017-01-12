@@ -28,8 +28,6 @@
 #ifndef TRIHLAV_VIEW_IFACE_HPP_
 #define TRIHLAV_VIEW_IFACE_HPP_
 
-#include <boost/utility.hpp>
-
 namespace trihlav {
 
 class IWidget;
@@ -37,8 +35,10 @@ class IWidget;
 /**
  * Parent to all view interfaces.
  */
-class ViewIface : boost::noncopyable {
+class ViewIface {
 public:
+	ViewIface(){}
+	ViewIface( const ViewIface& ) = delete;
 	virtual ~ViewIface(){}
 };
 

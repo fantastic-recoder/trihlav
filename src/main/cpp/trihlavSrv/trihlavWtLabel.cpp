@@ -26,17 +26,21 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#include "trihlavWtLabel.hpp"
+
+using Wt::WLabel;
+using std::string;
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
+WtLabel::WtLabel(const string& pDefText ) : WLabel(pDefText) {
 	// TODO Auto-generated constructor stub
 
 }
 
-WtStrEdit::~WtStrEdit() {
+WtLabel::~WtLabel() {
 	// TODO Auto-generated destructor stub
 }
 
 } /* namespace trihlav */
+

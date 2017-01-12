@@ -43,6 +43,8 @@
 
 #include "trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
+#include "trihlavLib/trihlavLoginPresenter.hpp"
 
 namespace trihlav {
 
@@ -83,6 +85,10 @@ YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
 
 void KeyListPresenter::reloadKeyList() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::reloadKeyList");
+	if(!itsLoginPresenter) {
+		itsLoginPresenter.reset(new LoginPresenter(getFactory()));
+		itsLoginPresenter->show();
+	}
 	KeyManager& myKeyMan(getFactory().getKeyManager());
 	const size_t myKeySz = myKeyMan.loadKeys();
 	getView().clear();

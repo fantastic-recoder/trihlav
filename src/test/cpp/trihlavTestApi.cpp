@@ -22,6 +22,7 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavLog.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -119,7 +120,8 @@ TEST( trihlavApi, testLoadAndSaveKeyCfg) {
 	BOOST_LOG_NAMED_SCOPE("testLoadAndSaveKeyCfg");
 	path myTestCfgDir(unique_path("/tmp/trihlav-%%%%-%%%%"));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: '" << myTestCfgDir <<"'.";
-	KeyManager myManager(myTestCfgDir);
+	Settings mySettings(myTestCfgDir);
+	KeyManager myManager(mySettings);
 	YubikoOtpKeyConfig myTestCfg0(myManager);
 	myTestCfg0.setPrivateId("010203040506");
 	myTestCfg0.setTimestamp(UTimestamp(12345));

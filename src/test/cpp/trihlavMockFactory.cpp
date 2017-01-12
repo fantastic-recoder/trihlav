@@ -26,6 +26,8 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include <memory>
+
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
@@ -37,11 +39,13 @@
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
 
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockKeyListView.hpp"
 #include "trihlavMockMessageView.hpp"
 #include "trihlavMockPswdCheckView.hpp"
+#include "trihlavMockLoginView.hpp"
 
 using ::testing::Return;
 using ::testing::ReturnRef;
@@ -89,6 +93,14 @@ MockFactory::MockFactory() {
 				auto myRetVal=new NiceMock<MockPswdCheckView>;
 				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
 				return myRetVal;
+			}));
+	ON_CALL(*this, createLoginView()) //
+	.WillByDefault(Invoke([]()->std::unique_ptr<LoginViewIface> //
+			{
+				BOOST_LOG_NAMED_SCOPE("MockFactory::createLoginView");
+				auto myRetVal=new NiceMock< MockLoginView>;
+				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
+				return std::unique_ptr<LoginViewIface>(myRetVal);
 			}));
 }
 

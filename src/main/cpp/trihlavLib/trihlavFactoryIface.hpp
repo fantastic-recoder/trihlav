@@ -32,6 +32,8 @@
 
 #include <memory>
 
+#include "trihlavLib/trihlavGlobals.hpp"
+
 namespace trihlav {
 
 class MainPanelViewIface;
@@ -51,6 +53,9 @@ using SysUserListViewIfacePtr = std::shared_ptr<SysUserListViewIface>;
 
 class FactoryIface {
 public:
+
+	FactoryIface();
+
 	virtual ~FactoryIface();
 	virtual MainPanelViewIface* createMainPanelView()=0;
 	virtual KeyListPresenterIface* createKeyListPresenter();
@@ -66,12 +71,16 @@ public:
 	virtual OsIface& getOsIface();
 
 	/// @brief Global settings.
-	virtual Settings& getSettings();
+	Settings &getSettings();
 
 	/// @brief Select a operating system user
 	virtual SysUserListViewIfacePtr createSysUserListView() =0;
+
+	/// @brief Login in the operating system UI.
+	virtual LoginViewIfacePtr createLoginView()=0;
 private:
 	std::unique_ptr<OsIface> itsOsIface;
+	std::unique_ptr<KeyManager> itsKeyManager;
 };
 
 }  // namespace trihlav

@@ -17,32 +17,23 @@ namespace trihlav {
 
 class YubikoOtpKeyConfig;
 
+    class Settings;
+
 /**
  * Manage key operations, fe. their persistence.
  */
 class KeyManager {
 public:
-	using path = boost::filesystem::path;
+    using path = boost::filesystem::path;
 	using KeyList_t = std::vector<std::shared_ptr<YubikoOtpKeyConfig> >;
 	using KeyMap_t = std::map<std::string,YubikoOtpKeyConfig*>;
 
     /// Lazy initialization constructor.
-    KeyManager(const path& pDir);
+    KeyManager(const Settings &pSettings);
 
-    KeyManager();
+    const Settings &getSettings() const;
 
     virtual ~KeyManager();
-
-    virtual const path& getConfigDir() const;
-
-    void setConfigDir( const path& pPath );
-
-    /**
-     * Are all internal resources ready.
-     */
-    const bool isInitialized() const {
-        return itsInitializedFlag;
-    }
 
     /// @brief Load or reload all keys.
     size_t loadKeys();
@@ -59,19 +50,13 @@ public:
     /// @brief Access an loaded key.
     YubikoOtpKeyConfig* getKeyByPublicId( const std::string& pPubId);
 
-    /// @brief Get users home directory
-    static const path getHome();
-
 	void update(const std::string& pPubId,YubikoOtpKeyConfig& pKey);
 
 	void prefixKeyFile(const path& pKyFileFName, const std::string& pPrefix) const;
 private:
-    mutable bool itsInitializedFlag;
-    boost::filesystem::path itsConfigDir;
     KeyList_t itsKeyList;
     KeyMap_t  itsKeyMapByPublicId;
-    const path detectConfigDir() const;
-    void checkPath(const path& pPath, bool &readable, bool &writable) const;
+    const Settings &itsSettings;
 };
 
 } /* namespace trihlav */

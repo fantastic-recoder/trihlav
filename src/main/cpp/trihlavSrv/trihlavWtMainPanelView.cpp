@@ -5,6 +5,9 @@
  *      Author: grobap
  */
 
+#include <string>
+#include <boost/locale.hpp>
+
 #include <Wt/WLineEdit>
 #include <Wt/WMenu>
 #include <Wt/WMessageBox>
@@ -26,6 +29,7 @@
 
 using namespace Wt;
 using namespace std;
+using boost::locale::translate;
 
 namespace trihlav {
 
@@ -61,10 +65,10 @@ void WtMainPanelView::addView(const std::string& pName,WtViewIface&  pView) {
  * 	Create a itsNavigation bar with a link to a web page.
  *
  */
-WtMainPanelView::WtMainPanelView():itsView ( new WContainerWidget()) {
+WtMainPanelView::WtMainPanelView() : itsView ( new WContainerWidget()) {
 	// Create a itsNavigation bar with a link to a web page.
 	setNavigation(new Wt::WNavigationBar(itsView));
-	getNavigation()->setTitle("Trihlav OTP Server",
+	getNavigation()->setTitle(WString(translate("TRIHLAV OTP Server")),
 			"http://www.google.com/search?q=One+Time+Password");
 	getNavigation()->setResponsive(true);
 	setContentsStack (new Wt::WStackedWidget(itsView));

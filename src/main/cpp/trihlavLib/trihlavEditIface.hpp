@@ -29,7 +29,6 @@
 #define TRIHLAV_EDIT_IFACE_HPP_
 
 #include <string>
-#include <boost/utility.hpp>
 
 namespace trihlav {
 
@@ -37,8 +36,10 @@ namespace trihlav {
  * Interface to a UI widget, which can edit, set and get a value.
  */
 template< typename T>
-class EditIface : virtual public boost::noncopyable {
+class EditIface {
 public:
+	EditIface(){}
+	EditIface(const EditIface& )=delete;
 	/**
 	 * @return The edited value.
 	 */

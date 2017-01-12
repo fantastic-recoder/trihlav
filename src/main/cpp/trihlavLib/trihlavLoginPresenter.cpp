@@ -26,17 +26,23 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#include <boost/locale.hpp>
+
+#include "trihlavLib/trihlavFactoryIface.hpp"
+#include "trihlavLib/trihlavLoginPresenter.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
-
+LoginPresenter::LoginPresenter(FactoryIface& pFactory) : //
+		PresenterBase(pFactory) //
+{
+	itsLoginView=getFactory().createLoginView();
 }
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
+void LoginPresenter::show() {
+	itsLoginView->show();
 }
 
 } /* namespace trihlav */
+

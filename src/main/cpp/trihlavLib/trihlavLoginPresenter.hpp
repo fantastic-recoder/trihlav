@@ -26,17 +26,29 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#ifndef TRIHLAV_LOGIN_PRESENTER_HPP_
+#define TRIHLAV_LOGIN_PRESENTER_HPP_
+
+#include <boost/signals2.hpp>
+#include "trihlavLib/trihlavPresenterBase.hpp"
+#include "trihlavLib/trihlavGlobals.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+/**
+ * Request the operating system credentials.
+ */
+class LoginPresenter: public PresenterBase {
+public:
+    using LoggedInSignal = ::boost::signals2::signal<bool()>;
 
-}
-
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+	LoginPresenter(FactoryIface& pFactory);
+	LoggedInSignal loggedInSignal;
+	void show();
+private:
+	LoginViewIfacePtr itsLoginView;
+};
 
 } /* namespace trihlav */
+
+#endif /* TRIHLAV_LOGIN_PRESENTER_HPP_ */

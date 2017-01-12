@@ -38,6 +38,7 @@ namespace trihlav {
 class KeyListViewIface;
 class YubikoOtpKeyPresenter;
 class FactoryIface;
+class LoginPresenter;
 
 class KeyListPresenter: virtual public KeyListPresenterIface {
 public:
@@ -67,6 +68,7 @@ private:
 	bool checkSelection() const;
 	KeyListViewIface* itsKeyListView;
 	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
+	std::unique_ptr<LoginPresenter> itsLoginPresenter;
 	int itsSelectedKey= -1;
 };
 

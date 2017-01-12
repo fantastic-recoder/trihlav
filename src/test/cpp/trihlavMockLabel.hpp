@@ -26,17 +26,32 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#ifndef TRIHLAV_MOCK_LABEL_HPP_
+#define TRIHLAV_MOCK_LABEL_HPP_
+
+#include <string>
+
+#include "trihlavLib/trihlavLabelIface.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+class MockLabel: public LabelIface {
+	std::string itsText;
+public:
+	MockLabel();
 
-}
+	/// The text to be displayed.
+	virtual void setText(const std::string& pTxt) {
+		itsText=pTxt;
+	}
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+	/// What is being displayed?
+	virtual const std::string getText() const {
+		return itsText;
+	}
+
+};
 
 } /* namespace trihlav */
+
+#endif /* TRIHLAV_MOCK_LABEL_HPP_ */

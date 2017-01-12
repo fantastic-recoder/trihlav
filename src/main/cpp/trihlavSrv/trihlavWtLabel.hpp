@@ -25,38 +25,37 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#ifndef TRIHLAV_MOCK_FACTORY_HPP_
-#define TRIHLAV_MOCK_FACTORY_HPP_
 
-#include <memory>
-#include <gmock/gmock.h>
+#ifndef TRIHLAV_WT_LABEL_HPP_
+#define TRIHLAV_WT_LABEL_HPP_
 
-#include "trihlavLib/trihlavFactoryIface.hpp"
+#include <string>
+#include <Wt/WLabel>
+
+#include "trihlavLib/trihlavLabelIface.hpp"
 
 namespace trihlav {
 
-class MockYubikoOtpKeyView;
-class MockYubikoOtpKeyPresenter;
-class MockKeyListView;
+class WtLabel: virtual public Wt::WLabel, virtual public LabelIface {
+public:
+	WtLabel(const std::string&);
+	virtual ~WtLabel();
+	/**
+	 * @return The displayed text.
+	 */
+	virtual const std::string getText() const override {
+		return text().toUTF8();
+	}
 
-/**
- * @brief Mock factory.
- */
-struct MockFactory: virtual public FactoryIface {
+	/**
+	 * @param pVal set the displayed text.
+	 */
+	virtual void setText(const std::string& pVal) override {
+		Wt::WLabel::setText(Wt::WString::fromUTF8(pVal));
+	}
 
-	MOCK_METHOD0(createMainPanelView,MainPanelViewIface* ());
-	MOCK_METHOD0(createKeyListPresenter,KeyListPresenterIface* () );
-	MOCK_METHOD0(createKeyListView,KeyListViewIface* () );
-	MOCK_METHOD0(createPswdChckView,PswdChckViewIface* () );
-	MOCK_METHOD0(createYubikoOtpKeyView,YubikoOtpKeyViewIface* () );
-	MOCK_METHOD0(createMessageView, MessageViewIface* () );
-	MOCK_METHOD0(createSysUserListView,SysUserListViewIfacePtr () );
-	MOCK_METHOD0(createLoginView,LoginViewIfacePtr() );
-	MockFactory();
-	virtual ~MockFactory(){}
 };
 
+} /* namespace trihlav */
 
-}
-
-#endif /* TRIHLAV_MOCK_FACTORY_HPP_ */
+#endif /* TRIHLAV_WT_LABEL_HPP_ */

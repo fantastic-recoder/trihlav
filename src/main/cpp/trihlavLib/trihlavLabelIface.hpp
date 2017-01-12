@@ -26,17 +26,35 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#ifndef TRIHLAV_LABEL_IFACE_HPP_
+#define TRIHLAV_LABEL_IFACE_HPP_
+
+#include <string>
+
+#include "trihlavLib/trihlavLabelIface.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+/**
+ * Interface for an UI label.
+ */
+class LabelIface {
+public:
+	LabelIface();
 
-}
+	/// Ensure non copyablity.
+	LabelIface(const LabelIface& ) = delete;
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+	/// The text to be displayed.
+	virtual void setText(const std::string& pTxt) = 0;
+
+	/// What is being displayed?
+	virtual const std::string getText() const = 0;
+
+	/// Ensure virtuability.
+	virtual ~LabelIface(){}
+};
 
 } /* namespace trihlav */
+
+#endif /* TRIHLAV_LABEL_IFACE_HPP_ */

@@ -31,12 +31,13 @@
 
 #include <Wt/WLineEdit>
 
-#include "../trihlavLib/trihlavEditIface.hpp"
+#include "trihlavLib/trihlavEditIface.hpp"
 
 namespace trihlav {
 
 class WtStrEdit: virtual public Wt::WLineEdit, virtual public StrEditIface {
 public:
+	///
 	WtStrEdit();
 	virtual ~WtStrEdit();
 	/**

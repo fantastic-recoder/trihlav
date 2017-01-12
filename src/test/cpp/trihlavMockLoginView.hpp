@@ -26,17 +26,40 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#ifndef TRIHLAV_MOCK_LOGIN_VIEW_HPP_
+#define TRIHLAV_MOCK_LOGIN_VIEW_HPP_
+
+#include "trihlavLib/trihlavLoginViewIface.hpp"
+
+#include "trihlavMockLabel.hpp"
+#include "trihlavMockEditIface.hpp"
+#include "trihlavMockStrEdit.hpp"
+#include "trihlavMockDialogView.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+class MockLoginView: virtual public LoginViewIface, virtual public MockDialogView  {
+public:
+	MockStrEdit itsEdtUserName;
+	MockStrEdit itsEdtPassword;
+	MockLabel itsLblUserName;
+	MockLabel itsLblPassword;
 
-}
+	MOCK_CONST_METHOD0(getEdtUserName,  const StrEditIface& () );
+	MOCK_METHOD0(getEdtUserName, StrEditIface& () );
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+	MOCK_CONST_METHOD0(getEdtPassword,  const StrEditIface& () );
+	MOCK_METHOD0(getEdtPassword, StrEditIface& () );
+
+	MOCK_CONST_METHOD0(getLblPassword,  const LabelIface& () );
+	MOCK_METHOD0(getLblPassword, LabelIface& () );
+
+	MOCK_CONST_METHOD0(getLblUserName,  const LabelIface& () );
+	MOCK_METHOD0(getLblUserName, LabelIface& () );
+
+	MockLoginView();
+};
 
 } /* namespace trihlav */
+
+#endif /* TRIHLAV_MOCK_LOGIN_VIEW_HPP_ */

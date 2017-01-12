@@ -39,7 +39,10 @@ namespace trihlav {
      */
     class Settings {
     public:
-        Settings( const boost::filesystem::path& pArchFilename);
+
+        Settings();
+
+        Settings(const boost::filesystem::path &pConfigDir);
 
         /**
          * Allow superuser?
@@ -75,12 +78,36 @@ namespace trihlav {
 
         void save();
 
-        void load();
+        /// @brief Load settings from disk, when they exists.
+        bool load();
+
+        const boost::filesystem::path &getConfigDir() const;
+
+        void setConfigDir(const boost::filesystem::path &pPath);
+
+        /// @brief Get users home directory
+        static const boost::filesystem::path getHome();
+
+        /**
+         * Are all internal resources ready.
+         */
+        const bool isInitialized() const {
+            return itsInitializedFlag;
+        }
+
+
     private:
-        const boost::filesystem::path& itsArchFilename;
+        boost::filesystem::path itsArchFilename;
 
         bool itsAllowRoot=true;
         int  itsMinUser=1000;
+
+        boost::filesystem::path itsConfigDir;
+        mutable bool itsInitializedFlag;
+
+        const boost::filesystem::path detectConfigDir() const;
+
+        void checkPath(const boost::filesystem::path &pPath, bool &readable, bool &writable) const;
     };
 }
 

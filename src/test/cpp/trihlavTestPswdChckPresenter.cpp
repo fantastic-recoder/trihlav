@@ -49,6 +49,8 @@
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
@@ -117,8 +119,8 @@ TEST_F(TestPswdChckPresenter,computeCrc) {
 	EXPECT_TRUE(create_directory(myTestCfgFile));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
 	NiceMock<MockFactory> myMockFactory;
+	myMockFactory.getSettings().setConfigDir(myTestCfgFile);
 	KeyManager& myKeyMan(myMockFactory.getKeyManager());
-	myKeyMan.setConfigDir(myTestCfgFile);
 	YubikoOtpKeyConfig myCfg0(myKeyMan);
 	myCfg0.setDescription(K_TST_DESC0);
 	myCfg0.setPrivateId(K_TST_PRIV0);
@@ -142,8 +144,8 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
 	int myTimer=333;
 	NiceMock<MockFactory> myMockFactory;
+	myMockFactory.getSettings().setConfigDir(myTestCfgFile);
 	KeyManager& myKeyMan(myMockFactory.getKeyManager());
-	myKeyMan.setConfigDir(myTestCfgFile);
 	YubikoOtpKeyConfig myCfg0(myKeyMan);
 	myCfg0.setDescription(K_TST_DESC0);
 	myCfg0.setPrivateId(K_TST_PRIV0);

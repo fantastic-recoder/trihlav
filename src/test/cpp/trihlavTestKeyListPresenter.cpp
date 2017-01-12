@@ -48,6 +48,8 @@
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
@@ -220,8 +222,8 @@ static KeyManager& createKeyManager(NiceMock<MockFactory>& pMockFactory) {
 	EXPECT_FALSE(exists(myTestCfgFile));
 	EXPECT_TRUE(create_directory(myTestCfgFile));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
+	pMockFactory.getSettings().setConfigDir(myTestCfgFile);
 	KeyManager& myKeyMan(pMockFactory.getKeyManager());
-	myKeyMan.setConfigDir(myTestCfgFile);
 	return myKeyMan;
 }
 
@@ -269,8 +271,8 @@ TEST_F(TestKeyListPresenter,canReadTheConfigDir) {
 	EXPECT_EQ(K_TST_SECU2, myCfg21.getSecretKey());
 	EXPECT_EQ(K_TST_SYS_USER2, myCfg21.getSysUser());
 
-	remove_all(myKeyMan.getConfigDir());
-	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+	remove_all(myMockFactory.getSettings().getConfigDir());
+	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
 }
 
 TEST_F(TestKeyListPresenter,canSurviveIllformedKeyfile) {
@@ -283,10 +285,10 @@ TEST_F(TestKeyListPresenter,canSurviveIllformedKeyfile) {
 	myIllCfg.save();
 	myKeyMan.loadKeys();
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
-	const trihlav::KeyManager::path myConfigDir = myKeyMan.getConfigDir();
+	const trihlav::KeyManager::path myConfigDir = myMockFactory.getSettings().getConfigDir();
 	BOOST_LOG_TRIVIAL(debug)<< "Clean up. Remove " << myConfigDir;
 	remove_all(myConfigDir);
-	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
 
 }
 
@@ -314,8 +316,8 @@ TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
 	myKeyListView.selectionChangedSig(2);
 	EXPECT_TRUE(myDelBtn.isEnabled());
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
-	remove_all(myKeyMan.getConfigDir());
-	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+	remove_all(myMockFactory.getSettings().getConfigDir());
+	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
 }
 
 TEST_F(TestKeyListPresenter,canEditYubikoKey) {
@@ -336,8 +338,8 @@ TEST_F(TestKeyListPresenter,canEditYubikoKey) {
 	EXPECT_CALL(myMockYubikoOtpKeyView, show());
 	myKeyListView.selectionChangedSig(1);
 	myKeyListView.getBtnEditKey().pressedSig();
-	remove_all(myKeyMan.getConfigDir());
-	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+	remove_all(myMockFactory.getSettings().getConfigDir());
+	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
 }
 
 TEST_F(TestKeyListPresenter,canDeleteYubikoKey) {
@@ -363,8 +365,8 @@ TEST_F(TestKeyListPresenter,canDeleteYubikoKey) {
 	myKeyListView.selectionChangedSig(1);
 	myKeyListView.getBtnDelKey().pressedSig();
 	EXPECT_EQ(2, myKeyMan.getKeyCount());
-	remove_all(myKeyMan.getConfigDir());
-	EXPECT_FALSE(exists(myKeyMan.getConfigDir()));
+	remove_all(myMockFactory.getSettings().getConfigDir());
+	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
 }
 
 int main(int argc, char **argv) {

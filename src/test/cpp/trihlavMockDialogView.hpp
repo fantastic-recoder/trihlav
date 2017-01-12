@@ -26,17 +26,33 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#ifndef TRIHLAV_MOCK_DIALOG_VIEW_HPP_
+#define TRIHLAV_MOCK_DIALOG_VIEW_HPP_
+
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"  // Brings in Google Mock.
+
+#include "trihlavLib/trihlavDialogViewIface.hpp"
+#include "trihlavMockButton.hpp"
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+class MockDialogView : virtual public DialogViewIface {
+public:
+	MockDialogView();
+	MOCK_CONST_METHOD0(getBtnOk, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnOk, ButtonIface& () );
 
-}
+	MOCK_CONST_METHOD0(getBtnCancel, const  ButtonIface& () );
+	MOCK_METHOD0(getBtnCancel, ButtonIface& () );
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+	MOCK_METHOD0(show, void ());
+
+	MockButton itsMockBtnOk;
+	MockButton itsMockBtnCancel;
+
+};
 
 } /* namespace trihlav */
+
+#endif /* TRIHLAV_MOCK_DIALOG_VIEW_HPP_ */

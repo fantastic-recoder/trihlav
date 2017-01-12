@@ -29,16 +29,16 @@
 #define TRIHLAV_MOCK_YUBIKO_OTP_KEY_VIEW_HPP_
 
 #include <gmock/gmock.h>
-#include "../../main/cpp/trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockSpinBox.hpp"
 #include "trihlavMockStrEdit.hpp"
-
+#include "trihlavMockDialogView.hpp"
 
 namespace trihlav {
 
-struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
+struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface, virtual public MockDialogView {
 
 	MockStrEdit itsMockEdtPrivateId;
 	MockStrEdit itsMockEdtPublicId;
@@ -50,8 +50,6 @@ struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 	MockButton itsMockBtnGenPublicId;
 	MockButton itsMockBtnGenSecretKey;
 	MockButton itsMockBtnSelectSysUser;
-	MockButton itsMockBtnOk;
-	MockButton itsMockBtnCancel;
 
 	MockYubikoOtpKeyView();
 
@@ -84,14 +82,6 @@ struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface {
 
 	MOCK_CONST_METHOD0(getBtnSelectSysUser, const  ButtonIface& () );
 	MOCK_METHOD0(getBtnSelectSysUser, ButtonIface& () );
-
-	MOCK_CONST_METHOD0(getBtnOk, const  ButtonIface& () );
-	MOCK_METHOD0(getBtnOk, ButtonIface& () );
-
-	MOCK_CONST_METHOD0(getBtnCancel, const  ButtonIface& () );
-	MOCK_METHOD0(getBtnCancel, ButtonIface& () );
-
-	MOCK_METHOD0(show, void ());
 
 	virtual ~MockYubikoOtpKeyView();
 

@@ -26,6 +26,7 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavEmptyPublicId.hpp"
 #include "trihlavLib/trihlavLog.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
 
 using std::cout;
 using std::ostringstream;
@@ -173,11 +174,11 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 }
 
 void YubikoOtpKeyConfig::generateFilename() {
-	if(itsKeyManager.getConfigDir().empty()) {
+	if (itsKeyManager.getSettings().getConfigDir().empty()) {
 		throw std::runtime_error("YubikoOtpKeyConfig::generateFilename()==\"\"");
 	}
-	path myFilename = itsKeyManager.getConfigDir()
-			/ "%%-%%-%%.trihlav-key.json";
+	path myFilename = itsKeyManager.getSettings().getConfigDir()
+					  / "%%-%%-%%.trihlav-key.json";
 	itsFilename=unique_path(myFilename);
 }
 

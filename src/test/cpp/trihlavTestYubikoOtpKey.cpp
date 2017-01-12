@@ -14,6 +14,7 @@
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
@@ -24,6 +25,7 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
+#include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavMockButton.hpp"
 #include "trihlavMockEditIface.hpp"
 #include "trihlavMockStrEdit.hpp"
@@ -64,15 +66,16 @@ TEST_F(TestYubikoOtpKey,factoryPointers) {
 
 TEST_F(TestYubikoOtpKey,keyManagerInit) {
 	BOOST_LOG_NAMED_SCOPE("testKeyManagerInitialisation");
-	KeyManager myKMan(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
+	Settings mySettings(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
+	KeyManager myKMan(mySettings);
 	BOOST_LOG_TRIVIAL(debug)<< "Test lazy init. only first getter will cause"
 	" initialization";
-	EXPECT_TRUE(!myKMan.isInitialized());
-	const path& myKManPath = myKMan.getConfigDir();
+	EXPECT_TRUE(!mySettings.isInitialized());
+	const path& myKManPath = mySettings.getConfigDir();
 	BOOST_LOG_TRIVIAL(debug)<< "Got config. directory \"" << myKManPath << "\","
 	" now we should be initialized";
 
-	EXPECT_TRUE(myKMan.isInitialized());
+	EXPECT_TRUE(mySettings.isInitialized());
 	BOOST_LOG_TRIVIAL(debug)<< "Does the configuration path exists?";
 	EXPECT_TRUE(exists(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "Yes, it does.";
@@ -133,7 +136,8 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 
 TEST_F(TestYubikoOtpKey,throwsExceptionOnWrongSysUser) {
 	BOOST_LOG_NAMED_SCOPE("throwsExceptionOnWrongSysUser");
-	KeyManager myKMan(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
+	Settings mySettings(unique_path("/tmp/trihlav-tst-%%%%-%%%%-%%%%-%%%%"));
+	KeyManager myKMan(mySettings);
 	YubikoOtpKeyConfig myCfg(myKMan);
 	try {
 		myCfg.setSysUser("");
