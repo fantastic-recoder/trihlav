@@ -29,6 +29,7 @@
 #ifndef TRIHLAV_LOGIN_PRESENTER_HPP_
 #define TRIHLAV_LOGIN_PRESENTER_HPP_
 
+#include <string>
 #include <boost/signals2.hpp>
 #include "trihlavLib/trihlavPresenterBase.hpp"
 #include "trihlavLib/trihlavGlobals.hpp"
@@ -44,9 +45,14 @@ public:
 
 	LoginPresenter(FactoryIface& pFactory);
 	LoggedInSignal loggedInSignal;
-	void show();
+	virtual void show();
+	virtual LoginViewIface& getView();
+	virtual std::string& getLoggedInUser() {
+		return itsLoggedInUser;
+	}
 private:
 	LoginViewIfacePtr itsLoginView;
+	std::string       itsLoggedInUser;
 };
 
 } /* namespace trihlav */

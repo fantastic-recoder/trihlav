@@ -101,6 +101,24 @@ target_link_libraries(trihlavPamTester
                       ${PAM_LIBRARIES}
                       )
                       
+add_executable( trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
+ 	trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
+	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp
+)
+
+target_link_libraries(trihlavTestLoginPresenter
+                      trihlavApi
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      libgtest
+    				  libgmock
+                      ${YUBIKEY_LIB}
+                      ${Boost_LIBRARIES}
+                      ${PAM_LIBRARIES}
+                      )
+add_test( NAME trihlavTestLoginPresenter COMMAND trihlavTestLoginPresenter )
+
+                      
 add_executable( trihlavTestTupleList trihlavTestTupleList.cpp )
 add_test( NAME trihlavTestTupleList COMMAND trihlavTestTupleList )
 target_link_libraries(trihlavTestTupleList

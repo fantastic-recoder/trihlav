@@ -44,5 +44,9 @@ void LoginPresenter::show() {
 	itsLoginView->show();
 }
 
+LoginViewIface& LoginPresenter::getView() {
+	return *itsLoginView;
+}
+
 } /* namespace trihlav */
 

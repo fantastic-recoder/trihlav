@@ -52,6 +52,7 @@ struct MockFactory: virtual public FactoryIface {
 	MOCK_METHOD0(createMessageView, MessageViewIface* () );
 	MOCK_METHOD0(createSysUserListView,SysUserListViewIfacePtr () );
 	MOCK_METHOD0(createLoginView,LoginViewIfacePtr() );
+	MOCK_METHOD0(getOsIface,OsIface& () );
 	MockFactory();
 	virtual ~MockFactory(){}
 };
