@@ -36,7 +36,7 @@ public:
 
 	void selectedUser(int pIdx);
 
-	void accepted();
+	void accepted(bool);
 private:
 	using SysUsersIt=SysUsers::const_iterator;
 

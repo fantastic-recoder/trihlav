@@ -28,7 +28,6 @@ class WtSysUserListView: virtual public WtDialogView, virtual public SysUserList
 public:
 	WtSysUserListView();
 	virtual void show(const SysUsers& pUsers) override;
-    virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
     virtual int getSelected() override;
     virtual const UserRow_t& getRow(int pId) const override;
 

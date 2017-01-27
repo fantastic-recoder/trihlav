@@ -103,7 +103,6 @@ WtSysUserListView::WtSysUserListView() :
 	getDlg().contents()->setLayout(myContentLayout);
 	getDlg().contents()->setOverflow(Wt::WContainerWidget::OverflowHidden);
 	getDlg().setResizable(true);
-	getDlg().finished().connect(this, &WtSysUserListView::finishedSlot);
 }
 
 void WtSysUserListView::show(const SysUsers& pUsers) {
@@ -120,12 +119,6 @@ void WtSysUserListView::show(const SysUsers& pUsers) {
 	BOOST_LOG_TRIVIAL(debug)<<"System users loaded.";
 	getDlg().setModal(true);
 	getDlg().show();
-}
-
-void WtSysUserListView::finishedSlot(WDialog::DialogCode pCode) {
-	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::finishedSlot");
-	if(pCode == WDialog::DialogCode::Accepted)
-		acceptedSig();
 }
 
 /**

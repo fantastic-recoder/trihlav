@@ -28,7 +28,7 @@ SysUserListPresenter::SysUserListPresenter(FactoryIface& pFactory) :
 				itsSysUsers->end()) {
 	BOOST_LOG_NAMED_SCOPE("SysUserListPresenter::SysUserListPresenter");
 	getView().selectionChangedSig.connect([=](int pIdx) {selectedUser(pIdx);});
-	getView().acceptedSig.connect([=]() {accepted();});
+	getView().acceptedSig.connect([=](bool pAccepted) {accepted(pAccepted);});
 }
 
 SysUserListViewIface& SysUserListPresenter::getView() {
@@ -72,11 +72,14 @@ void SysUserListPresenter::selectedUser(int pIdx) {
 	}
 }
 
-void SysUserListPresenter::accepted() {
+void SysUserListPresenter::accepted(const bool pAccepted) {
 	BOOST_LOG_NAMED_SCOPE("SysUserListPresenter::accepted");
-	BOOST_LOG_TRIVIAL(debug)<<"accepted";
-	this->userSelectedSig();
+	if (pAccepted) {
+		BOOST_LOG_TRIVIAL(debug)<<"accepted";
+		this->userSelectedSig();
+	}
 }
 
-} /* namespace trihlav */
+}
+/* namespace trihlav */
 

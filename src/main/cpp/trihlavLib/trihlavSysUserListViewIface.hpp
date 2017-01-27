@@ -18,7 +18,6 @@ namespace trihlav {
 
 class SysUserListViewIface : virtual public DialogViewIface {
 public:
-    using AcceptedSignal= ::boost::signals2::signal<void()>;
     using SelectionChangedSignal= ::boost::signals2::signal<void(int)>;
     using UserRow_t = ::std::tuple<std::string,std::string>;
 
@@ -26,8 +25,6 @@ public:
 	 * Should be fired by the UI when user selects a row. The ids of the rows are passed.
 	 */
 	SelectionChangedSignal selectionChangedSig;
-
-    AcceptedSignal acceptedSig;
 
     virtual void show(const SysUsers& pUsers)=0;
 
