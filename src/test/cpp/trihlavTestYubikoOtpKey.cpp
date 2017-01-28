@@ -111,7 +111,7 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	myViewIface.getBtnGenPrivateId().pressedSig();
 	myViewIface.getBtnGenPublicId().pressedSig();
 	myViewIface.getBtnGenSecretKey().pressedSig();
-	myViewIface.acceptedSig(true);
+	myViewIface.sigDialogFinished(true);
 	const string myPrivId(myViewIface.getEdtPrivateId().getValue());
 	const string myPublicId(myViewIface.getEdtPublicId().getValue());
 	const string mySecretKey(myViewIface.getEdtSecretKey().getValue());

@@ -18,6 +18,7 @@ class FactoryIface;
 class MainPanelViewIface;
 class KeyListPresenterIface;
 class PswdChckPresenterIface;
+enum class PanelName;
 
 /**
  * Implementation of the top level UI presenter.
@@ -31,6 +32,7 @@ public:
 	virtual ~MainPanelPresenter();
 	virtual ViewIface& getView();
 	virtual void setupUi();
+	virtual void showedPanel(const PanelName pPanel);
 };
 
 } /* namespace trihlav */

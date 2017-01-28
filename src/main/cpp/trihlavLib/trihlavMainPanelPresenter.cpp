@@ -7,6 +7,7 @@
 
 #include <boost/locale.hpp>
 
+#include "trihlavLib/trihlavLogApi.hpp"
 #include "trihlavLib/trihlavMainPanelPresenter.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
 
@@ -37,10 +38,19 @@ ViewIface& MainPanelPresenter::getView() {
 void MainPanelPresenter::setupUi() {
 	getFactory().getSettings().load();
 	PswdChckViewIface& myPswdChckView=itsPswdChckPresenter->getView();
-	itsMainPanelView->add(translate("Password check"),myPswdChckView);
+	itsMainPanelView->add(translate("Password check"),PanelName::PswdCheck,myPswdChckView);
 	KeyListViewIface& myKeyListView=itsKeyListPresenter->getView();
-	itsMainPanelView->add(translate("Key list"),myKeyListView);
-	itsKeyListPresenter->reloadKeyList();
+	itsMainPanelView->add(translate("Key list"),PanelName::KeyList,myKeyListView);
+	itsMainPanelView->sigShowedPanel.connect([=](const PanelName& pPanel){showedPanel(pPanel);});
+}
+
+void MainPanelPresenter::showedPanel(const PanelName pPanel) {
+	BOOST_LOG_NAMED_SCOPE("MainPanelPresenter::showedPanel");
+
+	if(pPanel==PanelName::KeyList) {
+		itsKeyListPresenter->reloadKeyList();
+	}
 }
 
 } /* namespace trihlav */
+

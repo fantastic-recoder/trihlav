@@ -57,10 +57,13 @@ using ::std::string;
 
 static const string K_TST_USR1("test_user1");
 
+/**
+ * Mock OS Interface to auth. the user.
+ */
 class OsIfaceT : virtual public OsIface {
 public:
 	virtual bool checkOsPswd(const std::string& p_strUName,
-			const std::string& p_strPswd) const {
+			const std::string& p_strPswd) const override {
 		if(p_strUName=="test1" && p_strPswd=="paswd1") {
 			return true;
 		}
@@ -68,6 +71,9 @@ public:
 	}
 };
 
+/**
+ * Override the mock factory with our special derrived #getOsIface()
+ */
 class MockFactoryT : virtual public MockFactory {
 public:
 	OsIfaceT itsOsIface;

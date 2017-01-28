@@ -28,7 +28,7 @@ SysUserListPresenter::SysUserListPresenter(FactoryIface& pFactory) :
 				itsSysUsers->end()) {
 	BOOST_LOG_NAMED_SCOPE("SysUserListPresenter::SysUserListPresenter");
 	getView().selectionChangedSig.connect([=](int pIdx) {selectedUser(pIdx);});
-	getView().acceptedSig.connect([=](bool pAccepted) {accepted(pAccepted);});
+	getView().sigDialogFinished.connect([=](bool pAccepted) {accepted(pAccepted);});
 }
 
 SysUserListViewIface& SysUserListPresenter::getView() {

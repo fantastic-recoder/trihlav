@@ -29,6 +29,7 @@
 #define TRIHLAV_MAIN_PANEL_VIEW_IFACE_HPP_
 
 #include <string>
+#include <boost/signals2.hpp>
 
 #include "trihlavViewIface.hpp"
 
@@ -37,13 +38,20 @@ namespace trihlav {
 class PswdChckViewIface;
 class KeyListViewIface;
 
+enum class PanelName {
+	KeyList,PswdCheck,Settings
+};
+
+
 /**
  * The interface of the top level UI view, as in MVP design pattern.
  */
 class MainPanelViewIface : public ViewIface {
 public:
-	virtual void add(const std::string& pName,PswdChckViewIface& pPswdChckView)=0;
-	virtual void add(const std::string& pName,KeyListViewIface& pKeyListView)=0;
+	using SigShowedPanel = boost::signals2::signal<void (PanelName)>;
+	SigShowedPanel sigShowedPanel;
+	virtual void add(const std::string& pLocalizedName, const PanelName& pName,PswdChckViewIface& pPswdChckView)=0;
+	virtual void add(const std::string& pLocalizedName, const PanelName& pName,KeyListViewIface& pKeyListView)=0;
 	virtual ~MainPanelViewIface(){}
 };
 

@@ -44,17 +44,19 @@ class DialogViewIface: public virtual ViewIface {
 
 public:
 
-    typedef ::boost::signals2::signal<void(const bool)> AcceptedSignal ;
+    typedef ::boost::signals2::signal<void(const bool)> SigDialogFinished ;
 
-    AcceptedSignal acceptedSig;
+    SigDialogFinished sigDialogFinished;
 
     /// @brief Cancel button constant interface.
 	virtual const ButtonIface&  getBtnCancel() const = 0;
+
 	/// @brief Cancel button interface.
 	virtual ButtonIface&  getBtnCancel() = 0;
 
 	/// @brief ok button constant interface.
 	virtual const ButtonIface&  getBtnOk() const = 0;
+
 	/// @brief ok button interface.
 	virtual ButtonIface&  getBtnOk() = 0;
 

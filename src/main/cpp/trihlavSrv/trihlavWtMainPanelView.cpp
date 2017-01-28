@@ -33,32 +33,45 @@ using boost::locale::translate;
 
 namespace trihlav {
 
-void WtMainPanelView::add(const string& pName,KeyListViewIface&  pKeyListView){
+const string toString(const PanelName& pName) {
+	if(pName==PanelName::KeyList) {
+		return "KeyList";
+	} else if(pName==PanelName::PswdCheck) {
+		return "PswdCheck";
+	} else if(pName==PanelName::Settings) {
+		return "Settings";
+	} else {
+		return "Unknown panel";
+	}
+}
+
+void WtMainPanelView::add(const string& pLocalizedName, const PanelName& pName,KeyListViewIface&  pKeyListView){
 	WtKeyListView* myKeyListView =
 			dynamic_cast<WtKeyListView*>(&pKeyListView);
 	if (myKeyListView== 0) {
 		//TODO add rtti of the base type to the err msg
 		throw CannotCastImplementation("WtKeyListView");
 	}
-	addView(pName,*myKeyListView);
+	addView(pLocalizedName,pName,*myKeyListView);
 }
 
-void WtMainPanelView::add(const string& pName, PswdChckViewIface& pPswdChckView) {
+void WtMainPanelView::add(const string& pLocalizedName, const PanelName& pName, PswdChckViewIface& pPswdChckView) {
 	WtPswdChckView* myPswdChckView =
 			dynamic_cast<WtPswdChckView*>(&pPswdChckView);
 	if (myPswdChckView == 0) {
 		//TODO add rtti of the base type to the err msg
 		throw CannotCastImplementation("WtPswdChckView");
 	}
-	addView(pName,*myPswdChckView);
+	addView(pLocalizedName,pName,*myPswdChckView);
 }
 
-void WtMainPanelView::addView(const std::string& pName,WtViewIface&  pView) {
-	WMenuItem* myItem = getLeftMenu()->addItem(pName.c_str(),
+void WtMainPanelView::addView(const std::string& pLocalizedName, const PanelName& pName,WtViewIface&  pView) {
+	WMenuItem* myItem = getLeftMenu()->addItem(pLocalizedName,
 			pView.getWWidget());
-	string myUrl("/"+pName);
+	string myUrl("/"+toString(pName));
 	myItem->setLink(
 			Wt::WLink(Wt::WLink::InternalPath, myUrl.c_str()));
+	myItem->triggered().connect(std::bind([=](){sigShowedPanel(pName);}));
 }
 
 /**
@@ -127,3 +140,4 @@ WContainerWidget* WtMainPanelView::getNativeView() {
 }
 
 } /* namespace trihlav */
+

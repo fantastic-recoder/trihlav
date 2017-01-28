@@ -43,7 +43,7 @@ void YubikoOtpKeyPresenter::initUi() {
 	getView().getSbxPublicIdLen().setMin(0);
 	getView().getSbxPublicIdLen().setMax(6);
 	getView().getSbxPublicIdLen().setStep(1);
-	getView().acceptedSig.connect([this](const bool pAccepted) {
+	getView().sigDialogFinished.connect([this](const bool pAccepted) {
 		accepted(pAccepted);
 	});
 	getView().getBtnGenPrivateId().pressedSig.connect([this]() {

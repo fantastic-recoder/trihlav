@@ -51,8 +51,8 @@ public:
 	WtMainPanelView();
 	virtual ~WtMainPanelView();
 	virtual Wt::WContainerWidget* getNativeView();
-	virtual void add(const std::string& pName, PswdChckViewIface& pPswdChckView);
-	virtual void add(const std::string& pName, KeyListViewIface& pKeyListView);
+	virtual void add(const std::string& pLocalizedName, const PanelName& pName, PswdChckViewIface& pPswdChckView) override;
+	virtual void add(const std::string& pLocalizedName, const PanelName& pName, KeyListViewIface& pKeyListView) override;
 
 	const Wt::WNavigationBar* getNavigation() const {
 		return itsNavigation;
@@ -83,7 +83,7 @@ public:
 	}
 
 protected:
-	virtual void addView(const std::string& pName, WtViewIface& pView);
+	virtual void addView(const std::string& pLocalizedName, const PanelName& pName, WtViewIface& pView);
 
 	void setNavigation(Wt::WNavigationBar* pNavigation) {
 		itsNavigation = pNavigation;

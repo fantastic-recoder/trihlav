@@ -85,7 +85,7 @@ namespace trihlav {
     }
 
     void WtDialogView::finishedSlot(WDialog::DialogCode pCode) {
-        acceptedSig(pCode == WDialog::DialogCode::Accepted);
+        sigDialogFinished(pCode == WDialog::DialogCode::Accepted);
     }
 
     Wt::WDialog &WtDialogView::getDlg() {
