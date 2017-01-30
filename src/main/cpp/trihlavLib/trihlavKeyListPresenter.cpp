@@ -43,25 +43,26 @@
 
 #include "trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
-#include "trihlavLib/trihlavLoginViewIface.hpp"
-#include "trihlavLib/trihlavLoginPresenter.hpp"
 
 namespace trihlav {
 
 KeyListPresenter::KeyListPresenter(FactoryIface& pFactory) :
-		KeyListPresenterIface(pFactory), PresenterBase(pFactory), itsYubikoOtpKeyPresenter(
-				0), itsKeyListView(0) {
+		KeyListPresenterIface(pFactory), //
+		CanOsAuthPresenter(pFactory), //
+		itsYubikoOtpKeyPresenter(0), //
+		itsKeyListView(0) //
+{
 }
 
 KeyListViewIface& KeyListPresenter::getView() {
 	if (itsKeyListView == 0) {
 		itsKeyListView = getFactory().createKeyListView();
 		getView().getBtnAddKey().pressedSig.connect([=] {addKey();});
-		getView().getBtnReload().pressedSig.connect(
-				[=] {reloadKeyList();});
+		getView().getBtnReload().pressedSig.connect([=] {reloadKeyList();});
 		getView().getBtnEditKey().pressedSig.connect([=] {editKey();});
 		getView().getBtnDelKey().pressedSig.connect([=] {deleteKey();});
-		getView().selectionChangedSig.connect([=](int pIdx){selectionChanged(pIdx);});
+		getView().selectionChangedSig.connect(
+				[=](int pIdx) {selectionChanged(pIdx);});
 	}
 	return *itsKeyListView;
 }
@@ -85,10 +86,6 @@ YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
 
 void KeyListPresenter::reloadKeyList() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::reloadKeyList");
-	if(!itsLoginPresenter) {
-		itsLoginPresenter.reset(new LoginPresenter(getFactory()));
-		itsLoginPresenter->show();
-	}
 	KeyManager& myKeyMan(getFactory().getKeyManager());
 	const size_t myKeySz = myKeyMan.loadKeys();
 	getView().clear();
@@ -100,10 +97,14 @@ void KeyListPresenter::reloadKeyList() {
 	getView().selectionChangedSig(-1);
 }
 
+void KeyListPresenter::doProtectedAction() {
+	reloadKeyList();
+}
+
 bool KeyListPresenter::checkSelection() const {
-	if(itsSelectedKey == -1) {
-		BOOST_LOG_TRIVIAL(warning) << "KeyListPresenter edit/delete "
-				"called without proper selection.";
+	if (itsSelectedKey == -1) {
+		BOOST_LOG_TRIVIAL(warning)<< "KeyListPresenter edit/delete "
+		"called without proper selection.";
 		return false;
 	}
 	return true;
@@ -111,7 +112,7 @@ bool KeyListPresenter::checkSelection() const {
 
 void KeyListPresenter::editKey() {
 	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::editKey");
-	if(checkSelection()) {
+	if (checkSelection()) {
 		KeyManager& myKeyMan(getFactory().getKeyManager());
 		getYubikoOtpKeyPresenter().editKey(myKeyMan.getKey(itsSelectedKey));
 	}
@@ -119,7 +120,7 @@ void KeyListPresenter::editKey() {
 
 void KeyListPresenter::deleteKey() {
 	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::deleteKey");
-	if(checkSelection()) {
+	if (checkSelection()) {
 		KeyManager& myKeyMan(getFactory().getKeyManager());
 		getYubikoOtpKeyPresenter().deleteKey(myKeyMan.getKey(itsSelectedKey));
 	}
@@ -127,15 +128,16 @@ void KeyListPresenter::deleteKey() {
 
 void KeyListPresenter::selectionChanged(int pIdx) {
 	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::selectionChange");
-	if(pIdx==-1) {
+	if (pIdx == -1) {
 		getView().getBtnDelKey().setEnabled(false);
 		getView().getBtnEditKey().setEnabled(false);
 	} else {
 		getView().getBtnDelKey().setEnabled(true);
 		getView().getBtnEditKey().setEnabled(true);
 	}
-	itsSelectedKey=pIdx;
+	itsSelectedKey = pIdx;
 	BOOST_LOG_TRIVIAL(debug)<<"Curently selected " << itsSelectedKey;
 }
 
-} /* namespace trihlav */
+}
+/* namespace trihlav */

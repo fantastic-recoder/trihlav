@@ -61,6 +61,8 @@ using Wt::Orientation;
 using Wt::DisplayRole;
 using Wt::WModelIndexSet;
 using std::vector;
+using U = Wt::WLength::Unit;
+
 
 namespace trihlav {
 
@@ -73,8 +75,8 @@ class WtKeyListModel: public WtListModel<int, std::string, std::string,
 		std::string, int, int> {
 public:
 	WtKeyListModel() :
-			WtListModel<int, std::string, std::string, std::string, int, int>( {
-					{ translate("Record ID") }, { translate("Public ID") }, {
+			WtListModel<int, std::string, std::string, std::string, int, int>(
+					{ { translate("Record ID") }, { translate("Public ID") }, {
 							translate("Description") }, { translate(
 							"Private ID") }, { translate("Use counter") }, {
 							translate("Counter") } }) {
@@ -85,7 +87,10 @@ public:
 void WtKeyListView::layoutSizeChanged(int pW, int pH) {
 	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
 	const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
-	const int K_COL_CNT=itsTable->model()->columnCount();
+	int K_COL_CNT {1};
+	if(itsTable->model()) {
+		K_COL_CNT=itsTable->model()->columnCount();
+	}
 	const int K_TBL_INT_M=7*K_COL_CNT+2;
 	for (int i = 0; i < K_COL_CNT; ++i) {
 		if(i==2) {
@@ -94,6 +99,20 @@ void WtKeyListView::layoutSizeChanged(int pW, int pH) {
 			itsTable->setColumnWidth(i, 120);
 		}
 	}
+	itsTable->resize(WLength(pW, U::Pixel), WLength(pH, U::Pixel));
+}
+
+void WtKeyListView::createTable() {
+	itsTable = new WTableView();
+	itsTable->setModel(itsDtaMdl);
+	itsTable->setAlternatingRowColors(true);
+	itsTable->setCanReceiveFocus(true);
+	itsTable->setColumnResizeEnabled(true);
+	itsTable->setColumnWidth(2, "400px");
+	itsTable->setSelectionMode(Wt::SingleSelection);
+	itsTable->resize(WLength(100.0, U::Percentage), WLength(128.0, U::FontEm));
+	itsTable->selectionChanged().connect(this,
+			&WtKeyListView::selectionChanged);
 }
 
 WtKeyListView::WtKeyListView() {
@@ -112,13 +131,7 @@ WtKeyListView::WtKeyListView() {
 	myBtnsLayout->addWidget(itsBtnEdit);
 	myBtnsLayout->addWidget(itsBtnDel);
 	myBtnsLayout->addWidget(itsBtnReload);
-	itsTable = new WTableView();
-	itsTable->setModel(itsDtaMdl);
-	itsTable->setAlternatingRowColors(true);
-	itsTable->setCanReceiveFocus(true);
-	itsTable->setColumnResizeEnabled(true);
-	itsTable->setColumnWidth(2, "400px");
-	itsTable->setSelectionMode(Wt::SingleSelection);
+	createTable();
 	myTopLayout->addLayout(myBtnsLayout);
 	myTopLayout->addWidget(itsTable);
 	myTopLayout->setContentsMargins(K_TBL_V_MARGIN, K_TBL_V_MARGIN,
@@ -126,8 +139,6 @@ WtKeyListView::WtKeyListView() {
 	myTopLayout->setSpacing(K_TBL_V_MARGIN);
 	setLayout(myTopLayout);
 	setLayoutSizeAware(true);
-	itsTable->selectionChanged().connect(this,
-			&WtKeyListView::selectionChanged);
 }
 
 WtKeyListView::~WtKeyListView() {
@@ -154,6 +165,7 @@ ButtonIface& trihlav::WtKeyListView::getBtnReload() {
 }
 
 void WtKeyListView::clear() {
+	itsTable->clearSelection();
 	itsDtaMdl->clear();
 }
 
@@ -163,7 +175,7 @@ void WtKeyListView::addRow(const KeyRow_t& pRow) {
 
 void WtKeyListView::addedAllRows() {
 	BOOST_LOG_TRIVIAL(debug)<< "We have " << itsDtaMdl->rowCount();
-	itsTable->setModel(itsDtaMdl);
+	itsTable->refresh();
 }
 
 void WtKeyListView::unselectAll() {

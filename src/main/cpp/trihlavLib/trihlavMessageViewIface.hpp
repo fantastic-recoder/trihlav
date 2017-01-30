@@ -28,6 +28,8 @@
 #ifndef TRIHLAV_MESSAGE_VIEW_IFACE_HPP_
 #define TRIHLAV_MESSAGE_VIEW_IFACE_HPP_
 
+#include <string>
+
 #include "trihlavPresenterBase.hpp"
 
 namespace trihlav {

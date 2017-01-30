@@ -49,7 +49,7 @@ public:
 
 	constexpr static const size_t K_COL_CNT = sizeof...(Columns_t);
 
-	void addRow(const Row_t pRowNum) {
+	virtual void addRow(const Row_t pRowNum) {
 		itsRows.push_back(pRowNum);
 	}
 

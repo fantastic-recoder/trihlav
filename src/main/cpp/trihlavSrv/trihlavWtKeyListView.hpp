@@ -71,6 +71,7 @@ public:
 	virtual void addedAllRows() override;
 	virtual void unselectAll() override;
 	virtual const KeyRow_t& getRow(int pId) const override;
+
 protected:
 	virtual int getSelected();
 	virtual void layoutSizeChanged(int, int) override;
@@ -82,6 +83,8 @@ protected:
 	void selectionChanged();
 
 private:
+	void createTable();
+
 	Wt::WTableView *itsTable;
 	WtPushButton* itsBtnAdd;
 	WtPushButton* itsBtnDel;

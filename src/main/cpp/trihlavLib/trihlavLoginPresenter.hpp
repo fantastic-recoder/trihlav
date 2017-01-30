@@ -41,15 +41,16 @@ namespace trihlav {
  */
 class LoginPresenter: public PresenterBase {
 public:
-    using LoggedInSignal = ::boost::signals2::signal<bool()>;
+    using SigUserAccepted = ::boost::signals2::signal<void()>;
 
 	LoginPresenter(FactoryIface& pFactory);
-	LoggedInSignal loggedInSignal;
+
 	virtual void show();
 	virtual LoginViewIface& getView();
 	virtual std::string& getLoggedInUser() {
 		return itsLoggedInUser;
 	}
+	SigUserAccepted sigUserAccepted;
 private:
 	LoginViewIfacePtr itsLoginView;
 	std::string       itsLoggedInUser;

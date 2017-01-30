@@ -36,8 +36,8 @@ namespace trihlav {
 class FactoryIface;
 
 /**
- * Common functionality to all controllers.
- * Every controller has an view.
+ * Common base to all controllers/presenters.
+ * Every controller has an (UI) factory.
  */
 class PresenterBase {
 public:

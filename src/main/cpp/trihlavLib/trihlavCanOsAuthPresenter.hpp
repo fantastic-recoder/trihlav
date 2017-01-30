@@ -26,31 +26,51 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/locale.hpp>
+#ifndef TRIHLAV_CAN_OS_AUTH_PRESENTER_HPP_
+#define TRIHLAV_CAN_OS_AUTH_PRESENTER_HPP_
 
-#include "trihlavLib/trihlavFactoryIface.hpp"
-#include "trihlavLib/trihlavLoginPresenter.hpp"
-#include "trihlavLib/trihlavLoginViewIface.hpp"
+#include <memory>
+
+#include "trihlavLib/trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
-LoginPresenter::LoginPresenter(FactoryIface& pFactory) : //
-		PresenterBase(pFactory) //
-{
-	itsLoginView = getFactory().createLoginView();
-	itsLoginView->sigDialogFinished.connect( ///< connect start
-			[=](bool pStatus)->void
-			{	if(pStatus)sigUserAccepted();} ///< lambda 2 b called
-			);///< end connect
-}
+class  FactoryIface;
+class LoginPresenter;
 
-void LoginPresenter::show() {
-	itsLoginView->show();
-}
+/**
+ * This presenter is able to authenticate the user in underlying
+ * operating system, in Linux for example it uses PAM.
+ */
+class CanOsAuthPresenter: public PresenterBase {
+protected:
 
-LoginViewIface& LoginPresenter::getView() {
-	return *itsLoginView;
-}
+	/**
+	 * Handles the userl login dialog.
+	 */
+	std::unique_ptr<LoginPresenter> itsLoginPresenter;
+
+	/**
+	 * Login dialog finished with success.
+	 */
+	virtual void userAccepted();
+	/**
+	 * will be called when the OS authenticates the user.
+	 */
+	virtual void doProtectedAction()=0;
+public:
+
+	/// Do nothing, be lazy.
+	CanOsAuthPresenter( FactoryIface& pFactory );
+	/// Just to be virtual...
+	virtual ~CanOsAuthPresenter();
+
+	/**
+	 * Governing presenter calls this to execute the (in most cases username and password)protected
+	 */
+	virtual void protectedAction();
+};
 
 } /* namespace trihlav */
 
+#endif /* TRIHLAV_CAN_OS_AUTH_PRESENTER_HPP_ */

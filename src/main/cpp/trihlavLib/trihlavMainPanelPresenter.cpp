@@ -48,7 +48,7 @@ void MainPanelPresenter::showedPanel(const PanelName pPanel) {
 	BOOST_LOG_NAMED_SCOPE("MainPanelPresenter::showedPanel");
 
 	if(pPanel==PanelName::KeyList) {
-		itsKeyListPresenter->reloadKeyList();
+		itsKeyListPresenter->protectedAction();
 	}
 }
 

@@ -26,31 +26,36 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/locale.hpp>
-
-#include "trihlavLib/trihlavFactoryIface.hpp"
-#include "trihlavLib/trihlavLoginPresenter.hpp"
+#include "trihlavLib/trihlavLogApi.hpp"
+#include "trihlavLib/trihlavCanOsAuthPresenter.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
+#include "trihlavLib/trihlavLoginPresenter.hpp"
 
 namespace trihlav {
 
-LoginPresenter::LoginPresenter(FactoryIface& pFactory) : //
-		PresenterBase(pFactory) //
-{
-	itsLoginView = getFactory().createLoginView();
-	itsLoginView->sigDialogFinished.connect( ///< connect start
-			[=](bool pStatus)->void
-			{	if(pStatus)sigUserAccepted();} ///< lambda 2 b called
-			);///< end connect
+CanOsAuthPresenter::CanOsAuthPresenter(FactoryIface& pFactory) :
+		PresenterBase(pFactory) {
+	// TODO Auto-generated constructor stub
+
 }
 
-void LoginPresenter::show() {
-	itsLoginView->show();
+CanOsAuthPresenter::~CanOsAuthPresenter() {
+	// TODO Auto-generated destructor stub
 }
 
-LoginViewIface& LoginPresenter::getView() {
-	return *itsLoginView;
+void CanOsAuthPresenter::userAccepted() {
+	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::userAccepted");
+	doProtectedAction();
+}
+
+void CanOsAuthPresenter::protectedAction() {
+	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
+	if(!itsLoginPresenter) {
+		itsLoginPresenter.reset(new LoginPresenter(getFactory()));
+		itsLoginPresenter->sigUserAccepted.connect([=]()->void{ userAccepted();});
+		itsLoginPresenter->show();
+	}
+
 }
 
 } /* namespace trihlav */
-

@@ -28,15 +28,15 @@
 #ifndef TRIHLAV_KEY_LIST_PRESENTER_IFACE_HPP_
 #define TRIHLAV_KEY_LIST_PRESENTER_IFACE_HPP_
 
-#include "trihlavPresenterBase.hpp"
+#include "trihlavLib/trihlavCanOsAuthPresenter.hpp"
 
 namespace trihlav {
 
 class KeyListViewIface;
 
-class KeyListPresenterIface : virtual public PresenterBase {
+class KeyListPresenterIface : virtual public CanOsAuthPresenter {
 public:
-	KeyListPresenterIface(FactoryIface& pFactory):PresenterBase(pFactory) {}
+	KeyListPresenterIface(FactoryIface& pFactory):CanOsAuthPresenter(pFactory) {}
 	virtual ~KeyListPresenterIface(){}
 	virtual KeyListViewIface& getView()=0;
 	virtual void addKey()=0;

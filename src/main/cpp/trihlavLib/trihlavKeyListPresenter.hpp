@@ -38,7 +38,6 @@ namespace trihlav {
 class KeyListViewIface;
 class YubikoOtpKeyPresenter;
 class FactoryIface;
-class LoginPresenter;
 
 class KeyListPresenter: virtual public KeyListPresenterIface {
 public:
@@ -62,13 +61,14 @@ public:
 	void reloadKeyList();
 
 	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
-
+protected:
+	/// What to do when base presenter does the auth.
+	virtual void doProtectedAction() override;
 private:
 	void selectionChanged(int pIdx);
 	bool checkSelection() const;
 	KeyListViewIface* itsKeyListView;
 	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
-	std::unique_ptr<LoginPresenter> itsLoginPresenter;
 	int itsSelectedKey= -1;
 };
 

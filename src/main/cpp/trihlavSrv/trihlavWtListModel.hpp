@@ -123,9 +123,24 @@ public:
 	}
 
 	virtual void clear() {
+		const size_t myRows{TupleList_t::getRowCount()};
+		beginRemoveRows(Wt::WModelIndex(),0,myRows);
 		TupleList_t::clear();
+		endRemoveRows();
 	}
 
+	virtual void addRow(const typename TupleList_t::Row_t pRow) {
+		const size_t myRows{TupleList_t::getRowCount()};
+		beginInsertRows(Wt::WModelIndex(),myRows,myRows+1);
+		insertRow(myRows);
+		TupleList_t::addRow(pRow);
+		endInsertRows();
+	}
+
+	virtual void doReset() {
+		reset();
+		dataChanged().emit(createIndex(0,0,0UL),createIndex(rowCount(),columnCount(),0UL));
+	}
 private:
 	const Captions_t itsCaptions;
 };
