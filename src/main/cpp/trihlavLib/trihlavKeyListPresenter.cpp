@@ -97,8 +97,17 @@ void KeyListPresenter::reloadKeyList() {
 	getView().selectionChangedSig(-1);
 }
 
-void KeyListPresenter::doProtectedAction() {
-	reloadKeyList();
+void KeyListPresenter::doProtectedAction(bool pStatus) {
+	if (pStatus) {
+		getView().getBtnAddKey().setEnabled(true);
+		getView().getBtnReload().setEnabled(true);
+		reloadKeyList();
+	} else {
+		getView().getBtnAddKey().setEnabled(false);
+		getView().getBtnDelKey().setEnabled(false);
+		getView().getBtnEditKey().setEnabled(false);
+		getView().getBtnReload().setEnabled(false);
+	}
 }
 
 bool KeyListPresenter::checkSelection() const {

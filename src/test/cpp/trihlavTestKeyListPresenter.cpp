@@ -113,9 +113,6 @@ using ::trihlav::MockMessageView;
 using ::boost::filesystem::path;
 using ::boost::filesystem::unique_path;
 
-//bool operator== (boost::tuples::tuple<int, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, int, int>,
-//		const boost::tuples::tuple<int, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char>, int, int>);
-
 class TestKeyListPresenter: public ::testing::Test {
 public:
 	virtual void SetUp() {

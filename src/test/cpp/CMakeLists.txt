@@ -106,7 +106,6 @@ add_executable( trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
 	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
 	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp
 )
-
 target_link_libraries(trihlavTestLoginPresenter
                       trihlavApi
                       ${CMAKE_THREAD_LIBS_INIT}

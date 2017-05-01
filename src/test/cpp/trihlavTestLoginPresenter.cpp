@@ -53,6 +53,7 @@ using ::trihlav::OsIface;
 using ::trihlav::Settings;
 using ::trihlav::MockFactory;
 using ::trihlav::LoginPresenter;
+using ::trihlav::MockLoginView;
 using ::std::string;
 
 static const string K_TST_USR1("test_user1");
@@ -99,7 +100,10 @@ TEST_F(TestLogin,validateUser) {
 	MockFactoryT myFactory;
 	EXPECT_CALL(myFactory,createLoginView());
 	LoginPresenter myLoginPresenter(myFactory);
-	myLoginPresenter.getView().getEdtUserName().setValue(::K_TST_USR1);
+	auto& myView=myLoginPresenter.getView();myLoginPresenter.getView();
+	auto& myMockView=dynamic_cast<MockLoginView&>(myView);
+	EXPECT_CALL(myMockView,getBtnOk());
+	myView.getEdtUserName().setValue(::K_TST_USR1);
 	myLoginPresenter.getView().getEdtPassword().setValue("paswd1");
 	myLoginPresenter.getView().getBtnOk().pressed();
 	EXPECT_EQ(myLoginPresenter.getLoggedInUser(),::K_TST_USR1)

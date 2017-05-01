@@ -63,7 +63,7 @@ public:
 	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
 protected:
 	/// What to do when base presenter does the auth.
-	virtual void doProtectedAction() override;
+	virtual void doProtectedAction(bool pStatus) override;
 private:
 	void selectionChanged(int pIdx);
 	bool checkSelection() const;

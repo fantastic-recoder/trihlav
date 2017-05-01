@@ -28,11 +28,17 @@
 
 #include "trihlavMockDialogView.hpp"
 
+using ::testing::ReturnRef;
+
 namespace trihlav {
 
 MockDialogView::MockDialogView() {
-	// TODO Auto-generated constructor stub
-
+	ON_CALL(*this,getBtnOk()) //
+	.WillByDefault(ReturnRef(itsMockBtnOk));
+	ON_CALL(*this,getBtnCancel()) //
+	.WillByDefault(ReturnRef(itsMockBtnCancel));
+	itsMockBtnCancel.pressedSig.connect([this](){sigDialogFinished(false);});
+	itsMockBtnOk.pressedSig.connect([this](){sigDialogFinished(true);});
 }
 
 } /* namespace trihlav */

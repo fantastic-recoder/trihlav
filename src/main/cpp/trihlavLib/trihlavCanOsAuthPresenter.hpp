@@ -53,11 +53,11 @@ protected:
 	/**
 	 * Login dialog finished with success.
 	 */
-	virtual void userAccepted();
+	virtual void userAccepted(bool pStatus);
 	/**
 	 * will be called when the OS authenticates the user.
 	 */
-	virtual void doProtectedAction()=0;
+	virtual void doProtectedAction(bool pStatus)=0;
 public:
 
 	/// Do nothing, be lazy.

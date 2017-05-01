@@ -28,10 +28,15 @@
 
 #include "trihlavMockLoginView.hpp"
 
+using ::testing::ReturnRef;
+
 namespace trihlav {
 
 MockLoginView::MockLoginView() {
-	// TODO Auto-generated constructor stub
+	ON_CALL(*this,getEdtUserName()) //
+	.WillByDefault(ReturnRef(itsEdtUserName));
+	ON_CALL(*this,getEdtPassword()) //
+	.WillByDefault(ReturnRef(itsEdtPassword));
 
 }
 

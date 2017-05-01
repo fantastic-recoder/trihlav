@@ -41,7 +41,7 @@ namespace trihlav {
  */
 class LoginPresenter: public PresenterBase {
 public:
-    using SigUserAccepted = ::boost::signals2::signal<void()>;
+    using SigUserAccepted = ::boost::signals2::signal<void(bool)>;
 
 	LoginPresenter(FactoryIface& pFactory);
 
@@ -52,6 +52,9 @@ public:
 	}
 	SigUserAccepted sigUserAccepted;
 private:
+	enum Status{SHOWING,HIDING} itsStatus=HIDING;
+	void dialogClosed(bool);
+	void checkUser();
 	LoginViewIfacePtr itsLoginView;
 	std::string       itsLoggedInUser;
 };

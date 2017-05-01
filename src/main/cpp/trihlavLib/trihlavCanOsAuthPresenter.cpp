@@ -43,19 +43,19 @@ CanOsAuthPresenter::~CanOsAuthPresenter() {
 	// TODO Auto-generated destructor stub
 }
 
-void CanOsAuthPresenter::userAccepted() {
+void CanOsAuthPresenter::userAccepted(bool pStatus) {
 	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::userAccepted");
-	doProtectedAction();
+	doProtectedAction(pStatus);
 }
 
 void CanOsAuthPresenter::protectedAction() {
 	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
-	if(!itsLoginPresenter) {
+	if (!itsLoginPresenter) {
 		itsLoginPresenter.reset(new LoginPresenter(getFactory()));
-		itsLoginPresenter->sigUserAccepted.connect([=]()->void{ userAccepted();});
-		itsLoginPresenter->show();
+		itsLoginPresenter->sigUserAccepted.connect(
+				[=](bool pStatus)->void {userAccepted(pStatus);});
 	}
-
+	itsLoginPresenter->show();
 }
 
 } /* namespace trihlav */

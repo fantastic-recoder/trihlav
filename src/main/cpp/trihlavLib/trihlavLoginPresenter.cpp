@@ -27,6 +27,10 @@
  */
 
 #include <boost/locale.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/expressions.hpp>
 
 #include "trihlavLib/trihlavFactoryIface.hpp"
 #include "trihlavLib/trihlavLoginPresenter.hpp"
@@ -40,16 +44,29 @@ LoginPresenter::LoginPresenter(FactoryIface& pFactory) : //
 	itsLoginView = getFactory().createLoginView();
 	itsLoginView->sigDialogFinished.connect( ///< connect start
 			[=](bool pStatus)->void
-			{	if(pStatus)sigUserAccepted();} ///< lambda 2 b called
+			{	dialogClosed(pStatus);} ///< lambda 2 b called
 			);///< end connect
 }
 
 void LoginPresenter::show() {
-	itsLoginView->show();
+	BOOST_LOG_NAMED_SCOPE("LoginPresenter::show");
+	if (itsStatus != SHOWING) {
+		itsLoginView->show();
+		BOOST_LOG_TRIVIAL(debug)<<"Showing login dialog ...";
+	}
 }
 
 LoginViewIface& LoginPresenter::getView() {
 	return *itsLoginView;
+}
+
+void LoginPresenter::dialogClosed(bool pStatus) {
+	BOOST_LOG_NAMED_SCOPE("trihlav::LoginPresenter::dialogClosed");
+	sigUserAccepted(pStatus);
+	itsStatus = HIDING;
+}
+
+void LoginPresenter::checkUser() {
 }
 
 } /* namespace trihlav */
