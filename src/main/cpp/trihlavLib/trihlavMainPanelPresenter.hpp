@@ -10,12 +10,12 @@
 
 #include <memory>
 
-#include "trihlavPresenterBase.hpp"
+#include "trihlavLib/trihlavPresenterBase.hpp"
+#include "trihlavLib/trihlavGlobals.hpp"
 
 namespace trihlav {
 
 class FactoryIface;
-class MainPanelViewIface;
 class KeyListPresenterIface;
 class PswdChckPresenterIface;
 enum class PanelName;
@@ -24,9 +24,9 @@ enum class PanelName;
  * Implementation of the top level UI presenter.
  */
 class MainPanelPresenter : virtual public PresenterBase {
-	std::unique_ptr<MainPanelViewIface> itsMainPanelView;
-	KeyListPresenterIface*  itsKeyListPresenter;
-	PswdChckPresenterIface* itsPswdChckPresenter;
+	MainPanelViewIfacePtr itsMainPanelView;
+	KeyListPresenterIfacePtr  itsKeyListPresenter;
+	PswdChckPresenterIfacePtr itsPswdChckPresenter;
 public:
 	MainPanelPresenter(FactoryIface& pFactory);
 	virtual ~MainPanelPresenter();

@@ -31,7 +31,8 @@
 
 #include <memory>
 
-#include "trihlavKeyListPresenterIface.hpp"
+#include "trihlavLib/trihlavKeyListPresenterIface.hpp"
+#include "trihlavLib/trihlavGlobals.hpp"
 
 namespace trihlav {
 
@@ -67,7 +68,7 @@ protected:
 private:
 	void selectionChanged(int pIdx);
 	bool checkSelection() const;
-	KeyListViewIface* itsKeyListView;
+	KeyListViewIfacePtr itsKeyListView;
 	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
 	int itsSelectedKey= -1;
 };

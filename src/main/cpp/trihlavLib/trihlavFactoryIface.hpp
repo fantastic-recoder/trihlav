@@ -57,12 +57,12 @@ public:
 	FactoryIface();
 
 	virtual ~FactoryIface();
-	virtual MainPanelViewIface* createMainPanelView()=0;
-	virtual KeyListPresenterIface* createKeyListPresenter();
-	virtual KeyListViewIface* createKeyListView()=0;
-	virtual PswdChckPresenterIface* createPswdChckPresenter();
-	virtual PswdChckViewIface* createPswdChckView() =0;
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() =0;
+	virtual MainPanelViewIfacePtr createMainPanelView()=0;
+	virtual KeyListPresenterIfacePtr createKeyListPresenter();
+	virtual KeyListViewIfacePtr createKeyListView()=0;
+	virtual PswdChckPresenterIfacePtr createPswdChckPresenter();
+	virtual PswdChckViewIfacePtr createPswdChckView() =0;
+	virtual YubikoOtpKeyViewIfacePtr createYubikoOtpKeyView() =0;
 	virtual MessageViewIfacePtr createMessageView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();

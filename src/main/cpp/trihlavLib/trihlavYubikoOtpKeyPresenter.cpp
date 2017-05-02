@@ -73,13 +73,12 @@ void YubikoOtpKeyPresenter::systemUserSelected() {
 }
 
 YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(FactoryIface& pFactory) :
-		PresenterBase(pFactory), itsView(0), itsCurCfg(0) {
+		PresenterBase(pFactory), itsCurCfg(0) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
 }
 
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::~YubikoOptKeyPresenter");
-	delete itsView;
 	delete itsCurCfg;
 }
 
@@ -219,9 +218,9 @@ string YubikoOtpKeyPresenter::getDescription() {
 }
 
 YubikoOtpKeyViewIface& YubikoOtpKeyPresenter::getView() {
-	if (itsView == 0) {
+	if (!itsView) {
 		itsView = getFactory().createYubikoOtpKeyView();
-		BOOST_LOG_TRIVIAL(debug)<< "Allocated view " << itsView;
+		BOOST_LOG_TRIVIAL(debug)<< "Allocated view " << itsView.get();
 		initUi();
 	}
 	return *itsView;

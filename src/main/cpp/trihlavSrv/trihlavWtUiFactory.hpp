@@ -38,10 +38,10 @@ class WtUiFactory: virtual public FactoryIface {
 public:
 	WtUiFactory();
 	virtual ~WtUiFactory();
-	virtual MainPanelViewIface* createMainPanelView() override;
-	virtual KeyListViewIface* createKeyListView() override;
-	virtual PswdChckViewIface* createPswdChckView() override;
-	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() override;
+	virtual MainPanelViewIfacePtr createMainPanelView() override;
+	virtual KeyListViewIfacePtr createKeyListView() override;
+	virtual PswdChckViewIfacePtr createPswdChckView() override;
+	virtual YubikoOtpKeyViewIfacePtr createYubikoOtpKeyView() override;
 	virtual MessageViewIfacePtr createMessageView() override;
 	virtual SysUserListViewIfacePtr createSysUserListView() override;
 	virtual LoginViewIfacePtr createLoginView() override;

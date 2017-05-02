@@ -55,8 +55,7 @@ const char* PswdChckPresenter::K_PSWD_OK="Password OK!";
 
 PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
 		PswdChckPresenterIface(pFactory), //< forced by virtual inheritance
-		PresenterBase(pFactory), //< has a factory
-		itsView(0) //< initialize view
+		PresenterBase(pFactory) //< has a factory
 {
 	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::PswdChckPresenter");
 }
@@ -119,7 +118,6 @@ void PswdChckPresenter::okPressed() {
 }
 
 PswdChckPresenter::~PswdChckPresenter() {
-	delete itsView;
 }
 
 } /* namespace trihlav */

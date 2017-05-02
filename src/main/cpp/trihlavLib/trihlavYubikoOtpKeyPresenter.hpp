@@ -31,15 +31,14 @@
 #include <memory>
 #include <boost/signals2.hpp>
 
-#include "trihlavPresenterBase.hpp"
+#include "trihlavLib/trihlavGlobals.hpp"
+#include "trihlavLib/trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
 class FactoryIface;
-class YubikoOtpKeyViewIface;
 class YubikoOtpKeyConfig;
 class StrEditIface;
-class MessageViewIface;
 class SysUserListPresenter;
 
 using signal_t=boost::signals2::signal<void()>;
@@ -122,7 +121,7 @@ public:
 	signal_t saved;
 private:
 	EMode itsMode=None;
-    YubikoOtpKeyViewIface* itsView;
+    YubikoOtpKeyViewIfacePtr itsView;
     YubikoOtpKeyConfig* itsCurCfg;
     void accepted( bool pAccepted);
 	void throwNoConfig();

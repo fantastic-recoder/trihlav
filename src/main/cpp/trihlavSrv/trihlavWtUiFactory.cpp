@@ -30,8 +30,8 @@ WtUiFactory::~WtUiFactory() {
 	// TODO Auto-generated destructor stub
 }
 
-MainPanelViewIface* WtUiFactory::createMainPanelView() {
-	return new WtMainPanelView();
+MainPanelViewIfacePtr WtUiFactory::createMainPanelView() {
+	return MainPanelViewIfacePtr(new WtMainPanelView());
 }
 
 FactoryIface& getUiFactory() {
@@ -39,16 +39,16 @@ FactoryIface& getUiFactory() {
 	return theWtUiFactory;
 }
 
-KeyListViewIface* WtUiFactory::createKeyListView() {
-	return new WtKeyListView();
+KeyListViewIfacePtr WtUiFactory::createKeyListView() {
+	return KeyListViewIfacePtr(new WtKeyListView());
 }
 
-PswdChckViewIface* WtUiFactory::createPswdChckView() {
-	return new WtPswdChckView();
+PswdChckViewIfacePtr WtUiFactory::createPswdChckView() {
+	return PswdChckViewIfacePtr(new WtPswdChckView());
 }
 
-YubikoOtpKeyViewIface* WtUiFactory::createYubikoOtpKeyView() {
-	return new WtYubikoOtpKeyView();
+YubikoOtpKeyViewIfacePtr WtUiFactory::createYubikoOtpKeyView() {
+	return YubikoOtpKeyViewIfacePtr(new WtYubikoOtpKeyView());
 }
 
 MessageViewIfacePtr WtUiFactory::createMessageView() {

@@ -49,8 +49,7 @@ namespace trihlav {
 KeyListPresenter::KeyListPresenter(FactoryIface& pFactory) :
 		KeyListPresenterIface(pFactory), //
 		CanOsAuthPresenter(pFactory), //
-		itsYubikoOtpKeyPresenter(0), //
-		itsKeyListView(0) //
+		itsYubikoOtpKeyPresenter(0) //
 {
 }
 
@@ -69,7 +68,6 @@ KeyListViewIface& KeyListPresenter::getView() {
 
 KeyListPresenter::~KeyListPresenter() {
 	delete itsYubikoOtpKeyPresenter;
-	delete itsKeyListView;
 }
 
 void KeyListPresenter::addKey() {

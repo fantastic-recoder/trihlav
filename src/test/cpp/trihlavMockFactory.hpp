@@ -44,11 +44,11 @@ class MockKeyListView;
  */
 struct MockFactory: virtual public FactoryIface {
 
-	MOCK_METHOD0(createMainPanelView,MainPanelViewIface* ());
-	MOCK_METHOD0(createKeyListPresenter,KeyListPresenterIface* () );
-	MOCK_METHOD0(createKeyListView,KeyListViewIface* () );
-	MOCK_METHOD0(createPswdChckView,PswdChckViewIface* () );
-	MOCK_METHOD0(createYubikoOtpKeyView,YubikoOtpKeyViewIface* () );
+	MOCK_METHOD0(createMainPanelView,MainPanelViewIfacePtr ());
+	MOCK_METHOD0(createKeyListPresenter,KeyListPresenterIfacePtr () );
+	MOCK_METHOD0(createKeyListView,KeyListViewIfacePtr () );
+	MOCK_METHOD0(createPswdChckView,PswdChckViewIfacePtr () );
+	MOCK_METHOD0(createYubikoOtpKeyView,YubikoOtpKeyViewIfacePtr () );
 	MOCK_METHOD0(createMessageView, MessageViewIfacePtr () );
 	MOCK_METHOD0(createSysUserListView,SysUserListViewIfacePtr () );
 	MOCK_METHOD0(createLoginView,LoginViewIfacePtr() );

@@ -27,6 +27,9 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
+#include "trihlavLib/trihlavMainPanelViewIface.hpp"
+#include "trihlavLib/trihlavKeyListPresenterIface.hpp"
+#include "trihlavLib/trihlavPswdChckViewIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockEditIface.hpp"
@@ -62,8 +65,7 @@ TEST_F(TestYubikoOtpKey,factoryPointers) {
 	BOOST_LOG_NAMED_SCOPE("TestYubikoOtpKey_factoryPointers_Test::TestBody");
 	NiceMock<MockFactory> myMockFactory;
 	auto myView = myMockFactory.createKeyListView();
-	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyViewPtr:" << myView;
-	delete myView;
+	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyViewPtr:" << myView.get();
 }
 
 TEST_F(TestYubikoOtpKey,keyManagerInit) {

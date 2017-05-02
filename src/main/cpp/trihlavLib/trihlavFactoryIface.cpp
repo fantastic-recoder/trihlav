@@ -61,13 +61,13 @@ namespace trihlav {
         return *itsKeyManager;
     }
 
-    KeyListPresenterIface *FactoryIface::createKeyListPresenter() {
+    KeyListPresenterIfacePtr FactoryIface::createKeyListPresenter() {
         BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
-        return new KeyListPresenter(*this);
+        return KeyListPresenterIfacePtr (new KeyListPresenter(*this));
     }
 
-    PswdChckPresenterIface *FactoryIface::createPswdChckPresenter() {
-        return new PswdChckPresenter(*this);
+    PswdChckPresenterIfacePtr FactoryIface::createPswdChckPresenter() {
+        return PswdChckPresenterIfacePtr(new PswdChckPresenter(*this));
     }
 
     OsIface &FactoryIface::getOsIface() {

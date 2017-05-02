@@ -51,6 +51,9 @@
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
+#include "trihlavLib/trihlavKeyListViewIface.hpp"
+#include "trihlavLib/trihlavMainPanelViewIface.hpp"
 
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"

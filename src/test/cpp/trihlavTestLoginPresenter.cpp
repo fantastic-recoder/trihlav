@@ -42,6 +42,11 @@
 #include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavLib/trihlavLoginPresenter.hpp"
 #include "trihlavLib/trihlavMessageViewIface.hpp"
+#include "trihlavLib/trihlavPswdChckViewIface.hpp"
+#include "trihlavLib/trihlavMainPanelViewIface.hpp"
+#include "trihlavLib/trihlavKeyListPresenter.hpp"
+#include "trihlavLib/trihlavKeyListViewIface.hpp"
+#include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 
 #include "trihlavMockLoginView.hpp"
 #include "trihlavMockFactory.hpp"

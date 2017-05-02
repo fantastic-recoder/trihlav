@@ -44,7 +44,7 @@ class MessageViewIface;
  * Main functionality, checks the one passwords.
  */
 class PswdChckPresenter: public PswdChckPresenterIface {
-	mutable PswdChckViewIface* itsView=0;
+	mutable PswdChckViewIfacePtr itsView;
 	mutable MessageViewIfacePtr itsMessageView;
 public:
 	PswdChckPresenter(FactoryIface& pFactory);

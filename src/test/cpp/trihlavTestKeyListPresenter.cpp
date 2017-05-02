@@ -50,6 +50,8 @@
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
+#include "trihlavLib/trihlavMainPanelViewIface.hpp"
+#include "trihlavLib/trihlavPswdChckViewIface.hpp"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"  // Brings in Google Mock.
