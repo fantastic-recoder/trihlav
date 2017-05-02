@@ -31,7 +31,8 @@
 
 #include <memory>
 
-#include "trihlavPswdChckPresenterIface.hpp"
+#include "trihlavLib/trihlavGlobals.hpp"
+#include "trihlavLib/trihlavPswdChckPresenterIface.hpp"
 
 namespace trihlav {
 
@@ -44,7 +45,7 @@ class MessageViewIface;
  */
 class PswdChckPresenter: public PswdChckPresenterIface {
 	mutable PswdChckViewIface* itsView=0;
-	mutable MessageViewIface* itsMessageView=0;
+	mutable MessageViewIfacePtr itsMessageView;
 public:
 	PswdChckPresenter(FactoryIface& pFactory);
 	virtual ~PswdChckPresenter() override;

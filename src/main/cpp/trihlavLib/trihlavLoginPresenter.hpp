@@ -33,6 +33,7 @@
 #include <boost/signals2.hpp>
 #include "trihlavLib/trihlavPresenterBase.hpp"
 #include "trihlavLib/trihlavGlobals.hpp"
+#include "trihlavLib/trihlavOsIface.hpp"
 
 namespace trihlav {
 
@@ -50,13 +51,27 @@ public:
 	virtual std::string& getLoggedInUser() {
 		return itsLoggedInUser;
 	}
+
+	const OsIface& getOs() const {
+		return itsOs;
+	}
+
+	MessageViewIface& getMessageView();
+
 	SigUserAccepted sigUserAccepted;
+
+	static const std::string K_TRIHLAV_OS_PASSWORD_CHECK;
+
 private:
 	enum Status{SHOWING,HIDING} itsStatus=HIDING;
+
 	void dialogClosed(bool);
 	void checkUser();
-	LoginViewIfacePtr itsLoginView;
-	std::string       itsLoggedInUser;
+
+	LoginViewIfacePtr   itsLoginView;
+	std::string         itsLoggedInUser;
+	OsIface&            itsOs; ///< OS abstraction
+	MessageViewIfacePtr itsMessageView; ///< Can show a message to the user
 };
 
 } /* namespace trihlav */

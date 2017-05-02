@@ -26,6 +26,8 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
+
 #include "trihlavMockButton.hpp"
 #include "trihlavMockEditIface.hpp"
 #include "trihlavMockStrEdit.hpp"

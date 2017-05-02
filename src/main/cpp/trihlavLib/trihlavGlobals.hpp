@@ -32,7 +32,10 @@
 namespace trihlav {
 
 class LoginViewIface;
+class MessageViewIface;
+
 using LoginViewIfacePtr = std::unique_ptr<LoginViewIface>;
+using MessageViewIfacePtr = std::unique_ptr<MessageViewIface>;
 
 }  // namespace trihlav
 

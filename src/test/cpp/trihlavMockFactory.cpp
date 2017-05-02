@@ -78,12 +78,12 @@ MockFactory::MockFactory() {
 			}));
 
 	ON_CALL(*this, createMessageView()) //
-	.WillByDefault(Invoke([]()->MessageViewIface* //
+	.WillByDefault(Invoke([]()->MessageViewIfacePtr //
 			{
 				BOOST_LOG_NAMED_SCOPE("MockFactory::createMessageView");
 				auto myRetVal=new NiceMock<MockMessageView>;
 				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
-				return myRetVal;
+				return MessageViewIfacePtr(myRetVal);
 			}));
 
 	ON_CALL(*this, createPswdChckView()) //

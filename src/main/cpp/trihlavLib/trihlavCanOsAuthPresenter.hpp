@@ -40,7 +40,8 @@ class LoginPresenter;
 
 /**
  * This presenter is able to authenticate the user in underlying
- * operating system, in Linux for example it uses PAM.
+ * operating system, in Linux for example it uses PAM. It is meant 2 be
+ * overloaded in a is-a relationship.
  */
 class CanOsAuthPresenter: public PresenterBase {
 protected:
@@ -54,6 +55,7 @@ protected:
 	 * Login dialog finished with success.
 	 */
 	virtual void userAccepted(bool pStatus);
+
 	/**
 	 * will be called when the OS authenticates the user.
 	 */
@@ -62,6 +64,7 @@ public:
 
 	/// Do nothing, be lazy.
 	CanOsAuthPresenter( FactoryIface& pFactory );
+
 	/// Just to be virtual...
 	virtual ~CanOsAuthPresenter();
 

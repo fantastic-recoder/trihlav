@@ -85,14 +85,14 @@ void PswdChckPresenter::okPressed() {
 	if (myPswdSz < YUBIKEY_OTP_SIZE) {
 		getView().getEdtPswd0().setValue("");
 		getMessageView().showMessage( //
-				translate("Trihlav password check."), //
+				translate(K_MSG_TITLE), //
 				translate("Password is too short!"));
 		return;
 	}
 	// Find the key ...
 	if(myPswdSz==YUBIKEY_OTP_SIZE) {
 		getMessageView().showMessage( //
-				translate("Trihlav password check."), //
+				translate(K_MSG_TITLE), //
 				translate("Keys without public prefix are not yet supported!"));
 		return;
 	}
@@ -120,7 +120,6 @@ void PswdChckPresenter::okPressed() {
 
 PswdChckPresenter::~PswdChckPresenter() {
 	delete itsView;
-	delete itsMessageView;
 }
 
 } /* namespace trihlav */

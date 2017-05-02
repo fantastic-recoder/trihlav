@@ -51,8 +51,8 @@ YubikoOtpKeyViewIface* WtUiFactory::createYubikoOtpKeyView() {
 	return new WtYubikoOtpKeyView();
 }
 
-MessageViewIface* WtUiFactory::createMessageView() {
-	return new WtMessageView();
+MessageViewIfacePtr WtUiFactory::createMessageView() {
+	return MessageViewIfacePtr(new WtMessageView());
 }
 
 SysUserListViewIfacePtr WtUiFactory::createSysUserListView() {

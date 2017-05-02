@@ -41,6 +41,7 @@
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavLib/trihlavLoginPresenter.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
 
 #include "trihlavMockLoginView.hpp"
 #include "trihlavMockFactory.hpp"
@@ -57,6 +58,7 @@ using ::trihlav::MockLoginView;
 using ::std::string;
 
 static const string K_TST_USR1("test_user1");
+static const string K_TST_PSWD1("paswd1");
 
 /**
  * Mock OS Interface to auth. the user.
@@ -65,7 +67,7 @@ class OsIfaceT : virtual public OsIface {
 public:
 	virtual bool checkOsPswd(const std::string& p_strUName,
 			const std::string& p_strPswd) const override {
-		if(p_strUName=="test1" && p_strPswd=="paswd1") {
+		if(p_strUName==K_TST_USR1 && p_strPswd=="paswd1") {
 			return true;
 		}
 		return false;
@@ -99,15 +101,24 @@ TEST_F(TestLogin,validateUser) {
 	BOOST_LOG_NAMED_SCOPE("TestLogin::validateUser");
 	MockFactoryT myFactory;
 	EXPECT_CALL(myFactory,createLoginView());
+	EXPECT_CALL(myFactory,createMessageView());
 	LoginPresenter myLoginPresenter(myFactory);
-	auto& myView=myLoginPresenter.getView();myLoginPresenter.getView();
+	auto& myView=myLoginPresenter.getView();
 	auto& myMockView=dynamic_cast<MockLoginView&>(myView);
-	EXPECT_CALL(myMockView,getBtnOk());
+	EXPECT_CALL(myMockView,getBtnOk()).Times(2);
+	EXPECT_CALL(myMockView,show()).Times(2);
+	myLoginPresenter.show();
 	myView.getEdtUserName().setValue(::K_TST_USR1);
-	myLoginPresenter.getView().getEdtPassword().setValue("paswd1");
+	myLoginPresenter.getView().getEdtPassword().setValue(::K_TST_PSWD1);
 	myLoginPresenter.getView().getBtnOk().pressed();
 	EXPECT_EQ(myLoginPresenter.getLoggedInUser(),::K_TST_USR1)
 		<< "Logged in system user was not passed from view to presenter.";
+	myLoginPresenter.show();
+	myView.getEdtUserName().setValue(::K_TST_USR1);
+	myLoginPresenter.getView().getEdtPassword().setValue("baaad password");
+	myLoginPresenter.getView().getBtnOk().pressed();
+	EXPECT_EQ(myLoginPresenter.getLoggedInUser(),"")
+		<< "Wrong password has not been recognised.";
 }
 
 

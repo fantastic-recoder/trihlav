@@ -49,6 +49,8 @@ namespace trihlav {
     public:
         WtDialogView();
 
+        virtual ~WtDialogView();
+
         virtual const ButtonIface &getBtnCancel() const override;
 
         const Wt::WDialog &getDlg() const {

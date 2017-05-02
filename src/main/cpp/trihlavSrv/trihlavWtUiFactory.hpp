@@ -42,7 +42,7 @@ public:
 	virtual KeyListViewIface* createKeyListView() override;
 	virtual PswdChckViewIface* createPswdChckView() override;
 	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() override;
-	virtual MessageViewIface* createMessageView() override;
+	virtual MessageViewIfacePtr createMessageView() override;
 	virtual SysUserListViewIfacePtr createSysUserListView() override;
 	virtual LoginViewIfacePtr createLoginView() override;
 

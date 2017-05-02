@@ -30,6 +30,7 @@
 #include "trihlavLib/trihlavCanOsAuthPresenter.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
 #include "trihlavLib/trihlavLoginPresenter.hpp"
+#include "trihlavLib/trihlavMessageViewIface.hpp"
 
 namespace trihlav {
 

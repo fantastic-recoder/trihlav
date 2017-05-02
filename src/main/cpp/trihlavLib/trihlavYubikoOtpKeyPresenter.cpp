@@ -178,7 +178,8 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 			}
 			saved();
 		} catch (const std::exception& pExc) {
-			getFactory().createMessageView()->showMessage(
+			auto myMsgView=getFactory().createMessageView();
+			myMsgView->showMessage(
 					translate("Trihlav error!"), pExc.what());
 		} catch (...) {
 			getFactory().createMessageView()->showMessage(
@@ -292,7 +293,7 @@ void YubikoOtpKeyPresenter::generateModhex(int pBytes, string& pTarget) {
 
 MessageViewIface& YubikoOtpKeyPresenter::getMessageView() {
 	if(!itsMessageView) {
-		itsMessageView.reset(getFactory().createMessageView());
+		itsMessageView=getFactory().createMessageView();
 	}
 	return *itsMessageView;
 }

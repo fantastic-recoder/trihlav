@@ -63,7 +63,7 @@ public:
 	virtual PswdChckPresenterIface* createPswdChckPresenter();
 	virtual PswdChckViewIface* createPswdChckView() =0;
 	virtual YubikoOtpKeyViewIface* createYubikoOtpKeyView() =0;
-	virtual MessageViewIface* createMessageView() =0;
+	virtual MessageViewIfacePtr createMessageView() =0;
 	virtual const KeyManager& getKeyManager() const;
 	virtual KeyManager& getKeyManager();
 
