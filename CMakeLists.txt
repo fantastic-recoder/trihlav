@@ -183,6 +183,7 @@ ENDIF(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
 
 ADD_SUBDIRECTORY(src/main/cpp/trihlavSrv)
 ADD_SUBDIRECTORY(src/main/cpp/trihlavLib)
+ADD_SUBDIRECTORY(src/main/cpp/pam)
 ADD_SUBDIRECTORY(src/main/script)
 ADD_SUBDIRECTORY(src/main/resources)
 ADD_SUBDIRECTORY(src/test/cpp)
