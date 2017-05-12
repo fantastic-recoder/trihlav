@@ -2,8 +2,14 @@
 
 INCLUDE_DIRECTORIES(.. ${PAM_INCLUDE_DIR})
 
-ADD_LIBRARY(pam_trihlav SHARED pam_trihlav.cpp )
+ADD_LIBRARY(pam_trihlav SHARED trihlavPam.cpp trihlavSslClient.cpp )
 SET_TARGET_PROPERTIES(pam_trihlav PROPERTIES PREFIX "")
+
+add_executable(trihlavSslClient trihlavSslClient.cpp trihlavSslClientTester.cpp )
+target_link_libraries(trihlavSslClient
+    ${Boost_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+)
 
 # Ubuntu hardcoded - needs to be detected
 SET(PAM_MODULES_DIR /lib/x86_64-linux-gnu/security )

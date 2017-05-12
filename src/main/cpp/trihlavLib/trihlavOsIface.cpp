@@ -208,4 +208,5 @@ const SysUsers OsIface::getSysUsers(const Settings& pSettings) const {
 	return myUsers;
 }
 
+
 } /* namespace trihlav */

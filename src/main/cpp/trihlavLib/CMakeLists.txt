@@ -34,6 +34,7 @@ trihlavWrongConfigValue.cpp
     trihlavLogApi.hpp trihlavSettings.cpp trihlavSettings.hpp  
     trihlavLoginPresenter.cpp  trihlavLoginPresenter.hpp trihlavLabelIface.cpp 
     trihlavLabelIface.hpp 
-    trihlavCanOsAuthPresenter.cpp trihlavCanOsAuthPresenter.hpp)
+    trihlavCanOsAuthPresenter.cpp trihlavCanOsAuthPresenter.hpp
+    trihlavCreateX509.cpp)
 
 INSTALL(TARGETS trihlavApi LIBRARY DESTINATION lib)

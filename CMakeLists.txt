@@ -181,6 +181,10 @@ ELSE(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
 ENDIF(${WT_RESOURCES} EQUAL WT_RESOURCES-NOTFOUND)
 ###############################################################################
 
+# Our only dependency is OpenSSL
+find_package(OpenSSL REQUIRED)
+#include_directories(${OPENSSL_INCLUDE_DIR})
+
 ADD_SUBDIRECTORY(src/main/cpp/trihlavSrv)
 ADD_SUBDIRECTORY(src/main/cpp/trihlavLib)
 ADD_SUBDIRECTORY(src/main/cpp/pam)

@@ -18,6 +18,7 @@ target_link_libraries(trihlavTestApi
     				  libgmock
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
 
 add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp 
@@ -35,6 +36,7 @@ target_link_libraries(trihlavTestYubikoOtpKey
                       ${YUBIKEY_LIB}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
 
 add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp 
@@ -52,6 +54,7 @@ target_link_libraries(trihlavTestKeyListPresenter
                       ${YUBIKEY_LIB}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
 
 add_executable( trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp 
@@ -69,6 +72,7 @@ target_link_libraries(trihlavTestPswdChckPresenter
                       ${YUBIKEY_LIB}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
 
 add_executable( trihlavTestOsIface trihlavTestOsIface.cpp )
@@ -83,6 +87,7 @@ target_link_libraries(trihlavTestOsIface
                       ${YUBIKEY_LIB}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
                       
 add_executable( pretty_example pretty_example.cc )
@@ -99,6 +104,7 @@ target_link_libraries(trihlavPamTester
                       ${CMAKE_THREAD_LIBS_INIT}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
                       
 add_executable( trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
@@ -114,7 +120,10 @@ target_link_libraries(trihlavTestLoginPresenter
                       ${YUBIKEY_LIB}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
+
 add_test( NAME trihlavTestLoginPresenter COMMAND trihlavTestLoginPresenter )
 
                       
@@ -128,5 +137,6 @@ target_link_libraries(trihlavTestTupleList
                       ${YUBIKEY_LIB}
                       ${Boost_LIBRARIES}
                       ${PAM_LIBRARIES}
+                      ${OPENSSL_LIBRARIES}
                       )
                       
