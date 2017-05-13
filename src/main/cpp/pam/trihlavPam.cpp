@@ -50,33 +50,37 @@
 #include <security/pam_modules.h>
 #endif
 
-#include "trihlavLib/trihlavApi.hpp"
+#include "../trihlavLib/trihlavConstants.hpp"
+#include "trihlavLib/trihlavLogApi.hpp"
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <security/pam_appl.h>
 #include <security/pam_modules.h>
 
+#include "trihlavPam.hpp"
+#include "trihlavSslClient.hpp"
+
 /* expected hook */
-PAM_EXTERN int pam_sm_setcred( pam_handle_t *pamh, int flags, int argc, const char **argv ) {
+PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags, int argc,
+		const char **argv) {
+	BOOST_LOG_TRIVIAL(debug)<<"pam_sm_setcred";
 	return PAM_SUCCESS;
 }
 
-PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv) {
-	printf("Acct mgmt\n");
+PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc,
+		const char **argv) {
+	BOOST_LOG_TRIVIAL(debug)<<"Acct mgmt\n";
 	return PAM_SUCCESS;
 }
 
 /* expected hook, this is where custom stuff happens */
-PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags,int argc, const char **argv ) {
+PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc,
+		const char **argv) {
 	int retval;
 
 	const char* pUsername;
 	retval = pam_get_user(pamh, &pUsername, "Username: ");
 
-	printf("Welcome %s\n", pUsername);
+	BOOST_LOG_TRIVIAL(info)<< "Welcome " << pUsername;
 
 	if (retval != PAM_SUCCESS) {
 		return retval;
@@ -87,4 +91,17 @@ PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags,int argc, cons
 	}
 
 	return PAM_SUCCESS;
+}
+
+namespace trihlav {
+AuthResult checkOtps(const std::string& pServer, const std::string& pUsername,
+		const Passwords& pPasswords) {
+	boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
+	ctx.set_default_verify_paths();
+
+	boost::asio::io_service io_service;
+	SslClient c(io_service, ctx, pServer, pUsername, pPasswords);
+	io_service.run();
+	return AuthResult(false, "");
+}
 }

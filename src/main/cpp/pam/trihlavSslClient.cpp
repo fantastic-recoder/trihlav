@@ -30,10 +30,20 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost/log/expressions.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "trihlavSslClient.hpp"
 
+#include "trihlavLib/trihlavConstants.hpp"
+
 using boost::asio::ip::tcp;
+
+using std::string;
+using std::ostream;
+using boost::lexical_cast;
+using std::string;
+using boost::asio::ssl::context;
+using boost::asio::io_service;
 
 namespace trihlav {
 
@@ -41,23 +51,34 @@ SslClient::~SslClient() {
 	// TODO Auto-generated destructor stub
 }
 
-SslClient::SslClient(boost::asio::io_service& io_service,
-		boost::asio::ssl::context& context, const std::string& server,
-		const std::string& path) :
+/**
+ *  TODO: URL encoding
+ */
+SslClient::SslClient(io_service& io_service, context& context,
+		const string& pServer, const string& pUsername,
+		const Passwords& pPasswords) :
 		itsResolver(io_service), itsSocket(io_service, context) {
 
 	// Form the request. We specify the "Connection: close" header so that the
 	// server will close the socket after transmitting the response. This will
 	// allow us to treat all data up until the EOF as the content.
 	std::ostream request_stream(&itsRequest);
-	request_stream << "GET " << path << " HTTP/1.0\r\n";
-	request_stream << "Host: " << server << "\r\n";
+	string myUrl{K_AUTH_URL+"?"+K_USER_NM+"="+pUsername};
+	const string K_SP(" "+K_PSWD+"=");
+	for (auto myPswdPtr = pPasswords.begin(); //
+			myPswdPtr != pPasswords.end();
+			++myPswdPtr) {
+		myUrl += (K_SP + *myPswdPtr);
+	}
+	BOOST_LOG_TRIVIAL(debug)<<myUrl;
+	request_stream << "GET " << myUrl << " HTTP/1.0\r\n";
+	request_stream << "Host: " << pServer << "\r\n";
 	request_stream << "Accept: */*\r\n";
 	request_stream << "Connection: close\r\n\r\n";
 
 	// Start an asynchronous resolve to translate the server and service names
 	// into a list of endpoints.
-	tcp::resolver::query query(server, "https");
+	tcp::resolver::query query(pServer, "https");
 	itsResolver.async_resolve(query,
 			boost::bind(&SslClient::handle_resolve, this,
 					boost::asio::placeholders::error,
@@ -76,7 +97,7 @@ void SslClient::handle_resolve(const boost::system::error_code& err,
 				boost::bind(&SslClient::handle_connect, this,
 						boost::asio::placeholders::error));
 	} else {
-		BOOST_LOG_TRIVIAL(error) << "Error resolve: " << err.message() << "\n";
+		BOOST_LOG_TRIVIAL(error)<< "Error resolve: " << err.message() << "\n";
 	}
 }
 
@@ -93,7 +114,7 @@ bool SslClient::verify_certificate(bool preverified,
 	char subject_name[256];
 	X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
 	X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
-	BOOST_LOG_TRIVIAL(info) << "Verifying " << subject_name << "\n";
+	BOOST_LOG_TRIVIAL(info)<< "Verifying " << subject_name << "\n";
 
 	return preverified;
 }
@@ -105,13 +126,13 @@ void SslClient::handle_connect(const boost::system::error_code& err) {
 				boost::bind(&SslClient::handle_handshake, this,
 						boost::asio::placeholders::error));
 	} else {
-		BOOST_LOG_TRIVIAL(error) << "Connect failed: " << err.message() << "\n";
+		BOOST_LOG_TRIVIAL(error)<< "Connect failed: " << err.message() << "\n";
 	}
 }
 
 void SslClient::handle_handshake(const boost::system::error_code& error) {
 	if (!error) {
-		BOOST_LOG_TRIVIAL(info) << "Handshake OK " << "\n";
+		BOOST_LOG_TRIVIAL(info)<< "Handshake OK " << "\n";
 		BOOST_LOG_TRIVIAL(debug) << "Request: " << "\n";
 		const char* header = boost::asio::buffer_cast<const char*>(
 				itsRequest.data());
@@ -135,7 +156,7 @@ void SslClient::handle_write_request(const boost::system::error_code& err) {
 				boost::bind(&SslClient::handle_read_status_line, this,
 						boost::asio::placeholders::error));
 	} else {
-		BOOST_LOG_TRIVIAL(error) << "Error write req: " << err.message() << "\n";
+		BOOST_LOG_TRIVIAL(error)<< "Error write req: " << err.message() << "\n";
 	}
 }
 
@@ -165,7 +186,7 @@ void SslClient::handle_read_status_line(const boost::system::error_code& err) {
 				boost::bind(&SslClient::handle_read_headers, this,
 						boost::asio::placeholders::error));
 	} else {
-		BOOST_LOG_TRIVIAL(error) << "Error: " << err.message() << "\n";
+		BOOST_LOG_TRIVIAL(error)<< "Error: " << err.message() << "\n";
 	}
 }
 
@@ -180,15 +201,15 @@ void SslClient::handle_read_headers(const boost::system::error_code& err) {
 
 		// Write whatever content we already have to output.
 		if (itsResponse.size() > 0)
-			BOOST_LOG_TRIVIAL(debug) << &itsResponse;
+			BOOST_LOG_TRIVIAL(debug)<< &itsResponse;
 
-		// Start reading remaining data until EOF.
+			// Start reading remaining data until EOF.
 		boost::asio::async_read(itsSocket, itsResponse,
 				boost::asio::transfer_at_least(1),
 				boost::bind(&SslClient::handle_read_content, this,
 						boost::asio::placeholders::error));
 	} else {
-		BOOST_LOG_TRIVIAL(error) << "Error: " << err << "\n";
+		BOOST_LOG_TRIVIAL(error)<< "Error: " << err << "\n";
 	}
 }
 
@@ -203,8 +224,9 @@ void SslClient::handle_read_content(const boost::system::error_code& err) {
 				boost::bind(&SslClient::handle_read_content, this,
 						boost::asio::placeholders::error));
 	} else if (err != boost::asio::error::eof) {
-		BOOST_LOG_TRIVIAL(error) << "Error: " << err << "\n";
+		BOOST_LOG_TRIVIAL(error)<<"Error: " << err << "\n";
 	}
 }
 
-} /* namespace trihlav */
+}
+/* namespace trihlav */

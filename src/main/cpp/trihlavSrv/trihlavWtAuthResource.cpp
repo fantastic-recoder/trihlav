@@ -9,6 +9,8 @@
 #include <Wt/Http/Response>
 
 #include "trihlavWtAuthResource.hpp"
+
+#include "trihlavLib/trihlavConstants.hpp"
 #include "trihlavLib/trihlavLogApi.hpp"
 
 using std::string;
@@ -26,8 +28,8 @@ namespace trihlav {
      */
     void WtAuthResource::handleRequest(const Wt::Http::Request &pRequest, Wt::Http::Response &pResponse) {
         BOOST_LOG_NAMED_SCOPE("WtAuthResource::handleRequest");
-        const Wt::Http::ParameterValues &myLoginVals = pRequest.getParameterValues("login");
-        const Wt::Http::ParameterValues &myOtpVals = pRequest.getParameterValues("password");
+        const Wt::Http::ParameterValues &myLoginVals = pRequest.getParameterValues(K_LOGIN);
+        const Wt::Http::ParameterValues &myOtpVals = pRequest.getParameterValues(K_PSWD);
         string myLogin;
         vector<string> myOtp;
         if(myLoginVals.size()==1) {

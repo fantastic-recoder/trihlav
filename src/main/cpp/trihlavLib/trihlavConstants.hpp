@@ -26,21 +26,18 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRIHLAV_API_HPP
-#define TRIHLAV_API_HPP
+#ifndef TRIHLAV_CONSTANTS_HPP
+#define TRIHLAV_CONSTANTS_HPP
 
 #include <string>
 
 namespace trihlav {
 
-class YubikoOtpKeyConfig;
-
-/// Check the passed OTP password
-bool check(const std::string& pPasswd);
-
-/// Get the yubiko server configuration
-YubikoOtpKeyConfig& getConfig();
+const std::string K_LOGIN{"login"};
+const std::string K_PSWD{"password"};
+const std::string K_USER_NM{"username"};
+const std::string K_AUTH_URL{"/auth"};
 
 }
 
-#endif // TRIHLAV_API_HPP
+#endif // TRIHLAV_CONSTANTS_HPP

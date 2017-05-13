@@ -6,8 +6,7 @@ CONFIGURE_FILE( "${CMAKE_CURRENT_SOURCE_DIR}/trihlavVersion.cpp.in" "${CMAKE_CUR
 
 INCLUDE_DIRECTORIES(.. ${PAM_INCLUDE_DIR})
 
-ADD_LIBRARY(trihlavApi SHARED trihlavApi.cpp  trihlavApi.hpp 
-trihlavWrongConfigValue.cpp 
+ADD_LIBRARY(trihlavApi SHARED trihlavWrongConfigValue.cpp 
 	trihlavYubikoOtpKeyConfig.cpp trihlavYubikoOtpKeyConfig.cpp
 	trihlavWrongConfigValue.hpp trihlavWrongConfigValue.cpp 
 	trihlavKeyManager.cpp trihlavKeyManager.hpp 

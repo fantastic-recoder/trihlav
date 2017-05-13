@@ -38,13 +38,16 @@
 #include <boost/bind.hpp>
 #include <boost/asio/ssl.hpp>
 
+#include "trihlavPam.hpp"
+
 namespace trihlav {
 
 class SslClient {
 public:
 	SslClient(boost::asio::io_service& io_service,
 			boost::asio::ssl::context& context, const std::string& server,
-			const std::string& path);
+			const std::string& pUsername,
+			const Passwords& pPasswords);
 	virtual ~SslClient();
 
 private:

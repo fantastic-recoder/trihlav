@@ -7,6 +7,8 @@
 #include "trihlavApp.hpp"
 #include "trihlavWtAuthResource.hpp"
 
+#include "trihlavLib/trihlavConstants.hpp"
+
 #if defined(__unix__)
 #include <signal.h>
 #endif
@@ -38,7 +40,7 @@ int main(int argc, char **argv) {
 		server.addEntryPoint(Wt::Application, App::createApplication);
 		// create the auth REST resource
 		WtAuthResource myAuthResource;
-		server.addResource(&myAuthResource,"/auth");
+		server.addResource(&myAuthResource,K_AUTH_URL);
 		if (server.start()) {
 			int sig = WServer::waitForShutdown(argv[0]);
 			std::cerr << "Shutdown (signal = " << sig << ")" << std::endl;

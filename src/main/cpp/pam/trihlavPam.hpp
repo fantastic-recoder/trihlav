@@ -26,37 +26,21 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "trihlavPam.hpp"
+#ifndef TRIHLAV_PAM_HPP_
+#define TRIHLAV_PAM_HPP_
 
-using namespace trihlav;
-using std::get;
-using std::cout;
-using std::cerr;
+#include <tuple>
+#include <list>
+#include <string>
 
-int main(int argc, char* argv[]) {
-	try {
-		if (argc != 4) {
-			cout << "Usage: " << argv[0]
-					<< " <server[:port]> <username> <password> [<password> ...]\n";
-			return 1;
-		}
+namespace trihlav {
 
-		Passwords myPasswords;
-		for (int aIdx = 2; aIdx < argc; ++aIdx) {
-			myPasswords.push_back(argv[aIdx]);
-		}
-		AuthResult myRes = checkOtps(argv[1], argv[2], myPasswords);
-		if (get < 0 > (myRes)) {
-			cout << "Authorisation ok." << std::endl;
-		} else {
-			cerr << "Authorisation failed. - " << get < 1
-					> (myRes) << std::endl;
-		}
-	} catch (std::exception& e) {
-		cout << "Exception: " << e.what() << "\n";
-	}
+using AuthResult = std::tuple<bool, std::string>;
+using Passwords = std::list<std::string>;
 
-	return 0;
-}
+AuthResult checkOtps(const std::string& pServer, const std::string& pUsername,
+		const Passwords& pPasswords);
 
+}  // namespace trihlav
+
+#endif /* TRIHLAV_PAM_HPP_ */

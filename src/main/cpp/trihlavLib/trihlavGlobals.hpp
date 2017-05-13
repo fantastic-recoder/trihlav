@@ -29,6 +29,8 @@
 #ifndef TRIHLAV_GLOBALS_HPP_
 #define TRIHLAV_GLOBALS_HPP_
 
+#include <memory>
+
 namespace trihlav {
 
 class LoginViewIface;
