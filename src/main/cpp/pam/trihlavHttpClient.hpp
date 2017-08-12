@@ -42,31 +42,62 @@
 
 namespace trihlav {
 
-class SslClient {
+class HttpClient {
 public:
-	SslClient(boost::asio::io_service& io_service,
+	enum Mode {
+		HTTP = 1, HTTPS = 2, INVALID = 0
+	};
+
+	HttpClient(boost::asio::io_service& io_service,
 			boost::asio::ssl::context& context, const std::string& server,
-			const std::string& pUsername,
-			const Passwords& pPasswords);
-	virtual ~SslClient();
+			const std::string& pUsername, const Passwords& pPasswords);
+	virtual ~HttpClient();
+
+	const std::string& getPort() const {
+		return itsPort;
+	}
+
+	const std::string& getServer() const {
+		return itsServer;
+	}
+
+	void parseModeHostAndPort(const std::string& pServer);
+
+	bool isAuthOk() const {
+		return itsAuthOk;
+	}
+
+	const std::string& getResponse() const {
+		return itsResponseStr;
+	}
+
+	Mode getMode() const {
+		return itsMode;
+	}
+
+	bool foundResponseStr();
 
 private:
-	  void handle_resolve(const boost::system::error_code& err,
-	                      boost::asio::ip::tcp::resolver::iterator endpoint_iterator);
-	  bool verify_certificate(bool preverified,
-	                          boost::asio::ssl::verify_context& ctx);
-	  void handle_connect(const boost::system::error_code& err);
-	  void handle_handshake(const boost::system::error_code& error);
-	  void handle_write_request(const boost::system::error_code& err);
-	  void handle_read_status_line(const boost::system::error_code& err);
-	  void handle_read_headers(const boost::system::error_code& err);
-	  void handle_read_content(const boost::system::error_code& err);
+	void handleResolve(const boost::system::error_code& err,
+			boost::asio::ip::tcp::resolver::iterator endpoint_iterator);
+	bool verifyCertificate(bool preverified,
+			boost::asio::ssl::verify_context& ctx);
+	void handleConnect(const boost::system::error_code& err);
+	void handleHandshake(const boost::system::error_code& error);
+	void handleWriteRequest(const boost::system::error_code& err);
+	void handleReadStatusLine(const boost::system::error_code& err);
+	void handleReadHeaders(const boost::system::error_code& err);
+	void handleReadContent(const boost::system::error_code& err);
+	const std::string& getProtocol() const;
 
-	  boost::asio::ip::tcp::resolver itsResolver;
-	  boost::asio::ssl::stream<boost::asio::ip::tcp::socket> itsSocket;
-	  boost::asio::streambuf itsRequest;
-	  boost::asio::streambuf itsResponse;
-
+	boost::asio::ip::tcp::resolver itsResolver;
+	boost::asio::ssl::stream<boost::asio::ip::tcp::socket> itsSslSocket;
+	boost::asio::ip::tcp::socket itsHttpSocket;
+	boost::asio::streambuf itsRequest;
+	boost::asio::streambuf itsResponse;
+	std::string itsServer, itsPort, itsResponseStr;
+	Mode itsMode = INVALID;
+	bool itsAuthOk = false;
 };
 
 } /* namespace trihlav */

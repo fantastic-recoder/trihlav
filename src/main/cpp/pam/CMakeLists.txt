@@ -2,14 +2,18 @@
 
 INCLUDE_DIRECTORIES(.. ${PAM_INCLUDE_DIR})
 
-ADD_LIBRARY(pam_trihlav SHARED trihlavPam.cpp trihlavSslClient.cpp 
+ADD_LIBRARY(pam_trihlav SHARED trihlavPam.cpp trihlavHttpClient.cpp 
     trihlavPam.cpp)
 
 SET_TARGET_PROPERTIES(pam_trihlav PROPERTIES PREFIX "")
 
-add_executable(trihlavSslClient trihlavSslClient.cpp trihlavSslClientTester.cpp 
+ADD_LIBRARY(trihlavClt STATIC trihlavHttpClient.cpp ) 
+
+add_executable(trihlavHttpClient trihlavHttpClientMain.cpp 
     trihlavPam.cpp)
-target_link_libraries(trihlavSslClient
+
+target_link_libraries(trihlavHttpClient
+    trihlavClt
     ${Boost_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     ${PAM_LIBRARY}

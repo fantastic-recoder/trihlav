@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		Passwords myPasswords;
-		for (int aIdx = 2; aIdx < argc; ++aIdx) {
+		for (int aIdx = 3; aIdx < argc; ++aIdx) {
 			myPasswords.push_back(argv[aIdx]);
 		}
 		AuthResult myRes = checkOtps(argv[1], argv[2], myPasswords);

@@ -80,7 +80,7 @@ X509 * generate_x509(EVP_PKEY * pkey) {
 	X509_NAME_add_entry_by_txt(name, "C", MBSTRING_ASC, (unsigned char *) "CA",
 			-1, -1, 0);
 	X509_NAME_add_entry_by_txt(name, "O", MBSTRING_ASC,
-			(unsigned char *) "MyCompany", -1, -1, 0);
+			(unsigned char *) "trihlav", -1, -1, 0);
 	X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC,
 			(unsigned char *) "localhost", -1, -1, 0);
 

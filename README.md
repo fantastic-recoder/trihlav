@@ -4,15 +4,17 @@
 C++ backend, web frontend.
 
 ## Features
-Yubikey OTP support
+1. Yubikey OTP support
+2. Web configuration UI
+3. PAM module
 
 ## Build
 ### Dependencies
-1. Python (only build, and it only triggers CMake)
+1. Python  used only to trigger the build, and it only calls CMake)
 2. CMake
 3. Yubiko libraries
 4. Boost
-5. WT
+5. WT++ C++ Web toolkit, used for the web GUI
 
 ## TODO
 0. Check all ranges when creating a key.
