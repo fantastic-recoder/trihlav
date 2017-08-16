@@ -53,6 +53,17 @@ KeyListPresenter::KeyListPresenter(FactoryIface& pFactory) :
 {
 }
 
+void KeyListPresenter::disableKeyListBtns() {
+	if (m_KeyListView == 0) {
+		getView();
+		return;
+	}
+	getView().getBtnAddKey().setEnabled(false);
+	getView().getBtnDelKey().setEnabled(false);
+	getView().getBtnEditKey().setEnabled(false);
+	getView().getBtnReload().setEnabled(false);
+}
+
 KeyListViewIface& KeyListPresenter::getView() {
 	if (m_KeyListView == 0) {
 		m_KeyListView = getFactory().createKeyListView();
@@ -62,6 +73,7 @@ KeyListViewIface& KeyListPresenter::getView() {
 		getView().getBtnDelKey().pressedSig.connect([=] {deleteKey();});
 		getView().selectionChangedSig.connect(
 				[=](int pIdx) {selectionChanged(pIdx);});
+		disableKeyListBtns();
 	}
 	return *m_KeyListView;
 }

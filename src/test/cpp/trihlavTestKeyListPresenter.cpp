@@ -154,11 +154,19 @@ TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
 	NiceMock<MockFactory> myMockFactory;
 	KeyListPresenter myKeyListPresenter(myMockFactory);
 	KeyListViewIface& myView { myKeyListPresenter.getView() };
+	//TODO fix this mess!
+//	MockKeyListView& myKeyListView =
+//			dynamic_cast<MockKeyListView&>(myView);
+//	EXPECT_CALL(myKeyListView, getBtnDelKey());
+//	EXPECT_CALL(myKeyListView, getBtnAddKey());
+//	EXPECT_CALL(myKeyListView, getBtnEditKey());
+//	EXPECT_CALL(myKeyListView, getBtnReload());
+	//myKeyListPresenter.protectedAction();
 	myKeyListPresenter.reloadKeyList();
-	ASSERT_TRUE(myView.getBtnAddKey().isEnabled());
+	ASSERT_FALSE(myView.getBtnAddKey().isEnabled());
 	ASSERT_FALSE(myView.getBtnDelKey().isEnabled());
 	ASSERT_FALSE(myView.getBtnEditKey().isEnabled());
-	ASSERT_TRUE(myView.getBtnReload().isEnabled());
+	ASSERT_FALSE(myView.getBtnReload().isEnabled());
 }
 
 static const char* K_TST_DESC0 = "Test key 1";

@@ -62,6 +62,8 @@ public:
 	void reloadKeyList();
 
 	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
+	void disableKeyListBtns();
+
 protected:
 	/// What to do when base presenter does the auth.
 	virtual void doProtectedAction(bool pStatus) override;
