@@ -55,11 +55,11 @@ public:
 	virtual Wt::WWidget* getWWidget();
 
 	const Wt::WTableView* getTable() const {
-		return itsTable;
+		return m_Table;
 	}
 
 	Wt::WTableView* getTable() {
-		return itsTable;
+		return m_Table;
 	}
 
 	virtual ButtonIface& getBtnAddKey() override;
@@ -77,7 +77,7 @@ protected:
 	virtual void layoutSizeChanged(int, int) override;
 
 	void setTable(Wt::WTableView* pTable) {
-		itsTable = pTable;
+		m_Table = pTable;
 	}
 
 	void selectionChanged();
@@ -85,12 +85,12 @@ protected:
 private:
 	void createTable();
 
-	Wt::WTableView *itsTable;
-	WtPushButton* itsBtnAdd;
-	WtPushButton* itsBtnDel;
-	WtPushButton* itsBtnEdit;
-	WtPushButton* itsBtnReload;
-	WtKeyListModel* itsDtaMdl;
+	Wt::WTableView *m_Table;
+	WtPushButton* m_BtnAdd;
+	WtPushButton* m_BtnDel;
+	WtPushButton* m_BtnEdit;
+	WtPushButton* m_BtnReload;
+	WtKeyListModel* m_DtaMdl;
 	static const int K_TBL_V_MARGIN;
 };
 

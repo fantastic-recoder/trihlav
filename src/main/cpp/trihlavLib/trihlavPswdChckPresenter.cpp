@@ -61,19 +61,19 @@ PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
 }
 
 PswdChckViewIface& PswdChckPresenter::getView() {
-	if (!itsView) {
+	if (!m_View) {
 		BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::getView");
-		itsView = getFactory().createPswdChckView();
-		itsView->getBtnOk().pressedSig.connect([=]() {okPressed();});
+		m_View = getFactory().createPswdChckView();
+		m_View->getBtnOk().pressedSig.connect([=]() {okPressed();});
 	}
-	return *itsView;
+	return *m_View;
 }
 
 MessageViewIface& PswdChckPresenter::getMessageView() {
-	if (!itsMessageView) {
-		itsMessageView = getFactory().createMessageView();
+	if (!m_MessageView) {
+		m_MessageView = getFactory().createMessageView();
 	}
-	return *itsMessageView;
+	return *m_MessageView;
 }
 
 void PswdChckPresenter::okPressed() {

@@ -39,26 +39,26 @@ class  MockButton: virtual public ButtonIface {
 public:
 	MockButton():ButtonIface() {}
 
-	std::string itsVal;
+	std::string m_Val;
 	virtual const std::string getText() const {
-		return itsVal;
+		return m_Val;
 	}
 
 	virtual void setText(const std::string& pVal) {
             if(isEnabled()) {
-                itsVal = pVal;
+                m_Val = pVal;
             }
         }
 
         virtual bool isEnabled() const override {
-            return itsEnabled;
+            return m_Enabled;
         }
 
         virtual void setEnabled(bool pEnabled) override {
-            itsEnabled=pEnabled;
+            m_Enabled=pEnabled;
         }
 private:
-        bool itsEnabled=true;
+        bool m_Enabled=true;
 };
 
 

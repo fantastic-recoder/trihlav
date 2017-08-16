@@ -34,48 +34,48 @@
 namespace trihlav {
 
 struct MockSpinBox: virtual public SpinBoxIface {
-	int itsVal;
-	int itsMin;
-	int itsMax;
-	int itsStep;
+	int m_Val;
+	int m_Min;
+	int m_Max;
+	int m_Step;
 
 	/**
 	 * Set some unlikely initialization values like min = -1, max = -1 und
 	 * step = 0.
 	 */
-	MockSpinBox():itsVal(0), itsMin(-1),itsMax(-1),itsStep(0) {
+	MockSpinBox():m_Val(0), m_Min(-1),m_Max(-1),m_Step(0) {
 	}
 
 	virtual const int getValue() const {
-		return itsVal;
+		return m_Val;
 	}
 
 	virtual void setValue(const int& pVal) {
-		itsVal=pVal;
+		m_Val=pVal;
 	}
 
 	virtual void setMin(const int pMin) {
-		itsMin = pMin;
+		m_Min = pMin;
 	}
 
 	virtual const int getMin() const {
-		return itsMin;
+		return m_Min;
 	}
 
 	virtual void setMax(const int pMax) {
-		itsMax = pMax;
+		m_Max = pMax;
 	}
 
 	virtual const int getMax() const {
-		return itsMax;
+		return m_Max;
 	}
 
 	virtual void setStep(const int pStep) {
-		itsStep = pStep;
+		m_Step = pStep;
 	}
 
 	virtual const int getStep() const {
-		return itsStep;
+		return m_Step;
 	}
 
 };

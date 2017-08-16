@@ -55,7 +55,7 @@ public:
 
     virtual ~YubikoOtpKeyPresenter();
 
-    /// @brief Add a new key and present it in its view.
+    /// @brief Add a new key and present it in m_ view.
     virtual void addKey();
 
     /// @brief delete current key being edited.
@@ -120,14 +120,14 @@ public:
 
 	signal_t saved;
 private:
-	EMode itsMode=None;
-    YubikoOtpKeyViewIfacePtr itsView;
-    YubikoOtpKeyConfig* itsCurCfg;
+	EMode m_Mode=None;
+    YubikoOtpKeyViewIfacePtr m_View;
+    YubikoOtpKeyConfig* m_CurCfg;
     void accepted( bool pAccepted);
 	void throwNoConfig();
 	void initUi();
-	std::unique_ptr<MessageViewIface> itsMessageView;
-	std::unique_ptr<SysUserListPresenter> itsSysUserListPresenter;
+	std::unique_ptr<MessageViewIface> m_MessageView;
+	std::unique_ptr<SysUserListPresenter> m_SysUserListPresenter;
 };
 
 } /* namespace trihlavApi */

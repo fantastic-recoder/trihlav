@@ -34,9 +34,9 @@ namespace trihlav {
 
 MockLoginView::MockLoginView() {
 	ON_CALL(*this,getEdtUserName()) //
-	.WillByDefault(ReturnRef(itsEdtUserName));
+	.WillByDefault(ReturnRef(m_EdtUserName));
 	ON_CALL(*this,getEdtPassword()) //
-	.WillByDefault(ReturnRef(itsEdtPassword));
+	.WillByDefault(ReturnRef(m_EdtPassword));
 
 }
 

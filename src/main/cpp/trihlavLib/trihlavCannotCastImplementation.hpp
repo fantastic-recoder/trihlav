@@ -35,15 +35,15 @@ namespace trihlav {
 
     class CannotCastImplementation  : virtual public std::invalid_argument {
     private:
-        std::string itsTypename;
-        std::string itsMsg;
+        std::string m_Typename;
+        std::string m_Msg;
     public:
         const std::string &getTypename() const {
-            return itsTypename;
+            return m_Typename;
         }
 
         void setTypename(const std::string &pTypename) {
-            itsTypename = pTypename;
+            m_Typename = pTypename;
         }
         const char* what() const throw();
     public:

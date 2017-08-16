@@ -40,10 +40,10 @@ namespace trihlav {
 
 class MockLoginView: virtual public LoginViewIface, virtual public MockDialogView  {
 public:
-	MockStrEdit itsEdtUserName;
-	MockStrEdit itsEdtPassword;
-	MockLabel itsLblUserName;
-	MockLabel itsLblPassword;
+	MockStrEdit m_EdtUserName;
+	MockStrEdit m_EdtPassword;
+	MockLabel m_LblUserName;
+	MockLabel m_LblPassword;
 
 	MOCK_CONST_METHOD0(getEdtUserName,  const StrEditIface& () );
 	MOCK_METHOD0(getEdtUserName, StrEditIface& () );

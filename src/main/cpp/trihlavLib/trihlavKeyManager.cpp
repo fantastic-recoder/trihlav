@@ -48,7 +48,7 @@ namespace trihlav {
  *  @param pConfigDir The directory where to store the key configuration data.
  */
     KeyManager::KeyManager(const Settings &pSettings) //
-            : itsSettings(pSettings) //
+            : m_Settings(pSettings) //
     {
         BOOST_LOG_NAMED_SCOPE("KeyManager::KeyManager");
     }
@@ -87,8 +87,8 @@ namespace trihlav {
  */
     size_t KeyManager::loadKeys() {
         BOOST_LOG_NAMED_SCOPE("KeyManager::loadKeys");
-        itsKeyList.resize(0);
-        itsKeyMapByPublicId.clear();
+        m_KeyList.resize(0);
+        m_KeyMapByPublicId.clear();
         list<path> myDamagedFiles;
         for (auto it = recursive_directory_iterator(getSettings().getConfigDir());
              it != recursive_directory_iterator(); it++) {
@@ -102,12 +102,12 @@ namespace trihlav {
                     YubikoOtpKeyConfig *myCfg = new YubikoOtpKeyConfig(*this, myFNameWithPath);
                     myCfg->load();
                     YubikoOtpKeyConfigPtr myKey{myCfg};
-                    itsKeyList.emplace_back(myKey);
+                    m_KeyList.emplace_back(myKey);
                     string myId(myKey->getPublicId());
                     if (myId.empty()) {
                         (myId += "generated:") += myKey->getFilename().string();
                     }
-                    itsKeyMapByPublicId.emplace(KeyMap_t::value_type {myId, myKey.get()});
+                    m_KeyMapByPublicId.emplace(KeyMap_t::value_type {myId, myKey.get()});
                 } catch (std::exception &myExc) {
                     BOOST_LOG_TRIVIAL(error) << "Exception caugh while loading key file \"" << myFName << "\" - "
                                              << myExc.what();
@@ -123,20 +123,20 @@ namespace trihlav {
         for (path myFName : myDamagedFiles) {
             prefixKeyFile(myFName, "damaged");
         }
-        return itsKeyList.size();
+        return m_KeyList.size();
     }
 
     const size_t KeyManager::getKeyCount() const {
-        return itsKeyList.size();
+        return m_KeyList.size();
     }
 
     const YubikoOtpKeyConfig &KeyManager::getKey(const size_t pIdx) const {
-        if (pIdx < 0 || itsKeyList.size() < pIdx) {
+        if (pIdx < 0 || m_KeyList.size() < pIdx) {
             throw std::range_error(
                     (format("Key index %1% is out of range <0,%2%>.") % pIdx
-                     % itsKeyList.size()).str());
+                     % m_KeyList.size()).str());
         }
-        return *(itsKeyList[pIdx]);
+        return *(m_KeyList[pIdx]);
     }
 
 /**
@@ -145,8 +145,8 @@ namespace trihlav {
     const YubikoOtpKeyConfig *KeyManager::getKeyByPublicId(
             const string &pPubId) const {
         BOOST_LOG_NAMED_SCOPE("KeyManager::getKeyByPublicId const");
-        auto myKey = itsKeyMapByPublicId.find(pPubId);
-        if (myKey == itsKeyMapByPublicId.end()) {
+        auto myKey = m_KeyMapByPublicId.find(pPubId);
+        if (myKey == m_KeyMapByPublicId.end()) {
             BOOST_LOG_TRIVIAL(warning) << "Key prefixed " << pPubId << " has not been found.";
             return 0;
         }
@@ -158,8 +158,8 @@ namespace trihlav {
  */
     YubikoOtpKeyConfig *KeyManager::getKeyByPublicId(const string &pPubId) {
         BOOST_LOG_NAMED_SCOPE("KeyManager::getKeyByPublicId");
-        auto myKey = itsKeyMapByPublicId.find(pPubId);
-        if (myKey == itsKeyMapByPublicId.end()) {
+        auto myKey = m_KeyMapByPublicId.find(pPubId);
+        if (myKey == m_KeyMapByPublicId.end()) {
             BOOST_LOG_TRIVIAL(warning) << "Key prefixed " << pPubId << " has not been found.";
             return 0;
         }
@@ -168,23 +168,23 @@ namespace trihlav {
 
     void KeyManager::update(const std::string &pPubId, YubikoOtpKeyConfig &pKey) {
         if (!pPubId.empty()) {
-            const auto myIt = itsKeyMapByPublicId.find(pPubId);
-            if (myIt != itsKeyMapByPublicId.end()) {
+            const auto myIt = m_KeyMapByPublicId.find(pPubId);
+            if (myIt != m_KeyMapByPublicId.end()) {
                 if (myIt->second->getPrivateId().compare(pKey.getPrivateId())
                     == 0) {
-                    itsKeyMapByPublicId.erase(myIt);
+                    m_KeyMapByPublicId.erase(myIt);
                 }
             } else {
                 BOOST_LOG_TRIVIAL(debug) << "Public id " << pPubId << " has not been found.";
             }
-            itsKeyMapByPublicId[pKey.getPublicId()] = &pKey;
+            m_KeyMapByPublicId[pKey.getPublicId()] = &pKey;
         } else {
             BOOST_LOG_TRIVIAL(debug) << "Public id is empty.";
         }
     }
 
     const Settings &KeyManager::getSettings() const {
-        return itsSettings;
+        return m_Settings;
     }
 
 }

@@ -51,12 +51,12 @@ void CanOsAuthPresenter::userAccepted(bool pStatus) {
 
 void CanOsAuthPresenter::protectedAction() {
 	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
-	if (!itsLoginPresenter) {
-		itsLoginPresenter.reset(new LoginPresenter(getFactory()));
-		itsLoginPresenter->sigUserAccepted.connect(
+	if (!m_LoginPresenter) {
+		m_LoginPresenter.reset(new LoginPresenter(getFactory()));
+		m_LoginPresenter->sigUserAccepted.connect(
 				[=](bool pStatus)->void {userAccepted(pStatus);});
 	}
-	itsLoginPresenter->show();
+	m_LoginPresenter->show();
 }
 
 } /* namespace trihlav */

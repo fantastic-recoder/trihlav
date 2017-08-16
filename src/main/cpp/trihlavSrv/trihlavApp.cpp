@@ -53,12 +53,12 @@ namespace trihlav {
         setTitle("TRIHLAV");               // application title
         setTheme(new WBootstrapTheme(this));
         useStyleSheet("style/trihlav.css");
-        itsMainPanelCntrl.reset(new MainPanelPresenter(getUiFactory()));
-        trihlav::ViewIface &myIMainPanelView = itsMainPanelCntrl->getView();
+        m_MainPanelCntrl.reset(new MainPanelPresenter(getUiFactory()));
+        trihlav::ViewIface &myIMainPanelView = m_MainPanelCntrl->getView();
         WtMainPanelView &myMainPanelView = dynamic_cast<WtMainPanelView &>
         (myIMainPanelView);
         root()->addWidget(myMainPanelView.getNativeView());
-        itsMainPanelCntrl->setupUi();
+        m_MainPanelCntrl->setupUi();
     }
 
     App *App::createApplication(const WEnvironment &env) {

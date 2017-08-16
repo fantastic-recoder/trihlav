@@ -49,7 +49,7 @@ protected:
 	/**
 	 * Handles the userl login dialog.
 	 */
-	std::unique_ptr<LoginPresenter> itsLoginPresenter;
+	std::unique_ptr<LoginPresenter> m_LoginPresenter;
 
 	/**
 	 * Login dialog finished with success.

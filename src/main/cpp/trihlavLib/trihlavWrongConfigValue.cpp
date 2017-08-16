@@ -72,56 +72,56 @@ const string& WrongConfigValue::getValNameStr(
 }
 
 size_t WrongConfigValue::getExpected() const {
-    return itsExpected;
+    return m_Expected;
 }
 
 void WrongConfigValue::setExpected(const size_t &value) {
-    itsExpected = value;
+    m_Expected = value;
 }
 
 const string& WrongConfigValue::getReal() const {
-    return itsReal;
+    return m_Real;
 }
 
 void WrongConfigValue::setReal(const size_t &value) {
-    itsReal = value;
+    m_Real = value;
 }
 
 WrongConfigValue::EValNames WrongConfigValue::getValName() const {
-    return itsValName;
+    return m_ValName;
 }
 
 void WrongConfigValue::setValName(const WrongConfigValue::EValNames &value) {
-    itsValName = value;
+    m_ValName = value;
 }
 
 WrongConfigValue::EReason WrongConfigValue::getReason() const {
-    return itsReason;
+    return m_Reason;
 }
 
 void WrongConfigValue::setReason(const WrongConfigValue::EReason &value) {
-    itsReason = value;
+    m_Reason = value;
 }
 
 WrongConfigValue::WrongConfigValue(const WrongConfigValue::EValNames pValName,
                                    const size_t pExpected, const std::string& pReal) :
-    itsValName(pValName), itsReason(EWrongSize), itsExpected(pExpected), itsReal(
+    m_ValName(pValName), m_Reason(EWrongSize), m_Expected(pExpected), m_Real(
         pReal),invalid_argument(K_FAILED_FORMAT_MSG.c_str())
 {
     try {
-        itsMsg=string("Config value \"")
-               + WrongConfigValue::getValNameStr(itsValName)
-               + "\" has wrong size, expected " + to_string(int(itsExpected))
-               + ", but got " + to_string(int(itsReal.size()))+"(\""+itsReal+"\")";
+        m_Msg=string("Config value \"")
+               + WrongConfigValue::getValNameStr(m_ValName)
+               + "\" has wrong size, expected " + to_string(int(m_Expected))
+               + ", but got " + to_string(int(m_Real.size()))+"(\""+m_Real+"\")";
     } catch (...) {
-        itsMsg=K_FAILED_FORMAT_MSG.c_str();
+        m_Msg=K_FAILED_FORMAT_MSG.c_str();
     }
 }
 
 static vector<string> msgs;
 
 const char* WrongConfigValue::what() const throw() {
-    return itsMsg.c_str();
+    return m_Msg.c_str();
 }
 
 } // end namespace YuSerApi

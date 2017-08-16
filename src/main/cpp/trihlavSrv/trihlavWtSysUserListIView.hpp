@@ -35,8 +35,8 @@ private:
 
 	void selectionChanged();
 
-	Wt::WTableView* itsSysUserTable;
-	WtSysUserListModel* itsDtaMdl;   ///< Data model for the view.
+	Wt::WTableView* m_SysUserTable;
+	WtSysUserListModel* m_DtaMdl;   ///< Data model for the view.
 };
 
 } /* namespace trihlav */

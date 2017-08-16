@@ -35,15 +35,15 @@
 namespace trihlav {
 
 class MockPswdCheckView: public PswdChckViewIface {
-	MockButton itsBtnOk;
-	MockStrEdit itsEdtPswd0;
+	MockButton m_BtnOk;
+	MockStrEdit m_EdtPswd0;
 public:
 	virtual ButtonIface& getBtnOk() override {
-		return itsBtnOk;
+		return m_BtnOk;
 	}
 
 	virtual StrEditIface& getEdtPswd0() override {
-		return itsEdtPswd0;
+		return m_EdtPswd0;
 	}
 
 	MockPswdCheckView();

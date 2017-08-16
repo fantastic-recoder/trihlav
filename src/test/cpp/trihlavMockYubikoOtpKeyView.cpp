@@ -42,49 +42,49 @@ void MockYubikoOtpKeyView::setupDefaultOnCallHandlers() {
 	BOOST_LOG_NAMED_SCOPE("MockYubikoOtpKeyView::setupDefaultOnCallHandlers");
 
 	ON_CALL(*this,getEdtPrivateId()).WillByDefault(
-			ReturnRef(itsMockEdtPrivateId));
+			ReturnRef(m_MockEdtPrivateId));
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPrivateId()).WillByDefault(
-			ReturnRef(itsMockEdtPrivateId));
+			ReturnRef(m_MockEdtPrivateId));
 
 	ON_CALL(*this,getEdtSecretKey()).WillByDefault(
-			ReturnRef(itsMockEdtSecretKey));
+			ReturnRef(m_MockEdtSecretKey));
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtSecretKey()).WillByDefault(
-			ReturnRef(itsMockEdtSecretKey));
+			ReturnRef(m_MockEdtSecretKey));
 
 	ON_CALL(*this,getEdtPublicId()).WillByDefault(
-			ReturnRef(itsMockEdtPublicId));
+			ReturnRef(m_MockEdtPublicId));
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtPublicId()).WillByDefault(
-			ReturnRef(itsMockEdtPublicId));
+			ReturnRef(m_MockEdtPublicId));
 
 	ON_CALL(*this,getEdtDescription()).WillByDefault(
-			ReturnRef(itsMockEdtDescription));
+			ReturnRef(m_MockEdtDescription));
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtDescription()).WillByDefault(
-			ReturnRef(itsMockEdtDescription));
+			ReturnRef(m_MockEdtDescription));
 
 	ON_CALL(*this,getSbxPublicIdLen()).WillByDefault(
-			ReturnRef(itsMockSbxPublicIdLen));
+			ReturnRef(m_MockSbxPublicIdLen));
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getSbxPublicIdLen()).WillByDefault(
-			ReturnRef(itsMockSbxPublicIdLen));
+			ReturnRef(m_MockSbxPublicIdLen));
 
-	ON_CALL(*this,getBtnOk()).WillByDefault(ReturnRef(itsMockBtnOk));
+	ON_CALL(*this,getBtnOk()).WillByDefault(ReturnRef(m_MockBtnOk));
 
 	ON_CALL(*this,getEdtSysUser()).WillByDefault(
-			ReturnRef(itsMockEdtSysUser));
+			ReturnRef(m_MockEdtSysUser));
 	ON_CALL((const MockYubikoOtpKeyView&)(*this),getEdtSysUser()).WillByDefault(
-			ReturnRef(itsMockEdtSysUser));
+			ReturnRef(m_MockEdtSysUser));
 
 	ON_CALL(*this,getBtnSelectSysUser()).WillByDefault(
-			ReturnRef(itsMockBtnSelectSysUser));
+			ReturnRef(m_MockBtnSelectSysUser));
 
 
 	ON_CALL(*this,getBtnGenPrivateId()).WillByDefault(
-			ReturnRef(itsMockBtnGenPrivateId));
+			ReturnRef(m_MockBtnGenPrivateId));
 
 	ON_CALL(*this,getBtnGenPublicId()).WillByDefault(
-			ReturnRef(itsMockBtnGenPublicId));
+			ReturnRef(m_MockBtnGenPublicId));
 
 	ON_CALL(*this,getBtnGenSecretKey()).WillByDefault(
-			ReturnRef(itsMockBtnGenSecretKey));
+			ReturnRef(m_MockBtnGenSecretKey));
 }
 
 MockYubikoOtpKeyView::MockYubikoOtpKeyView() {

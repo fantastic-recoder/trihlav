@@ -47,7 +47,7 @@ public:
 	virtual ~App();
 	static App *createApplication(const Wt::WEnvironment& pEnv);
 private:
-	std::unique_ptr<MainPanelPresenter> itsMainPanelCntrl;
+	std::unique_ptr<MainPanelPresenter> m_MainPanelCntrl;
 };
 
 } /* namespace trihlav */

@@ -48,16 +48,16 @@ using U = Wt::WLength::Unit;
 namespace trihlav {
 
 WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
-		itsPublicId(new WtStrEdit), //
-		itsPublicIdLen(new WtSpinBox), //
-		itsPrivateId(new WtStrEdit), //
-		itsSecretKey(new WtStrEdit), //
-		itsEdtDescription(new WtStrEdit), //
-		itsGenPublicIdentityBtn(new WtPushButton(translate("Generate"))), //
-		itsGenPrivateIdentityBtn(new WtPushButton(translate("Generate"))), //
-		itsEdtSysUser(new WtStrEdit), //
-		itsBtnSelectSysUser(new WtPushButton(translate("Select system user"))), //
-		itsGenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
+		m_PublicId(new WtStrEdit), //
+		m_PublicIdLen(new WtSpinBox), //
+		m_PrivateId(new WtStrEdit), //
+		m_SecretKey(new WtStrEdit), //
+		m_EdtDescription(new WtStrEdit), //
+		m_GenPublicIdentityBtn(new WtPushButton(translate("Generate"))), //
+		m_GenPrivateIdentityBtn(new WtPushButton(translate("Generate"))), //
+		m_EdtSysUser(new WtStrEdit), //
+		m_BtnSelectSysUser(new WtPushButton(translate("Select system user"))), //
+		m_GenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
 {
 	getDlg().setCaption(translate("Add key").str());
 	getDlg().setWidth(WLength(64, U::FontEm));
@@ -66,52 +66,52 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		Wt::WLabel* myLbl = new WLabel(translate("Description").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsEdtDescription,0,1,1,5,Wt::AlignMiddle);
+		myTopLayout->addWidget(m_EdtDescription,0,1,1,5,Wt::AlignMiddle);
 	}
 	{
-		itsGenPublicIdentityBtn->setWidth(WLength(9.0,U::FontEm));
-		itsPublicId->setWidth(WLength(13.0,U::FontEm));
-		itsPublicId->setInputMask("<aa aa aa aa aa aa");
-		itsPublicId->addStyleClass("console-font");
-		itsPublicIdLen->setWidth(WLength(2.0,U::FontEm));
+		m_GenPublicIdentityBtn->setWidth(WLength(9.0,U::FontEm));
+		m_PublicId->setWidth(WLength(13.0,U::FontEm));
+		m_PublicId->setInputMask("<aa aa aa aa aa aa");
+		m_PublicId->addStyleClass("console-font");
+		m_PublicIdLen->setWidth(WLength(2.0,U::FontEm));
 		Wt::WLabel* myLbl = new WLabel(translate("Public ID (modhex)").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,1,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsPublicId,1,1,1,3,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsPublicIdLen,1,4,1,1,Wt::AlignLeft|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsGenPublicIdentityBtn,1,5,1,1,Wt::AlignTop);
+		myTopLayout->addWidget(m_PublicId,1,1,1,3,Wt::AlignMiddle);
+		myTopLayout->addWidget(m_PublicIdLen,1,4,1,1,Wt::AlignLeft|Wt::AlignMiddle);
+		myTopLayout->addWidget(m_GenPublicIdentityBtn,1,5,1,1,Wt::AlignTop);
 	}
 	{
-		itsGenPrivateIdentityBtn->setWidth(WLength(9.0,U::FontEm));
-		itsPrivateId->setWidth(WLength(18.0,U::FontEm));
-		itsPrivateId->setInputMask("<hh hh hh hh hh hh");
-		itsPrivateId->addStyleClass("console-font");
+		m_GenPrivateIdentityBtn->setWidth(WLength(9.0,U::FontEm));
+		m_PrivateId->setWidth(WLength(18.0,U::FontEm));
+		m_PrivateId->setInputMask("<hh hh hh hh hh hh");
+		m_PrivateId->addStyleClass("console-font");
 		Wt::WLabel* myLbl = new WLabel(translate("Private ID").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsPrivateId,2,1,1,4,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsGenPrivateIdentityBtn,2,5,1,1,Wt::AlignTop);
+		myTopLayout->addWidget(m_PrivateId,2,1,1,4,Wt::AlignMiddle);
+		myTopLayout->addWidget(m_GenPrivateIdentityBtn,2,5,1,1,Wt::AlignTop);
 	}
 	{
-		itsGenSecretKeyBtn->setWidth(WLength(9.0,U::FontEm));
-		itsSecretKey->setWidth(WLength(18.0,U::FontEm));
-		itsSecretKey->setInputMask("<hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh");
-		itsSecretKey->addStyleClass("console-font");
+		m_GenSecretKeyBtn->setWidth(WLength(9.0,U::FontEm));
+		m_SecretKey->setWidth(WLength(18.0,U::FontEm));
+		m_SecretKey->setInputMask("<hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh");
+		m_SecretKey->addStyleClass("console-font");
 		Wt::WText* myLbl = new WText(translate("Secret key").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,3,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsSecretKey,3,1,1,4,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsGenSecretKeyBtn,3,5,1,1,Wt::AlignTop);
+		myTopLayout->addWidget(m_SecretKey,3,1,1,4,Wt::AlignMiddle);
+		myTopLayout->addWidget(m_GenSecretKeyBtn,3,5,1,1,Wt::AlignTop);
 	}
 	{
-		itsBtnSelectSysUser->setWidth(WLength(9.0,U::FontEm));
-		itsEdtSysUser->setWidth(WLength(18.0,U::FontEm));
-		itsEdtSysUser->setReadOnly(true);
+		m_BtnSelectSysUser->setWidth(WLength(9.0,U::FontEm));
+		m_EdtSysUser->setWidth(WLength(18.0,U::FontEm));
+		m_EdtSysUser->setReadOnly(true);
 		Wt::WText* myLbl = new WText(translate("Operating system user").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
 		myTopLayout->addWidget(myLbl,4,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsEdtSysUser,4,1,1,3,Wt::AlignMiddle);
-		myTopLayout->addWidget(itsBtnSelectSysUser,4,4,1,2,Wt::AlignTop);
+		myTopLayout->addWidget(m_EdtSysUser,4,1,1,3,Wt::AlignMiddle);
+		myTopLayout->addWidget(m_BtnSelectSysUser,4,4,1,2,Wt::AlignTop);
 	}
 	getDlg().contents()->setLayout(myTopLayout);
 }
@@ -121,83 +121,83 @@ WtYubikoOtpKeyView::~WtYubikoOtpKeyView() {
 }
 
 const StrEditIface& WtYubikoOtpKeyView::getEdtPublicId() const {
-	return *itsPublicId;
+	return *m_PublicId;
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtPublicId() {
-	return *itsPublicId;
+	return *m_PublicId;
 }
 
 SpinBoxIface& WtYubikoOtpKeyView::getSbxPublicIdLen() {
-	return *itsPublicIdLen;
+	return *m_PublicIdLen;
 }
 
 const SpinBoxIface& WtYubikoOtpKeyView::getSbxPublicIdLen() const {
-	return *itsPublicIdLen;
+	return *m_PublicIdLen;
 }
 
 const StrEditIface& WtYubikoOtpKeyView::getEdtPrivateId() const {
-	return *itsPrivateId;
+	return *m_PrivateId;
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtPrivateId() {
-	return *itsPrivateId;
+	return *m_PrivateId;
 }
 
 const StrEditIface& WtYubikoOtpKeyView::getEdtSecretKey() const {
-	return *itsSecretKey;
+	return *m_SecretKey;
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtSecretKey() {
-	return *itsSecretKey;
+	return *m_SecretKey;
 }
 
 const ButtonIface& WtYubikoOtpKeyView::getBtnGenPublicId() const {
-	return *itsGenPublicIdentityBtn;
+	return *m_GenPublicIdentityBtn;
 }
 
 ButtonIface& WtYubikoOtpKeyView::getBtnGenPublicId() {
-	return *itsGenPublicIdentityBtn;
+	return *m_GenPublicIdentityBtn;
 }
 
 const ButtonIface& WtYubikoOtpKeyView::getBtnGenPrivateId() const {
-	return *itsGenPrivateIdentityBtn;
+	return *m_GenPrivateIdentityBtn;
 }
 
 ButtonIface& WtYubikoOtpKeyView::getBtnGenPrivateId() {
-	return *itsGenPrivateIdentityBtn;
+	return *m_GenPrivateIdentityBtn;
 }
 
 const ButtonIface& WtYubikoOtpKeyView::getBtnGenSecretKey() const {
-	return *itsGenSecretKeyBtn;
+	return *m_GenSecretKeyBtn;
 }
 
 ButtonIface& WtYubikoOtpKeyView::getBtnGenSecretKey() {
-	return *itsGenSecretKeyBtn;
+	return *m_GenSecretKeyBtn;
 }
 
 const StrEditIface& WtYubikoOtpKeyView::getEdtSysUser() const {
-	return *itsEdtSysUser;
+	return *m_EdtSysUser;
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtSysUser() {
-	return *itsEdtSysUser;
+	return *m_EdtSysUser;
 }
 
 const ButtonIface& WtYubikoOtpKeyView::getBtnSelectSysUser() const {
-	return *itsBtnSelectSysUser;
+	return *m_BtnSelectSysUser;
 }
 
 ButtonIface& WtYubikoOtpKeyView::getBtnSelectSysUser() {
-	return *itsBtnSelectSysUser;
+	return *m_BtnSelectSysUser;
 }
 
 StrEditIface& WtYubikoOtpKeyView::getEdtDescription() {
-	return *itsEdtDescription;
+	return *m_EdtDescription;
 }
 
 const StrEditIface& WtYubikoOtpKeyView::getEdtDescription() const {
-	return *itsEdtDescription;
+	return *m_EdtDescription;
 }
 
 } /* namespace trihlav */

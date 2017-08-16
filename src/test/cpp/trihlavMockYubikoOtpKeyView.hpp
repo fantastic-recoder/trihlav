@@ -40,16 +40,16 @@ namespace trihlav {
 
 struct MockYubikoOtpKeyView: virtual public YubikoOtpKeyViewIface, virtual public MockDialogView {
 
-	MockStrEdit itsMockEdtPrivateId;
-	MockStrEdit itsMockEdtPublicId;
-	MockStrEdit itsMockEdtDescription;
-	MockStrEdit itsMockEdtSecretKey;
-	MockStrEdit itsMockEdtSysUser;
-	MockSpinBox itsMockSbxPublicIdLen;
-	MockButton itsMockBtnGenPrivateId;
-	MockButton itsMockBtnGenPublicId;
-	MockButton itsMockBtnGenSecretKey;
-	MockButton itsMockBtnSelectSysUser;
+	MockStrEdit m_MockEdtPrivateId;
+	MockStrEdit m_MockEdtPublicId;
+	MockStrEdit m_MockEdtDescription;
+	MockStrEdit m_MockEdtSecretKey;
+	MockStrEdit m_MockEdtSysUser;
+	MockSpinBox m_MockSbxPublicIdLen;
+	MockButton m_MockBtnGenPrivateId;
+	MockButton m_MockBtnGenPublicId;
+	MockButton m_MockBtnGenSecretKey;
+	MockButton m_MockBtnSelectSysUser;
 
 	MockYubikoOtpKeyView();
 

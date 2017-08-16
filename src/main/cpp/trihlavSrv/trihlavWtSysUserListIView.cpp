@@ -79,8 +79,8 @@ public:
 };
 
 WtSysUserListView::WtSysUserListView() :
-		itsDtaMdl(new WtSysUserListModel), //
-		itsSysUserTable(new WTableView) //
+		m_DtaMdl(new WtSysUserListModel), //
+		m_SysUserTable(new WTableView) //
 {
 	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::WtSysUserListView");
 	getDlg().setCaption(translate("Add key").str());
@@ -88,15 +88,15 @@ WtSysUserListView::WtSysUserListView() :
 	getDlg().resize(K_DLG_W, K_DLG_H);
 	WVBoxLayout* myContentLayout = new WVBoxLayout;
 	{
-		itsSysUserTable->setObjectName("SysUserTable");
+		m_SysUserTable->setObjectName("SysUserTable");
 
-		itsSysUserTable->setModel(itsDtaMdl);
-		itsSysUserTable->setAlternatingRowColors(true);
-		itsSysUserTable->setCanReceiveFocus(true);
-		itsSysUserTable->setColumnResizeEnabled(true);
-		itsSysUserTable->setSelectionMode(Wt::SingleSelection);
-		myContentLayout->addWidget(itsSysUserTable);
-		itsSysUserTable->selectionChanged().connect(this,
+		m_SysUserTable->setModel(m_DtaMdl);
+		m_SysUserTable->setAlternatingRowColors(true);
+		m_SysUserTable->setCanReceiveFocus(true);
+		m_SysUserTable->setColumnResizeEnabled(true);
+		m_SysUserTable->setSelectionMode(Wt::SingleSelection);
+		myContentLayout->addWidget(m_SysUserTable);
+		m_SysUserTable->selectionChanged().connect(this,
 				&WtSysUserListView::selectionChanged);
 
 	}
@@ -108,13 +108,13 @@ WtSysUserListView::WtSysUserListView() :
 void WtSysUserListView::show(const SysUsers& pUsers) {
 	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::show");
 	int myCnt = 0;
-	itsDtaMdl->clear();
+	m_DtaMdl->clear();
 	for (const SysUser& myUser : pUsers) {
 		myCnt++;
-		BOOST_LOG_TRIVIAL(debug)<<"User: " << myUser.itsLogin;
-		itsDtaMdl->addRow(
-				WtSysUserListModel::Row_t(std::string(myUser.itsLogin),
-						std::string(myUser.itsFullName)));
+		BOOST_LOG_TRIVIAL(debug)<<"User: " << myUser.m_Login;
+		m_DtaMdl->addRow(
+				WtSysUserListModel::Row_t(std::string(myUser.m_Login),
+						std::string(myUser.m_FullName)));
 	}
 	BOOST_LOG_TRIVIAL(debug)<<"System users loaded.";
 	getDlg().setModal(true);
@@ -125,7 +125,7 @@ void WtSysUserListView::show(const SysUsers& pUsers) {
  * @return a list of ids of the selected keys.
  */
 int WtSysUserListView::getSelected() {
-	WModelIndexSet mySelected { itsSysUserTable->selectedIndexes() };
+	WModelIndexSet mySelected { m_SysUserTable->selectedIndexes() };
 	if (mySelected.empty()) {
 		return -1;
 	}
@@ -134,7 +134,7 @@ int WtSysUserListView::getSelected() {
 
 const WtSysUserListView::UserRow_t&
 WtSysUserListView::getRow(int pId) const {
-	return itsDtaMdl->getRow(pId);
+	return m_DtaMdl->getRow(pId);
 }
 
 void WtSysUserListView::selectionChanged() {

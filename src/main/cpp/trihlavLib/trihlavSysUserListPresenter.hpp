@@ -40,9 +40,9 @@ public:
 private:
 	using SysUsersIt=SysUsers::const_iterator;
 
-	std::unique_ptr<SysUsers> itsSysUsers;
-	std::shared_ptr<SysUserListViewIface> itsView;
-	SysUsersIt itsCurrentUser;
+	std::unique_ptr<SysUsers> m_SysUsers;
+	std::shared_ptr<SysUserListViewIface> m_View;
+	SysUsersIt m_CurrentUser;
 };
 
 } /* namespace trihlav */

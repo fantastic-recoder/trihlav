@@ -49,13 +49,13 @@ namespace trihlav {
 KeyListPresenter::KeyListPresenter(FactoryIface& pFactory) :
 		KeyListPresenterIface(pFactory), //
 		CanOsAuthPresenter(pFactory), //
-		itsYubikoOtpKeyPresenter(0) //
+		m_YubikoOtpKeyPresenter(0) //
 {
 }
 
 KeyListViewIface& KeyListPresenter::getView() {
-	if (itsKeyListView == 0) {
-		itsKeyListView = getFactory().createKeyListView();
+	if (m_KeyListView == 0) {
+		m_KeyListView = getFactory().createKeyListView();
 		getView().getBtnAddKey().pressedSig.connect([=] {addKey();});
 		getView().getBtnReload().pressedSig.connect([=] {reloadKeyList();});
 		getView().getBtnEditKey().pressedSig.connect([=] {editKey();});
@@ -63,11 +63,11 @@ KeyListViewIface& KeyListPresenter::getView() {
 		getView().selectionChangedSig.connect(
 				[=](int pIdx) {selectionChanged(pIdx);});
 	}
-	return *itsKeyListView;
+	return *m_KeyListView;
 }
 
 KeyListPresenter::~KeyListPresenter() {
-	delete itsYubikoOtpKeyPresenter;
+	delete m_YubikoOtpKeyPresenter;
 }
 
 void KeyListPresenter::addKey() {
@@ -75,11 +75,11 @@ void KeyListPresenter::addKey() {
 }
 
 YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
-	if (itsYubikoOtpKeyPresenter == 0) {
-		itsYubikoOtpKeyPresenter = new YubikoOtpKeyPresenter(getFactory());
-		itsYubikoOtpKeyPresenter->saved.connect([=] {reloadKeyList();});
+	if (m_YubikoOtpKeyPresenter == 0) {
+		m_YubikoOtpKeyPresenter = new YubikoOtpKeyPresenter(getFactory());
+		m_YubikoOtpKeyPresenter->saved.connect([=] {reloadKeyList();});
 	}
-	return *itsYubikoOtpKeyPresenter;
+	return *m_YubikoOtpKeyPresenter;
 }
 
 void KeyListPresenter::reloadKeyList() {
@@ -109,7 +109,7 @@ void KeyListPresenter::doProtectedAction(bool pStatus) {
 }
 
 bool KeyListPresenter::checkSelection() const {
-	if (itsSelectedKey == -1) {
+	if (m_SelectedKey == -1) {
 		BOOST_LOG_TRIVIAL(warning)<< "KeyListPresenter edit/delete "
 		"called without proper selection.";
 		return false;
@@ -121,7 +121,7 @@ void KeyListPresenter::editKey() {
 	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::editKey");
 	if (checkSelection()) {
 		KeyManager& myKeyMan(getFactory().getKeyManager());
-		getYubikoOtpKeyPresenter().editKey(myKeyMan.getKey(itsSelectedKey));
+		getYubikoOtpKeyPresenter().editKey(myKeyMan.getKey(m_SelectedKey));
 	}
 }
 
@@ -129,7 +129,7 @@ void KeyListPresenter::deleteKey() {
 	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::deleteKey");
 	if (checkSelection()) {
 		KeyManager& myKeyMan(getFactory().getKeyManager());
-		getYubikoOtpKeyPresenter().deleteKey(myKeyMan.getKey(itsSelectedKey));
+		getYubikoOtpKeyPresenter().deleteKey(myKeyMan.getKey(m_SelectedKey));
 	}
 }
 
@@ -142,8 +142,8 @@ void KeyListPresenter::selectionChanged(int pIdx) {
 		getView().getBtnDelKey().setEnabled(true);
 		getView().getBtnEditKey().setEnabled(true);
 	}
-	itsSelectedKey = pIdx;
-	BOOST_LOG_TRIVIAL(debug)<<"Curently selected " << itsSelectedKey;
+	m_SelectedKey = pIdx;
+	BOOST_LOG_TRIVIAL(debug)<<"Curently selected " << m_SelectedKey;
 }
 
 }

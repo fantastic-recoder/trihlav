@@ -66,11 +66,11 @@ void HttpClient::parseModeHostAndPort(const string& pServer) {
 							"valid protocoll (" + K_HTTP + K_DIV + " or "
 							+ K_HTTPS + K_DIV + ".");
 		} else {
-			itsMode = HTTPS;
+			m_Mode = HTTPS;
 			BOOST_LOG_TRIVIAL(debug)<< "mode \""<< K_HTTPS << "\"";
 		}
 	} else {
-		itsMode = HTTP;
+		m_Mode = HTTP;
 		BOOST_LOG_TRIVIAL(debug) << "mode \""<< K_HTTP << "\"";
 	}
 	myIt = pServer.find("://");
@@ -84,18 +84,18 @@ void HttpClient::parseModeHostAndPort(const string& pServer) {
 	BOOST_LOG_TRIVIAL(debug)<< "server and port " << myServer;
 	myIt = myServer.find_first_of(':');
 	if (myIt == -1) {
-		itsServer = myServer;
-		itsPort = "";
+		m_Server = myServer;
+		m_Port = "";
 	} else {
-		itsServer = myServer.substr(0, myIt);
+		m_Server = myServer.substr(0, myIt);
 		if (++myIt < myServer.size()) {
-			itsPort = myServer.substr(myIt, myServer.size());
+			m_Port = myServer.substr(myIt, myServer.size());
 		} else {
-			itsPort = "";
+			m_Port = "";
 		}
 	}
-	BOOST_LOG_TRIVIAL(debug)<< "server \"" << itsServer << "\" port \""
-	<< itsPort << "\"";
+	BOOST_LOG_TRIVIAL(debug)<< "server \"" << m_Server << "\" port \""
+	<< m_Port << "\"";
 }
 
 /**
@@ -104,13 +104,13 @@ void HttpClient::parseModeHostAndPort(const string& pServer) {
 HttpClient::HttpClient(io_service& io_service, context& context,
 		const string& pServer, const string& pUsername,
 		const Passwords& pPasswords) :
-		itsResolver(io_service), itsSslSocket(io_service, context), itsHttpSocket(
+		m_Resolver(io_service), m_SslSocket(io_service, context), m_HttpSocket(
 				io_service) {
 	parseModeHostAndPort(pServer);
 	// Form the request. We specify the "Connection: close" header so that the
 	// server will close the socket after transmitting the response. This will
 	// allow us to treat all data up until the EOF as the content.
-	std::ostream request_stream(&itsRequest);
+	std::ostream request_stream(&m_Request);
 	string myUrl { K_AUTH_URL + "?" + K_USER_NM + "=" + pUsername };
 	const string K_SP("&" + K_PSWD + "=");
 	for (auto myPswdPtr = pPasswords.begin(); //
@@ -119,16 +119,16 @@ HttpClient::HttpClient(io_service& io_service, context& context,
 	}
 	BOOST_LOG_TRIVIAL(debug)<<myUrl;
 	request_stream << "GET " << myUrl << " HTTP/1.0\r\n";
-	request_stream << "Host: " << itsServer << "\r\n";
+	request_stream << "Host: " << m_Server << "\r\n";
 	request_stream << "Accept: */*\r\n";
 	request_stream << "Connection: close\r\n\r\n";
 
 	// Start an asynchronous resolve to translate the server and service names
 	// into a list of endpoints.
-	BOOST_LOG_TRIVIAL(debug)<<"Resolving " << itsServer;
-	tcp::resolver::query query(itsServer,
-			itsPort.empty() ? getProtocol() : itsPort);	///"http" "https"
-	itsResolver.async_resolve(query,
+	BOOST_LOG_TRIVIAL(debug)<<"Resolving " << m_Server;
+	tcp::resolver::query query(m_Server,
+			m_Port.empty() ? getProtocol() : m_Port);	///"http" "https"
+	m_Resolver.async_resolve(query,
 			boost::bind(&HttpClient::handleResolve, this,
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::iterator));
@@ -138,17 +138,17 @@ void HttpClient::handleResolve(const boost::system::error_code& err,
 		tcp::resolver::iterator endpoint_iterator) {
 	if (!err) {
 		BOOST_LOG_TRIVIAL(info)<< "Resolve OK";
-		itsResponseStr = "";
-		itsSslSocket.set_verify_mode(boost::asio::ssl::verify_peer);
-		itsSslSocket.set_verify_callback(
+		m_ResponseStr = "";
+		m_SslSocket.set_verify_mode(boost::asio::ssl::verify_peer);
+		m_SslSocket.set_verify_callback(
 				boost::bind(&HttpClient::verifyCertificate, this, _1, _2));
 
 		if (getMode() == HTTPS) {
-			boost::asio::async_connect(itsSslSocket.lowest_layer(), endpoint_iterator,
+			boost::asio::async_connect(m_SslSocket.lowest_layer(), endpoint_iterator,
 					boost::bind(&HttpClient::handleConnect, this,
 							boost::asio::placeholders::error));
 		} else if (getMode() == HTTP) {
-			boost::asio::async_connect(itsHttpSocket, endpoint_iterator,
+			boost::asio::async_connect(m_HttpSocket, endpoint_iterator,
 					boost::bind(&HttpClient::handleConnect, this,
 							boost::asio::placeholders::error));
 		}
@@ -179,11 +179,11 @@ void HttpClient::handleConnect(const boost::system::error_code& err) {
 	if (!err) {
 		BOOST_LOG_TRIVIAL(info)<< "Connect OK ";
 		if (getMode() == HTTPS) {
-			itsSslSocket.async_handshake(boost::asio::ssl::stream_base::client,
+			m_SslSocket.async_handshake(boost::asio::ssl::stream_base::client,
 					boost::bind(&HttpClient::handleHandshake, this,
 							boost::asio::placeholders::error));
 		} else if (getMode() == HTTP) {
-			boost::asio::async_write(itsHttpSocket, itsRequest,
+			boost::asio::async_write(m_HttpSocket, m_Request,
 					boost::bind(&HttpClient::handleWriteRequest, this,
 							boost::asio::placeholders::error));
 		}
@@ -197,11 +197,11 @@ void HttpClient::handleHandshake(const boost::system::error_code& error) {
 		BOOST_LOG_TRIVIAL(info)<< "Handshake OK ";
 		BOOST_LOG_TRIVIAL(debug) << "Request: ";
 		const char* header = boost::asio::buffer_cast<const char*>(
-				itsRequest.data());
+				m_Request.data());
 		BOOST_LOG_TRIVIAL(debug) << header;
 
 		// The handshake was successful. Send the request.
-		boost::asio::async_write(itsSslSocket, itsRequest,
+		boost::asio::async_write(m_SslSocket, m_Request,
 				boost::bind(&HttpClient::handleWriteRequest, this,
 						boost::asio::placeholders::error));
 	} else {
@@ -211,15 +211,15 @@ void HttpClient::handleHandshake(const boost::system::error_code& error) {
 
 void HttpClient::handleWriteRequest(const boost::system::error_code& err) {
 	if (!err) {
-		// Read the response status line. The itsResponse streambuf will
+		// Read the response status line. The m_Response streambuf will
 		// automatically grow to accommodate the entire line. The growth may be
 		// limited by passing a maximum size to the streambuf constructor.
 		if (getMode() == HTTPS) {
-			boost::asio::async_read_until(itsSslSocket, itsResponse, "\r\n",
+			boost::asio::async_read_until(m_SslSocket, m_Response, "\r\n",
 					boost::bind(&HttpClient::handleReadStatusLine, this,
 							boost::asio::placeholders::error));
 		} else if (getMode() == HTTP) {
-			boost::asio::async_read_until(itsHttpSocket, itsResponse, "\r\n",
+			boost::asio::async_read_until(m_HttpSocket, m_Response, "\r\n",
 					boost::bind(&HttpClient::handleReadStatusLine, this,
 							boost::asio::placeholders::error));
 		}
@@ -231,7 +231,7 @@ void HttpClient::handleWriteRequest(const boost::system::error_code& err) {
 void HttpClient::handleReadStatusLine(const boost::system::error_code& err) {
 	if (!err) {
 		// Check that response is OK.
-		std::istream response_stream(&itsResponse);
+		std::istream response_stream(&m_Response);
 		std::string http_version;
 		response_stream >> http_version;
 		unsigned int status_code;
@@ -251,11 +251,11 @@ void HttpClient::handleReadStatusLine(const boost::system::error_code& err) {
 
 		// Read the response headers, which are terminated by a blank line.
 		if (getMode() == HTTPS) {
-			boost::asio::async_read_until(itsSslSocket, itsResponse, "\r\n\r\n",
+			boost::asio::async_read_until(m_SslSocket, m_Response, "\r\n\r\n",
 					boost::bind(&HttpClient::handleReadHeaders, this,
 							boost::asio::placeholders::error));
 		} else if (getMode() == HTTP) {
-			boost::asio::async_read_until(itsHttpSocket, itsResponse,
+			boost::asio::async_read_until(m_HttpSocket, m_Response,
 					"\r\n\r\n",
 					boost::bind(&HttpClient::handleReadHeaders, this,
 							boost::asio::placeholders::error));
@@ -268,24 +268,24 @@ void HttpClient::handleReadStatusLine(const boost::system::error_code& err) {
 void HttpClient::handleReadHeaders(const boost::system::error_code& err) {
 	if (!err) {
 		// Process the response headers.
-		std::istream response_stream(&itsResponse);
+		std::istream response_stream(&m_Response);
 		std::string header;
 		while (std::getline(response_stream, header) && header != "\r")
 			BOOST_LOG_TRIVIAL(debug)<< header;
 
 			// Write whatever content we already have to output.
-		if (itsResponse.size() > 0)
+		if (m_Response.size() > 0)
 			if(foundResponseStr())
 				return;
 
 			// Start reading remaining data until EOF.
 		if (getMode() == HTTPS) {
-			boost::asio::async_read(itsSslSocket, itsResponse,
+			boost::asio::async_read(m_SslSocket, m_Response,
 					boost::asio::transfer_at_least(1),
 					boost::bind(&HttpClient::handleReadContent, this,
 							boost::asio::placeholders::error));
 		} else if (getMode() == HTTP) {
-			boost::asio::async_read(itsHttpSocket, itsResponse,
+			boost::asio::async_read(m_HttpSocket, m_Response,
 					boost::asio::transfer_at_least(1),
 					boost::bind(&HttpClient::handleReadContent, this,
 							boost::asio::placeholders::error));
@@ -297,14 +297,14 @@ void HttpClient::handleReadHeaders(const boost::system::error_code& err) {
 
 bool HttpClient::foundResponseStr() {
 	// Write all of the data that has been read so far.
-	itsResponseStr += string { buffers_begin(itsResponse.data()), buffers_end(
-			itsResponse.data()) };
-	BOOST_LOG_TRIVIAL(debug)<<itsResponseStr;
-	if (itsResponseStr.find("Fail!")!= -1) {
-		itsAuthOk = false;
+	m_ResponseStr += string { buffers_begin(m_Response.data()), buffers_end(
+			m_Response.data()) };
+	BOOST_LOG_TRIVIAL(debug)<<m_ResponseStr;
+	if (m_ResponseStr.find("Fail!")!= -1) {
+		m_AuthOk = false;
 		return true;
-	} else if (itsResponseStr.find("ok!")!= -1) {
-		itsAuthOk = true;
+	} else if (m_ResponseStr.find("ok!")!= -1) {
+		m_AuthOk = true;
 		return true;
 	}
 	return false;
@@ -316,12 +316,12 @@ void HttpClient::handleReadContent(const boost::system::error_code& err) {
 		if(foundResponseStr()) return;
 		// Continue reading remaining data until EOF.
 		if (getMode() == HTTPS) {
-			boost::asio::async_read(itsSslSocket, itsResponse,
+			boost::asio::async_read(m_SslSocket, m_Response,
 					boost::asio::transfer_at_least(1),
 					boost::bind(&HttpClient::handleReadContent, this,
 							boost::asio::placeholders::error));
 		} else if (getMode() == HTTP) {
-			boost::asio::async_read(itsHttpSocket, itsResponse,
+			boost::asio::async_read(m_HttpSocket, m_Response,
 					boost::asio::transfer_at_least(1),
 					boost::bind(&HttpClient::handleReadContent, this,
 							boost::asio::placeholders::error));
@@ -332,11 +332,11 @@ void HttpClient::handleReadContent(const boost::system::error_code& err) {
 }
 
 const std::string& HttpClient::getProtocol() const {
-	if (itsMode == HTTP)
+	if (m_Mode == HTTP)
 		return K_HTTP;
-	if (itsMode == HTTPS)
+	if (m_Mode == HTTPS)
 		return K_HTTPS;
-	BOOST_LOG_TRIVIAL(error)<< "Unknown protocol " << itsMode
+	BOOST_LOG_TRIVIAL(error)<< "Unknown protocol " << m_Mode
 	<< " returning "+K_HTTPS;
 	return K_HTTPS;
 }

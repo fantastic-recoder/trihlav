@@ -90,7 +90,7 @@ TEST_F(TestYubikoOtpKey,keyManagerInit) {
 			dynamic_cast<MockYubikoOtpKeyView&>(myPresenter.getView()));
 	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyView  " << &myYubikoOtpKeyView;
 	BOOST_LOG_TRIVIAL(debug)<< "PrivateID          '" //
-	<< myYubikoOtpKeyView.itsMockEdtPrivateId.getValue() << "'.";
+	<< myYubikoOtpKeyView.m_MockEdtPrivateId.getValue() << "'.";
 	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getValue(), 6);
 	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getMin(), 0);
 	EXPECT_EQ(myPresenter.getView().getSbxPublicIdLen().getMax(), 6);

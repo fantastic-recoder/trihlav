@@ -36,10 +36,10 @@
 namespace trihlav {
 
 struct MockKeyListView: virtual KeyListViewIface {
-	MockButton itsMockBtnAddKey;
-	MockButton itsMockBtnEditKey;
-	MockButton itsMockBtnReloadKey;
-	MockButton itsMockBtnDelKey;
+	MockButton m_MockBtnAddKey;
+	MockButton m_MockBtnEditKey;
+	MockButton m_MockBtnReloadKey;
+	MockButton m_MockBtnDelKey;
 	MockKeyListView();//
 	MOCK_METHOD0(getBtnAddKey, ButtonIface& ());//
 	MOCK_METHOD0(getBtnDelKey, ButtonIface& ());//

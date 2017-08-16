@@ -54,9 +54,9 @@ public:
 
 	void prefixKeyFile(const path& pKyFileFName, const std::string& pPrefix) const;
 private:
-    KeyList_t itsKeyList;
-    KeyMap_t  itsKeyMapByPublicId;
-    const Settings &itsSettings;
+    KeyList_t m_KeyList;
+    KeyMap_t  m_KeyMapByPublicId;
+    const Settings &m_Settings;
 };
 
 } /* namespace trihlav */

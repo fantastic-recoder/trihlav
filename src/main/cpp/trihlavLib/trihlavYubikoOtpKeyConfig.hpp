@@ -44,8 +44,8 @@ public:
 	 */
 	const UTimestamp getTimestamp() const {
 		UTimestamp myRetVal;
-		myRetVal.tstp.tstpl = itsToken.tstpl;
-		myRetVal.tstp.tstph = itsToken.tstph;
+		myRetVal.tstp.tstpl = m_Token.tstpl;
+		myRetVal.tstp.tstph = m_Token.tstph;
 		return myRetVal;
 	}
 
@@ -54,8 +54,8 @@ public:
 	 * @param pVal new value of timestamp values.
 	 */
 	void setTimestamp(const UTimestamp pVal) {
-		itsToken.tstpl = pVal.tstp.tstpl;
-		itsToken.tstph = pVal.tstp.tstph;
+		m_Token.tstpl = pVal.tstp.tstpl;
+		m_Token.tstph = pVal.tstp.tstph;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public:
 
 	/// @brief Getter.
 	const bfs::path& getFilename() const {
-		return itsFilename;
+		return m_Filename;
 	}
 
 	void generateFilename();
@@ -153,18 +153,18 @@ public:
 	 * @return The Yubikey constant token.
 	 */
 	const yubikey_token_st& getToken() const {
-		return itsToken;
+		return m_Token;
 	}
 
 	/**
 	 * @return The Yubikey token.
 	 */
 	yubikey_token_st& getToken() {
-		return itsToken;
+		return m_Token;
 	}
 
 	const std::string& getPublicId() const {
-		return itsPublicId;
+		return m_PublicId;
 	}
 
 	/// @brief Set the public id and update indexes.
@@ -178,7 +178,7 @@ public:
 	 * @return the secret key binnary array.
 	 */
 	const SecretKeyArr& getSecretKeyArray() const {
-		return itsKey;
+		return m_Key;
 	}
 
 	/**
@@ -203,20 +203,20 @@ public:
 	 *
 	 * Not interpreted technically.
 	 *
-	 * @see itsDescription
+	 * @see m_Description
 	 */
 	const std::string& getDescription() const {
-		return itsDescription;
+		return m_Description;
 	}
 
 	/**
 	 * @brief setter, sets the user description.
-	 * @see itsDescription
+	 * @see m_Description
 	 */
 	void setDescription(const std::string& pDesc) {
 		if (pDesc.compare(getDescription()) != 0) {
-			itsDescription = pDesc;
-			itsChangedFlag = true;
+			m_Description = pDesc;
+			m_ChangedFlag = true;
 		}
 	}
 
@@ -242,7 +242,7 @@ public:
 	}
 
 	const std::string& getSysUser() const {
-		return itsSysUser;
+		return m_SysUser;
 	}
 
 	void setSysUser(const std::string& pSysUser);
@@ -257,14 +257,14 @@ protected:
 	void copyAndSaveToken(const yubikey_token_st& pToken);
 
 private:
-	std::string itsPublicId;    //< Keys public ID max 6 characters.
-	bool itsChangedFlag;        //< will be set internal when something changed
-	bfs::path itsFilename;      //< where to store it
-	yubikey_token_st itsToken;
-	SecretKeyArr itsKey;
-	std::string itsDescription; //< Users free text describing the key
-	KeyManager& itsKeyManager;  //< Global functionality & data
-	std::string itsSysUser;     //< assotiated system user
+	std::string m_PublicId;    //< Keys public ID max 6 characters.
+	bool m_ChangedFlag;        //< will be set internal when something changed
+	bfs::path m_Filename;      //< where to store it
+	yubikey_token_st m_Token;
+	SecretKeyArr m_Key;
+	std::string m_Description; //< Users free text describing the key
+	KeyManager& m_KeyManager;  //< Global functionality & data
+	std::string m_SysUser;     //< assotiated system user
 };
 
 } // end namespace trihlavApi

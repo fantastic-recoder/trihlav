@@ -88,52 +88,52 @@ void WtKeyListView::layoutSizeChanged(int pW, int pH) {
 	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
 	const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
 	int K_COL_CNT {1};
-	if(itsTable->model()) {
-		K_COL_CNT=itsTable->model()->columnCount();
+	if(m_Table->model()) {
+		K_COL_CNT=m_Table->model()->columnCount();
 	}
 	const int K_TBL_INT_M=7*K_COL_CNT+2;
 	for (int i = 0; i < K_COL_CNT; ++i) {
 		if(i==2) {
-			itsTable->setColumnWidth(i,K_TBL_W-5*WIDTH-K_TBL_INT_M);
+			m_Table->setColumnWidth(i,K_TBL_W-5*WIDTH-K_TBL_INT_M);
 		} else {
-			itsTable->setColumnWidth(i, 120);
+			m_Table->setColumnWidth(i, 120);
 		}
 	}
-	itsTable->resize(WLength(pW, U::Pixel), WLength(pH, U::Pixel));
+	m_Table->resize(WLength(pW, U::Pixel), WLength(pH, U::Pixel));
 }
 
 void WtKeyListView::createTable() {
-	itsTable = new WTableView();
-	itsTable->setModel(itsDtaMdl);
-	itsTable->setAlternatingRowColors(true);
-	itsTable->setCanReceiveFocus(true);
-	itsTable->setColumnResizeEnabled(true);
-	itsTable->setColumnWidth(2, "400px");
-	itsTable->setSelectionMode(Wt::SingleSelection);
-	itsTable->resize(WLength(100.0, U::Percentage), WLength(128.0, U::FontEm));
-	itsTable->selectionChanged().connect(this,
+	m_Table = new WTableView();
+	m_Table->setModel(m_DtaMdl);
+	m_Table->setAlternatingRowColors(true);
+	m_Table->setCanReceiveFocus(true);
+	m_Table->setColumnResizeEnabled(true);
+	m_Table->setColumnWidth(2, "400px");
+	m_Table->setSelectionMode(Wt::SingleSelection);
+	m_Table->resize(WLength(100.0, U::Percentage), WLength(128.0, U::FontEm));
+	m_Table->selectionChanged().connect(this,
 			&WtKeyListView::selectionChanged);
 }
 
 WtKeyListView::WtKeyListView() {
-	itsDtaMdl = new WtKeyListModel;
+	m_DtaMdl = new WtKeyListModel;
 	WHBoxLayout* myBtnsLayout = new WHBoxLayout;
 	WVBoxLayout* myTopLayout = new WVBoxLayout;
-	itsBtnAdd = new WtPushButton(translate("New key").str());
-	itsBtnDel = new WtPushButton(translate("Delete key").str());
-	itsBtnReload = new WtPushButton(translate("Reload keys").str());
-	itsBtnEdit = new WtPushButton(translate("Edit key").str());
-	itsBtnAdd->setWidth(WLength { 6, WLength::FontEm });
-	itsBtnEdit->setWidth(WLength { 6, WLength::FontEm });
-	itsBtnDel->setWidth(WLength { 6, WLength::FontEm });
-	itsBtnReload->setWidth(WLength { 6, WLength::FontEm });
-	myBtnsLayout->addWidget(itsBtnAdd);
-	myBtnsLayout->addWidget(itsBtnEdit);
-	myBtnsLayout->addWidget(itsBtnDel);
-	myBtnsLayout->addWidget(itsBtnReload);
+	m_BtnAdd = new WtPushButton(translate("New key").str());
+	m_BtnDel = new WtPushButton(translate("Delete key").str());
+	m_BtnReload = new WtPushButton(translate("Reload keys").str());
+	m_BtnEdit = new WtPushButton(translate("Edit key").str());
+	m_BtnAdd->setWidth(WLength { 6, WLength::FontEm });
+	m_BtnEdit->setWidth(WLength { 6, WLength::FontEm });
+	m_BtnDel->setWidth(WLength { 6, WLength::FontEm });
+	m_BtnReload->setWidth(WLength { 6, WLength::FontEm });
+	myBtnsLayout->addWidget(m_BtnAdd);
+	myBtnsLayout->addWidget(m_BtnEdit);
+	myBtnsLayout->addWidget(m_BtnDel);
+	myBtnsLayout->addWidget(m_BtnReload);
 	createTable();
 	myTopLayout->addLayout(myBtnsLayout);
-	myTopLayout->addWidget(itsTable);
+	myTopLayout->addWidget(m_Table);
 	myTopLayout->setContentsMargins(K_TBL_V_MARGIN, K_TBL_V_MARGIN,
 			K_TBL_V_MARGIN, K_TBL_V_MARGIN);
 	myTopLayout->setSpacing(K_TBL_V_MARGIN);
@@ -149,37 +149,37 @@ Wt::WWidget* WtKeyListView::getWWidget() {
 }
 
 ButtonIface& WtKeyListView::getBtnAddKey() {
-	return *itsBtnAdd;
+	return *m_BtnAdd;
 }
 
 ButtonIface& WtKeyListView::getBtnEditKey() {
-	return *itsBtnEdit;
+	return *m_BtnEdit;
 }
 
 ButtonIface& trihlav::WtKeyListView::getBtnDelKey() {
-	return *itsBtnDel;
+	return *m_BtnDel;
 }
 
 ButtonIface& trihlav::WtKeyListView::getBtnReload() {
-	return *itsBtnReload;
+	return *m_BtnReload;
 }
 
 void WtKeyListView::clear() {
-	itsTable->clearSelection();
-	itsDtaMdl->clear();
+	m_Table->clearSelection();
+	m_DtaMdl->clear();
 }
 
 void WtKeyListView::addRow(const KeyRow_t& pRow) {
-	itsDtaMdl->addRow(pRow);
+	m_DtaMdl->addRow(pRow);
 }
 
 void WtKeyListView::addedAllRows() {
-	BOOST_LOG_TRIVIAL(debug)<< "We have " << itsDtaMdl->rowCount();
-	itsTable->refresh();
+	BOOST_LOG_TRIVIAL(debug)<< "We have " << m_DtaMdl->rowCount();
+	m_Table->refresh();
 }
 
 void WtKeyListView::unselectAll() {
-	itsTable->clearSelection();
+	m_Table->clearSelection();
 	this->selectionChangedSig(-1);
 }
 
@@ -187,7 +187,7 @@ void WtKeyListView::unselectAll() {
  * @return a list of ids of the selected keys.
  */
 int WtKeyListView::getSelected() {
-	WModelIndexSet mySelected { itsTable->selectedIndexes() };
+	WModelIndexSet mySelected { m_Table->selectedIndexes() };
 	if (mySelected.empty()) {
 		return -1;
 	}
@@ -195,7 +195,7 @@ int WtKeyListView::getSelected() {
 }
 
 const WtKeyListView::KeyRow_t& WtKeyListView::getRow(int pId) const {
-	return itsDtaMdl->getRow(pId);
+	return m_DtaMdl->getRow(pId);
 }
 
 void WtKeyListView::selectionChanged() {

@@ -29,10 +29,10 @@ public:
 	virtual LabelIface& getLblPassword() override;
 
 private:
-	WtStrEdit* itsEdtUserName;
-	WtStrEdit* itsEdtPassword;
-	WtLabel* itsLblUserName;
-	WtLabel* itsLblPassword;
+	WtStrEdit* m_EdtUserName;
+	WtStrEdit* m_EdtPassword;
+	WtLabel* m_LblUserName;
+	WtLabel* m_LblPassword;
 };
 
 } /* namespace trihlav */

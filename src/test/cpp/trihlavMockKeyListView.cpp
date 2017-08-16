@@ -42,13 +42,13 @@ MockKeyListView::MockKeyListView() {
 	BOOST_LOG_NAMED_SCOPE("MockKeyListView::MockKeyListView");
 
 	ON_CALL(*this,getBtnAddKey()) //
-	.WillByDefault(ReturnRef(itsMockBtnAddKey));
+	.WillByDefault(ReturnRef(m_MockBtnAddKey));
 	ON_CALL(*this,getBtnDelKey()) //
-	.WillByDefault(ReturnRef(itsMockBtnDelKey));
+	.WillByDefault(ReturnRef(m_MockBtnDelKey));
 	ON_CALL(*this,getBtnEditKey()) //
-	.WillByDefault(ReturnRef(itsMockBtnEditKey));
+	.WillByDefault(ReturnRef(m_MockBtnEditKey));
 	ON_CALL(*this,getBtnReload()) //
-	.WillByDefault(ReturnRef(itsMockBtnReloadKey));
+	.WillByDefault(ReturnRef(m_MockBtnReloadKey));
 
 }
 

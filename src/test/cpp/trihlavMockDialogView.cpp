@@ -34,11 +34,11 @@ namespace trihlav {
 
 MockDialogView::MockDialogView() {
 	ON_CALL(*this,getBtnOk()) //
-	.WillByDefault(ReturnRef(itsMockBtnOk));
+	.WillByDefault(ReturnRef(m_MockBtnOk));
 	ON_CALL(*this,getBtnCancel()) //
-	.WillByDefault(ReturnRef(itsMockBtnCancel));
-	itsMockBtnCancel.pressedSig.connect([this](){sigDialogFinished(false);});
-	itsMockBtnOk.pressedSig.connect([this](){sigDialogFinished(true);});
+	.WillByDefault(ReturnRef(m_MockBtnCancel));
+	m_MockBtnCancel.pressedSig.connect([this](){sigDialogFinished(false);});
+	m_MockBtnOk.pressedSig.connect([this](){sigDialogFinished(true);});
 }
 
 } /* namespace trihlav */

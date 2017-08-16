@@ -75,19 +75,19 @@ void WtMainPanelView::addView(const std::string& pLocalizedName, const PanelName
 }
 
 /**
- * 	Create a itsNavigation bar with a link to a web page.
+ * 	Create a m_Navigation bar with a link to a web page.
  *
  */
-WtMainPanelView::WtMainPanelView() : itsView ( new WContainerWidget()) {
-	// Create a itsNavigation bar with a link to a web page.
-	setNavigation(new Wt::WNavigationBar(itsView));
+WtMainPanelView::WtMainPanelView() : m_View ( new WContainerWidget()) {
+	// Create a m_Navigation bar with a link to a web page.
+	setNavigation(new Wt::WNavigationBar(m_View));
 	getNavigation()->setTitle(WString(translate("TRIHLAV OTP Server")),
 			"http://www.google.com/search?q=One+Time+Password");
 	getNavigation()->setResponsive(true);
-	setContentsStack (new Wt::WStackedWidget(itsView));
-	itsContentsStack->addStyleClass("contents");
+	setContentsStack (new Wt::WStackedWidget(m_View));
+	m_ContentsStack->addStyleClass("contents");
 	// Setup a Left-aligned menu.
-	setLeftMenu(new Wt::WMenu(itsContentsStack, itsView));
+	setLeftMenu(new Wt::WMenu(m_ContentsStack, m_View));
 	getNavigation()->addMenu(getLeftMenu(), Wt::AlignLeft);
 	// Setup a Right-aligned menu.
 	Wt::WMenu* rightMenu = new Wt::WMenu();
@@ -128,15 +128,15 @@ WtMainPanelView::WtMainPanelView() : itsView ( new WContainerWidget()) {
 					messageBox->show();
 				}));
 	getNavigation()->addSearch(edit, Wt::AlignRight);
-	itsView->addWidget(getContentsStack());
+	m_View->addWidget(getContentsStack());
 }
 
 WtMainPanelView::~WtMainPanelView() {
-	delete itsView;
+	delete m_View;
 }
 
 WContainerWidget* WtMainPanelView::getNativeView() {
-	return itsView;
+	return m_View;
 }
 
 } /* namespace trihlav */

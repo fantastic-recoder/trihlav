@@ -42,20 +42,20 @@ class FactoryIface;
 class PresenterBase {
 public:
 
-	PresenterBase(FactoryIface& pFactory) : itsFactory(pFactory) {
+	PresenterBase(FactoryIface& pFactory) : m_Factory(pFactory) {
 	}
 
 	const FactoryIface& getFactory() const {
-		return itsFactory;
+		return m_Factory;
 	}
 
 	FactoryIface& getFactory() {
-		return itsFactory;
+		return m_Factory;
 	}
 
 	virtual ~PresenterBase(){}
 private:
-	FactoryIface& itsFactory;
+	FactoryIface& m_Factory;
 };
 
 } /* namespace trihlav */

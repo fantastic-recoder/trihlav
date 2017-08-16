@@ -45,43 +45,43 @@ using U = Wt::WLength::Unit;
 
 namespace trihlav {
 WtDialogView::WtDialogView() : //
-		itsDlg(new WDialog), //
-		itsCancelBtn(new WtPushButton(translate("Cancel"))), //
-		itsOkBtn(new WtPushButton(translate("ok"))) //
+		m_Dlg(new WDialog), //
+		m_CancelBtn(new WtPushButton(translate("Cancel"))), //
+		m_OkBtn(new WtPushButton(translate("ok"))) //
 
 {
 	BOOST_LOG_NAMED_SCOPE("WtDialogView::WtDialogView()");
 	WHBoxLayout* myBtnLayout = new WHBoxLayout;
 	{
-		itsCancelBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		itsOkBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		myBtnLayout->addWidget(itsOkBtn);
-		myBtnLayout->addWidget(itsCancelBtn);
+		m_CancelBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
+		m_OkBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
+		myBtnLayout->addWidget(m_OkBtn);
+		myBtnLayout->addWidget(m_CancelBtn);
 	}
-	itsDlg->footer()->setLayout(myBtnLayout);
-	itsDlg->finished().connect(this, &WtDialogView::finishedSlot);
-	itsCancelBtn->clicked().connect(itsDlg.get(), &WDialog::reject);
-	itsOkBtn->clicked().connect(itsDlg.get(), &WDialog::accept);
+	m_Dlg->footer()->setLayout(myBtnLayout);
+	m_Dlg->finished().connect(this, &WtDialogView::finishedSlot);
+	m_CancelBtn->clicked().connect(m_Dlg.get(), &WDialog::reject);
+	m_OkBtn->clicked().connect(m_Dlg.get(), &WDialog::accept);
 }
 
 const ButtonIface& WtDialogView::getBtnCancel() const {
-	return *itsCancelBtn;
+	return *m_CancelBtn;
 }
 
 ButtonIface& WtDialogView::getBtnCancel() {
-	return *itsCancelBtn;
+	return *m_CancelBtn;
 }
 
 const ButtonIface& WtDialogView::getBtnOk() const {
-	return *itsOkBtn;
+	return *m_OkBtn;
 }
 
 ButtonIface& WtDialogView::getBtnOk() {
-	return *itsOkBtn;
+	return *m_OkBtn;
 }
 
 void WtDialogView::show() {
-	itsDlg->show();
+	m_Dlg->show();
 }
 
 WtDialogView::~WtDialogView() {
@@ -90,10 +90,10 @@ WtDialogView::~WtDialogView() {
 
 void WtDialogView::finishedSlot(WDialog::DialogCode pCode) {
 	sigDialogFinished(pCode == WDialog::DialogCode::Accepted);
-	itsDlg->hide();
+	m_Dlg->hide();
 }
 
 Wt::WDialog &WtDialogView::getDlg() {
-	return *itsDlg;
+	return *m_Dlg;
 }
 }

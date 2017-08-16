@@ -68,9 +68,9 @@ protected:
 private:
 	void selectionChanged(int pIdx);
 	bool checkSelection() const;
-	KeyListViewIfacePtr itsKeyListView;
-	YubikoOtpKeyPresenter* itsYubikoOtpKeyPresenter;
-	int itsSelectedKey= -1;
+	KeyListViewIfacePtr m_KeyListView;
+	YubikoOtpKeyPresenter* m_YubikoOtpKeyPresenter;
+	int m_SelectedKey= -1;
 };
 
 } /* namespace trihlav */

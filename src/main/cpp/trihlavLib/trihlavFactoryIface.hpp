@@ -79,8 +79,8 @@ public:
 	/// @brief Login in the operating system UI.
 	virtual LoginViewIfacePtr createLoginView()=0;
 private:
-	std::unique_ptr<OsIface> itsOsIface;
-	std::unique_ptr<KeyManager> itsKeyManager;
+	std::unique_ptr<OsIface> m_OsIface;
+	std::unique_ptr<KeyManager> m_KeyManager;
 };
 
 }  // namespace trihlav

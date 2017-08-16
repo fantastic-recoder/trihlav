@@ -49,11 +49,11 @@ public:
 	virtual void show();
 	virtual LoginViewIface& getView();
 	virtual std::string& getLoggedInUser() {
-		return itsLoggedInUser;
+		return m_LoggedInUser;
 	}
 
 	const OsIface& getOs() const {
-		return itsOs;
+		return m_Os;
 	}
 
 	MessageViewIface& getMessageView();
@@ -63,15 +63,15 @@ public:
 	static const std::string K_TRIHLAV_OS_PASSWORD_CHECK;
 
 private:
-	enum Status{SHOWING,HIDING} itsStatus=HIDING;
+	enum Status{SHOWING,HIDING} m_Status=HIDING;
 
 	void dialogClosed(bool);
 	void checkUser();
 
-	LoginViewIfacePtr   itsLoginView;
-	std::string         itsLoggedInUser;
-	OsIface&            itsOs; ///< OS abstraction
-	MessageViewIfacePtr itsMessageView; ///< Can show a message to the user
+	LoginViewIfacePtr   m_LoginView;
+	std::string         m_LoggedInUser;
+	OsIface&            m_Os; ///< OS abstraction
+	MessageViewIfacePtr m_MessageView; ///< Can show a message to the user
 };
 
 } /* namespace trihlav */

@@ -84,9 +84,9 @@ public:
  */
 class MockFactoryT : virtual public MockFactory {
 public:
-	OsIfaceT itsOsIface;
+	OsIfaceT m_OsIface;
 	virtual OsIface& getOsIface() {
-		return itsOsIface;
+		return m_OsIface;
 	}
 };
 

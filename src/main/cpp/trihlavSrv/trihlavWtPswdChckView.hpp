@@ -50,9 +50,9 @@ public:
 	virtual ButtonIface& getBtnOk() override;
 	virtual StrEditIface& getEdtPswd0() override;
 private:
-	Wt::WContainerWidget* itsMainPanel;
-	WtPushButton* itsBtnOk;
-	WtStrEdit* itsEdtPswd;
+	Wt::WContainerWidget* m_MainPanel;
+	WtPushButton* m_BtnOk;
+	WtStrEdit* m_EdtPswd;
 };
 
 } /* namespace trihlav */

@@ -46,34 +46,34 @@ namespace trihlav {
 
         /**
          * Allow superuser?
-         * @return Settings#itsAllowRoot.
+         * @return Settings#m_AllowRoot.
          */
         bool isAllowRoot() const {
-            return itsAllowRoot;
+            return m_AllowRoot;
         }
 
         /**
          * Allow superuser?
-         * @return Settings#itsAllowRoot.
+         * @return Settings#m_AllowRoot.
          */
         bool& isAllowRoot() {
-            return itsAllowRoot;
+            return m_AllowRoot;
         }
 
         /**
          * On UNIX systems will allow select user from this value.
-         * @return Settings#itsMinUser .
+         * @return Settings#m_MinUser .
          */
         int getMinUser() const {
-            return itsMinUser;
+            return m_MinUser;
         }
 
         /**
          * On UNIX systems will allow select user from this value.
-         * @return Settings#itsMinUser .
+         * @return Settings#m_MinUser .
          */
         int& getMinUser() {
-            return itsMinUser;
+            return m_MinUser;
         }
 
         void save();
@@ -92,18 +92,18 @@ namespace trihlav {
          * Are all internal resources ready.
          */
         const bool isInitialized() const {
-            return itsInitializedFlag;
+            return m_InitializedFlag;
         }
 
 
     private:
-        boost::filesystem::path itsArchFilename;
+        boost::filesystem::path m_ArchFilename;
 
-        bool itsAllowRoot=true;
-        int  itsMinUser=1000;
+        bool m_AllowRoot=true;
+        int  m_MinUser=1000;
 
-        boost::filesystem::path itsConfigDir;
-        mutable bool itsInitializedFlag;
+        boost::filesystem::path m_ConfigDir;
+        mutable bool m_InitializedFlag;
 
         const boost::filesystem::path detectConfigDir() const;
 

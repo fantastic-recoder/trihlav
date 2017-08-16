@@ -50,17 +50,17 @@ public:
 	constexpr static const size_t K_COL_CNT = sizeof...(Columns_t);
 
 	virtual void addRow(const Row_t pRowNum) {
-		itsRows.push_back(pRowNum);
+		m_Rows.push_back(pRowNum);
 	}
 
 	const Row_t& getRow(size_t pRowNum) const {
-		const size_t mySz { itsRows.size() };
+		const size_t mySz { m_Rows.size() };
 		if (pRowNum >= mySz) {
 			throw std::out_of_range(
 					"Row " + std::to_string(pRowNum) + " out of range [0.."
 							+ std::to_string(mySz) + "].");
 		}
-		return itsRows[pRowNum];
+		return m_Rows[pRowNum];
 	}
 
 	const auto get(size_t pRowNum, size_t pColNum) const {
@@ -68,11 +68,11 @@ public:
 	}
 
 	const size_t getRowCount() const {
-		itsRows.size();
+		m_Rows.size();
 	}
 
 	void clear() {
-		itsRows.clear();
+		m_Rows.clear();
 	}
 
 private:
@@ -88,7 +88,7 @@ private:
 		return this->get_intern<(I < K_COL_CNT-1 ? I+1 : 0)>(pRowNum,pColNum);
 	}
 
-	RowList_t itsRows;
+	RowList_t m_Rows;
 
 };
 

@@ -54,25 +54,25 @@ public:
 	virtual ~HttpClient();
 
 	const std::string& getPort() const {
-		return itsPort;
+		return m_Port;
 	}
 
 	const std::string& getServer() const {
-		return itsServer;
+		return m_Server;
 	}
 
 	void parseModeHostAndPort(const std::string& pServer);
 
 	bool isAuthOk() const {
-		return itsAuthOk;
+		return m_AuthOk;
 	}
 
 	const std::string& getResponse() const {
-		return itsResponseStr;
+		return m_ResponseStr;
 	}
 
 	Mode getMode() const {
-		return itsMode;
+		return m_Mode;
 	}
 
 	bool foundResponseStr();
@@ -90,14 +90,14 @@ private:
 	void handleReadContent(const boost::system::error_code& err);
 	const std::string& getProtocol() const;
 
-	boost::asio::ip::tcp::resolver itsResolver;
-	boost::asio::ssl::stream<boost::asio::ip::tcp::socket> itsSslSocket;
-	boost::asio::ip::tcp::socket itsHttpSocket;
-	boost::asio::streambuf itsRequest;
-	boost::asio::streambuf itsResponse;
-	std::string itsServer, itsPort, itsResponseStr;
-	Mode itsMode = INVALID;
-	bool itsAuthOk = false;
+	boost::asio::ip::tcp::resolver m_Resolver;
+	boost::asio::ssl::stream<boost::asio::ip::tcp::socket> m_SslSocket;
+	boost::asio::ip::tcp::socket m_HttpSocket;
+	boost::asio::streambuf m_Request;
+	boost::asio::streambuf m_Response;
+	std::string m_Server, m_Port, m_ResponseStr;
+	Mode m_Mode = INVALID;
+	bool m_AuthOk = false;
 };
 
 } /* namespace trihlav */

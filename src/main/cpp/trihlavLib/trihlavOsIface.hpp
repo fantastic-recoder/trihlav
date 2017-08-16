@@ -42,14 +42,14 @@ class Settings;
  * structure.
  */
 struct SysUser {
-	std::string itsLogin;
-	std::string itsFullName;
-	long itsId;
-	const std::string str() const { return itsLogin+" [ " + itsFullName + ", "+std::to_string(itsId) +" ]"; }
+	std::string m_Login;
+	std::string m_FullName;
+	long m_Id;
+	const std::string str() const { return m_Login+" [ " + m_FullName + ", "+std::to_string(m_Id) +" ]"; }
 };
 
 inline std::ostream& operator << ( std::ostream& pOstr, const SysUser& pUser )  {
-	pOstr << "SysUser{ login=\"" << pUser.itsLogin << "\" name=\"" << pUser.itsFullName << "\" }";
+	pOstr << "SysUser{ login=\"" << pUser.m_Login << "\" name=\"" << pUser.m_FullName << "\" }";
 	return pOstr;
 }
 

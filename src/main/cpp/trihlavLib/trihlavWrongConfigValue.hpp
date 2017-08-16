@@ -46,11 +46,11 @@ public:
 
     virtual ~WrongConfigValue() throw() {}
 private:
-    EValNames itsValName;
-    EReason itsReason;
-    size_t itsExpected;
-    std::string itsReal;
-    std::string itsMsg;
+    EValNames m_ValName;
+    EReason m_Reason;
+    size_t m_Expected;
+    std::string m_Real;
+    std::string m_Msg;
 };
 
 }

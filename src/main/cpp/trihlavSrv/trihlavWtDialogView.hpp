@@ -43,9 +43,9 @@ namespace trihlav {
 
     class WtDialogView : virtual public DialogViewIface {
     private:
-        WtPushButton *itsCancelBtn;
-        WtPushButton *itsOkBtn;
-        std::unique_ptr<Wt::WDialog> itsDlg;
+        WtPushButton *m_CancelBtn;
+        WtPushButton *m_OkBtn;
+        std::unique_ptr<Wt::WDialog> m_Dlg;
     public:
         WtDialogView();
 
@@ -54,7 +54,7 @@ namespace trihlav {
         virtual const ButtonIface &getBtnCancel() const override;
 
         const Wt::WDialog &getDlg() const {
-            return *itsDlg;
+            return *m_Dlg;
         }
 
         virtual Wt::WDialog &getDlg();

@@ -22,9 +22,9 @@ namespace trihlav {
 
 MainPanelPresenter::MainPanelPresenter(FactoryIface& pFactory) :
 		PresenterBase(pFactory),
-		itsKeyListPresenter(pFactory.createKeyListPresenter()),
-		itsPswdChckPresenter(pFactory.createPswdChckPresenter()),
-		itsMainPanelView(pFactory.createMainPanelView())
+		m_KeyListPresenter(pFactory.createKeyListPresenter()),
+		m_PswdChckPresenter(pFactory.createPswdChckPresenter()),
+		m_MainPanelView(pFactory.createMainPanelView())
 {
 }
 
@@ -32,23 +32,23 @@ MainPanelPresenter::~MainPanelPresenter() {
 }
 
 ViewIface& MainPanelPresenter::getView() {
-	return *itsMainPanelView;
+	return *m_MainPanelView;
 }
 
 void MainPanelPresenter::setupUi() {
 	getFactory().getSettings().load();
-	PswdChckViewIface& myPswdChckView=itsPswdChckPresenter->getView();
-	itsMainPanelView->add(translate("Password check"),PanelName::PswdCheck,myPswdChckView);
-	KeyListViewIface& myKeyListView=itsKeyListPresenter->getView();
-	itsMainPanelView->add(translate("Key list"),PanelName::KeyList,myKeyListView);
-	itsMainPanelView->sigShowedPanel.connect([=](const PanelName& pPanel){showedPanel(pPanel);});
+	PswdChckViewIface& myPswdChckView=m_PswdChckPresenter->getView();
+	m_MainPanelView->add(translate("Password check"),PanelName::PswdCheck,myPswdChckView);
+	KeyListViewIface& myKeyListView=m_KeyListPresenter->getView();
+	m_MainPanelView->add(translate("Key list"),PanelName::KeyList,myKeyListView);
+	m_MainPanelView->sigShowedPanel.connect([=](const PanelName& pPanel){showedPanel(pPanel);});
 }
 
 void MainPanelPresenter::showedPanel(const PanelName pPanel) {
 	BOOST_LOG_NAMED_SCOPE("MainPanelPresenter::showedPanel");
 
 	if(pPanel==PanelName::KeyList) {
-		itsKeyListPresenter->protectedAction();
+		m_KeyListPresenter->protectedAction();
 	}
 }
 

@@ -191,7 +191,7 @@ const SysUsers OsIface::getSysUsers(const Settings& pSettings) const {
 			std::smatch myMatches;
 			if (regex_match(aReadLine, myMatches, K_PSWD_LN)) {
 				SysUser myUser{myMatches[2],myMatches[6],std::stol(myMatches[4])};
-				if(pSettings.getMinUser()<=myUser.itsId) {
+				if(pSettings.getMinUser()<=myUser.m_Id) {
 					myUsers.push_back(myUser);
 				}
 			} else {

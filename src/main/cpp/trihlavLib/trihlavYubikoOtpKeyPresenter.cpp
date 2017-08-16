@@ -73,13 +73,13 @@ void YubikoOtpKeyPresenter::systemUserSelected() {
 }
 
 YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(FactoryIface& pFactory) :
-		PresenterBase(pFactory), itsCurCfg(0) {
+		PresenterBase(pFactory), m_CurCfg(0) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
 }
 
 YubikoOtpKeyPresenter::~YubikoOtpKeyPresenter() {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::~YubikoOptKeyPresenter");
-	delete itsCurCfg;
+	delete m_CurCfg;
 }
 
 void YubikoOtpKeyPresenter::showCurrentConfig() {
@@ -91,43 +91,43 @@ void YubikoOtpKeyPresenter::showCurrentConfig() {
 }
 
 void YubikoOtpKeyPresenter::addKey() {
-	delete itsCurCfg;
-	itsCurCfg = 0;
+	delete m_CurCfg;
+	m_CurCfg = 0;
 	getCurCfg();
-	itsMode = Add;
+	m_Mode = Add;
 	showCurrentConfig();
 }
 
 void YubikoOtpKeyPresenter::deleteKey(const YubikoOtpKeyConfig& pKeyCfg) {
-	delete itsCurCfg;
-	itsCurCfg = new YubikoOtpKeyConfig { pKeyCfg };
-	itsMode = Delete;
+	delete m_CurCfg;
+	m_CurCfg = new YubikoOtpKeyConfig { pKeyCfg };
+	m_Mode = Delete;
 	if (getMessageView().ask(translate("Trihlav question"),
 			translate(
-					"Really delete key \"" + itsCurCfg->getDescription()
+					"Really delete key \"" + m_CurCfg->getDescription()
 							+ "\"."))) {
 		deleteKey();
 		saved();
-		itsMode = None;
+		m_Mode = None;
 	}
 }
 
 void YubikoOtpKeyPresenter::editKey(const YubikoOtpKeyConfig& pKeyCfg) {
-	delete itsCurCfg;
-	itsCurCfg = new YubikoOtpKeyConfig { pKeyCfg };
-	itsMode = Edit;
+	delete m_CurCfg;
+	m_CurCfg = new YubikoOtpKeyConfig { pKeyCfg };
+	m_Mode = Edit;
 	showCurrentConfig();
 }
 
 YubikoOtpKeyConfig& YubikoOtpKeyPresenter::getCurCfg() {
-	if (!itsCurCfg) {
-		itsCurCfg = new YubikoOtpKeyConfig(getFactory().getKeyManager());
+	if (!m_CurCfg) {
+		m_CurCfg = new YubikoOtpKeyConfig(getFactory().getKeyManager());
 	}
-	return *itsCurCfg;
+	return *m_CurCfg;
 }
 
 void YubikoOtpKeyPresenter::deleteKey() {
-	if (itsCurCfg) {
+	if (m_CurCfg) {
 		const path myFilename = getCurCfg().getFilename();
 		if (exists(myFilename)) {
 			getFactory().getKeyManager().prefixKeyFile(myFilename, "deleted");
@@ -157,11 +157,11 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::accepted");
 	BOOST_LOG_TRIVIAL(info)<< "Accepted==" << pAccepted;
 	if (pAccepted) {
-		if (itsCurCfg == 0) {
+		if (m_CurCfg == 0) {
 			throwNoConfig();
 		}
 		try {
-			if (itsMode == Add || itsMode == Edit) {
+			if (m_Mode == Add || m_Mode == Edit) {
 				string myPrivateId { deleteSpaces(getPrivateId()) };
 				getCurCfg().setPrivateId(myPrivateId);
 
@@ -185,7 +185,7 @@ void YubikoOtpKeyPresenter::accepted(const bool pAccepted) {
 					translate("Trihlav error!"),
 					translate("Unknown exception caught!"));
 		}
-		itsMode = None;
+		m_Mode = None;
 	}
 }
 
@@ -218,12 +218,12 @@ string YubikoOtpKeyPresenter::getDescription() {
 }
 
 YubikoOtpKeyViewIface& YubikoOtpKeyPresenter::getView() {
-	if (!itsView) {
-		itsView = getFactory().createYubikoOtpKeyView();
-		BOOST_LOG_TRIVIAL(debug)<< "Allocated view " << itsView.get();
+	if (!m_View) {
+		m_View = getFactory().createYubikoOtpKeyView();
+		BOOST_LOG_TRIVIAL(debug)<< "Allocated view " << m_View.get();
 		initUi();
 	}
-	return *itsView;
+	return *m_View;
 }
 
 StrEditIface& YubikoOtpKeyPresenter::getEdtPrivateId() {
@@ -291,18 +291,18 @@ void YubikoOtpKeyPresenter::generateModhex(int pBytes, string& pTarget) {
 }
 
 MessageViewIface& YubikoOtpKeyPresenter::getMessageView() {
-	if(!itsMessageView) {
-		itsMessageView=getFactory().createMessageView();
+	if(!m_MessageView) {
+		m_MessageView=getFactory().createMessageView();
 	}
-	return *itsMessageView;
+	return *m_MessageView;
 }
 
 SysUserListPresenter& YubikoOtpKeyPresenter::getSysUserListPresenter() {
-	if(!itsSysUserListPresenter) {
-		itsSysUserListPresenter.reset( new SysUserListPresenter(getFactory()));
-		itsSysUserListPresenter->userSelectedSig.connect([this](){systemUserSelected();});
+	if(!m_SysUserListPresenter) {
+		m_SysUserListPresenter.reset( new SysUserListPresenter(getFactory()));
+		m_SysUserListPresenter->userSelectedSig.connect([this](){systemUserSelected();});
 	}
-	return *itsSysUserListPresenter;
+	return *m_SysUserListPresenter;
 }
 
 

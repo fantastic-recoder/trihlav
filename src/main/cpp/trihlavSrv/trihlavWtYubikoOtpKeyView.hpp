@@ -42,17 +42,17 @@ class WtStrEdit;
 class WtSpinBox;
 
 class WtYubikoOtpKeyView: virtual public WtDialogView, virtual public YubikoOtpKeyViewIface {
-	WtStrEdit* itsPublicId;
-	WtStrEdit* itsEdtDescription;
-	WtSpinBox* itsPublicIdLen;
-	WtStrEdit* itsPrivateId;
-	WtStrEdit* itsSecretKey;
-	WtStrEdit* itsEdtSysUser;
-	WtPushButton* itsGenPublicIdentityBtn;
-	WtPushButton* itsGenPrivateIdentityBtn;
-	WtPushButton* itsGenSecretKeyBtn;
-	WtPushButton* itsBtnSelectSysUser;
-	std::string   itsSysUserLogin;
+	WtStrEdit* m_PublicId;
+	WtStrEdit* m_EdtDescription;
+	WtSpinBox* m_PublicIdLen;
+	WtStrEdit* m_PrivateId;
+	WtStrEdit* m_SecretKey;
+	WtStrEdit* m_EdtSysUser;
+	WtPushButton* m_GenPublicIdentityBtn;
+	WtPushButton* m_GenPrivateIdentityBtn;
+	WtPushButton* m_GenSecretKeyBtn;
+	WtPushButton* m_BtnSelectSysUser;
+	std::string   m_SysUserLogin;
 public:
 	WtYubikoOtpKeyView();
 	virtual ~WtYubikoOtpKeyView();

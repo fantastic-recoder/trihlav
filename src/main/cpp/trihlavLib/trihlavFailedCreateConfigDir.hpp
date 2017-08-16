@@ -12,15 +12,15 @@ namespace trihlav {
 
     class FailedCreateConfigDir  : virtual public std::invalid_argument {
     private:
-        boost::filesystem::path itsConfigDir;
-        std::string             itsMsg;
+        boost::filesystem::path m_ConfigDir;
+        std::string             m_Msg;
     public:
         const boost::filesystem::path &getConfigDir() const {
-            return itsConfigDir;
+            return m_ConfigDir;
         }
 
         void setConfigDir(const boost::filesystem::path &pConfigDir) {
-            itsConfigDir = pConfigDir;
+            m_ConfigDir = pConfigDir;
         }
         const char* what() const throw();
     public:

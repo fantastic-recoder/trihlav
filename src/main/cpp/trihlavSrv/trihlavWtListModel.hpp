@@ -56,7 +56,7 @@ public:
 	 * @param pCaptions column captions
 	 */
 	WtListModel(const std::vector<std::string>& pCaptions) :
-			itsCaptions(pCaptions) {
+			m_Captions(pCaptions) {
 	}
 
 	/**
@@ -75,7 +75,7 @@ public:
 	int columnCount(const Wt::WModelIndex &pParent = Wt::WModelIndex()) const
 			override {
 		if (!pParent.isValid())
-			return itsCaptions.size();
+			return m_Captions.size();
 		return sizeof...(Columns_t);
 	}
 
@@ -110,10 +110,10 @@ public:
 		if (pOrientation == Wt::Horizontal) {
 			switch (pRole) {
 				case Wt::DisplayRole:
-				if (pSection >= itsCaptions.size()) {
+				if (pSection >= m_Captions.size()) {
 					return boost::any("-");
 				}
-				return itsCaptions[pSection];
+				return m_Captions[pSection];
 				default:
 				return boost::any();
 
@@ -142,7 +142,7 @@ public:
 		dataChanged().emit(createIndex(0,0,0UL),createIndex(rowCount(),columnCount(),0UL));
 	}
 private:
-	const Captions_t itsCaptions;
+	const Captions_t m_Captions;
 };
 
 }

@@ -36,16 +36,16 @@ namespace trihlav {
 template<typename T>
 class MockEditIface: virtual public EditIface<T> {
 public:
-	T itsVal;
+	T m_Val;
 
-	MockEditIface(const T& pVal) : itsVal(pVal){}
+	MockEditIface(const T& pVal) : m_Val(pVal){}
 
 	/**
 	 * @brief Getter
 	 * @return a copy of it's value
 	 */
 	virtual const T getValue() const  override {
-		return itsVal;
+		return m_Val;
 	}
 
 	/**
@@ -54,7 +54,7 @@ public:
 	 * @return void
 	 */
 	virtual void setValue(const T& pVal)  override {
-		itsVal = pVal;
+		m_Val = pVal;
 	}
 
 	/**

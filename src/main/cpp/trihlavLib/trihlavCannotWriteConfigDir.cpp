@@ -41,16 +41,16 @@ namespace trihlav {
     CannotWriteConfigDir::CannotWriteConfigDir(const boost::filesystem::path &pConfigDir) : invalid_argument(
     		K_CONFIG_DIR_NOT_WRIEABLE.c_str()) {
         try {
-            itsMsg=K_CONFIG_DIR_NOT_WRIEABLE+string("Directory \"")
+            m_Msg=K_CONFIG_DIR_NOT_WRIEABLE+string("Directory \"")
                    + getConfigDir().native()
                    + string("\"") ;
         } catch (...) {
-            itsMsg=K_FAILED_FORMAT_MSG.c_str();
+            m_Msg=K_FAILED_FORMAT_MSG.c_str();
         }
     }
 
     const char* CannotWriteConfigDir::what() const throw() {
-        return itsMsg.c_str();
+        return m_Msg.c_str();
     }
 
 

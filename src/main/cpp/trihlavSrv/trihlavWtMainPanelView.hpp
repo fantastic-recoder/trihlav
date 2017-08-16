@@ -55,49 +55,49 @@ public:
 	virtual void add(const std::string& pLocalizedName, const PanelName& pName, KeyListViewIface& pKeyListView) override;
 
 	const Wt::WNavigationBar* getNavigation() const {
-		return itsNavigation;
+		return m_Navigation;
 	}
 
 	Wt::WNavigationBar* getNavigation() {
-		return itsNavigation;
+		return m_Navigation;
 	}
 
 	const Wt::WMenu* getLeftMenu() const {
-		return itsLeftMenu;
+		return m_LeftMenu;
 	}
 
 	Wt::WMenu* getLeftMenu() {
-		return itsLeftMenu;
+		return m_LeftMenu;
 	}
 
 	const Wt::WStackedWidget* getContentsStack() const {
-		return itsContentsStack;
+		return m_ContentsStack;
 	}
 
 	Wt::WStackedWidget* getContentsStack() {
-		return itsContentsStack;
+		return m_ContentsStack;
 	}
 
 	void setContentsStack(Wt::WStackedWidget* myContentsStack) {
-		itsContentsStack = myContentsStack;
+		m_ContentsStack = myContentsStack;
 	}
 
 protected:
 	virtual void addView(const std::string& pLocalizedName, const PanelName& pName, WtViewIface& pView);
 
 	void setNavigation(Wt::WNavigationBar* pNavigation) {
-		itsNavigation = pNavigation;
+		m_Navigation = pNavigation;
 	}
 
 	void setLeftMenu(Wt::WMenu* pLeftMenu) {
-		itsLeftMenu = pLeftMenu;
+		m_LeftMenu = pLeftMenu;
 	}
 
 private:
-	Wt::WContainerWidget* itsView;
-	Wt::WNavigationBar* itsNavigation;
-	Wt::WMenu* itsLeftMenu;
-	Wt::WStackedWidget* itsContentsStack;
+	Wt::WContainerWidget* m_View;
+	Wt::WNavigationBar* m_Navigation;
+	Wt::WMenu* m_LeftMenu;
+	Wt::WStackedWidget* m_ContentsStack;
 };
 
 } /* namespace trihlav */

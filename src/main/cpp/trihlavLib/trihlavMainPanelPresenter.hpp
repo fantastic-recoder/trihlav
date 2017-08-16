@@ -24,9 +24,9 @@ enum class PanelName;
  * Implementation of the top level UI presenter.
  */
 class MainPanelPresenter : virtual public PresenterBase {
-	MainPanelViewIfacePtr itsMainPanelView;
-	KeyListPresenterIfacePtr  itsKeyListPresenter;
-	PswdChckPresenterIfacePtr itsPswdChckPresenter;
+	MainPanelViewIfacePtr m_MainPanelView;
+	KeyListPresenterIfacePtr  m_KeyListPresenter;
+	PswdChckPresenterIfacePtr m_PswdChckPresenter;
 public:
 	MainPanelPresenter(FactoryIface& pFactory);
 	virtual ~MainPanelPresenter();

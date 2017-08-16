@@ -40,40 +40,40 @@ namespace trihlav {
 
 WtLoginView::WtLoginView() //
 :
-		itsEdtUserName(new WtStrEdit)  //
-				, itsEdtPassword(new WtStrEdit) //
-				, itsLblUserName(new WtLabel("User name")) //
-				, itsLblPassword(new WtLabel("Password")) //
+		m_EdtUserName(new WtStrEdit)  //
+				, m_EdtPassword(new WtStrEdit) //
+				, m_LblUserName(new WtLabel("User name")) //
+				, m_LblPassword(new WtLabel("Password")) //
 {
 	getDlg().setWidth(WLength(32, U::FontEm));
 	WGridLayout* myTopLayout = new WGridLayout;
 	{
-		itsLblUserName->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(itsLblUserName,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsEdtUserName,0,1,1,1,Wt::AlignMiddle);
+		m_LblUserName->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(m_LblUserName,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(m_EdtUserName,0,1,1,1,Wt::AlignMiddle);
 	}
 	{
-		itsLblPassword->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(itsLblPassword,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(itsEdtPassword,2,1,1,1,Wt::AlignMiddle);
+		m_LblPassword->setWidth(WLength(9.0,U::FontEm));
+		myTopLayout->addWidget(m_LblPassword,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
+		myTopLayout->addWidget(m_EdtPassword,2,1,1,1,Wt::AlignMiddle);
 	}
 	getDlg().contents()->setLayout(myTopLayout);
 }
 
 StrEditIface& WtLoginView::getEdtUserName() {
-	return *itsEdtUserName;
+	return *m_EdtUserName;
 }
 
 StrEditIface& WtLoginView::getEdtPassword() {
-	return *itsEdtPassword;
+	return *m_EdtPassword;
 }
 
 LabelIface& WtLoginView::getLblUserName() {
-	return *itsLblUserName;
+	return *m_LblUserName;
 }
 
 LabelIface& WtLoginView::getLblPassword() {
-	return *itsLblPassword;
+	return *m_LblPassword;
 }
 
 } /* namespace trihlav */

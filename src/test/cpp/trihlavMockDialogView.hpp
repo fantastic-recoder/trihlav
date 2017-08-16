@@ -48,8 +48,8 @@ public:
 
 	MOCK_METHOD0(show, void ());
 
-	MockButton itsMockBtnOk;
-	MockButton itsMockBtnCancel;
+	MockButton m_MockBtnOk;
+	MockButton m_MockBtnCancel;
 
 };
 

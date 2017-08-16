@@ -79,8 +79,8 @@ namespace pretty
       : prefix(pre), delimiter(delim), postfix(post) {}
   };
 
-  template<class T, class charT, class traits>
-  int const decor<T, charT, traits>::xindex = std::ios_base::xalloc();
+  template<class T, class charT, class tram_>
+  int const decor<T, charT, tram_>::xindex = std::ios_base::xalloc();
 
   namespace detail
   {

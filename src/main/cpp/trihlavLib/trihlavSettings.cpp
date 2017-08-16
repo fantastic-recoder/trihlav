@@ -60,23 +60,23 @@ namespace trihlav {
 
     bool Settings::load() {
 
-        if (exists(itsArchFilename)) {
+        if (exists(m_ArchFilename)) {
             // create and open an archive for input
-            std::ifstream myIfs(itsArchFilename.native());
+            std::ifstream myIfs(m_ArchFilename.native());
             boost::archive::text_iarchive myIa(myIfs);
             // read class state from archive
             myIa >> (*this);
             // archive and stream closed when destructors are called
             return true;
         } else {
-            BOOST_LOG_TRIVIAL(info) << "Config file " << itsArchFilename << " does not exists.";
+            BOOST_LOG_TRIVIAL(info) << "Config file " << m_ArchFilename << " does not exists.";
         }
         return false;
     }
 
     void Settings::save() {
         // create and open a character archive for output
-        std::ofstream myOfs(itsArchFilename.native());
+        std::ofstream myOfs(m_ArchFilename.native());
         boost::archive::text_oarchive myOa(myOfs);
         // write class instance to archive
         myOa << (*this);
@@ -93,23 +93,23 @@ namespace trihlav {
     Settings::getConfigDir() const {
         BOOST_LOG_NAMED_SCOPE("Settings::getConfigDir()");
         if (!isInitialized()) {
-            BOOST_LOG_TRIVIAL(debug) << "Checking config dir " << itsConfigDir << ".";
-            if (exists(itsConfigDir)) {
-                const perms &myPerms = status(itsConfigDir).permissions();
+            BOOST_LOG_TRIVIAL(debug) << "Checking config dir " << m_ConfigDir << ".";
+            if (exists(m_ConfigDir)) {
+                const perms &myPerms = status(m_ConfigDir).permissions();
                 if (!myPerms & perms::owner_write) {
-                    throw CannotWriteConfigDir(itsConfigDir);
+                    throw CannotWriteConfigDir(m_ConfigDir);
                 }
             } else {
-                BOOST_LOG_TRIVIAL(debug) << "Creating config dir " << itsConfigDir << ".";
-                if (!create_directories(itsConfigDir)) {
-                    throw FailedCreateConfigDir(itsConfigDir);
+                BOOST_LOG_TRIVIAL(debug) << "Creating config dir " << m_ConfigDir << ".";
+                if (!create_directories(m_ConfigDir)) {
+                    throw FailedCreateConfigDir(m_ConfigDir);
                 }
             }
-            itsInitializedFlag = true;
+            m_InitializedFlag = true;
         } else {
             BOOST_LOG_TRIVIAL(debug) << "Config. dir. was already initialized.";
         }
-        return itsConfigDir;
+        return m_ConfigDir;
     }
 
     void Settings::checkPath(const path &pPath, bool &readable,
@@ -184,7 +184,7 @@ namespace trihlav {
             if (myWriteable) {
                 BOOST_LOG_TRIVIAL(debug) << ": " << myDefPath << " is writable.";
             } else {
-                throw FailedCreateConfigDir(itsConfigDir);
+                throw FailedCreateConfigDir(m_ConfigDir);
             }
         }
         return myDefPath;
@@ -200,30 +200,30 @@ namespace trihlav {
         if (myWriteable) {
             BOOST_LOG_TRIVIAL(debug) << ": " << pConfigDir << " is writable.";
         } else {
-            throw FailedCreateConfigDir(itsConfigDir);
+            throw FailedCreateConfigDir(m_ConfigDir);
         }
-        itsConfigDir = pConfigDir;
-        itsArchFilename = (getConfigDir() / K_SETTINGS_FILE_NAME);
-        BOOST_LOG_TRIVIAL(debug) << "Config. dir set: " << itsConfigDir << " " << itsConfigDir << ".";
+        m_ConfigDir = pConfigDir;
+        m_ArchFilename = (getConfigDir() / K_SETTINGS_FILE_NAME);
+        BOOST_LOG_TRIVIAL(debug) << "Config. dir set: " << m_ConfigDir << " " << m_ConfigDir << ".";
     }
 
     Settings::Settings(const path &pConfigDir) //
-            : itsInitializedFlag(false) //
-            , itsConfigDir(pConfigDir) //
+            : m_InitializedFlag(false) //
+            , m_ConfigDir(pConfigDir) //
     {
         BOOST_LOG_NAMED_SCOPE("Settings::Settings");
-        itsArchFilename = (itsConfigDir / K_SETTINGS_FILE_NAME);
-        BOOST_LOG_TRIVIAL(debug) << "C'tor from config. dir: " << itsConfigDir << " " << itsConfigDir << ".";
+        m_ArchFilename = (m_ConfigDir / K_SETTINGS_FILE_NAME);
+        BOOST_LOG_TRIVIAL(debug) << "C'tor from config. dir: " << m_ConfigDir << " " << m_ConfigDir << ".";
     }
 
 
     Settings::Settings() //
-            : itsInitializedFlag(false) //
-            , itsConfigDir(detectConfigDir()) //
+            : m_InitializedFlag(false) //
+            , m_ConfigDir(detectConfigDir()) //
     {
         BOOST_LOG_NAMED_SCOPE("Settings::Settings");
-        itsArchFilename = (itsConfigDir / K_SETTINGS_FILE_NAME);
-        BOOST_LOG_TRIVIAL(debug) << "Default c'tor config dir:" << itsConfigDir << " " << itsConfigDir << ".";
+        m_ArchFilename = (m_ConfigDir / K_SETTINGS_FILE_NAME);
+        BOOST_LOG_TRIVIAL(debug) << "Default c'tor config dir:" << m_ConfigDir << " " << m_ConfigDir << ".";
 
     }
 
@@ -302,7 +302,7 @@ namespace trihlav {
              AccessCheck() requires an impersonation token.  We first get a primary
              token and then create a duplicate impersonation token.  The
              impersonation token is not actually assigned to the thread, but is
-             used in the call to AccessCheck.  Thus, this function itself never
+             used in the call to AccessCheck.  Thus, this function m_elf never
              impersonates, but does use the identity of the thread.  If the thread
              was impersonating already, this function uses that impersonation context.
              */

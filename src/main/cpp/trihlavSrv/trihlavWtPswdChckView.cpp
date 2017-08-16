@@ -47,19 +47,19 @@ using boost::locale::translate;
 namespace trihlav {
 
 WtPswdChckView::WtPswdChckView() //
-:itsBtnOk(new WtPushButton(translate("check")))
-,itsEdtPswd(new WtStrEdit)
+:m_BtnOk(new WtPushButton(translate("check")))
+,m_EdtPswd(new WtStrEdit)
 {
-	itsBtnOk->setWidth(WLength(7.0,WLength::FontEm));
-	itsEdtPswd->setWidth(WLength(32.0,WLength::FontEm));
-	itsEdtPswd->setMargin(WLength(16.0,WLength::Pixel));
-	itsMainPanel = new WContainerWidget();
-	itsMainPanel->setWidth(WLength(100.0,WLength::Percentage));
-	itsMainPanel->setHeight(WLength(7.0,WLength::FontEm));
-	itsMainPanel->setContentAlignment(Wt::AlignCenter|Wt::AlignBottom);
-	itsMainPanel->addWidget(new WText(translate("One time password").str()));
-	itsMainPanel->addWidget(itsEdtPswd);
-	itsMainPanel->addWidget(itsBtnOk);
+	m_BtnOk->setWidth(WLength(7.0,WLength::FontEm));
+	m_EdtPswd->setWidth(WLength(32.0,WLength::FontEm));
+	m_EdtPswd->setMargin(WLength(16.0,WLength::Pixel));
+	m_MainPanel = new WContainerWidget();
+	m_MainPanel->setWidth(WLength(100.0,WLength::Percentage));
+	m_MainPanel->setHeight(WLength(7.0,WLength::FontEm));
+	m_MainPanel->setContentAlignment(Wt::AlignCenter|Wt::AlignBottom);
+	m_MainPanel->addWidget(new WText(translate("One time password").str()));
+	m_MainPanel->addWidget(m_EdtPswd);
+	m_MainPanel->addWidget(m_BtnOk);
 }
 
 WtPswdChckView::~WtPswdChckView() {
@@ -67,18 +67,18 @@ WtPswdChckView::~WtPswdChckView() {
 }
 
 WWidget* WtPswdChckView::getWWidget() {
-	return itsMainPanel;
+	return m_MainPanel;
 }
 
 void WtPswdChckView::setupUi() {
 }
 
 ButtonIface& WtPswdChckView::getBtnOk() {
-	return *itsBtnOk;
+	return *m_BtnOk;
 }
 
 StrEditIface& WtPswdChckView::getEdtPswd0() {
-	return *itsEdtPswd;
+	return *m_EdtPswd;
 }
 
 } /* namespace trihlav */

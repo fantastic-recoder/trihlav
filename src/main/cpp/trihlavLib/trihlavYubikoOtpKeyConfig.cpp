@@ -88,8 +88,8 @@ static const string K_NM_DOC_DESC = K_NM_DOC + K_NM_DESC;
 static const string K_NM_DOC_SYS_USER = K_NM_DOC + K_NM_SYS_USER;
 
 void YubikoOtpKeyConfig::zeroToken() {
-	memset(&itsToken, 0, sizeof(yubikey_token_st));
-	memset(&itsKey, 0, YUBIKEY_KEY_SIZE);
+	memset(&m_Token, 0, sizeof(yubikey_token_st));
+	memset(&m_Key, 0, YUBIKEY_KEY_SIZE);
 }
 
 /**
@@ -99,7 +99,7 @@ void YubikoOtpKeyConfig::zeroToken() {
  */
 YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager,
 		const bfs::path& pFilename) :
-		itsKeyManager(pKeyManager), itsChangedFlag(false), itsFilename(
+		m_KeyManager(pKeyManager), m_ChangedFlag(false), m_Filename(
 				pFilename) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
 	BOOST_LOG_TRIVIAL(debug)<< "Passed filename:  " << pFilename.native();
@@ -110,7 +110,7 @@ YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager,
  *
  */
 YubikoOtpKeyConfig::YubikoOtpKeyConfig(KeyManager& pKeyManager) :
-		itsKeyManager(pKeyManager), itsChangedFlag(false) {
+		m_KeyManager(pKeyManager), m_ChangedFlag(false) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::YubikoOtpKeyConfig");
 	generateFilename();
 	zeroToken();
@@ -124,7 +124,7 @@ const string YubikoOtpKeyConfig::getPrivateId() const {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::getPrivateId");
 	string myRetVal(K_YBK_PRIVATE_ID_LEN, '.');
 	yubikey_hex_encode(&myRetVal[0],
-			reinterpret_cast<const char*>(&itsToken.uid), YUBIKEY_UID_SIZE);
+			reinterpret_cast<const char*>(&m_Token.uid), YUBIKEY_UID_SIZE);
 	return string(myRetVal);
 }
 
@@ -142,16 +142,16 @@ void YubikoOtpKeyConfig::setPrivateId(const string &pPrivateId) {
 				K_YBK_PRIVATE_ID_LEN, myPrivateId);
 	}
 	if (getPrivateId() != pPrivateId) {
-		yubikey_hex_decode(reinterpret_cast<char*>(itsToken.uid),
+		yubikey_hex_decode(reinterpret_cast<char*>(m_Token.uid),
 				myPrivateId.c_str(), YUBIKEY_UID_SIZE);
-		itsChangedFlag = true;
+		m_ChangedFlag = true;
 	}
 }
 
 const std::string YubikoOtpKeyConfig::getSecretKey() const {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::getSecretKey()");
 	string myRetVal(K_SEC_KEY_SZ, '.');
-	yubikey_hex_encode(&myRetVal[0], reinterpret_cast<const char*>(&itsKey),
+	yubikey_hex_encode(&myRetVal[0], reinterpret_cast<const char*>(&m_Key),
 	YUBIKEY_KEY_SIZE);
 	return string(myRetVal);
 }
@@ -166,20 +166,20 @@ void YubikoOtpKeyConfig::setSecretKey(const std::string& pKey) {
 				mySecretKey);
 	}
 	if (getSecretKey() != pKey) {
-		yubikey_hex_decode(reinterpret_cast<char*>(itsKey.data()),
+		yubikey_hex_decode(reinterpret_cast<char*>(m_Key.data()),
 				mySecretKey.c_str(),
 				YUBIKEY_KEY_SIZE);
-		itsChangedFlag = true;
+		m_ChangedFlag = true;
 	}
 }
 
 void YubikoOtpKeyConfig::generateFilename() {
-	if (itsKeyManager.getSettings().getConfigDir().empty()) {
+	if (m_KeyManager.getSettings().getConfigDir().empty()) {
 		throw std::runtime_error("YubikoOtpKeyConfig::generateFilename()==\"\"");
 	}
-	path myFilename = itsKeyManager.getSettings().getConfigDir()
+	path myFilename = m_KeyManager.getSettings().getConfigDir()
 					  / "%%-%%-%%.trihlav-key.json";
-	itsFilename=unique_path(myFilename);
+	m_Filename=unique_path(myFilename);
 }
 
 const string YubikoOtpKeyConfig::checkFileName(bool pIsOut) const {
@@ -245,7 +245,7 @@ void YubikoOtpKeyConfig::load() {
 		if (!mySysUser.empty())
 			setSysUser(mySysUser);
 	}
-	itsChangedFlag = false;
+	m_ChangedFlag = false;
 }
 
 /**
@@ -268,7 +268,7 @@ void YubikoOtpKeyConfig::save() {
 	myTree.put(K_NM_DOC_SYS_USER /*-->*/, getSysUser());
 	myTree.put(K_NM_DOC_VERS /*------>*/, K_VL_VERS);
 	write_json(myOutFile, myTree);
-	itsChangedFlag = false;
+	m_ChangedFlag = false;
 }
 
 /**
@@ -289,7 +289,7 @@ bool YubikoOtpKeyConfig::operator ==(const YubikoOtpKeyConfig& pOther) const {
 		<< this->getPublicId() << "!=" << pOther.getPublicId();
 		return false;
 	}
-	if (memcmp(&this->itsKey, &pOther.itsKey,sizeof(itsKey)) !=0 ) {
+	if (memcmp(&this->m_Key, &pOther.m_Key,sizeof(m_Key)) !=0 ) {
 		BOOST_LOG_TRIVIAL(debug)<< "Secret key "
 		<< this->getSecretKey() << "!=" << pOther.getSecretKey();
 		return false;
@@ -303,7 +303,7 @@ YubikoOtpKeyConfig::~YubikoOtpKeyConfig() {
 
 void YubikoOtpKeyConfig::setFilename(const string &value) {
 	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyConfig::setFilename");
-	itsFilename = value;
+	m_Filename = value;
 }
 
 const string YubikoOtpKeyConfig::token2json() const {
@@ -371,12 +371,12 @@ const string YubikoOtpKeyConfig::modhex2Hex(const std::string& p2Hex) {
 }
 
 void YubikoOtpKeyConfig::setPublicId(const std::string& pPubId) {
-	auto myOldKey = itsPublicId;
+	auto myOldKey = m_PublicId;
 	if (pPubId.empty()) {
 		throw EmptyPublicId();
 	}
-	itsPublicId = pPubId;
-	itsKeyManager.update(pPubId, *this);
+	m_PublicId = pPubId;
+	m_KeyManager.update(pPubId, *this);
 }
 
 void YubikoOtpKeyConfig::copyAndSaveToken(const yubikey_token_st& pToken) {
@@ -457,7 +457,7 @@ void YubikoOtpKeyConfig::setSysUser(const string& pSysUser) {
 		throw invalid_argument { "System user is empty or too long:\""
 				+ pSysUser + "\"" };
 	}
-	itsSysUser = pSysUser;
+	m_SysUser = pSysUser;
 }
 
 } // end namespace trihlav

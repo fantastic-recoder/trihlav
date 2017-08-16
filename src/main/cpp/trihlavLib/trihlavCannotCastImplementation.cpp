@@ -41,16 +41,16 @@ namespace trihlav {
     CannotCastImplementation::CannotCastImplementation(const std::string& pTypename) : invalid_argument(
     		K_PREFIX.c_str()) {
         try {
-            itsMsg=K_PREFIX+string(" \"")
+            m_Msg=K_PREFIX+string(" \"")
                    + getTypename()
                    + string("\".") ;
         } catch (...) {
-            itsMsg=K_FAILED_FORMAT_MSG.c_str();
+            m_Msg=K_FAILED_FORMAT_MSG.c_str();
         }
     }
 
     const char* CannotCastImplementation::what() const throw() {
-        return itsMsg.c_str();
+        return m_Msg.c_str();
     }
 
 

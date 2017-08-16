@@ -36,18 +36,18 @@
 namespace trihlav {
 
 class MockLabel: public LabelIface {
-	std::string itsText;
+	std::string m_Text;
 public:
 	MockLabel();
 
 	/// The text to be displayed.
 	virtual void setText(const std::string& pTxt) {
-		itsText=pTxt;
+		m_Text=pTxt;
 	}
 
 	/// What is being displayed?
 	virtual const std::string getText() const {
-		return itsText;
+		return m_Text;
 	}
 
 };

@@ -50,7 +50,7 @@ namespace trihlav {
  */
     KeyManager &FactoryIface::getKeyManager() {
         BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
-        return *itsKeyManager;
+        return *m_KeyManager;
     }
 
 /**
@@ -58,7 +58,7 @@ namespace trihlav {
  */
     const KeyManager &FactoryIface::getKeyManager() const {
         BOOST_LOG_NAMED_SCOPE("IFactory::getKeyManager()");
-        return *itsKeyManager;
+        return *m_KeyManager;
     }
 
     KeyListPresenterIfacePtr FactoryIface::createKeyListPresenter() {
@@ -71,10 +71,10 @@ namespace trihlav {
     }
 
     OsIface &FactoryIface::getOsIface() {
-        if (!itsOsIface) {
-            itsOsIface.reset(new OsIface{});
+        if (!m_OsIface) {
+            m_OsIface.reset(new OsIface{});
         }
-        return *itsOsIface;
+        return *m_OsIface;
     }
 
     FactoryIface::~FactoryIface() {
@@ -86,7 +86,7 @@ namespace trihlav {
         return theSettings;
     }
 
-    FactoryIface::FactoryIface() : itsKeyManager(new KeyManager(getSettings())) {
+    FactoryIface::FactoryIface() : m_KeyManager(new KeyManager(getSettings())) {
 
     }
 
