@@ -48,6 +48,8 @@
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
+#include "trihlavLib/trihlavLoginPresenter.hpp"
+#include "trihlavLib/trihlavLoginViewIface.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
 #include "trihlavLib/trihlavMainPanelViewIface.hpp"
@@ -64,6 +66,7 @@
 #include "trihlavMockKeyListView.hpp"
 #include "trihlavMockMessageView.hpp"
 #include "trihlavMockEditIface.hpp"
+#include "trihlavMockLoginView.hpp"
 
 namespace trihlav {
 
@@ -98,8 +101,8 @@ using ::testing::NiceMock;
 using ::testing::Eq;
 using ::testing::_;
 using ::testing::NiceMock;
+using ::testing::Invoke;
 using ::trihlav::KeyListViewIface;
-//using ::trihlav::operator==;
 using ::trihlav::initLog;
 using ::trihlav::MockFactory;
 using ::trihlav::KeyManager;
@@ -112,6 +115,12 @@ using ::trihlav::YubikoOtpKeyPresenter;
 using ::trihlav::MockYubikoOtpKeyView;
 using ::trihlav::MockButton;
 using ::trihlav::MockMessageView;
+using ::trihlav::LoginPresenter;
+using ::trihlav::LoginViewIface;
+using ::trihlav::MockLoginView;
+using ::trihlav::MockOs;
+using ::trihlav::OsIface;
+
 using ::boost::filesystem::path;
 using ::boost::filesystem::unique_path;
 
@@ -130,7 +139,7 @@ public:
 TEST_F(TestKeyListPresenter,keyListRow) {
 	KeyListViewIface::KeyRow_t r0(0, "1", "2", "3", 4, 5), r1 { r0 };
 	EXPECT_TRUE(r0 == r1);
-	std::get<1>(r1)= "---";
+	std::get < 1 > (r1) = "---";
 	EXPECT_FALSE(r0 == r1);
 }
 
@@ -149,24 +158,33 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	myKeyListView.getBtnAddKey().pressedSig();
 }
 
+static const char* K_TEST_USER = "test-user";
+static const char* K_TEST_PSWD = "test-password";
+
 TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
 	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::buttonsAreInCorrectState");
 	NiceMock<MockFactory> myMockFactory;
 	KeyListPresenter myKeyListPresenter(myMockFactory);
 	KeyListViewIface& myView { myKeyListPresenter.getView() };
-	//TODO fix this mess!
-//	MockKeyListView& myKeyListView =
-//			dynamic_cast<MockKeyListView&>(myView);
-//	EXPECT_CALL(myKeyListView, getBtnDelKey());
-//	EXPECT_CALL(myKeyListView, getBtnAddKey());
-//	EXPECT_CALL(myKeyListView, getBtnEditKey());
-//	EXPECT_CALL(myKeyListView, getBtnReload());
-	//myKeyListPresenter.protectedAction();
-	myKeyListPresenter.reloadKeyList();
-	ASSERT_FALSE(myView.getBtnAddKey().isEnabled());
+	LoginPresenter& myLoginPresenter = myKeyListPresenter.getLoginPresenter();
+	LoginViewIface& myLoginViewIface = myLoginPresenter.getView();
+	OsIface& myOsIface = myMockFactory.getOsIface();
+	MockOs& myMockOs = dynamic_cast<MockOs&>(myOsIface);
+	EXPECT_CALL(myMockOs,checkOsPswd(Eq(K_TEST_USER),Eq(K_TEST_PSWD)))
+		.WillOnce(Return(true));
+	MockLoginView& myMockLoginView =
+			dynamic_cast<MockLoginView&>(myLoginViewIface);
+	EXPECT_CALL(myMockLoginView,show()).WillOnce(Invoke([&myMockLoginView]{
+		BOOST_LOG_TRIVIAL(debug)<<"MockLoginView,show()";
+		myMockLoginView.getEdtUserName().setValue(K_TEST_USER);
+		myMockLoginView.getEdtPassword().setValue(K_TEST_PSWD);
+		myMockLoginView.getBtnOk().pressed();
+	}));
+	myKeyListPresenter.protectedAction();
+	ASSERT_TRUE(myView.getBtnAddKey().isEnabled());
 	ASSERT_FALSE(myView.getBtnDelKey().isEnabled());
 	ASSERT_FALSE(myView.getBtnEditKey().isEnabled());
-	ASSERT_FALSE(myView.getBtnReload().isEnabled());
+	ASSERT_TRUE(myView.getBtnReload().isEnabled());
 }
 
 static const char* K_TST_DESC0 = "Test key 1";
@@ -292,7 +310,8 @@ TEST_F(TestKeyListPresenter,canSurviveIllformedKeyfile) {
 	myIllCfg.save();
 	myKeyMan.loadKeys();
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
-	const trihlav::KeyManager::path myConfigDir = myMockFactory.getSettings().getConfigDir();
+	const trihlav::KeyManager::path myConfigDir =
+			myMockFactory.getSettings().getConfigDir();
 	BOOST_LOG_TRIVIAL(debug)<< "Clean up. Remove " << myConfigDir;
 	remove_all(myConfigDir);
 	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
@@ -310,9 +329,12 @@ TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
 	BOOST_LOG_TRIVIAL(debug)<<"Preparing expectations.";
 	MockKeyListView& myKeyListView =
 			dynamic_cast<MockKeyListView&>(myKeyListPresenter.getView());
-	const KeyListViewIface::KeyRow_t myRow0 = myKeyListView.createRow(0, myCfg0);
-	const KeyListViewIface::KeyRow_t myRow1 = myKeyListView.createRow(1, myCfg1);
-	const KeyListViewIface::KeyRow_t myRow2 = myKeyListView.createRow(2, myCfg2);
+	const KeyListViewIface::KeyRow_t myRow0 = myKeyListView.createRow(0,
+			myCfg0);
+	const KeyListViewIface::KeyRow_t myRow1 = myKeyListView.createRow(1,
+			myCfg1);
+	const KeyListViewIface::KeyRow_t myRow2 = myKeyListView.createRow(2,
+			myCfg2);
 	MockButton& myDelBtn =
 			dynamic_cast<MockButton&>(myKeyListView.getBtnDelKey());
 	EXPECT_CALL(myKeyListView, addRow(Eq(myRow0)));

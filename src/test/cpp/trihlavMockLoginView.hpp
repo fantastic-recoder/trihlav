@@ -57,6 +57,9 @@ public:
 	MOCK_CONST_METHOD0(getLblUserName,  const LabelIface& () );
 	MOCK_METHOD0(getLblUserName, LabelIface& () );
 
+	MOCK_METHOD0( show, void () );
+
+
 	MockLoginView();
 };
 

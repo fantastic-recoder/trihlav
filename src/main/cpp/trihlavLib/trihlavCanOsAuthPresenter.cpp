@@ -49,14 +49,20 @@ void CanOsAuthPresenter::userAccepted(bool pStatus) {
 	doProtectedAction(pStatus);
 }
 
-void CanOsAuthPresenter::protectedAction() {
-	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
+LoginPresenter& CanOsAuthPresenter::getLoginPresenter() {
 	if (!m_LoginPresenter) {
+		BOOST_LOG_TRIVIAL(debug)<<"Creating login presenter.";
 		m_LoginPresenter.reset(new LoginPresenter(getFactory()));
 		m_LoginPresenter->sigUserAccepted.connect(
 				[=](bool pStatus)->void {userAccepted(pStatus);});
 	}
-	m_LoginPresenter->show();
+	BOOST_LOG_TRIVIAL(debug)<<"returning login presenter.";
+	return *m_LoginPresenter;
+}
+
+void CanOsAuthPresenter::protectedAction() {
+	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
+	getLoginPresenter().show();
 }
 
 } /* namespace trihlav */

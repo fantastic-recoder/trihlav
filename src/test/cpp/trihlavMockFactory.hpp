@@ -33,6 +33,8 @@
 
 #include "trihlavLib/trihlavFactoryIface.hpp"
 
+#include "trihlavMockOs.hpp"
+
 namespace trihlav {
 
 class MockYubikoOtpKeyView;
@@ -43,6 +45,8 @@ class MockKeyListView;
  * @brief Mock factory.
  */
 struct MockFactory: virtual public FactoryIface {
+
+	testing::NiceMock< MockOs > m_MockOs;
 
 	MOCK_METHOD0(createMainPanelView,MainPanelViewIfacePtr ());
 	MOCK_METHOD0(createKeyListPresenter,KeyListPresenterIfacePtr () );

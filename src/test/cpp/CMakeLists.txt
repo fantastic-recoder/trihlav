@@ -22,7 +22,7 @@ target_link_libraries(trihlavTestApi
                       )
 
 add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp 
-trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
 trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp 
 trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp )
 
@@ -40,7 +40,7 @@ target_link_libraries(trihlavTestYubikoOtpKey
                       )
 
 add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp 
-	trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+	trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp 
 	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
 	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp )
 
@@ -58,7 +58,7 @@ target_link_libraries(trihlavTestKeyListPresenter
                       )
 
 add_executable( trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp 
-	trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+	trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
 	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
 	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp )
 
@@ -108,7 +108,7 @@ target_link_libraries(trihlavPamTester
                       )
                       
 add_executable( trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
- 	trihlavMockFactory.cpp trihlavMockKeyListView.cpp
+ 	trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
 	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
 	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp
 )

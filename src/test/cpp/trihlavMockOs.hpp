@@ -26,56 +26,24 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRIHLAV_CAN_OS_AUTH_PRESENTER_HPP_
-#define TRIHLAV_CAN_OS_AUTH_PRESENTER_HPP_
+#ifndef TRIHLAV_MOCK_OS_HPP_
+#define TRIHLAV_MOCK_OS_HPP_
 
-#include <memory>
-
-#include "trihlavLib/trihlavPresenterBase.hpp"
+#include <gmock/gmock.h>
+#include "trihlavLib/trihlavOsIface.hpp"
 
 namespace trihlav {
 
-class  FactoryIface;
-class LoginPresenter;
-
-/**
- * This presenter is able to authenticate the user in underlying
- * operating system, in Linux for example it uses PAM. It is meant 2 be
- * overloaded in a is-a relationship.
- */
-class CanOsAuthPresenter: public PresenterBase {
-protected:
-
-	/**
-	 * Handles the userl login dialog.
-	 */
-	std::unique_ptr<LoginPresenter> m_LoginPresenter;
-
-	/**
-	 * Login dialog finished with success.
-	 */
-	virtual void userAccepted(bool pStatus);
-
-	/**
-	 * will be called when the OS authenticates the user.
-	 */
-	virtual void doProtectedAction(bool pStatus)=0;
+class MockOs : virtual public OsIface {
 public:
+	MockOs();
+	virtual ~MockOs();
 
-	/// Do nothing, be lazy.
-	CanOsAuthPresenter( FactoryIface& pFactory );
+	MOCK_CONST_METHOD2(checkOsPswd, bool (const std::string& p_strUName,
+			const std::string& p_strPswd));//
 
-	/// Just to be virtual...
-	virtual ~CanOsAuthPresenter();
-
-	/**
-	 * Governing presenter calls this to execute the (in most cases username and password)protected
-	 */
-	virtual void protectedAction();
-
-	LoginPresenter& getLoginPresenter();
 };
 
 } /* namespace trihlav */
 
-#endif /* TRIHLAV_CAN_OS_AUTH_PRESENTER_HPP_ */
+#endif /* TRIHLAV_MOCK_OS_HPP_ */

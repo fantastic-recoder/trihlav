@@ -101,8 +101,13 @@ MockFactory::MockFactory() {
 			{
 				BOOST_LOG_NAMED_SCOPE("MockFactory::createLoginView");
 				auto myRetVal=new NiceMock< MockLoginView>;
-				BOOST_LOG_TRIVIAL(debug)<< "Created " << myRetVal;
+				BOOST_LOG_TRIVIAL(debug)<< "Created mock login view." << myRetVal;
 				return std::unique_ptr<LoginViewIface>(myRetVal);
+			}));
+	ON_CALL(*this, getOsIface()) //
+	.WillByDefault(Invoke([this]()->OsIface& //
+			{
+				return this->m_MockOs;
 			}));
 }
 
