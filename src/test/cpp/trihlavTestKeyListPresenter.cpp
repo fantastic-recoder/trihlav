@@ -175,7 +175,8 @@ TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
 	MockLoginView& myMockLoginView =
 			dynamic_cast<MockLoginView&>(myLoginViewIface);
 	EXPECT_CALL(myMockLoginView,show()).WillOnce(Invoke([&myMockLoginView]{
-		BOOST_LOG_TRIVIAL(debug)<<"MockLoginView,show()";
+		BOOST_LOG_TRIVIAL(debug) //
+					<< "When MockLoginView.show() then we fill out and press ok.";
 		myMockLoginView.getEdtUserName().setValue(K_TEST_USER);
 		myMockLoginView.getEdtPassword().setValue(K_TEST_PSWD);
 		myMockLoginView.getBtnOk().pressed();
