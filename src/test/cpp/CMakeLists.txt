@@ -1,142 +1,148 @@
 # Basic test
 
 include_directories(
-	../../main/cpp  
-	${GTEST_INCLUDE_DIRS}
-    ${GMOCK_INCLUDE_DIRS}
+        ../../main/cpp
+        ${GTEST_INCLUDE_DIRS}
+        ${GMOCK_INCLUDE_DIRS}
 )
 
-add_executable( trihlavTestApi trihlavTestApi.cpp )
+set(COMMON_INCLUDES trihlavMockButton.hpp trihlavMockSpinBox.hpp trihlavMockEditIface.hpp
+        trihlavMockStrEdit.hpp trihlavMockMessageView.hpp)
 
-add_test( NAME trihlavTestApi COMMAND trihlavTestApi )
+add_executable(trihlavTestApi trihlavTestApi.cpp ${COMMON_INCLUDES})
+
+add_test(NAME trihlavTestApi COMMAND trihlavTestApi)
 
 target_link_libraries(trihlavTestApi
-                      ${YUBIKEY_LIB}
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-    				  libgmock
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
+        ${YUBIKEY_LIB}
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
 
-add_executable( trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp 
-trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
-trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp 
-trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp )
+add_executable(trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp
+        trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
+        trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
+        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES})
 
-add_test( NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey )
+add_test(NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey)
 
 target_link_libraries(trihlavTestYubikoOtpKey
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-                      libgmock
-                      ${YUBIKEY_LIB}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${YUBIKEY_LIB}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
 
-add_executable( trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp 
-	trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp 
-	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
-	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp )
+add_executable(trihlavTestKeyListPresenter trihlavTestKeyListPresenter.cpp
+        trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
+        trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
+        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES})
 
-add_test( NAME trihlavTestKeyListPresenter COMMAND trihlavTestKeyListPresenter )
+add_test(NAME trihlavTestKeyListPresenter COMMAND trihlavTestKeyListPresenter)
 
 target_link_libraries(trihlavTestKeyListPresenter
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-    				  libgmock
-                      ${YUBIKEY_LIB}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${YUBIKEY_LIB}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
 
-add_executable( trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp 
-	trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
-	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
-	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp )
+add_executable(trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp
+        trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
+        trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
+        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES})
 
-add_test( NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter )
+add_test(NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter)
 
 target_link_libraries(trihlavTestPswdChckPresenter
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-    				  libgmock
-                      ${YUBIKEY_LIB}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${YUBIKEY_LIB}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
 
-add_executable( trihlavTestOsIface trihlavTestOsIface.cpp )
+add_executable(trihlavTestOsIface trihlavTestOsIface.cpp ${COMMON_INCLUDES})
 
-add_test( NAME trihlavTestOsIface COMMAND trihlavTestOsIface )
+add_test(NAME trihlavTestOsIface COMMAND trihlavTestOsIface)
 
 target_link_libraries(trihlavTestOsIface
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-    				  libgmock
-                      ${YUBIKEY_LIB}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
-                      
-add_executable( pretty_example pretty_example.cc )
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${YUBIKEY_LIB}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
+
+add_executable(pretty_example pretty_example.cc)
 
 target_link_libraries(pretty_example
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      ${Boost_LIBRARIES}
-                      )
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${Boost_LIBRARIES}
+        )
 
-add_executable( trihlavPamTester trihlavPamTester.cpp )
+add_executable(trihlavPamTester trihlavPamTester.cpp)
 target_link_libraries(trihlavPamTester
-                      trihlavApi
-                      ${YUBIKEY_LIB}
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
-                      
-add_executable( trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
- 	trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
-	trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
-	trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp
-)
+        trihlavApi
+        ${YUBIKEY_LIB}
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
+
+add_executable(trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
+        trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
+        trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
+        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp
+        ${COMMON_INCLUDES})
+
 target_link_libraries(trihlavTestLoginPresenter
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-    				  libgmock
-                      ${YUBIKEY_LIB}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${YUBIKEY_LIB}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
 
-add_test( NAME trihlavTestLoginPresenter COMMAND trihlavTestLoginPresenter )
+add_test(NAME trihlavTestLoginPresenter COMMAND trihlavTestLoginPresenter)
 
-                      
-add_executable( trihlavTestTupleList trihlavTestTupleList.cpp )
-add_test( NAME trihlavTestTupleList COMMAND trihlavTestTupleList )
+
+add_executable(trihlavTestTupleList trihlavTestTupleList.cpp ${COMMON_INCLUDES})
+
+add_test(NAME trihlavTestTupleList COMMAND trihlavTestTupleList)
+
 target_link_libraries(trihlavTestTupleList
-                      trihlavApi
-                      ${CMAKE_THREAD_LIBS_INIT}
-                      libgtest
-    				  libgmock
-                      ${YUBIKEY_LIB}
-                      ${Boost_LIBRARIES}
-                      ${PAM_LIBRARIES}
-                      ${OPENSSL_LIBRARIES}
-                      )
-                      
+        trihlavApi
+        ${CMAKE_THREAD_LIBS_INIT}
+        libgtest
+        libgmock
+        ${YUBIKEY_LIB}
+        ${Boost_LIBRARIES}
+        ${PAM_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
+

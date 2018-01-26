@@ -35,18 +35,22 @@ namespace trihlav {
 
 class SpinBoxIface {
 public:
-	SpinBoxIface(){}
+    SpinBoxIface() = default;
 	SpinBoxIface (SpinBoxIface &) = delete;
 	virtual const int getValue() const=0;
 	virtual void setValue(const int& pVal)=0;
-	virtual void setMin(const int pMin)=0;
+
+    virtual void setMin(int pMin)=0;
 	virtual const int getMin() const =0;
-	virtual void setMax(const int pMax)=0;
+
+    virtual void setMax(int pMax)=0;
 	virtual const int getMax() const =0;
-	virtual void setStep(const int pStep)=0;
+
+    virtual void setStep(int pStep)=0;
 	virtual const int getStep() const =0;
-	virtual ~SpinBoxIface() {
-	}
+
+    virtual ~SpinBoxIface();
+
 };
 
 } /* namespace trihlav */

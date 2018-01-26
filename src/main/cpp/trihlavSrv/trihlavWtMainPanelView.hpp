@@ -33,72 +33,78 @@
 #include "../trihlavLib/trihlavMainPanelViewIface.hpp"
 
 namespace Wt {
-class WContainerWidget;
-class WNavigationBar;
-class WMenu;
-class WStackedWidget;
+    class WNavigationBar;
+
+    class WMenu;
+
+    class WStackedWidget;
+
+    class WMenuItem;
 }
 
 namespace trihlav {
 
-class WtViewIface;
+    class WtViewIface;
 
 /**
  * WT++ implementation of IMainPanelView.
  */
-class WtMainPanelView: virtual public MainPanelViewIface {
-public:
-	WtMainPanelView();
-	virtual ~WtMainPanelView();
-	virtual Wt::WContainerWidget* getNativeView();
-	virtual void add(const std::string& pLocalizedName, const PanelName& pName, PswdChckViewIface& pPswdChckView) override;
-	virtual void add(const std::string& pLocalizedName, const PanelName& pName, KeyListViewIface& pKeyListView) override;
+    class WtMainPanelView : virtual public MainPanelViewIface {
+    public:
+        WtMainPanelView();
 
-	const Wt::WNavigationBar* getNavigation() const {
-		return m_Navigation;
-	}
+        virtual ~WtMainPanelView();
 
-	Wt::WNavigationBar* getNavigation() {
-		return m_Navigation;
-	}
+        virtual void
+        add(const std::string &pLocalizedName, const PanelName &pName, PswdChckViewIface &pPswdChckView) override;
 
-	const Wt::WMenu* getLeftMenu() const {
-		return m_LeftMenu;
-	}
+        virtual void
+        add(const std::string &pLocalizedName, const PanelName &pName, KeyListViewIface &pKeyListView) override;
 
-	Wt::WMenu* getLeftMenu() {
-		return m_LeftMenu;
-	}
+        const Wt::WNavigationBar *getNavigation() const {
+            return m_Navigation;
+        }
 
-	const Wt::WStackedWidget* getContentsStack() const {
-		return m_ContentsStack;
-	}
+        Wt::WNavigationBar *getNavigation() {
+            return m_Navigation;
+        }
 
-	Wt::WStackedWidget* getContentsStack() {
-		return m_ContentsStack;
-	}
+        const Wt::WStackedWidget *getContentsStack() const {
+            return m_ContentsStack;
+        }
 
-	void setContentsStack(Wt::WStackedWidget* myContentsStack) {
-		m_ContentsStack = myContentsStack;
-	}
+        Wt::WStackedWidget *getContentsStack() {
+            return m_ContentsStack;
+        }
 
-protected:
-	virtual void addView(const std::string& pLocalizedName, const PanelName& pName, WtViewIface& pView);
+        Wt::WWidget *getContentsStackWgt();
 
-	void setNavigation(Wt::WNavigationBar* pNavigation) {
-		m_Navigation = pNavigation;
-	}
+        void setContentsStack(Wt::WStackedWidget *myContentsStack) {
+            m_ContentsStack = myContentsStack;
+        }
 
-	void setLeftMenu(Wt::WMenu* pLeftMenu) {
-		m_LeftMenu = pLeftMenu;
-	}
+        const Wt::WMenu *getLeftMenu() const {
+            return m_LeftMenu;
+        }
 
-private:
-	Wt::WContainerWidget* m_View;
-	Wt::WNavigationBar* m_Navigation;
-	Wt::WMenu* m_LeftMenu;
-	Wt::WStackedWidget* m_ContentsStack;
-};
+        Wt::WMenu *getLeftMenu() {
+            return m_LeftMenu;
+        }
+
+    protected:
+        virtual void addView(const std::string &pLocalizedName, const PanelName &pName, WtViewIface &pView);
+
+        void setNavigation(Wt::WNavigationBar *pNavigation) {
+            m_Navigation = pNavigation;
+        }
+
+
+    private:
+        Wt::WStackedWidget *m_MainPanel;
+        Wt::WNavigationBar *m_Navigation;
+        Wt::WStackedWidget *m_ContentsStack;
+        Wt::WMenu *m_LeftMenu;
+    };
 
 } /* namespace trihlav */
 

@@ -29,7 +29,7 @@
 #ifndef TRIHLAV_WT_DIALOG_VIEW_HPP_
 #define TRIHLAV_WT_DIALOG_VIEW_HPP_
 
-#include <Wt/WDialog>
+#include <Wt/WDialog.h>
 
 #include "trihlavLib/trihlavDialogViewIface.hpp"
 
@@ -41,7 +41,7 @@ namespace trihlav {
 
     class WtPushButton;
 
-    class WtDialogView : virtual public DialogViewIface {
+    class WtDialogView : virtual public DialogViewIface, virtual public Wt::Core::observable {
     private:
         WtPushButton *m_CancelBtn;
         WtPushButton *m_OkBtn;
@@ -68,7 +68,7 @@ namespace trihlav {
         virtual void show() override;
 
     private:
-        virtual void finishedSlot(Wt::WDialog::DialogCode pCode);
+        virtual void finishedSlot(Wt::DialogCode pCode);
 
     };
 }

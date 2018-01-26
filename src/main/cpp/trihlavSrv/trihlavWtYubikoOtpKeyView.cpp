@@ -28,10 +28,9 @@
 
 #include <boost/locale.hpp>
 
-#include <Wt/WGridLayout>
-#include <Wt/WDialog>
-#include <Wt/WLength>
-#include <Wt/WLabel>
+#include <Wt/WGridLayout.h>
+#include <Wt/WDialog.h>
+#include <Wt/WLabel.h>
 
 #include "trihlavWtStrEdit.hpp"
 #include "trihlavWtSpinBox.hpp"
@@ -59,14 +58,14 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		m_BtnSelectSysUser(new WtPushButton(translate("Select system user"))), //
 		m_GenSecretKeyBtn(new WtPushButton(translate("Generate"))) //
 {
-	getDlg().setCaption(translate("Add key").str());
+    getDlg().setWindowTitle(translate("Add key").str());
 	getDlg().setWidth(WLength(64, U::FontEm));
-	WGridLayout* myTopLayout = new WGridLayout;
-	{
-		Wt::WLabel* myLbl = new WLabel(translate("Description").str());
+    auto myTopLayout = new WGridLayout;
+    {
+        std::unique_ptr<Wt::WLabel> myLbl(new WLabel(translate("Description").str()));
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_EdtDescription,0,1,1,5,Wt::AlignMiddle);
+        myTopLayout->addWidget(std::move(myLbl), 0, 0, 1, 1, Wt::AlignmentFlag::Right | Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_EdtDescription), 0, 1, 1, 5, Wt::AlignmentFlag::Middle);
 	}
 	{
 		m_GenPublicIdentityBtn->setWidth(WLength(9.0,U::FontEm));
@@ -76,10 +75,12 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		m_PublicIdLen->setWidth(WLength(2.0,U::FontEm));
 		Wt::WLabel* myLbl = new WLabel(translate("Public ID (modhex)").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,1,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_PublicId,1,1,1,3,Wt::AlignMiddle);
-		myTopLayout->addWidget(m_PublicIdLen,1,4,1,1,Wt::AlignLeft|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_GenPublicIdentityBtn,1,5,1,1,Wt::AlignTop);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(myLbl), 1, 0, 1, 1,
+                               Wt::AlignmentFlag::Right | Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_PublicId), 1, 1, 1, 3, Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_PublicIdLen), 1, 4, 1, 1,
+                               Wt::AlignmentFlag::Left | Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_GenPublicIdentityBtn), 1, 5, 1, 1, Wt::AlignmentFlag::Top);
 	}
 	{
 		m_GenPrivateIdentityBtn->setWidth(WLength(9.0,U::FontEm));
@@ -88,9 +89,10 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		m_PrivateId->addStyleClass("console-font");
 		Wt::WLabel* myLbl = new WLabel(translate("Private ID").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_PrivateId,2,1,1,4,Wt::AlignMiddle);
-		myTopLayout->addWidget(m_GenPrivateIdentityBtn,2,5,1,1,Wt::AlignTop);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(myLbl), 2, 0, 1, 1,
+                               Wt::AlignmentFlag::Right | Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_PrivateId), 2, 1, 1, 4, Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_GenPrivateIdentityBtn), 2, 5, 1, 1, Wt::AlignmentFlag::Top);
 	}
 	{
 		m_GenSecretKeyBtn->setWidth(WLength(9.0,U::FontEm));
@@ -99,9 +101,10 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		m_SecretKey->addStyleClass("console-font");
 		Wt::WText* myLbl = new WText(translate("Secret key").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,3,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_SecretKey,3,1,1,4,Wt::AlignMiddle);
-		myTopLayout->addWidget(m_GenSecretKeyBtn,3,5,1,1,Wt::AlignTop);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(myLbl), 3, 0, 1, 1,
+                               Wt::AlignmentFlag::Right | Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_SecretKey), 3, 1, 1, 4, Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_GenSecretKeyBtn), 3, 5, 1, 1, Wt::AlignmentFlag::Top);
 	}
 	{
 		m_BtnSelectSysUser->setWidth(WLength(9.0,U::FontEm));
@@ -109,16 +112,15 @@ WtYubikoOtpKeyView::WtYubikoOtpKeyView() :
 		m_EdtSysUser->setReadOnly(true);
 		Wt::WText* myLbl = new WText(translate("Operating system user").str());
 		myLbl->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(myLbl,4,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_EdtSysUser,4,1,1,3,Wt::AlignMiddle);
-		myTopLayout->addWidget(m_BtnSelectSysUser,4,4,1,2,Wt::AlignTop);
-	}
-	getDlg().contents()->setLayout(myTopLayout);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(myLbl), 4, 0, 1, 1,
+                               Wt::AlignmentFlag::Right | Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_EdtSysUser), 4, 1, 1, 3, Wt::AlignmentFlag::Middle);
+        myTopLayout->addWidget(std::unique_ptr<WWidget>(m_BtnSelectSysUser), 4, 4, 1, 2, Wt::AlignmentFlag::Top);
+    }
+    getDlg().contents()->setLayout(std::unique_ptr<Wt::WLayout>(myTopLayout));
 }
 
-WtYubikoOtpKeyView::~WtYubikoOtpKeyView() {
-	// TODO Auto-generated destructor stubb
-}
+    WtYubikoOtpKeyView::~WtYubikoOtpKeyView() = default;
 
 const StrEditIface& WtYubikoOtpKeyView::getEdtPublicId() const {
 	return *m_PublicId;

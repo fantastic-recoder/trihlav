@@ -4,9 +4,8 @@
 
 #include <string>
 
-#include <Wt/WResource>
-#include <Wt/Http/Request>
-#include <Wt/Http/Response>
+#include <Wt/WResource.h>
+#include <Wt/Http/Response.h>
 
 #include "trihlavWtAuthResource.hpp"
 
@@ -51,7 +50,4 @@ namespace trihlav {
         pResponse.out() << "Fail!\n";
     }
 
-    WtAuthResource::~WtAuthResource() {
-
-    }
 }

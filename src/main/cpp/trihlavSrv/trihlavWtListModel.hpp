@@ -31,8 +31,9 @@
 
 #include <string>
 
-#include <Wt/WAbstractTableModel>
-#include <Wt/WModelIndex>
+#include <Wt/WAbstractTableModel.h>
+#include <Wt/WModelIndex.h>
+#include <Wt/WAny.h>
 
 #include "trihlavLib/trihlavRec2StrVisitor.hpp"
 #include "trihlavLib/trihlavTupleList.hpp"
@@ -84,18 +85,18 @@ public:
 	 * @param pRole what will be done with the return value eg. it will be displayed
 	 * @return the value of the cell
 	 */
-	virtual boost::any data(const Wt::WModelIndex& pIndex, int pRole =
-			Wt::DisplayRole) const override {
+	virtual Wt::cpp17::any data(const Wt::WModelIndex &pIndex, Wt::ItemDataRole pRole =
+	Wt::ItemDataRole::Display) const override {
 		const int myColumn = pIndex.column();
-		if (pRole == Wt::DisplayRole) {
+		if (pRole == Wt::ItemDataRole::Display) {
 			if (myColumn > sizeof ... (Columns_t)) {
-				return boost::any();
+				return Wt::cpp17::any::any();
 			} else {
 				return boost::apply_visitor(Rec2StrVisitor(),
 						TupleList_t::get(pIndex.row(),myColumn));
 			}
 		}
-		return boost::any();
+		return Wt::cpp17::any::any();
 	}
 
 	int getIdOfRow(size_t pRow) {
@@ -105,21 +106,17 @@ public:
 	/**
 	 * @brief Returns the header data for a column
 	 */
-	boost::any headerData(int pSection, Wt::Orientation pOrientation =
-			Wt::Horizontal, int pRole = Wt::DisplayRole) const override {
-		if (pOrientation == Wt::Horizontal) {
-			switch (pRole) {
-				case Wt::DisplayRole:
+	Wt::cpp17::any headerData(int pSection, Wt::Orientation pOrientation =
+	Wt::Orientation::Horizontal, Wt::ItemDataRole pRole = Wt::ItemDataRole::Display) const override {
+		if (pOrientation == Wt::Orientation::Horizontal) {
+			if (pRole == Wt::ItemDataRole::Display) {
 				if (pSection >= m_Captions.size()) {
-					return boost::any("-");
+					return Wt::cpp17::any("-");
 				}
 				return m_Captions[pSection];
-				default:
-				return boost::any();
-
 			}
 		}
-		return boost::any();
+		return Wt::cpp17::any();
 	}
 
 	virtual void clear() {

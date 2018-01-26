@@ -28,19 +28,22 @@
 #ifndef TRIHLAV_WT_VIEW_IFACE_HPP_
 #define TRIHLAV_WT_VIEW_IFACE_HPP_
 
+#include <memory>
+
 namespace Wt {
 
-class WWidget;
+    class WWidget;
 
 }  // namespace Wt
 
 namespace trihlav {
 
-class WtViewIface {
-public:
-	virtual Wt::WWidget* getWWidget()=0;
-	virtual ~WtViewIface(){}
-};
+    class WtViewIface {
+    public:
+        virtual Wt::WWidget *getWWidget()=0;
+
+        virtual ~WtViewIface() {}
+    };
 
 }  // namespace trihlav
 

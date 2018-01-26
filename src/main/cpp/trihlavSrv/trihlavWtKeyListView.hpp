@@ -29,7 +29,7 @@
 #ifndef TRIHLAV_WT_KEY_LIST_VIEW_HPP_
 #define TRIHLAV_WT_KEY_LIST_VIEW_HPP_
 
-#include <Wt/WContainerWidget>
+#include <Wt/WContainerWidget.h>
 
 #include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavWtViewIface.hpp"
@@ -52,7 +52,8 @@ class WtKeyListView: virtual public KeyListViewIface, //
 public:
 	WtKeyListView();
 	virtual ~WtKeyListView();
-	virtual Wt::WWidget* getWWidget();
+
+    virtual Wt::WWidget *getWWidget() override;
 
 	const Wt::WTableView* getTable() const {
 		return m_Table;
@@ -90,7 +91,7 @@ private:
 	WtPushButton* m_BtnDel;
 	WtPushButton* m_BtnEdit;
 	WtPushButton* m_BtnReload;
-	WtKeyListModel* m_DtaMdl;
+    std::shared_ptr<WtKeyListModel> m_DtaMdl;
 	static const int K_TBL_V_MARGIN;
 };
 

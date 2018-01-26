@@ -29,7 +29,7 @@
 #ifndef TRIHLAV_WT_STR_EDIT_HPP_
 #define TRIHLAV_WT_STR_EDIT_HPP_
 
-#include <Wt/WLineEdit>
+#include <Wt/WLineEdit.h>
 
 #include "trihlavLib/trihlavEditIface.hpp"
 

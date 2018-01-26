@@ -1,8 +1,6 @@
 #include <iostream>
-#include <stdexcept>
-#include <string>
-#include <Wt/WApplication>
-#include <Wt/WServer>
+#include <Wt/WApplication.h>
+#include <Wt/WServer.h>
 
 #include "trihlavApp.hpp"
 #include "trihlavWtAuthResource.hpp"
@@ -24,9 +22,9 @@
 using namespace trihlav;
 using namespace Wt;
 
-static const std::string K_TRIHLAV_WT_HTTPD_CFG("/etc/trihlav/wt_httpd.ini");
+static const char *K_TRIHLAV_WT_HTTPD_CFG = "/etc/trihlav/wt_httpd.ini";
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv, char **envp) {
 	try {
 		// use argv[0] as the application name to match a suitable entry
 		// in the Wt configuration file, and use the default configuration
@@ -37,16 +35,16 @@ int main(int argc, char **argv) {
 		server.setServerConfiguration(argc, argv, K_TRIHLAV_WT_HTTPD_CFG);
 		// add a single entry point, at the default location (as determined
 		// by the server configuration's deploy-path)
-		server.addEntryPoint(Wt::Application, App::createApplication);
+        server.addEntryPoint(EntryPointType::Application, App::createApplication);
 		// create the auth REST resource
 		WtAuthResource myAuthResource;
 		server.addResource(&myAuthResource,K_AUTH_URL);
 		if (server.start()) {
-			int sig = WServer::waitForShutdown(argv[0]);
+            int sig = WServer::waitForShutdown();
 			std::cerr << "Shutdown (signal = " << sig << ")" << std::endl;
 			server.stop();
 			if (sig == SIGHUP)
-				WServer::restart(argc, argv, environ);
+                WServer::restart(argc, argv, envp);
 		}
 	} catch (WServer::Exception& e) {
 		std::cerr << e.what() << "\n";

@@ -28,7 +28,7 @@
 #ifndef TRIHLAV_WT_SPIN_BOX_HPP_
 #define TRIHLAV_WT_SPIN_BOX_HPP_
 
-#include <Wt/WSpinBox>
+#include <Wt/WSpinBox.h>
 
 #include "../trihlavLib/trihlavSpinBoxIface.hpp"
 

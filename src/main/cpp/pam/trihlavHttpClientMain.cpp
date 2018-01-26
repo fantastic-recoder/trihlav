@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 
 		Passwords myPasswords;
 		for (int aIdx = 3; aIdx < argc; ++aIdx) {
-			myPasswords.push_back(argv[aIdx]);
+            myPasswords.emplace_back(argv[aIdx]);
 		}
 		AuthResult myRes = checkOtps(argv[1], argv[2], myPasswords);
 		if (get < 0 > (myRes)) {

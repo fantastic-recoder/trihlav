@@ -44,11 +44,13 @@ class WtStrEdit;
 class WtPswdChckView: virtual public PswdChckViewIface, virtual public WtViewIface {
 public:
 	WtPswdChckView();
-	virtual Wt::WWidget* getWWidget();
-	virtual ~WtPswdChckView();
+
+    virtual Wt::WWidget *getWWidget() override;
 	virtual void setupUi();
 	virtual ButtonIface& getBtnOk() override;
 	virtual StrEditIface& getEdtPswd0() override;
+
+    virtual ~WtPswdChckView();
 private:
 	Wt::WContainerWidget* m_MainPanel;
 	WtPushButton* m_BtnOk;

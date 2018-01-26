@@ -15,6 +15,7 @@ namespace Wt {
 	class WDialog;
 }
 
+#include <Wt/WSignal.h>
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
 
 #include "trihlavWtDialogView.hpp"
@@ -24,12 +25,16 @@ namespace trihlav {
 class WtPushButton;
 class WtSysUserListModel;
 
-class WtSysUserListView: virtual public WtDialogView, virtual public SysUserListViewIface {
+    class WtSysUserListView
+            : virtual public WtDialogView, virtual public SysUserListViewIface, virtual public Wt::Core::observable {
 public:
 	WtSysUserListView();
-	virtual void show(const SysUsers& pUsers) override;
-    virtual int getSelected() override;
-    virtual const UserRow_t& getRow(int pId) const override;
+
+        void show(const SysUsers &pUsers) override;
+
+        int getSelected() override;
+
+        const UserRow_t &getRow(int pId) const override;
 
 private:
 

@@ -29,26 +29,34 @@
 #define TRIHLAV_TRIHLAV_APP_HPP_
 
 #include <memory>
-#include <Wt/WApplication>
+#include <Wt/WApplication.h>
 
 namespace Wt {
-	class WEnvironment;
-	class WLineEdit;
-	class WText;
+    class WEnvironment;
+
+    class WLineEdit;
+
+    class WText;
 }
 
 namespace trihlav {
 
-class MainPanelPresenter;
+    class MainPanelPresenter;
 
-class App : public Wt::WApplication {
-public:
-	App(const Wt::WEnvironment& pEnv);
-	virtual ~App();
-	static App *createApplication(const Wt::WEnvironment& pEnv);
-private:
-	std::unique_ptr<MainPanelPresenter> m_MainPanelCntrl;
-};
+    using AppPtr = std::unique_ptr<Wt::WApplication>;
+
+    class App : public Wt::WApplication {
+    public:
+
+        App(const Wt::WEnvironment &pEnv);
+
+        virtual ~App();
+
+        static std::unique_ptr<WApplication> createApplication(const Wt::WEnvironment &pEnv);
+
+    private:
+        std::unique_ptr<MainPanelPresenter> m_MainPanelCntrl;
+    };
 
 } /* namespace trihlav */
 

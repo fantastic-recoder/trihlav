@@ -5,7 +5,7 @@
  *      Author: grobap
  */
 
-#include <Wt/WDialog>
+#include <Wt/WDialog.h>
 
 #include "trihlavLib/trihlavGetUiFactory.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
@@ -21,14 +21,9 @@
 
 namespace trihlav {
 
-WtUiFactory::WtUiFactory() {
-	// TODO Auto-generated constructor stub
+    WtUiFactory::WtUiFactory() = default;
 
-}
-
-WtUiFactory::~WtUiFactory() {
-	// TODO Auto-generated destructor stub
-}
+    WtUiFactory::~WtUiFactory() = default;
 
 MainPanelViewIfacePtr WtUiFactory::createMainPanelView() {
 	return MainPanelViewIfacePtr(new WtMainPanelView());

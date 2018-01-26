@@ -8,10 +8,10 @@
 #ifndef TRIHLAV_WT_PUSH_BUTTON_HPP_
 #define TRIHLAV_WT_PUSH_BUTTON_HPP_
 
-#include <Wt/WPushButton>
-#include <Wt/WString>
+#include <Wt/WPushButton.h>
+#include <Wt/WString.h>
 
-#include "../trihlavLib/trihlavButtonIface.hpp"
+#include "trihlavLib/trihlavButtonIface.hpp"
 
 namespace trihlav {
 
@@ -24,22 +24,23 @@ public:
 	 * @param pText initial value for the label.
 	 * @see setText( const std::string& )
 	 */
-	WtPushButton(const std::string& pText);
-	virtual ~WtPushButton();
+    explicit WtPushButton(const std::string &pText);
 
-    virtual const std::string getText() const override {
+    virtual ~WtPushButton() = default;
+
+    const std::string getText() const override {
 		return text().toUTF8();
 	}
 
-    virtual void setText( const std::string& pText) override {
+    void setText(const std::string &pText) override {
 		Wt::WPushButton::setText(Wt::WString::fromUTF8(pText));
     }
 
-    virtual void setEnabled( bool pEnabled) override {
+    void setEnabled(bool pEnabled) override {
         Wt::WPushButton::setEnabled(pEnabled);
     }
 
-    virtual bool isEnabled() const override {
+    bool isEnabled() const override {
         return Wt::WPushButton::isEnabled();
     }
 };

@@ -28,9 +28,9 @@
 
 #include <boost/locale.hpp>
 
-#include <Wt/WDialog>
-#include <Wt/WPushButton>
-#include <Wt/WHBoxLayout>
+#include <Wt/WDialog.h>
+#include <Wt/WPushButton.h>
+#include <Wt/WHBoxLayout.h>
 
 #include "trihlavLib/trihlavLogApi.hpp"
 #include "trihlavWtDialogView.hpp"
@@ -39,7 +39,10 @@
 using Wt::WDialog;
 using Wt::WLength;
 using Wt::WHBoxLayout;
+using Wt::WWidget;
+using Wt::WLayout;
 using std::string;
+using std::unique_ptr;
 using boost::locale::translate;
 using U = Wt::WLength::Unit;
 
@@ -55,10 +58,10 @@ WtDialogView::WtDialogView() : //
 	{
 		m_CancelBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
 		m_OkBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		myBtnLayout->addWidget(m_OkBtn);
-		myBtnLayout->addWidget(m_CancelBtn);
+		myBtnLayout->addWidget(unique_ptr<WWidget>(m_OkBtn));
+		myBtnLayout->addWidget(unique_ptr<WWidget>(m_CancelBtn));
 	}
-	m_Dlg->footer()->setLayout(myBtnLayout);
+	m_Dlg->footer()->setLayout(unique_ptr<WLayout>(myBtnLayout));
 	m_Dlg->finished().connect(this, &WtDialogView::finishedSlot);
 	m_CancelBtn->clicked().connect(m_Dlg.get(), &WDialog::reject);
 	m_OkBtn->clicked().connect(m_Dlg.get(), &WDialog::accept);
@@ -88,8 +91,8 @@ WtDialogView::~WtDialogView() {
 	BOOST_LOG_NAMED_SCOPE("WtDialogView::~WtDialogView");
 }
 
-void WtDialogView::finishedSlot(WDialog::DialogCode pCode) {
-	sigDialogFinished(pCode == WDialog::DialogCode::Accepted);
+	void WtDialogView::finishedSlot(Wt::DialogCode pCode) {
+		sigDialogFinished(pCode == Wt::DialogCode::Accepted);
 	m_Dlg->hide();
 }
 

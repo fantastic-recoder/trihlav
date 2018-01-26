@@ -26,11 +26,11 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
+#include <cstring>
+#include <cctype>
 
 /* Libtool defines PIC for shared objects */
 #ifndef PIC

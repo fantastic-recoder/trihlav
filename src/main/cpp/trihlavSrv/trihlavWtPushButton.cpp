@@ -14,8 +14,4 @@ WtPushButton::WtPushButton(const std::string& pText)
 	this->clicked().connect(std::bind([=]{pressed();}));
 }
 
-WtPushButton::~WtPushButton() {
-	// TODO Auto-generated destructor stub
-}
-
 } /* namespace trihlav */

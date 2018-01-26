@@ -35,10 +35,13 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 
-#include <Wt/WTableView>
-#include <Wt/WPushButton>
-#include <Wt/WHBoxLayout>
-#include <Wt/WVBoxLayout>
+#include <Wt/WAny.h>
+#include <Wt/WTableView.h>
+#include <Wt/WPushButton.h>
+#include <Wt/WHBoxLayout.h>
+#include <Wt/WVBoxLayout.h>
+#include <Wt/WAbstractItemModel.h>
+
 #include "trihlavWtPushButton.hpp"
 #include "trihlavWtKeyListView.hpp"
 #include "trihlavWtListModel.hpp"
@@ -48,18 +51,20 @@ using std::array;
 using std::list;
 using std::vector;
 using boost::locale::translate;
-using boost::any;
+using Wt::cpp17::any;
 using Wt::WText;
 using Wt::WContainerWidget;
 using Wt::WHBoxLayout;
 using Wt::WVBoxLayout;
 using Wt::WLength;
+using Wt::LengthUnit;
 using Wt::WTableView;
 using Wt::WAbstractTableModel;
 using Wt::WModelIndex;
 using Wt::Orientation;
-using Wt::DisplayRole;
+using Wt::ItemDataRole;
 using Wt::WModelIndexSet;
+using Wt::WLayout;
 using std::vector;
 using U = Wt::WLength::Unit;
 
@@ -109,35 +114,35 @@ void WtKeyListView::createTable() {
 	m_Table->setCanReceiveFocus(true);
 	m_Table->setColumnResizeEnabled(true);
 	m_Table->setColumnWidth(2, "400px");
-	m_Table->setSelectionMode(Wt::SingleSelection);
+    m_Table->setSelectionMode(Wt::SelectionMode::Single);
 	m_Table->resize(WLength(100.0, U::Percentage), WLength(128.0, U::FontEm));
 	m_Table->selectionChanged().connect(this,
 			&WtKeyListView::selectionChanged);
 }
 
 WtKeyListView::WtKeyListView() {
-	m_DtaMdl = new WtKeyListModel;
+    m_DtaMdl = std::shared_ptr<WtKeyListModel>(new WtKeyListModel);
 	WHBoxLayout* myBtnsLayout = new WHBoxLayout;
 	WVBoxLayout* myTopLayout = new WVBoxLayout;
 	m_BtnAdd = new WtPushButton(translate("New key").str());
 	m_BtnDel = new WtPushButton(translate("Delete key").str());
 	m_BtnReload = new WtPushButton(translate("Reload keys").str());
 	m_BtnEdit = new WtPushButton(translate("Edit key").str());
-	m_BtnAdd->setWidth(WLength { 6, WLength::FontEm });
-	m_BtnEdit->setWidth(WLength { 6, WLength::FontEm });
-	m_BtnDel->setWidth(WLength { 6, WLength::FontEm });
-	m_BtnReload->setWidth(WLength { 6, WLength::FontEm });
-	myBtnsLayout->addWidget(m_BtnAdd);
-	myBtnsLayout->addWidget(m_BtnEdit);
-	myBtnsLayout->addWidget(m_BtnDel);
-	myBtnsLayout->addWidget(m_BtnReload);
+    m_BtnAdd->setWidth(WLength {6, LengthUnit::FontEm});
+    m_BtnEdit->setWidth(WLength {6, LengthUnit::FontEm});
+    m_BtnDel->setWidth(WLength {6, LengthUnit::FontEm});
+    m_BtnReload->setWidth(WLength {6, LengthUnit::FontEm});
+    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnAdd));
+    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnEdit));
+    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnDel));
+    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnReload));
 	createTable();
-	myTopLayout->addLayout(myBtnsLayout);
-	myTopLayout->addWidget(m_Table);
+    myTopLayout->addLayout(std::unique_ptr<Wt::WLayout>(myBtnsLayout));
+    myTopLayout->addWidget(std::unique_ptr<Wt::WWidget>(m_Table));
 	myTopLayout->setContentsMargins(K_TBL_V_MARGIN, K_TBL_V_MARGIN,
 			K_TBL_V_MARGIN, K_TBL_V_MARGIN);
 	myTopLayout->setSpacing(K_TBL_V_MARGIN);
-	setLayout(myTopLayout);
+    setLayout(std::unique_ptr<WLayout>(myTopLayout));
 	setLayoutSizeAware(true);
 }
 

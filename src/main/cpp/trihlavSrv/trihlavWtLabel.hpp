@@ -30,7 +30,7 @@
 #define TRIHLAV_WT_LABEL_HPP_
 
 #include <string>
-#include <Wt/WLabel>
+#include <Wt/WLabel.h>
 
 #include "trihlavLib/trihlavLabelIface.hpp"
 

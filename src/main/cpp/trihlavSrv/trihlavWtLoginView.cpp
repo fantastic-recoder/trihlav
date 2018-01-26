@@ -26,13 +26,17 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <Wt/WGridLayout>
+#include <Wt/WGridLayout.h>
 
 #include "trihlavWtLoginView.hpp"
 #include "trihlavWtStrEdit.hpp"
 #include "trihlavWtLabel.hpp"
 
+using std::unique_ptr;
+using Wt::WWidget;
+using Wt::WLayout;
 using Wt::WGridLayout;
+using Wt::AlignmentFlag;
 using U = Wt::WLength::Unit;
 using Wt::WLength;
 
@@ -49,15 +53,17 @@ WtLoginView::WtLoginView() //
 	WGridLayout* myTopLayout = new WGridLayout;
 	{
 		m_LblUserName->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(m_LblUserName,0,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_EdtUserName,0,1,1,1,Wt::AlignMiddle);
+        myTopLayout->addWidget(unique_ptr<WWidget>(m_LblUserName), 0, 0, 1, 1,
+                               AlignmentFlag::Right | AlignmentFlag::Middle);
+        myTopLayout->addWidget(unique_ptr<WWidget>(m_EdtUserName), 0, 1, 1, 1, AlignmentFlag::Middle);
 	}
 	{
 		m_LblPassword->setWidth(WLength(9.0,U::FontEm));
-		myTopLayout->addWidget(m_LblPassword,2,0,1,1,Wt::AlignRight|Wt::AlignMiddle);
-		myTopLayout->addWidget(m_EdtPassword,2,1,1,1,Wt::AlignMiddle);
-	}
-	getDlg().contents()->setLayout(myTopLayout);
+        myTopLayout->addWidget(unique_ptr<WWidget>(m_LblPassword), 2, 0, 1, 1,
+                               AlignmentFlag::Right | AlignmentFlag::Middle);
+        myTopLayout->addWidget(unique_ptr<WWidget>(m_EdtPassword), 2, 1, 1, 1, AlignmentFlag::Middle);
+    }
+    getDlg().contents()->setLayout(unique_ptr<WLayout>(myTopLayout));
 }
 
 StrEditIface& WtLoginView::getEdtUserName() {

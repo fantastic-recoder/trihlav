@@ -28,14 +28,11 @@
 
 #include <boost/locale.hpp>
 
-#include <Wt/WDialog>
-#include <Wt/WTableView>
-#include <Wt/WFitLayout>
-#include <Wt/WGridLayout>
-#include <Wt/WScrollArea>
-#include <Wt/WHBoxLayout>
-#include <Wt/WVBoxLayout>
-#include <Wt/WModelIndex>
+#include <Wt/WDialog.h>
+#include <Wt/WTableView.h>
+#include <Wt/WFitLayout.h>
+#include <Wt/WHBoxLayout.h>
+#include <Wt/WVBoxLayout.h>
 
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -47,25 +44,27 @@
 #include "trihlavWtSysUserListIView.hpp"
 
 namespace {
-static const Wt::WLength K_DLG_H(40.0, Wt::WLength::Unit::FontEm);
-static const Wt::WLength K_DLG_W(30.0, Wt::WLength::Unit::FontEm);
+    const Wt::WLength K_DLG_H(40.0, Wt::WLength::Unit::FontEm);
+    const Wt::WLength K_DLG_W(30.0, Wt::WLength::Unit::FontEm);
 }
 
 namespace trihlav {
 
-using Wt::WTableView;
-using Wt::WDialog;
-using Wt::WLength;
-using Wt::WGridLayout;
-using Wt::WFitLayout;
-using Wt::WScrollArea;
+    using Wt::WWidget;
+    using Wt::WTableView;
+    using Wt::WDialog;
+    using Wt::WLength;
+    using Wt::WGridLayout;
+    using Wt::WFitLayout;
+    using Wt::WLayout;
 
-using Wt::WHBoxLayout;
-using Wt::WVBoxLayout;
-using Wt::WModelIndexSet;
+    using Wt::WHBoxLayout;
+    using Wt::WVBoxLayout;
+    using Wt::WModelIndexSet;
+    using Wt::WAbstractItemModel;
 
-using boost::locale::translate;
-using U = Wt::WLength::Unit;
+    using boost::locale::translate;
+    using U = Wt::WLength::Unit;
 
 /**
  * Holds the operating system user list data.
@@ -83,25 +82,25 @@ WtSysUserListView::WtSysUserListView() :
 		m_SysUserTable(new WTableView) //
 {
 	BOOST_LOG_NAMED_SCOPE("WtSysUserListView::WtSysUserListView");
-	getDlg().setCaption(translate("Add key").str());
+    getDlg().setWindowTitle(translate("Add key").str());
 	getDlg().setObjectName("WtSysUserListView");
 	getDlg().resize(K_DLG_W, K_DLG_H);
-	WVBoxLayout* myContentLayout = new WVBoxLayout;
+    auto myContentLayout = new WVBoxLayout;
 	{
 		m_SysUserTable->setObjectName("SysUserTable");
 
-		m_SysUserTable->setModel(m_DtaMdl);
+        m_SysUserTable->setModel(std::unique_ptr<WAbstractItemModel>(m_DtaMdl));
 		m_SysUserTable->setAlternatingRowColors(true);
 		m_SysUserTable->setCanReceiveFocus(true);
 		m_SysUserTable->setColumnResizeEnabled(true);
-		m_SysUserTable->setSelectionMode(Wt::SingleSelection);
-		myContentLayout->addWidget(m_SysUserTable);
+        m_SysUserTable->setSelectionMode(Wt::SelectionMode::Single);
+        myContentLayout->addWidget(std::unique_ptr<WWidget>(m_SysUserTable));
 		m_SysUserTable->selectionChanged().connect(this,
 				&WtSysUserListView::selectionChanged);
 
 	}
-	getDlg().contents()->setLayout(myContentLayout);
-	getDlg().contents()->setOverflow(Wt::WContainerWidget::OverflowHidden);
+    getDlg().contents()->setLayout(std::unique_ptr<WLayout>(myContentLayout));
+    getDlg().contents()->setOverflow(Wt::Overflow::Hidden);
 	getDlg().setResizable(true);
 }
 

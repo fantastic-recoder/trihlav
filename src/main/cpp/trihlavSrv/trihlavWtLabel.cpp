@@ -26,6 +26,8 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include <Wt/WFormWidget.h>
+
 #include "trihlavWtLabel.hpp"
 
 using Wt::WLabel;

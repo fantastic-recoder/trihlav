@@ -25,12 +25,11 @@
 	Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
-#include <Wt/WPanel>
-#include <Wt/WWidget>
-#include <Wt/WText>
-#include <Wt/WLength>
-#include <Wt/WLineEdit>
-#include <Wt/WContainerWidget>
+#include <Wt/WGlobal.h>
+#include <Wt/WPanel.h>
+#include <Wt/WText.h>
+#include <Wt/WLineEdit.h>
+#include <Wt/WContainerWidget.h>
 
 #include <boost/locale.hpp>
 
@@ -42,44 +41,46 @@ using Wt::WContainerWidget;
 using Wt::WText;
 using Wt::WWidget;
 using Wt::WLength;
+using Wt::AlignmentFlag;
+using Wt::AlignmentFlag;
 using boost::locale::translate;
 
 namespace trihlav {
 
-WtPswdChckView::WtPswdChckView() //
-:m_BtnOk(new WtPushButton(translate("check")))
-,m_EdtPswd(new WtStrEdit)
-{
-	m_BtnOk->setWidth(WLength(7.0,WLength::FontEm));
-	m_EdtPswd->setWidth(WLength(32.0,WLength::FontEm));
-	m_EdtPswd->setMargin(WLength(16.0,WLength::Pixel));
-	m_MainPanel = new WContainerWidget();
-	m_MainPanel->setWidth(WLength(100.0,WLength::Percentage));
-	m_MainPanel->setHeight(WLength(7.0,WLength::FontEm));
-	m_MainPanel->setContentAlignment(Wt::AlignCenter|Wt::AlignBottom);
-	m_MainPanel->addWidget(new WText(translate("One time password").str()));
-	m_MainPanel->addWidget(m_EdtPswd);
-	m_MainPanel->addWidget(m_BtnOk);
-}
+    using Unit=Wt::LengthUnit;
 
-WtPswdChckView::~WtPswdChckView() {
-	// TODO Auto-generated destructor stub
-}
+    WtPswdChckView::WtPswdChckView() //
+            : m_BtnOk(new WtPushButton(translate("check"))), m_EdtPswd(new WtStrEdit) {
+        m_BtnOk->setWidth(WLength(7.0, Unit::FontEm));
+        m_EdtPswd->setWidth(WLength(32.0, Unit::FontEm));
+        m_EdtPswd->setMargin(WLength(16.0, Unit::Pixel));
+        m_MainPanel = new WContainerWidget();
+        m_MainPanel->setWidth(WLength(100.0, Unit::Percentage));
+        m_MainPanel->setHeight(WLength(7.0, Unit::FontEm));
+        m_MainPanel->setContentAlignment(AlignmentFlag::Center | AlignmentFlag::Bottom);
+        m_MainPanel->addWidget(std::unique_ptr<WWidget>(new WText(translate("One time password").str())));
+        m_MainPanel->addWidget(std::unique_ptr<WWidget>(m_EdtPswd));
+        m_MainPanel->addWidget(std::unique_ptr<WWidget>(m_BtnOk));
+    }
 
-WWidget* WtPswdChckView::getWWidget() {
-	return m_MainPanel;
-}
+    WtPswdChckView::~WtPswdChckView() {
+        // TODO Auto-generated destructor stub
+    }
 
-void WtPswdChckView::setupUi() {
-}
+    Wt::WWidget *WtPswdChckView::getWWidget() {
+        return m_MainPanel;
+    }
 
-ButtonIface& WtPswdChckView::getBtnOk() {
-	return *m_BtnOk;
-}
+    void WtPswdChckView::setupUi() {
+    }
 
-StrEditIface& WtPswdChckView::getEdtPswd0() {
-	return *m_EdtPswd;
-}
+    ButtonIface &WtPswdChckView::getBtnOk() {
+        return *m_BtnOk;
+    }
+
+    StrEditIface &WtPswdChckView::getEdtPswd0() {
+        return *m_EdtPswd;
+    }
 
 } /* namespace trihlav */
 

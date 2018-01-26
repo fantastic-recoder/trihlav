@@ -5,7 +5,7 @@
 #ifndef TRIHLAV_WT_AUTH_RESOURCE_HPP_
 #define TRIHLAV_WT_AUTH_RESOURCE_HPP_
 
-#include <Wt/WResource>
+#include <Wt/WResource.h>
 
 namespace trihlav {
 
@@ -14,10 +14,10 @@ namespace trihlav {
      */
     class WtAuthResource : public Wt::WResource {
     public:
-        virtual ~WtAuthResource();
+        ~WtAuthResource() = default;
 
     protected:
-        virtual void handleRequest(const Wt::Http::Request &pRequest, Wt::Http::Response &pResponse);
+        void handleRequest(const Wt::Http::Request &pRequest, Wt::Http::Response &pResponse) override;
     };
 
 }
