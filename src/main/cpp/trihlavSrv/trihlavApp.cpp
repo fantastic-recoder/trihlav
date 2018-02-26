@@ -26,6 +26,7 @@
 	Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 */
 
+#include <memory>
 #include <boost/locale.hpp>
 #include <Wt/WText.h>
 #include <Wt/WBreak.h>
@@ -49,7 +50,7 @@ namespace trihlav {
             WApplication(pEnv) //
     {
         setTitle("TRIHLAV");               // application title
-        std::shared_ptr<WBootstrapTheme> bootstrapTheme(new WBootstrapTheme());
+/*        std::shared_ptr<WBootstrapTheme> bootstrapTheme(new WBootstrapTheme());
         setTheme(bootstrapTheme);
         useStyleSheet("style/trihlav.css");
         m_MainPanelCntrl = std::make_unique<MainPanelPresenter>(getUiFactory());
@@ -57,7 +58,8 @@ namespace trihlav {
         auto &myMainPanelView = dynamic_cast<WtMainPanelView &>
         (myIMainPanelView);
         root()->addWidget(std::unique_ptr<Wt::WWidget>(myMainPanelView.getContentsStackWgt()));
-        m_MainPanelCntrl->setupUi();
+        m_MainPanelCntrl->setupUi();*/
+        BOOST_LOG_TRIVIAL(info) << "App created.";
     }
 
     AppPtr App::createApplication(const WEnvironment &env) {
@@ -65,7 +67,7 @@ namespace trihlav {
          * You could read information from the environment to decide whether
          * the user has permission to start a new application
          */
-        return AppPtr(new App(env));
+        return std::unique_ptr<App>(new App(env));
     }
 
     App::~App() {

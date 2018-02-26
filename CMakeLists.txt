@@ -73,6 +73,8 @@ IF (CMAKE_VERSION VERSION_LESS "3.1")
 ELSE ()
   SET (CMAKE_CXX_STANDARD 14)
 ENDIF ()
+
+SET (CMAKE_CXX_FLAGS "-DBOOST_ASIO_ENABLE_HANDLER_TRACKING=1 ${CMAKE_CXX_FLAGS}")
 ###############################################################################
 
 ###############################################################################

@@ -34,10 +34,8 @@
 #include <Wt/WMessageBox.h>
 #include <Wt/WNavigationBar.h>
 #include <Wt/WPopupMenu.h>
-#include <Wt/WPopupMenuItem.h>
 #include <Wt/WStackedWidget.h>
 #include <Wt/WText.h>
-#include <Wt/WContainerWidget.h>
 
 #include "trihlavLib/trihlavCannotCastImplementation.hpp"
 #include "trihlavLib/trihlavVersion.hpp"
@@ -45,8 +43,6 @@
 #include "trihlavWtMainPanelView.hpp"
 #include "trihlavWtPswdChckView.hpp"
 #include "trihlavWtKeyListView.hpp"
-
-#include "trihlavWtViewIface.hpp"
 
 using Wt::WNavigationBar;
 using Wt::WMenu;
@@ -113,6 +109,7 @@ namespace trihlav {
         getNavigation()->setTitle(WString(translate("TRIHLAV OTP Server")),
                                   "http://www.google.com/search?q=One+Time+Password");
         getNavigation()->setResponsive(true);
+        /*
         m_MainPanel = new WStackedWidget();
         setContentsStack(m_MainPanel);
         m_ContentsStack->addStyleClass("contents");
@@ -160,7 +157,7 @@ namespace trihlav {
                     ));
                     messageBox->show();
                 }));
-        getNavigation()->addSearch(std::unique_ptr<WLineEdit>(edit), Wt::AlignmentFlag::Right);
+        getNavigation()->addSearch(std::unique_ptr<WLineEdit>(edit), Wt::AlignmentFlag::Right);*/
     }
 
     WtMainPanelView::~WtMainPanelView() {

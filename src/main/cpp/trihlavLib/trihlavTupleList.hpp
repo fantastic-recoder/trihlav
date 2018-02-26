@@ -63,7 +63,7 @@ public:
 		return m_Rows[pRowNum];
 	}
 
-	const auto get(size_t pRowNum, size_t pColNum) const {
+	const boost::variant<Columns_t ...> get(size_t pRowNum, size_t pColNum) const {
 		return get_intern<0>(pRowNum,pColNum);
 	}
 
