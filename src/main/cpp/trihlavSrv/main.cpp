@@ -8,6 +8,8 @@
 
 #include "trihlavApp.hpp"
 #include "trihlavWtAuthResource.hpp"
+#include "trihlavLib/trihlavLogApi.hpp"
+
 
 #include "trihlavLib/trihlavConstants.hpp"
 
@@ -99,34 +101,26 @@ void HelloApplication::greet()
 
 int main(int argc, char **argv, char **envp) {
 	try {
-        return Wt::WRun(argc, argv, [](const Wt::WEnvironment &env) {
-            /*
-             * You could read information from the environment to decide whether
-             * the user has permission to start a new application
-             */
-            return Wt::cpp14::make_unique<HelloApplication>(env);
-        });
-        /*
 		// use argv[0] as the application name to match a suitable entry
 		// in the Wt configuration file, and use the default configuration
 		// file (which defaults to /etc/wt/wt_config.xml unless the environment
 		// variable WT_CONFIG_XML is set)
-		WServer server(argv[0]);
+		WServer myServer(argv[0]);
 		// WTHTTP_CONFIGURATION is e.g. "/etc/wt/wthttpd"
-		server.setServerConfiguration(argc, argv, K_TRIHLAV_WT_HTTPD_CFG);
+		myServer.setServerConfiguration(argc, argv, K_TRIHLAV_WT_HTTPD_CFG);
 		// add a single entry point, at the default location (as determined
 		// by the server configuration's deploy-path)
-        server.addEntryPoint(EntryPointType::Application, &App::createApplication,"/trihlav");
+        myServer.addEntryPoint(EntryPointType::Application, &App::createApplication,"/trihlav");
 		// create the auth REST resource
 		WtAuthResource myAuthResource;
-		server.addResource(&myAuthResource,K_AUTH_URL);
-		if (server.start()) {
+		myServer.addResource(&myAuthResource,K_AUTH_URL);
+		if (myServer.start()) {
             int sig = WServer::waitForShutdown();
-			std::cerr << "Shutdown (signal = " << sig << ")" << std::endl;
-			server.stop();
+			BOOST_LOG_TRIVIAL(error) << "Shutdown (signal = " << sig << ")" << std::endl;
+			myServer.stop();
 			if (sig == SIGHUP)
                 WServer::restart(argc, argv, envp);
-		}*/
+		}
 	} catch (WServer::Exception& e) {
 		std::cerr << e.what() << "\n";
 		return 1;

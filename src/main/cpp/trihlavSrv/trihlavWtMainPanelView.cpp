@@ -109,7 +109,6 @@ namespace trihlav {
         getNavigation()->setTitle(WString(translate("TRIHLAV OTP Server")),
                                   "http://www.google.com/search?q=One+Time+Password");
         getNavigation()->setResponsive(true);
-        /*
         m_MainPanel = new WStackedWidget();
         setContentsStack(m_MainPanel);
         m_ContentsStack->addStyleClass("contents");
@@ -118,8 +117,8 @@ namespace trihlav {
                 unique_ptr<WMenu>(new WMenu(m_ContentsStack)),
                 Wt::AlignmentFlag::Left);
         // Setup a Right-aligned menu.
-        auto myRightMenu = std::unique_ptr<WMenu>(new Wt::WMenu());
-        getNavigation()->addMenu(std::move(myRightMenu), Wt::AlignmentFlag::Right);
+        auto myRightMenu = new Wt::WMenu();
+        getNavigation()->addMenu(std::unique_ptr<WMenu>(myRightMenu), Wt::AlignmentFlag::Right);
         // Create a myHelpPopup submenu for the Help menu.
         WPopupMenu *myHelpPopup = new WPopupMenu();
         const string myHelpText = "Showing Help: {1}\n"
@@ -139,9 +138,9 @@ namespace trihlav {
             ));
             messageBox->show();
         }, std::placeholders::_1));
-        auto item = unique_ptr<WMenuItem>(new WMenuItem("Help"));
-        item->setMenu(std::unique_ptr<WPopupMenu>(myHelpPopup));
-        myRightMenu->addItem(std::move(item));
+        auto myHelpMenuItem = new WMenuItem("Help");
+        myHelpMenuItem->setMenu(std::unique_ptr<WPopupMenu>(myHelpPopup));
+        myRightMenu->addItem(std::unique_ptr<WMenuItem>(myHelpMenuItem));
         // Add a Search control.
         WLineEdit *edit = new WLineEdit();
         edit->setToolTip("Enter a search item");
@@ -157,7 +156,7 @@ namespace trihlav {
                     ));
                     messageBox->show();
                 }));
-        getNavigation()->addSearch(std::unique_ptr<WLineEdit>(edit), Wt::AlignmentFlag::Right);*/
+        getNavigation()->addSearch(std::unique_ptr<WLineEdit>(edit), Wt::AlignmentFlag::Right);
     }
 
     WtMainPanelView::~WtMainPanelView() {

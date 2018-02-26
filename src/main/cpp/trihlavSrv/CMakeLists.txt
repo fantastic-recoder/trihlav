@@ -13,13 +13,13 @@ add_executable(trihlavsrv main.cpp trihlavApp.cpp trihlavApp.hpp trihlavWtUiFact
 
 TARGET_LINK_LIBRARIES(trihlavsrv
         trihlavApi
-        ${Boost_LIBRARIES}
         #${Wt_DEBUG_LIBRARY}
         ${Wt_LIBRARY}
         #${Wt_HTTP_DEBUG_LIBRARY}
         ${Wt_HTTP_LIBRARY}
         ${YUBIKEY_LIB}
         #${CMAKE_THREAD_LIBS_INIT}
+        ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
         ${OPENSSL_LIBRARIES}
         )
