@@ -49,15 +49,15 @@ namespace trihlav {
     App::App(const WEnvironment &pEnv) :
             WApplication(pEnv) //
     {
+        BOOST_LOG_TRIVIAL(info) << "App creating...";
         setTitle("TRIHLAV");               // application title
-        std::shared_ptr<WBootstrapTheme> bootstrapTheme(new WBootstrapTheme());
+        auto bootstrapTheme = std::make_shared<WBootstrapTheme>();
         setTheme(bootstrapTheme);
         useStyleSheet("style/trihlav.css");
         m_MainPanelCntrl = std::make_unique<MainPanelPresenter>(getUiFactory());
         trihlav::ViewIface &myIMainPanelView = m_MainPanelCntrl->getView();
-        auto &myMainPanelView = dynamic_cast<WtMainPanelView &>
-        (myIMainPanelView);
-        root()->addWidget(std::unique_ptr<Wt::WWidget>(myMainPanelView.getContentsStackWgt()));
+        auto &myMainPanelView = dynamic_cast<WtMainPanelView &>(myIMainPanelView);
+        root()->addWidget(std::unique_ptr<Wt::WWidget>(myMainPanelView.getRootWidget()));
         m_MainPanelCntrl->setupUi();
         BOOST_LOG_TRIVIAL(info) << "App created.";
     }

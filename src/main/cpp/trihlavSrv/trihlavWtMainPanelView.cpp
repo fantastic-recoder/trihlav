@@ -35,7 +35,9 @@
 #include <Wt/WNavigationBar.h>
 #include <Wt/WPopupMenu.h>
 #include <Wt/WStackedWidget.h>
+#include <Wt/WVBoxLayout.h>
 #include <Wt/WText.h>
+#include <Wt/WContainerWidget.h>
 
 #include "trihlavLib/trihlavCannotCastImplementation.hpp"
 #include "trihlavLib/trihlavVersion.hpp"
@@ -51,6 +53,9 @@ using Wt::WString;
 using Wt::WStackedWidget;
 using Wt::WPopupMenu;
 using Wt::WLineEdit;
+using Wt::WWidget;
+using Wt::WContainerWidget;
+using Wt::WVBoxLayout;
 
 using namespace std;
 using boost::locale::translate;
@@ -104,14 +109,17 @@ namespace trihlav {
      *
      */
     WtMainPanelView::WtMainPanelView() {
+        m_MainPanel = new WContainerWidget();
         // Create a m_Navigation bar with a link to a web page.
         setNavigation(new WNavigationBar());
         getNavigation()->setTitle(WString(translate("TRIHLAV OTP Server")),
                                   "http://www.google.com/search?q=One+Time+Password");
         getNavigation()->setResponsive(true);
-        m_MainPanel = new WStackedWidget();
-        setContentsStack(m_MainPanel);
+        m_MainContent = new WStackedWidget();
+        setContentsStack(m_MainContent);
         m_ContentsStack->addStyleClass("contents");
+        m_MainPanel->addWidget(std::unique_ptr<WWidget>(m_Navigation));
+        m_MainPanel->addWidget(std::unique_ptr<WWidget>(m_ContentsStack));
         // Setup a Left-aligned menu.
         m_LeftMenu = getNavigation()->addMenu(
                 unique_ptr<WMenu>(new WMenu(m_ContentsStack)),
@@ -162,8 +170,8 @@ namespace trihlav {
     WtMainPanelView::~WtMainPanelView() {
     }
 
-    Wt::WWidget *WtMainPanelView::getContentsStackWgt() {
-        return m_ContentsStack;
+    Wt::WWidget *WtMainPanelView::getRootWidget() {
+        return m_MainPanel;
     }
 
 } /* namespace trihlav */

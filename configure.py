@@ -27,31 +27,36 @@ LICENSE
 
 """
 
-import sys, os, traceback, optparse
-import time
-import re
+import optparse
+import os
 import subprocess
+import sys
+import time
+import traceback
 
-#from pexpect import run, spawn
 
-def main ():
+# from pexpect import run, spawn
 
+def main():
     global options, args
+
+
 if __name__ == '__main__':
     try:
-        myBuildDir="../trihlav-build"
+        myBuildDir = "../trihlav-build"
         if not os.path.exists(myBuildDir):
             os.makedirs(myBuildDir)
         os.chdir(myBuildDir)
         # TODO: Do something more interesting here...
         print 'Calling cmake'
-        cmake = subprocess.check_output(["/usr/bin/env", "cmake", "-DCMAKE_BUILD_TYPE=Debug","../trihlav"])
-        print 'Executing '+cmake
+        cmake = subprocess.check_output(["/usr/bin/env", "cmake", "-DCMAKE_BUILD_TYPE=Debug", "../trihlav"])
+        print 'Executing ' + cmake
         start_time = time.time()
-        parser = optparse.OptionParser(formatter=optparse.TitledHelpFormatter(), usage=globals()['__doc__'], version='$Id$')
-        parser.add_option ('-v', '--verbose', action='store_true', default=False, help='verbose output')
+        parser = optparse.OptionParser(formatter=optparse.TitledHelpFormatter(), usage=globals()['__doc__'],
+                                       version='$Id$')
+        parser.add_option('-v', '--verbose', action='store_true', default=False, help='verbose output')
         (options, args) = parser.parse_args()
-        #if len(args) < 1:
+        # if len(args) < 1:
         #    parser.error ('missing argument')
         if options.verbose: print time.asctime()
         main()
@@ -59,13 +64,12 @@ if __name__ == '__main__':
         if options.verbose: print 'TOTAL TIME IN MINUTES:',
         if options.verbose: print (time.time() - start_time) / 60.0
         sys.exit(0)
-    except KeyboardInterrupt, e: # Ctrl-C
+    except KeyboardInterrupt, e:  # Ctrl-C
         raise e
-    except SystemExit, e: # sys.exit()
+    except SystemExit, e:  # sys.exit()
         raise e
     except Exception, e:
         print 'ERROR, UNEXPECTED EXCEPTION'
         print str(e)
         traceback.print_exc()
         os._exit(1)
-

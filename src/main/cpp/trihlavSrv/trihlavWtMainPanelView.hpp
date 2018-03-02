@@ -40,6 +40,8 @@ namespace Wt {
     class WStackedWidget;
 
     class WMenuItem;
+
+    class WPanel;
 }
 
 namespace trihlav {
@@ -77,7 +79,7 @@ namespace trihlav {
             return m_ContentsStack;
         }
 
-        Wt::WWidget *getContentsStackWgt();
+        Wt::WWidget *getRootWidget();
 
         void setContentsStack(Wt::WStackedWidget *myContentsStack) {
             m_ContentsStack = myContentsStack;
@@ -100,7 +102,8 @@ namespace trihlav {
 
 
     private:
-        Wt::WStackedWidget *m_MainPanel;
+        Wt::WContainerWidget *m_MainPanel;
+        Wt::WStackedWidget *m_MainContent;
         Wt::WNavigationBar *m_Navigation;
         Wt::WStackedWidget *m_ContentsStack;
         Wt::WMenu *m_LeftMenu;
