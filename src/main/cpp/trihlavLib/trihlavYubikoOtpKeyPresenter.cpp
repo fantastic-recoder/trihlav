@@ -100,14 +100,19 @@ namespace trihlav {
         delete m_CurCfg;
         m_CurCfg = new YubikoOtpKeyConfig{pKeyCfg};
         m_Mode = Delete;
-        if (getMessageView().ask(translate("Trihlav question"),
-                                 translate(
-                                         "Really delete key \"" + m_CurCfg->getDescription()
-                                         + "\"."))) {
-            deleteKey();
-            saved();
-            m_Mode = None;
-        }
+        getMessageView().ask(
+                translate("Trihlav question"),
+                translate("Really delete key \"" + m_CurCfg->getDescription() + "\"."),
+                [this](bool pRetVal) {
+                    if (pRetVal) {
+                        const string myKeyName = this->m_CurCfg->getDescription();
+                        this->deleteKey();
+                        this->saved();
+                        this->m_Mode = None;
+                        BOOST_LOG_TRIVIAL(info) << "Key " << myKeyName << " deleted.";
+                    }
+                }
+        );
     }
 
     void YubikoOtpKeyPresenter::editKey(const YubikoOtpKeyConfig &pKeyCfg) {

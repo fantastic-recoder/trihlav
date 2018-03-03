@@ -29,16 +29,21 @@
 #define TRIHLAV_MESSAGE_VIEW_IFACE_HPP_
 
 #include <string>
+#include <functional>
 
 #include "trihlavPresenterBase.hpp"
 
 namespace trihlav {
 
+    /**
+     * A view, which can display messages and ask simple questions.
+     */
     class MessageViewIface {
     public:
         virtual void showMessage(const std::string &pHeader, const std::string &pMsg) =0;
 
-        virtual bool ask(const std::string &pHeader, const std::string &pMsg) =0;
+        virtual void
+        ask(const std::string &pHeader, const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) =0;
 
         virtual ~MessageViewIface();
     };

@@ -8,7 +8,9 @@
 #include <Wt/WMessageBox.h>
 
 using Wt::WMessageBox;
+using Wt::Icon;
 using Wt::StandardButton;
+using std::bind;
 
 namespace trihlav {
 
@@ -19,14 +21,32 @@ namespace trihlav {
     void WtMessageView::showMessage(const std::string &pHeader,
                                     const std::string &pMsg) {
         BOOST_LOG_NAMED_SCOPE("WtMessageView::showMessage");
-        WMessageBox::show(pHeader.c_str(), pMsg.c_str(), StandardButton::Ok);
+        WMessageBox *myMsgBox = new Wt::WMessageBox( //
+                pHeader.c_str(),
+                pMsg.c_str(),
+                Icon::Information,
+                StandardButton::Ok
+        );
+        myMsgBox->buttonClicked().connect(bind([=]() { delete myMsgBox; }));
+        myMsgBox->show();
     }
 
-    bool WtMessageView::ask(const std::string &pHeader,
-                            const std::string &pMsg) {
+    void WtMessageView::ask(const std::string &pHeader,
+                            const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) {
         BOOST_LOG_NAMED_SCOPE("WtMessageView::ask");
-        return (WMessageBox::show(pHeader.c_str(), pMsg.c_str(), StandardButton::Ok | StandardButton::Cancel) ==
-                StandardButton::Ok);
+        WMessageBox *myMsgBox = new Wt::WMessageBox( //
+                pHeader.c_str(),
+                pMsg.c_str(),
+                Icon::Question,
+                StandardButton::Ok | StandardButton::Cancel
+        );
+        myMsgBox->buttonClicked().connect(
+                bind([=]() {
+                    pCallback(myMsgBox->buttonResult() == StandardButton::Ok);
+                    delete myMsgBox;
+                })
+        );
+        myMsgBox->show();
     }
 
     WtMessageView::~WtMessageView() {
