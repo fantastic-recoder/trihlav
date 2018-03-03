@@ -29,6 +29,7 @@
 #define TRIHLAV_MOCK_MESSAGE_VIEW_HPP_
 
 #include <string>
+#include <functional>
 #include <gmock/gmock.h>
 #include "trihlavLib/trihlavMessageViewIface.hpp"
 
@@ -38,7 +39,8 @@ namespace trihlav {
 
 struct MockMessageView: virtual MessageViewIface, virtual boost::noncopyable {
 	MOCK_METHOD2(showMessage, void (const std::string&, const std::string&));//
-	MOCK_METHOD2(ask, bool (const std::string&, const std::string&));//
+    MOCK_METHOD3(ask, void(
+            const std::string&, const std::string&, std::function<void(bool)>));//
 };
 
 }

@@ -372,6 +372,10 @@ TEST_F(TestKeyListPresenter,canEditYubikoKey) {
 	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
 }
 
+void ansverTrue(const std::string &pHeader, const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) {
+    pCallback(true);
+}
+
 TEST_F(TestKeyListPresenter,canDeleteYubikoKey) {
 	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::canAddYubikoKey");
 	NiceMock<MockFactory> myMockFactory;
@@ -391,7 +395,7 @@ TEST_F(TestKeyListPresenter,canDeleteYubikoKey) {
 			dynamic_cast<MockMessageView&>(myYubikoOtpKeyPresenter.getMessageView());
 
 	KeyListViewIface& myKeyListView = myKeyListPresenter.getView();
-	EXPECT_CALL(myMockMessageView,ask(_,_)).WillOnce(Return(true));
+    EXPECT_CALL(myMockMessageView, ask(_, _, _)).WillOnce(Invoke(ansverTrue));
 	myKeyListView.selectionChangedSig(1);
 	myKeyListView.getBtnDelKey().pressedSig();
 	EXPECT_EQ(2, myKeyMan.getKeyCount());
