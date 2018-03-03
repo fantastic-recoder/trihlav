@@ -47,56 +47,56 @@ using boost::locale::translate;
 using U = Wt::WLength::Unit;
 
 namespace trihlav {
-WtDialogView::WtDialogView() : //
-		m_Dlg(new WDialog), //
-		m_CancelBtn(new WtPushButton(translate("Cancel"))), //
-		m_OkBtn(new WtPushButton(translate("ok"))) //
+    WtDialogView::WtDialogView() : //
+            m_Dlg(new WDialog), //
+            m_CancelBtn(new WtPushButton(translate("Cancel"))), //
+            m_OkBtn(new WtPushButton(translate("ok"))) //
 
-{
-	BOOST_LOG_NAMED_SCOPE("WtDialogView::WtDialogView()");
-	WHBoxLayout* myBtnLayout = new WHBoxLayout;
-	{
-		m_CancelBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		m_OkBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
-		myBtnLayout->addWidget(unique_ptr<WWidget>(m_OkBtn));
-		myBtnLayout->addWidget(unique_ptr<WWidget>(m_CancelBtn));
-	}
-	m_Dlg->footer()->setLayout(unique_ptr<WLayout>(myBtnLayout));
-	m_Dlg->finished().connect(this, &WtDialogView::finishedSlot);
-	m_CancelBtn->clicked().connect(m_Dlg.get(), &WDialog::reject);
-	m_OkBtn->clicked().connect(m_Dlg.get(), &WDialog::accept);
-}
+    {
+        BOOST_LOG_NAMED_SCOPE("WtDialogView::WtDialogView()");
+        WHBoxLayout *myBtnLayout = new WHBoxLayout;
+        {
+            m_CancelBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
+            m_OkBtn->resize(WLength(11.0, U::FontEm), WLength(4.0, U::FontEm));
+            myBtnLayout->addWidget(unique_ptr<WWidget>(m_OkBtn));
+            myBtnLayout->addWidget(unique_ptr<WWidget>(m_CancelBtn));
+        }
+        m_Dlg->footer()->setLayout(unique_ptr<WLayout>(myBtnLayout));
+        m_Dlg->finished().connect(this, &WtDialogView::finishedSlot);
+        m_CancelBtn->clicked().connect(m_Dlg.get(), &WDialog::reject);
+        m_OkBtn->clicked().connect(m_Dlg.get(), &WDialog::accept);
+    }
 
-const ButtonIface& WtDialogView::getBtnCancel() const {
-	return *m_CancelBtn;
-}
+    const ButtonIface &WtDialogView::getBtnCancel() const {
+        return *m_CancelBtn;
+    }
 
-ButtonIface& WtDialogView::getBtnCancel() {
-	return *m_CancelBtn;
-}
+    ButtonIface &WtDialogView::getBtnCancel() {
+        return *m_CancelBtn;
+    }
 
-const ButtonIface& WtDialogView::getBtnOk() const {
-	return *m_OkBtn;
-}
+    const ButtonIface &WtDialogView::getBtnOk() const {
+        return *m_OkBtn;
+    }
 
-ButtonIface& WtDialogView::getBtnOk() {
-	return *m_OkBtn;
-}
+    ButtonIface &WtDialogView::getBtnOk() {
+        return *m_OkBtn;
+    }
 
-void WtDialogView::show() {
-	m_Dlg->show();
-}
+    void WtDialogView::show() {
+        m_Dlg->show();
+    }
 
-WtDialogView::~WtDialogView() {
-	BOOST_LOG_NAMED_SCOPE("WtDialogView::~WtDialogView");
-}
+    WtDialogView::~WtDialogView() {
+        BOOST_LOG_NAMED_SCOPE("WtDialogView::~WtDialogView");
+    }
 
-	void WtDialogView::finishedSlot(Wt::DialogCode pCode) {
-		sigDialogFinished(pCode == Wt::DialogCode::Accepted);
-	m_Dlg->hide();
-}
+    void WtDialogView::finishedSlot(Wt::DialogCode pCode) {
+        sigDialogFinished(pCode == Wt::DialogCode::Accepted);
+        m_Dlg->hide();
+    }
 
-Wt::WDialog &WtDialogView::getDlg() {
-	return *m_Dlg;
-}
+    Wt::WDialog &WtDialogView::getDlg() {
+        return *m_Dlg;
+    }
 }

@@ -26,43 +26,43 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include "trihlavLib/trihlavMessageViewIface.hpp"
 #include "trihlavLib/trihlavLogApi.hpp"
 #include "trihlavLib/trihlavCanOsAuthPresenter.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
 #include "trihlavLib/trihlavLoginPresenter.hpp"
-#include "trihlavLib/trihlavMessageViewIface.hpp"
 
 namespace trihlav {
 
-CanOsAuthPresenter::CanOsAuthPresenter(FactoryIface& pFactory) :
-		PresenterBase(pFactory) {
-	// TODO Auto-generated constructor stub
+    CanOsAuthPresenter::CanOsAuthPresenter(FactoryIface &pFactory) :
+            PresenterBase(pFactory) {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
-CanOsAuthPresenter::~CanOsAuthPresenter() {
-	// TODO Auto-generated destructor stub
-}
+    CanOsAuthPresenter::~CanOsAuthPresenter() {
+        // TODO Auto-generated destructor stub
+    }
 
-void CanOsAuthPresenter::userAccepted(bool pStatus) {
-	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::userAccepted");
-	doProtectedAction(pStatus);
-}
+    void CanOsAuthPresenter::userAccepted(bool pStatus) {
+        BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::userAccepted");
+        doProtectedAction(pStatus);
+    }
 
-LoginPresenter& CanOsAuthPresenter::getLoginPresenter() {
-	if (!m_LoginPresenter) {
-		BOOST_LOG_TRIVIAL(debug)<<"Creating login presenter.";
-		m_LoginPresenter.reset(new LoginPresenter(getFactory()));
-		m_LoginPresenter->sigUserAccepted.connect(
-				[=](bool pStatus)->void {userAccepted(pStatus);});
-	}
-	BOOST_LOG_TRIVIAL(debug)<<"returning login presenter.";
-	return *m_LoginPresenter;
-}
+    LoginPresenter &CanOsAuthPresenter::getLoginPresenter() {
+        if (!m_LoginPresenter) {
+            BOOST_LOG_TRIVIAL(debug) << "Creating login presenter.";
+            m_LoginPresenter.reset(new LoginPresenter(getFactory()));
+            m_LoginPresenter->sigUserAccepted.connect(
+                    [=](bool pStatus) -> void { userAccepted(pStatus); });
+        }
+        BOOST_LOG_TRIVIAL(debug) << "returning login presenter.";
+        return *m_LoginPresenter;
+    }
 
-void CanOsAuthPresenter::protectedAction() {
-	BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
-	getLoginPresenter().show();
-}
+    void CanOsAuthPresenter::protectedAction() {
+        BOOST_LOG_NAMED_SCOPE("CanOsAuthPresenter::protectedAction");
+        getLoginPresenter().show();
+    }
 
 } /* namespace trihlav */

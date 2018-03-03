@@ -36,11 +36,12 @@ namespace trihlav {
 /**
  * Thrown when an empty public id will be thrown.
  */
-class EmptyPublicId: public std::range_error {
-public:
-	EmptyPublicId();
-	virtual ~EmptyPublicId();
-};
+    class EmptyPublicId : public std::range_error {
+    public:
+        EmptyPublicId();
+
+        virtual ~EmptyPublicId();
+    };
 
 } /* namespace trihlav */
 

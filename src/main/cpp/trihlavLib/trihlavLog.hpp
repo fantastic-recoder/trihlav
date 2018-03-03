@@ -7,9 +7,10 @@
  * Miscelanous logging related functionality is declared here.
  */
 namespace trihlav {
-	/// Initialize logging library.
-	void initLog();
-	void logDebug_token(const yubikey_token_st& pToken);
+    /// Initialize logging library.
+    void initLog();
+
+    void logDebug_token(const yubikey_token_st &pToken);
 
 }
 

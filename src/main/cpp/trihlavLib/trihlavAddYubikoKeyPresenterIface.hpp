@@ -32,8 +32,8 @@
 
 namespace trihlav {
 
-class AddYubikoKeyPresenterIface : virtual public PresenterBase {
-};
+    class AddYubikoKeyPresenterIface : virtual public PresenterBase {
+    };
 
 } /* namespace trihlav */
 

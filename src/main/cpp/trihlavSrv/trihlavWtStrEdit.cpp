@@ -30,13 +30,13 @@
 
 namespace trihlav {
 
-WtStrEdit::WtStrEdit() {
-	// TODO Auto-generated constructor stub
+    WtStrEdit::WtStrEdit() {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
-WtStrEdit::~WtStrEdit() {
-	// TODO Auto-generated destructor stub
-}
+    WtStrEdit::~WtStrEdit() {
+        // TODO Auto-generated destructor stub
+    }
 
 } /* namespace trihlav */

@@ -35,11 +35,11 @@
 
 namespace trihlav {
 
-using AuthResult = std::tuple<bool, std::string>;
-using Passwords = std::list<std::string>;
+    using AuthResult = std::tuple<bool, std::string>;
+    using Passwords = std::list<std::string>;
 
-AuthResult checkOtps(const std::string& pServer, const std::string& pUsername,
-		const Passwords& pPasswords);
+    AuthResult checkOtps(const std::string &pServer, const std::string &pUsername,
+                         const Passwords &pPasswords);
 
 }  // namespace trihlav
 

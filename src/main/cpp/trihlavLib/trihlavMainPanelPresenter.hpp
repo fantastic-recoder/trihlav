@@ -15,25 +15,32 @@
 
 namespace trihlav {
 
-class FactoryIface;
-class KeyListPresenterIface;
-class PswdChckPresenterIface;
-enum class PanelName;
+    class FactoryIface;
+
+    class KeyListPresenterIface;
+
+    class PswdChckPresenterIface;
+
+    enum class PanelName;
 
 /**
  * Implementation of the top level UI presenter.
  */
-class MainPanelPresenter : virtual public PresenterBase {
-	MainPanelViewIfacePtr m_MainPanelView;
-	KeyListPresenterIfacePtr  m_KeyListPresenter;
-	PswdChckPresenterIfacePtr m_PswdChckPresenter;
-public:
-	MainPanelPresenter(FactoryIface& pFactory);
-	virtual ~MainPanelPresenter();
-	virtual ViewIface& getView();
-	virtual void setupUi();
-	virtual void showedPanel(const PanelName pPanel);
-};
+    class MainPanelPresenter : virtual public PresenterBase {
+        MainPanelViewIfacePtr m_MainPanelView;
+        KeyListPresenterIfacePtr m_KeyListPresenter;
+        PswdChckPresenterIfacePtr m_PswdChckPresenter;
+    public:
+        MainPanelPresenter(FactoryIface &pFactory);
+
+        virtual ~MainPanelPresenter();
+
+        virtual ViewIface &getView();
+
+        virtual void setupUi();
+
+        virtual void showedPanel(const PanelName pPanel);
+    };
 
 } /* namespace trihlav */
 

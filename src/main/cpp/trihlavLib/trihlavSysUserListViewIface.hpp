@@ -16,23 +16,23 @@
 
 namespace trihlav {
 
-class SysUserListViewIface : virtual public DialogViewIface {
-public:
-    using SelectionChangedSignal= ::boost::signals2::signal<void(int)>;
-    using UserRow_t = ::std::tuple<std::string,std::string>;
+    class SysUserListViewIface : virtual public DialogViewIface {
+    public:
+        using SelectionChangedSignal= ::boost::signals2::signal<void(int)>;
+        using UserRow_t = ::std::tuple<std::string, std::string>;
 
-    /**
-	 * Should be fired by the UI when user selects a row. The ids of the rows are passed.
-	 */
-	SelectionChangedSignal selectionChangedSig;
+        /**
+         * Should be fired by the UI when user selects a row. The ids of the rows are passed.
+         */
+        SelectionChangedSignal selectionChangedSig;
 
-    virtual void show(const SysUsers& pUsers)=0;
+        virtual void show(const SysUsers &pUsers)=0;
 
-    virtual int getSelected()=0;
+        virtual int getSelected()=0;
 
-    virtual const UserRow_t& getRow(int pId) const =0;
+        virtual const UserRow_t &getRow(int pId) const =0;
 
-};
+    };
 
 } /* namespace trihlav */
 

@@ -41,56 +41,56 @@ namespace trihlav {
 /**
  * A list of tuples-records.
  */
-template<typename ... Columns_t>
-class TupleList {
-public:
-	typedef std::tuple<Columns_t ...> Row_t;
-	typedef std::vector<Row_t> RowList_t;
+    template<typename ... Columns_t>
+    class TupleList {
+    public:
+        typedef std::tuple<Columns_t ...> Row_t;
+        typedef std::vector<Row_t> RowList_t;
 
-	constexpr static const size_t K_COL_CNT = sizeof...(Columns_t);
+        constexpr static const size_t K_COL_CNT = sizeof...(Columns_t);
 
-	virtual void addRow(const Row_t pRowNum) {
-		m_Rows.push_back(pRowNum);
-	}
+        virtual void addRow(const Row_t pRowNum) {
+            m_Rows.push_back(pRowNum);
+        }
 
-	const Row_t& getRow(size_t pRowNum) const {
-		const size_t mySz { m_Rows.size() };
-		if (pRowNum >= mySz) {
-			throw std::out_of_range(
-					"Row " + std::to_string(pRowNum) + " out of range [0.."
-							+ std::to_string(mySz) + "].");
-		}
-		return m_Rows[pRowNum];
-	}
+        const Row_t &getRow(size_t pRowNum) const {
+            const size_t mySz{m_Rows.size()};
+            if (pRowNum >= mySz) {
+                throw std::out_of_range(
+                        "Row " + std::to_string(pRowNum) + " out of range [0.."
+                        + std::to_string(mySz) + "].");
+            }
+            return m_Rows[pRowNum];
+        }
 
-	const boost::variant<Columns_t ...> get(size_t pRowNum, size_t pColNum) const {
-		return get_intern<0>(pRowNum,pColNum);
-	}
+        const boost::variant<Columns_t ...> get(size_t pRowNum, size_t pColNum) const {
+            return get_intern<0>(pRowNum, pColNum);
+        }
 
-	const size_t getRowCount() const {
-		m_Rows.size();
-	}
+        const size_t getRowCount() const {
+            m_Rows.size();
+        }
 
-	void clear() {
-		m_Rows.clear();
-	}
+        void clear() {
+            m_Rows.clear();
+        }
 
-private:
+    private:
 
-	template<size_t I>
-	const boost::variant<Columns_t ...> get_intern(size_t pRowNum, size_t pColNum) const {
-		if (pColNum == I) {
-			return std::get < I > (getRow(pRowNum));
-		} else if (I >= K_COL_CNT) {
-			throw std::out_of_range("Tuple element out of range. Column "
-					+std::to_string(pColNum)+" > "+std::to_string(K_COL_CNT)+".");
-		}
-		return this->get_intern<(I < K_COL_CNT-1 ? I+1 : 0)>(pRowNum,pColNum);
-	}
+        template<size_t I>
+        const boost::variant<Columns_t ...> get_intern(size_t pRowNum, size_t pColNum) const {
+            if (pColNum == I) {
+                return std::get<I>(getRow(pRowNum));
+            } else if (I >= K_COL_CNT) {
+                throw std::out_of_range("Tuple element out of range. Column "
+                                        + std::to_string(pColNum) + " > " + std::to_string(K_COL_CNT) + ".");
+            }
+            return this->get_intern<(I < K_COL_CNT - 1 ? I + 1 : 0)>(pRowNum, pColNum);
+        }
 
-	RowList_t m_Rows;
+        RowList_t m_Rows;
 
-};
+    };
 
 }
 

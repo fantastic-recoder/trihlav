@@ -18,32 +18,32 @@ namespace trihlav {
 /**
  * Implement trihlav::IButton using Wt::WPushButton.
  */
-class WtPushButton: virtual public ButtonIface,  virtual public Wt::WPushButton {
-public:
-	/**
-	 * @param pText initial value for the label.
-	 * @see setText( const std::string& )
-	 */
-    explicit WtPushButton(const std::string &pText);
+    class WtPushButton : virtual public ButtonIface, virtual public Wt::WPushButton {
+    public:
+        /**
+         * @param pText initial value for the label.
+         * @see setText( const std::string& )
+         */
+        explicit WtPushButton(const std::string &pText);
 
-    virtual ~WtPushButton() = default;
+        virtual ~WtPushButton() = default;
 
-    const std::string getText() const override {
-		return text().toUTF8();
-	}
+        const std::string getText() const override {
+            return text().toUTF8();
+        }
 
-    void setText(const std::string &pText) override {
-		Wt::WPushButton::setText(Wt::WString::fromUTF8(pText));
-    }
+        void setText(const std::string &pText) override {
+            Wt::WPushButton::setText(Wt::WString::fromUTF8(pText));
+        }
 
-    void setEnabled(bool pEnabled) override {
-        Wt::WPushButton::setEnabled(pEnabled);
-    }
+        void setEnabled(bool pEnabled) override {
+            Wt::WPushButton::setEnabled(pEnabled);
+        }
 
-    bool isEnabled() const override {
-        return Wt::WPushButton::isEnabled();
-    }
-};
+        bool isEnabled() const override {
+            return Wt::WPushButton::isEnabled();
+        }
+    };
 
 } /* namespace trihlav */
 

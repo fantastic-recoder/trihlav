@@ -1,4 +1,4 @@
-#include "trihlavLib/trihlavWidgetIface.hpp"
+
 
 namespace trihlav {
 

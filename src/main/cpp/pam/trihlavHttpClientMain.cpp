@@ -34,29 +34,29 @@ using std::get;
 using std::cout;
 using std::cerr;
 
-int main(int argc, char* argv[]) {
-	try {
-		if (argc != 4) {
-			cout << "Usage: " << argv[0]
-					<< " <server[:port]> <username> <password> [<password> ...]\n";
-			return 1;
-		}
+int main(int argc, char *argv[]) {
+    try {
+        if (argc != 4) {
+            cout << "Usage: " << argv[0]
+                 << " <server[:port]> <username> <password> [<password> ...]\n";
+            return 1;
+        }
 
-		Passwords myPasswords;
-		for (int aIdx = 3; aIdx < argc; ++aIdx) {
+        Passwords myPasswords;
+        for (int aIdx = 3; aIdx < argc; ++aIdx) {
             myPasswords.emplace_back(argv[aIdx]);
-		}
-		AuthResult myRes = checkOtps(argv[1], argv[2], myPasswords);
-		if (get < 0 > (myRes)) {
-			cout << "Authorisation ok." << std::endl;
-		} else {
-			cerr << "Authorisation failed. - " << get < 1
-					> (myRes) << std::endl;
-		}
-	} catch (std::exception& e) {
-		cout << "Exception: " << e.what() << "\n";
-	}
+        }
+        AuthResult myRes = checkOtps(argv[1], argv[2], myPasswords);
+        if (get<0>(myRes)) {
+            cout << "Authorisation ok." << std::endl;
+        } else {
+            cerr << "Authorisation failed. - " << get<1
+            >(myRes) << std::endl;
+        }
+    } catch (std::exception &e) {
+        cout << "Exception: " << e.what() << "\n";
+    }
 
-	return 0;
+    return 0;
 }
 

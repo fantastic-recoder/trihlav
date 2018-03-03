@@ -9,13 +9,13 @@
 
 namespace trihlav {
 
-EmptyPublicId::EmptyPublicId() : std::range_error("Empty public ID.") {
-	// TODO Auto-generated constructor stub
+    EmptyPublicId::EmptyPublicId() : std::range_error("Empty public ID.") {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
-EmptyPublicId::~EmptyPublicId() {
-	// TODO Auto-generated destructor stub
-}
+    EmptyPublicId::~EmptyPublicId() {
+        // TODO Auto-generated destructor stub
+    }
 
 } /* namespace trihlav */

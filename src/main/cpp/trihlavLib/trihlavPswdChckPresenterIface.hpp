@@ -33,20 +33,22 @@
 
 namespace trihlav {
 
-class PswdChckViewIface;
-class MessageViewIface;
+    class PswdChckViewIface;
 
-class PswdChckPresenterIface : virtual public PresenterBase {
-public:
-	PswdChckPresenterIface(FactoryIface& pFactory) : PresenterBase(pFactory) {
-	}
+    class MessageViewIface;
 
-	virtual PswdChckViewIface& getView() =0;
-	virtual MessageViewIface& getMessageView() =0;
+    class PswdChckPresenterIface : virtual public PresenterBase {
+    public:
+        PswdChckPresenterIface(FactoryIface &pFactory) : PresenterBase(pFactory) {
+        }
 
-	virtual ~PswdChckPresenterIface() {}
+        virtual PswdChckViewIface &getView() =0;
 
-};
+        virtual MessageViewIface &getMessageView() =0;
+
+        virtual ~PswdChckPresenterIface() {}
+
+    };
 
 }  // namespace trihlav
 

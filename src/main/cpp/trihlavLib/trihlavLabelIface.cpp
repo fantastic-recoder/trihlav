@@ -9,9 +9,9 @@
 
 namespace trihlav {
 
-LabelIface::LabelIface() {
-	// TODO Auto-generated constructor stub
+    LabelIface::LabelIface() {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
 } /* namespace trihlav */

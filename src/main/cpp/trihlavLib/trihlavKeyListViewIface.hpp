@@ -27,6 +27,7 @@
  */
 #ifndef TRIHLAV_I_KEY_LIST_VIEW_IFACE_HPP_
 #define TRIHLAV_I_KEY_LIST_VIEW_IFACE_HPP_
+
 #include <list>
 #include <boost/signals2.hpp>
 #include <tuple>
@@ -35,55 +36,56 @@
 
 namespace trihlav {
 
-class ButtonIface;
-class YubikoOtpKeyConfig;
+    class ButtonIface;
+
+    class YubikoOtpKeyConfig;
 
 /**
  * Interface of the key list UI.
  */
-class KeyListViewIface: virtual public ViewIface {
-public:
+    class KeyListViewIface : virtual public ViewIface {
+    public:
 
-	typedef std::tuple<int, std::string, std::string, std::string, int, int> KeyRow_t;
+        typedef std::tuple<int, std::string, std::string, std::string, int, int> KeyRow_t;
 
-	/**
-	 * Should be fired by the UI when user selects a row. The ids of the rows are passed.
-	 */
-	boost::signals2::signal<void(int)> selectionChangedSig;
+        /**
+         * Should be fired by the UI when user selects a row. The ids of the rows are passed.
+         */
+        boost::signals2::signal<void(int)> selectionChangedSig;
 
-	/// @brief add a new key
-	virtual ButtonIface& getBtnAddKey() =0;
+        /// @brief add a new key
+        virtual ButtonIface &getBtnAddKey() =0;
 
-	/// @brief Delete key accessor
-	virtual ButtonIface& getBtnDelKey() =0;
+        /// @brief Delete key accessor
+        virtual ButtonIface &getBtnDelKey() =0;
 
-	/// @brief Edit current key button accessor
-	virtual ButtonIface& getBtnEditKey() =0;
+        /// @brief Edit current key button accessor
+        virtual ButtonIface &getBtnEditKey() =0;
 
-	/// @brief Reload the key list.
-	virtual ButtonIface& getBtnReload() =0;
+        /// @brief Reload the key list.
+        virtual ButtonIface &getBtnReload() =0;
 
-	/// @brief Unselect all keys in the list
-	virtual void unselectAll()=0;
+        /// @brief Unselect all keys in the list
+        virtual void unselectAll()=0;
 
-	/// @brief remove all items from the list
-	virtual void clear()=0;
+        /// @brief remove all items from the list
+        virtual void clear()=0;
 
-	/// @brief add a row/key to the list
-	virtual void addRow(const KeyRow_t& pRow)=0;
+        /// @brief add a row/key to the list
+        virtual void addRow(const KeyRow_t &pRow)=0;
 
-	/// @brief get an row identified by an id
-	virtual const KeyRow_t& getRow(int pId) const =0;
+        /// @brief get an row identified by an id
+        virtual const KeyRow_t &getRow(int pId) const =0;
 
-	/** 
-	 * @brief will be called by the presenter when 
-	 * all keys has been added.
-	 */
-	virtual void addedAllRows()=0;
+        /**
+         * @brief will be called by the presenter when
+         * all keys has been added.
+         */
+        virtual void addedAllRows()=0;
 
-	KeyRow_t createRow(int pRowIdx,
-			const YubikoOtpKeyConfig& pFromKey) const;
-};
+        KeyRow_t createRow(int pRowIdx,
+                           const YubikoOtpKeyConfig &pFromKey) const;
+    };
 
 } /* namespace trihlav */
 

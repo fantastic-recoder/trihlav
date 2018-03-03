@@ -43,70 +43,69 @@ using boost::locale::translate;
 
 namespace trihlav {
 
-const std::string LoginPresenter::K_TRIHLAV_OS_PASSWORD_CHECK {
-		"Trihlav OS password check." };
+    const std::string LoginPresenter::K_TRIHLAV_OS_PASSWORD_CHECK{
+            "Trihlav OS password check."};
 
-LoginPresenter::LoginPresenter(FactoryIface& pFactory) //
-:
-		PresenterBase(pFactory) //
-				, m_Os(pFactory.getOsIface()) {
-}
+    LoginPresenter::LoginPresenter(FactoryIface &pFactory) //
+            :
+            PresenterBase(pFactory) //
+            , m_Os(pFactory.getOsIface()) {
+    }
 
-void LoginPresenter::show() {
-	BOOST_LOG_NAMED_SCOPE("LoginPresenter::show");
-	if (m_Status != SHOWING) {
-		getView().sigDialogFinished.connect( ///< connect start
-				[=](bool pStatus)->void
-				{	dialogClosed(pStatus);} ///< lambda 2 b called
-				);///< end connect
-		getView().show();
-		BOOST_LOG_TRIVIAL(debug)<<"Showing login dialog ...";
-	}
-}
+    void LoginPresenter::show() {
+        BOOST_LOG_NAMED_SCOPE("LoginPresenter::show");
+        if (m_Status != SHOWING) {
+            getView().sigDialogFinished.connect( ///< connect start
+                    [=](bool pStatus) -> void { dialogClosed(pStatus); } ///< lambda 2 b called
+            );///< end connect
+            getView().show();
+            BOOST_LOG_TRIVIAL(debug) << "Showing login dialog ...";
+        }
+    }
 
-LoginViewIface& LoginPresenter::getView() {
-	if (!m_LoginView) {
-		m_LoginView = getFactory().createLoginView();
-	}
-	return *m_LoginView;
-}
+    LoginViewIface &LoginPresenter::getView() {
+        if (!m_LoginView) {
+            m_LoginView = getFactory().createLoginView();
+        }
+        return *m_LoginView;
+    }
 
-void LoginPresenter::dialogClosed(bool pStatus) {
-	BOOST_LOG_NAMED_SCOPE("trihlav::LoginPresenter::dialogClosed");
-	if (pStatus) {
-		const string myUserName { getView().getEdtUserName().getValue() };
-		const string myPassword { getView().getEdtPassword().getValue() };
-		if (myUserName.empty()) {
-			pStatus = false;
-			getMessageView().showMessage(translate(K_TRIHLAV_OS_PASSWORD_CHECK),
-					translate("User name is empty."));
-		} else if (!m_Os.checkOsPswd(myUserName, myPassword)) {
-			pStatus = false;
-			m_LoggedInUser = "";
-			getMessageView().showMessage(translate(K_TRIHLAV_OS_PASSWORD_CHECK),
-					translate(
-							"Failed to authenticate the user against the OS."));
+    void LoginPresenter::dialogClosed(bool pStatus) {
+        BOOST_LOG_NAMED_SCOPE("trihlav::LoginPresenter::dialogClosed");
+        if (pStatus) {
+            const string myUserName{getView().getEdtUserName().getValue()};
+            const string myPassword{getView().getEdtPassword().getValue()};
+            if (myUserName.empty()) {
+                pStatus = false;
+                getMessageView().showMessage(translate(K_TRIHLAV_OS_PASSWORD_CHECK),
+                                             translate("User name is empty."));
+            } else if (!m_Os.checkOsPswd(myUserName, myPassword)) {
+                pStatus = false;
+                m_LoggedInUser = "";
+                getMessageView().showMessage(translate(K_TRIHLAV_OS_PASSWORD_CHECK),
+                                             translate(
+                                                     "Failed to authenticate the user against the OS."));
 
-		} else {
-			m_LoggedInUser = myUserName;
-		}
-		BOOST_LOG_TRIVIAL(info)<<"User " << myUserName << " accepted.";
-	} else {
-		BOOST_LOG_TRIVIAL(debug)<<"Password check canceled.";
-	}
-	sigUserAccepted(pStatus);
-	m_Status = HIDING;
-}
+            } else {
+                m_LoggedInUser = myUserName;
+            }
+            BOOST_LOG_TRIVIAL(info) << "User " << myUserName << " accepted.";
+        } else {
+            BOOST_LOG_TRIVIAL(debug) << "Password check canceled.";
+        }
+        sigUserAccepted(pStatus);
+        m_Status = HIDING;
+    }
 
-MessageViewIface& LoginPresenter::getMessageView() {
-	if (!m_MessageView) {
-		m_MessageView = getFactory().createMessageView();
-	}
-	return *m_MessageView;
-}
+    MessageViewIface &LoginPresenter::getMessageView() {
+        if (!m_MessageView) {
+            m_MessageView = getFactory().createMessageView();
+        }
+        return *m_MessageView;
+    }
 
-void LoginPresenter::checkUser() {
-}
+    void LoginPresenter::checkUser() {
+    }
 
 } /* namespace trihlav */
 

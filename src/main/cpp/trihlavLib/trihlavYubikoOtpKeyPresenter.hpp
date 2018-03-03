@@ -36,99 +36,108 @@
 
 namespace trihlav {
 
-class FactoryIface;
-class YubikoOtpKeyConfig;
-class StrEditIface;
-class SysUserListPresenter;
+    class FactoryIface;
 
-using signal_t=boost::signals2::signal<void()>;
+    class YubikoOtpKeyConfig;
+
+    class StrEditIface;
+
+    class SysUserListPresenter;
+
+    using signal_t=boost::signals2::signal<void()>;
 
 /**
  * @brief Presents an @see YubikoOtpKeyConfig
  */
-class YubikoOtpKeyPresenter: virtual public PresenterBase {
-public:
+    class YubikoOtpKeyPresenter : virtual public PresenterBase {
+    public:
 
-	enum EMode {None,Edit,Add,Delete};
+        enum EMode {
+            None, Edit, Add, Delete
+        };
 
-    YubikoOtpKeyPresenter(FactoryIface&);
+        YubikoOtpKeyPresenter(FactoryIface &);
 
-    virtual ~YubikoOtpKeyPresenter();
+        virtual ~YubikoOtpKeyPresenter();
 
-    /// @brief Add a new key and present it in m_ view.
-    virtual void addKey();
+        /// @brief Add a new key and present it in m_ view.
+        virtual void addKey();
 
-    /// @brief delete current key being edited.
-    virtual void deleteKey();
+        /// @brief delete current key being edited.
+        virtual void deleteKey();
 
-    void deleteKey(const YubikoOtpKeyConfig& pKeyCfg );
+        void deleteKey(const YubikoOtpKeyConfig &pKeyCfg);
 
-    void editKey(const YubikoOtpKeyConfig& pKeyCfg );
+        void editKey(const YubikoOtpKeyConfig &pKeyCfg);
 
-    virtual YubikoOtpKeyConfig& getCurCfg();
+        virtual YubikoOtpKeyConfig &getCurCfg();
 
-    /// @brief generate random private id
-    virtual void generatePrivateId();
+        /// @brief generate random private id
+        virtual void generatePrivateId();
 
-    /// @brief generate random public id
-    virtual void generatePublicId();
+        /// @brief generate random public id
+        virtual void generatePublicId();
 
-    /// @brief generate random secret key
-    virtual void generateSecretKey();
+        /// @brief generate random secret key
+        virtual void generateSecretKey();
 
-    /// @brief get the length of public id.
-	int getPublicIdLen();
+        /// @brief get the length of public id.
+        int getPublicIdLen();
 
-	/// @brief Accessor returns private id edit widget.
-	StrEditIface& getEdtPrivateId();
+        /// @brief Accessor returns private id edit widget.
+        StrEditIface &getEdtPrivateId();
 
-	YubikoOtpKeyViewIface& getView();
+        YubikoOtpKeyViewIface &getView();
 
-    /// @brief generate random hex encoded byte array
-    static void generate(int pBytes, std::string& pTarget) ;
+        /// @brief generate random hex encoded byte array
+        static void generate(int pBytes, std::string &pTarget);
 
-    /// @brief generate random modhex encoded byte array
-    static void generateModhex(int pBytes, std::string& pTarget) ;
+        /// @brief generate random modhex encoded byte array
+        static void generateModhex(int pBytes, std::string &pTarget);
 
-	/// @brief Accessor returns secret key edit widget.
-	StrEditIface& getEdtSecretKey();
+        /// @brief Accessor returns secret key edit widget.
+        StrEditIface &getEdtSecretKey();
 
-	/// @brief Accessor returns secret key edit widget.
-	StrEditIface& getEdtPublicId();
+        /// @brief Accessor returns secret key edit widget.
+        StrEditIface &getEdtPublicId();
 
-	/// @brief Public ID getter.
-	std::string getPublicId();
+        /// @brief Public ID getter.
+        std::string getPublicId();
 
-	/// @brief Private id from UI getter.
-	std::string getPrivateId();
+        /// @brief Private id from UI getter.
+        std::string getPrivateId();
 
-	/// @brief Secret key getter.
-	std::string getSecretKey();
+        /// @brief Secret key getter.
+        std::string getSecretKey();
 
-	/// @brief Description getter.
-	std::string getDescription();
+        /// @brief Description getter.
+        std::string getDescription();
 
-	void showCurrentConfig();
+        void showCurrentConfig();
 
-	MessageViewIface& getMessageView();
+        MessageViewIface &getMessageView();
 
-	SysUserListPresenter& getSysUserListPresenter();
+        SysUserListPresenter &getSysUserListPresenter();
 
-	void selectSystemUser();
+        void selectSystemUser();
 
-	void systemUserSelected();
+        void systemUserSelected();
 
-	signal_t saved;
-private:
-	EMode m_Mode=None;
-    YubikoOtpKeyViewIfacePtr m_View;
-    YubikoOtpKeyConfig* m_CurCfg;
-    void accepted( bool pAccepted);
-	void throwNoConfig();
-	void initUi();
-	std::unique_ptr<MessageViewIface> m_MessageView;
-	std::unique_ptr<SysUserListPresenter> m_SysUserListPresenter;
-};
+        signal_t saved;
+    private:
+        EMode m_Mode = None;
+        YubikoOtpKeyViewIfacePtr m_View;
+        YubikoOtpKeyConfig *m_CurCfg;
+
+        void accepted(bool pAccepted);
+
+        void throwNoConfig();
+
+        void initUi();
+
+        std::unique_ptr<MessageViewIface> m_MessageView;
+        std::unique_ptr<SysUserListPresenter> m_SysUserListPresenter;
+    };
 
 } /* namespace trihlavApi */
 

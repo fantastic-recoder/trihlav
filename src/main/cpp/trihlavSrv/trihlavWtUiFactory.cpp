@@ -25,37 +25,37 @@ namespace trihlav {
 
     WtUiFactory::~WtUiFactory() = default;
 
-MainPanelViewIfacePtr WtUiFactory::createMainPanelView() {
-	return MainPanelViewIfacePtr(new WtMainPanelView());
-}
+    MainPanelViewIfacePtr WtUiFactory::createMainPanelView() {
+        return MainPanelViewIfacePtr(new WtMainPanelView());
+    }
 
-FactoryIface& getUiFactory() {
-	static WtUiFactory theWtUiFactory;
-	return theWtUiFactory;
-}
+    FactoryIface &getUiFactory() {
+        static WtUiFactory theWtUiFactory;
+        return theWtUiFactory;
+    }
 
-KeyListViewIfacePtr WtUiFactory::createKeyListView() {
-	return KeyListViewIfacePtr(new WtKeyListView());
-}
+    KeyListViewIfacePtr WtUiFactory::createKeyListView() {
+        return KeyListViewIfacePtr(new WtKeyListView());
+    }
 
-PswdChckViewIfacePtr WtUiFactory::createPswdChckView() {
-	return PswdChckViewIfacePtr(new WtPswdChckView());
-}
+    PswdChckViewIfacePtr WtUiFactory::createPswdChckView() {
+        return PswdChckViewIfacePtr(new WtPswdChckView());
+    }
 
-YubikoOtpKeyViewIfacePtr WtUiFactory::createYubikoOtpKeyView() {
-	return YubikoOtpKeyViewIfacePtr(new WtYubikoOtpKeyView());
-}
+    YubikoOtpKeyViewIfacePtr WtUiFactory::createYubikoOtpKeyView() {
+        return YubikoOtpKeyViewIfacePtr(new WtYubikoOtpKeyView());
+    }
 
-MessageViewIfacePtr WtUiFactory::createMessageView() {
-	return MessageViewIfacePtr(new WtMessageView());
-}
+    MessageViewIfacePtr WtUiFactory::createMessageView() {
+        return MessageViewIfacePtr(new WtMessageView());
+    }
 
-SysUserListViewIfacePtr WtUiFactory::createSysUserListView() {
-	return SysUserListViewIfacePtr(new WtSysUserListView());
-}
+    SysUserListViewIfacePtr WtUiFactory::createSysUserListView() {
+        return SysUserListViewIfacePtr(new WtSysUserListView());
+    }
 
-LoginViewIfacePtr WtUiFactory::createLoginView() {
-	return LoginViewIfacePtr(new WtLoginView());
-}
+    LoginViewIfacePtr WtUiFactory::createLoginView() {
+        return LoginViewIfacePtr(new WtLoginView());
+    }
 
 } /* namespace trihlav */

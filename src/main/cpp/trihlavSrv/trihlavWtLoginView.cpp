@@ -42,45 +42,45 @@ using Wt::WLength;
 
 namespace trihlav {
 
-WtLoginView::WtLoginView() //
-:
-		m_EdtUserName(new WtStrEdit)  //
-				, m_EdtPassword(new WtStrEdit) //
-				, m_LblUserName(new WtLabel("User name")) //
-				, m_LblPassword(new WtLabel("Password")) //
-{
-	getDlg().setWidth(WLength(32, U::FontEm));
-	WGridLayout* myTopLayout = new WGridLayout;
-	{
-		m_LblUserName->setWidth(WLength(9.0,U::FontEm));
-        myTopLayout->addWidget(unique_ptr<WWidget>(m_LblUserName), 0, 0, 1, 1,
-                               AlignmentFlag::Right | AlignmentFlag::Middle);
-        myTopLayout->addWidget(unique_ptr<WWidget>(m_EdtUserName), 0, 1, 1, 1, AlignmentFlag::Middle);
-	}
-	{
-		m_LblPassword->setWidth(WLength(9.0,U::FontEm));
-        myTopLayout->addWidget(unique_ptr<WWidget>(m_LblPassword), 2, 0, 1, 1,
-                               AlignmentFlag::Right | AlignmentFlag::Middle);
-        myTopLayout->addWidget(unique_ptr<WWidget>(m_EdtPassword), 2, 1, 1, 1, AlignmentFlag::Middle);
+    WtLoginView::WtLoginView() //
+            :
+            m_EdtUserName(new WtStrEdit)  //
+            , m_EdtPassword(new WtStrEdit) //
+            , m_LblUserName(new WtLabel("User name")) //
+            , m_LblPassword(new WtLabel("Password")) //
+    {
+        getDlg().setWidth(WLength(32, U::FontEm));
+        WGridLayout *myTopLayout = new WGridLayout;
+        {
+            m_LblUserName->setWidth(WLength(9.0, U::FontEm));
+            myTopLayout->addWidget(unique_ptr<WWidget>(m_LblUserName), 0, 0, 1, 1,
+                                   AlignmentFlag::Right | AlignmentFlag::Middle);
+            myTopLayout->addWidget(unique_ptr<WWidget>(m_EdtUserName), 0, 1, 1, 1, AlignmentFlag::Middle);
+        }
+        {
+            m_LblPassword->setWidth(WLength(9.0, U::FontEm));
+            myTopLayout->addWidget(unique_ptr<WWidget>(m_LblPassword), 2, 0, 1, 1,
+                                   AlignmentFlag::Right | AlignmentFlag::Middle);
+            myTopLayout->addWidget(unique_ptr<WWidget>(m_EdtPassword), 2, 1, 1, 1, AlignmentFlag::Middle);
+        }
+        getDlg().contents()->setLayout(unique_ptr<WLayout>(myTopLayout));
     }
-    getDlg().contents()->setLayout(unique_ptr<WLayout>(myTopLayout));
-}
 
-StrEditIface& WtLoginView::getEdtUserName() {
-	return *m_EdtUserName;
-}
+    StrEditIface &WtLoginView::getEdtUserName() {
+        return *m_EdtUserName;
+    }
 
-StrEditIface& WtLoginView::getEdtPassword() {
-	return *m_EdtPassword;
-}
+    StrEditIface &WtLoginView::getEdtPassword() {
+        return *m_EdtPassword;
+    }
 
-LabelIface& WtLoginView::getLblUserName() {
-	return *m_LblUserName;
-}
+    LabelIface &WtLoginView::getLblUserName() {
+        return *m_LblUserName;
+    }
 
-LabelIface& WtLoginView::getLblPassword() {
-	return *m_LblPassword;
-}
+    LabelIface &WtLoginView::getLblPassword() {
+        return *m_LblPassword;
+    }
 
 } /* namespace trihlav */
 

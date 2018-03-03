@@ -31,19 +31,19 @@ namespace trihlav {
         const Wt::Http::ParameterValues &myOtpVals = pRequest.getParameterValues(K_PSWD);
         string myLogin;
         vector<string> myOtp;
-        if(myLoginVals.size()==1) {
-            myLogin=myLoginVals[0];
+        if (myLoginVals.size() == 1) {
+            myLogin = myLoginVals[0];
         }
         BOOST_LOG_TRIVIAL(debug) << "login " << myLogin;
-        if(myOtpVals.size()>=1) {
+        if (myOtpVals.size() >= 1) {
             myOtp.push_back(myOtpVals[0]);
             BOOST_LOG_TRIVIAL(debug) << "otp[0] " << myOtp[0];
         }
-        if(myOtpVals.size()>=2) {
+        if (myOtpVals.size() >= 2) {
             myOtp.push_back(myOtpVals[1]);
             BOOST_LOG_TRIVIAL(debug) << "otp[1] " << myOtp[1];
         }
-        if(myOtpVals.size()>=3) {
+        if (myOtpVals.size() >= 3) {
             myOtp.push_back(myOtpVals[2]);
             BOOST_LOG_TRIVIAL(debug) << "otp[2] " << myOtp[2];
         }

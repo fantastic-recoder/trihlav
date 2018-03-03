@@ -33,15 +33,18 @@
 
 namespace trihlav {
 
-class ButtonIface;
-class StrEditIface;
+    class ButtonIface;
 
-class PswdChckViewIface : virtual public ViewIface {
-public:
-	virtual ButtonIface& getBtnOk()=0;
-	virtual StrEditIface& getEdtPswd0()=0;
-	virtual ~PswdChckViewIface(){}
-};
+    class StrEditIface;
+
+    class PswdChckViewIface : virtual public ViewIface {
+    public:
+        virtual ButtonIface &getBtnOk()=0;
+
+        virtual StrEditIface &getEdtPswd0()=0;
+
+        virtual ~PswdChckViewIface() {}
+    };
 
 } /* namespace trihlav */
 

@@ -36,44 +36,50 @@
 
 namespace trihlav {
 
-class KeyListViewIface;
-class YubikoOtpKeyPresenter;
-class FactoryIface;
+    class KeyListViewIface;
 
-class KeyListPresenter: virtual public KeyListPresenterIface {
-public:
+    class YubikoOtpKeyPresenter;
 
-	KeyListPresenter( FactoryIface& pFactory);
+    class FactoryIface;
 
-	virtual KeyListViewIface& getView() override;
+    class KeyListPresenter : virtual public KeyListPresenterIface {
+    public:
 
-	virtual ~KeyListPresenter();
+        KeyListPresenter(FactoryIface &pFactory);
 
-	/// @brief add a new key
-	virtual void addKey() override;
+        virtual KeyListViewIface &getView() override;
 
-	/// @brief edit currently selected key
-	virtual void editKey() override;
+        virtual ~KeyListPresenter();
 
-	/// @brief delete currently selected key
-	virtual void deleteKey() override;
+        /// @brief add a new key
+        virtual void addKey() override;
 
-	/// @brief reload current key list
-	void reloadKeyList();
+        /// @brief edit currently selected key
+        virtual void editKey() override;
 
-	YubikoOtpKeyPresenter& getYubikoOtpKeyPresenter();
-	void disableKeyListBtns();
+        /// @brief delete currently selected key
+        virtual void deleteKey() override;
 
-protected:
-	/// What to do when base presenter does the auth.
-	virtual void doProtectedAction(bool pStatus) override;
-private:
-	void selectionChanged(int pIdx);
-	bool checkSelection() const;
-	KeyListViewIfacePtr m_KeyListView;
-	YubikoOtpKeyPresenter* m_YubikoOtpKeyPresenter;
-	int m_SelectedKey= -1;
-};
+        /// @brief reload current key list
+        void reloadKeyList();
+
+        YubikoOtpKeyPresenter &getYubikoOtpKeyPresenter();
+
+        void disableKeyListBtns();
+
+    protected:
+        /// What to do when base presenter does the auth.
+        virtual void doProtectedAction(bool pStatus) override;
+
+    private:
+        void selectionChanged(int pIdx);
+
+        bool checkSelection() const;
+
+        KeyListViewIfacePtr m_KeyListView;
+        YubikoOtpKeyPresenter *m_YubikoOtpKeyPresenter;
+        int m_SelectedKey = -1;
+    };
 
 } /* namespace trihlav */
 

@@ -14,26 +14,31 @@
 
 namespace trihlav {
 
-class WtStrEdit;
-class WtLabel;
+    class WtStrEdit;
+
+    class WtLabel;
 
 /**
  * Wt based implementation of #LoginViewIface.
  */
-class WtLoginView: virtual public WtDialogView, virtual public LoginViewIface {
-public:
-	WtLoginView();
-	virtual StrEditIface& getEdtUserName() override;
-	virtual StrEditIface& getEdtPassword() override;
-	virtual LabelIface& getLblUserName() override;
-	virtual LabelIface& getLblPassword() override;
+    class WtLoginView : virtual public WtDialogView, virtual public LoginViewIface {
+    public:
+        WtLoginView();
 
-private:
-	WtStrEdit* m_EdtUserName;
-	WtStrEdit* m_EdtPassword;
-	WtLabel* m_LblUserName;
-	WtLabel* m_LblPassword;
-};
+        virtual StrEditIface &getEdtUserName() override;
+
+        virtual StrEditIface &getEdtPassword() override;
+
+        virtual LabelIface &getLblUserName() override;
+
+        virtual LabelIface &getLblPassword() override;
+
+    private:
+        WtStrEdit *m_EdtUserName;
+        WtStrEdit *m_EdtPassword;
+        WtLabel *m_LblUserName;
+        WtLabel *m_LblPassword;
+    };
 
 } /* namespace trihlav */
 

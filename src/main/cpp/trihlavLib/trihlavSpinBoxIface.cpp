@@ -9,8 +9,8 @@
 
 namespace trihlav {
 
-SpinBoxIface::~SpinBoxIface() {
-	// TODO Auto-generated destructor stub
-}
+    SpinBoxIface::~SpinBoxIface() {
+        // TODO Auto-generated destructor stub
+    }
 
 } /* namespace trihlav */

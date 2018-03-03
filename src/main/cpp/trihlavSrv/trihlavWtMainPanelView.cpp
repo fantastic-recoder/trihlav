@@ -37,8 +37,8 @@
 #include <Wt/WStackedWidget.h>
 #include <Wt/WVBoxLayout.h>
 #include <Wt/WText.h>
-#include <Wt/WContainerWidget.h>
 
+#include "trihlavLib/trihlavLogApi.hpp"
 #include "trihlavLib/trihlavCannotCastImplementation.hpp"
 #include "trihlavLib/trihlavVersion.hpp"
 
@@ -56,9 +56,13 @@ using Wt::WLineEdit;
 using Wt::WWidget;
 using Wt::WContainerWidget;
 using Wt::WVBoxLayout;
+using Wt::WString;
+using Wt::StandardButton;
+using Wt::Icon;
 
 using namespace std;
 using boost::locale::translate;
+using boost::log::trivial::debug;
 
 namespace trihlav {
 
@@ -129,45 +133,56 @@ namespace trihlav {
         getNavigation()->addMenu(std::unique_ptr<WMenu>(myRightMenu), Wt::AlignmentFlag::Right);
         // Create a myHelpPopup submenu for the Help menu.
         WPopupMenu *myHelpPopup = new WPopupMenu();
-        const string myHelpText = "Showing Help: {1}\n"
-                                          "Build version: " + Version::getVersion();
         myHelpPopup->addItem("Contents");
         myHelpPopup->addItem("Index");
         myHelpPopup->addSeparator();
         myHelpPopup->addItem("About");
-        myHelpPopup->itemSelected().connect(std::bind([=](Wt::WMenuItem *item) {
-            Wt::WMessageBox *messageBox = new Wt::WMessageBox("Help",
-                                                              Wt::WString::fromUTF8(myHelpText).arg(
-                                                                      item->text()), Wt::Icon::Information,
-                                                              Wt::StandardButton::Ok);
-            messageBox->buttonClicked().connect(std::bind([=]() {
-                                                              delete messageBox;
-                                                          }
-            ));
-            messageBox->show();
+        myHelpPopup->itemSelected().connect(std::bind([=](Wt::WMenuItem *pItem) {
+            showHelpMsgBox(pItem);
         }, std::placeholders::_1));
         auto myHelpMenuItem = new WMenuItem("Help");
         myHelpMenuItem->setMenu(std::unique_ptr<WPopupMenu>(myHelpPopup));
         myRightMenu->addItem(std::unique_ptr<WMenuItem>(myHelpMenuItem));
         // Add a Search control.
-        WLineEdit *edit = new WLineEdit();
-        edit->setToolTip("Enter a search item");
-        edit->enterPressed().connect(
-                std::bind([=]() {
-                    getLeftMenu()->select(1); // is the index of the "Sales"
-                    Wt::WMessageBox *messageBox = new Wt::WMessageBox("Help", Wt::WString::fromUTF8(
-                            "<p>Not yet implemented, should search for: {1}</p>").arg(edit->valueText()),
-                                                                      Wt::Icon::Information, Wt::StandardButton::Ok);
-                    messageBox->buttonClicked().connect(std::bind([=]() {
-                                                                      delete messageBox;
-                                                                  }
-                    ));
-                    messageBox->show();
-                }));
-        getNavigation()->addSearch(std::unique_ptr<WLineEdit>(edit), Wt::AlignmentFlag::Right);
+        m_SearchEdit = new WLineEdit();
+        m_SearchEdit->setToolTip("Enter a search item");
+        m_SearchEdit->enterPressed().connect( //
+                std::bind([=]() { showNotYetImplemented(); })
+        );
+        getNavigation()->addSearch(std::unique_ptr<WLineEdit>(m_SearchEdit), Wt::AlignmentFlag::Right);
+    }
+
+    void WtMainPanelView::showHelpMsgBox(const WMenuItem *pItem) const {
+        const string myHelpText = "Showing Help: {1}\n"
+                                          "Build version: " + Version::getVersion();
+        Wt::WMessageBox *myMsgBox = new Wt::WMessageBox( //
+                "Help",
+                WString::fromUTF8(myHelpText).arg(pItem->text()),
+                Icon::Information,
+                StandardButton::Ok
+        );
+        myMsgBox->buttonClicked().connect(bind([=]() { delete myMsgBox; }));
+        myMsgBox->show();
+    }
+
+    static const char *const K_NOT_IMPL = "<p>Not yet implemented, should search for: {1}</p>";
+
+    void WtMainPanelView::showNotYetImplemented() {
+        getLeftMenu()->select(1); // is the index of the "Sales"
+        Wt::WMessageBox *myMsgBox = new Wt::WMessageBox( //
+                "Help",
+                WString::fromUTF8(K_NOT_IMPL).arg( //
+                        m_SearchEdit->valueText()
+                ),
+                Icon::Information,
+                StandardButton::Ok
+        );
+        myMsgBox->buttonClicked().connect(bind([=]() { delete myMsgBox; }));
+        myMsgBox->show();
     }
 
     WtMainPanelView::~WtMainPanelView() {
+        BOOST_LOG_TRIVIAL(debug) << "~WtMainPanelView()";
     }
 
     Wt::WWidget *WtMainPanelView::getRootWidget() {

@@ -36,52 +36,73 @@
 
 namespace trihlav {
 
-class MainPanelViewIface;
-class KeyListPresenterIface;
-class KeyListViewIface;
-class PswdChckPresenterIface;
-class PswdChckViewIface;
-class YubikoOtpKeyViewIface;
-class YubikoOtpKeyPresenterIface;
-class MessageViewIface;
-class OsIface;
-class SysUserListViewIface;
-class Settings;
-class KeyManager;
+    class MainPanelViewIface;
 
-using SysUserListViewIfacePtr = std::shared_ptr<SysUserListViewIface>;
+    class KeyListPresenterIface;
 
-class FactoryIface {
-public:
+    class KeyListViewIface;
 
-	FactoryIface();
+    class PswdChckPresenterIface;
 
-	virtual ~FactoryIface();
-	virtual MainPanelViewIfacePtr createMainPanelView()=0;
-	virtual KeyListPresenterIfacePtr createKeyListPresenter();
-	virtual KeyListViewIfacePtr createKeyListView()=0;
-	virtual PswdChckPresenterIfacePtr createPswdChckPresenter();
-	virtual PswdChckViewIfacePtr createPswdChckView() =0;
-	virtual YubikoOtpKeyViewIfacePtr createYubikoOtpKeyView() =0;
-	virtual MessageViewIfacePtr createMessageView() =0;
-	virtual const KeyManager& getKeyManager() const;
-	virtual KeyManager& getKeyManager();
+    class PswdChckViewIface;
 
-	/// @brief OS System interface singleton
-	virtual OsIface& getOsIface();
+    class YubikoOtpKeyViewIface;
 
-	/// @brief Global settings.
-	Settings &getSettings();
+    class YubikoOtpKeyPresenterIface;
 
-	/// @brief Select a operating system user
-	virtual SysUserListViewIfacePtr createSysUserListView() =0;
+    class MessageViewIface;
 
-	/// @brief Login in the operating system UI.
-	virtual LoginViewIfacePtr createLoginView()=0;
-private:
-	std::unique_ptr<OsIface> m_OsIface;
-	std::unique_ptr<KeyManager> m_KeyManager;
-};
+    class OsIface;
+
+    class SysUserListViewIface;
+
+    class Settings;
+
+    class KeyManager;
+
+    using SysUserListViewIfacePtr = std::shared_ptr<SysUserListViewIface>;
+
+    class FactoryIface {
+    public:
+
+        FactoryIface();
+
+        virtual ~FactoryIface();
+
+        virtual MainPanelViewIfacePtr createMainPanelView()=0;
+
+        virtual KeyListPresenterIfacePtr createKeyListPresenter();
+
+        virtual KeyListViewIfacePtr createKeyListView()=0;
+
+        virtual PswdChckPresenterIfacePtr createPswdChckPresenter();
+
+        virtual PswdChckViewIfacePtr createPswdChckView() =0;
+
+        virtual YubikoOtpKeyViewIfacePtr createYubikoOtpKeyView() =0;
+
+        virtual MessageViewIfacePtr createMessageView() =0;
+
+        virtual const KeyManager &getKeyManager() const;
+
+        virtual KeyManager &getKeyManager();
+
+        /// @brief OS System interface singleton
+        virtual OsIface &getOsIface();
+
+        /// @brief Global settings.
+        Settings &getSettings();
+
+        /// @brief Select a operating system user
+        virtual SysUserListViewIfacePtr createSysUserListView() =0;
+
+        /// @brief Login in the operating system UI.
+        virtual LoginViewIfacePtr createLoginView()=0;
+
+    private:
+        std::unique_ptr<OsIface> m_OsIface;
+        std::unique_ptr<KeyManager> m_KeyManager;
+    };
 
 }  // namespace trihlav
 

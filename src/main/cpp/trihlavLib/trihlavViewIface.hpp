@@ -30,17 +30,19 @@
 
 namespace trihlav {
 
-class IWidget;
+    class IWidget;
 
 /**
  * Parent to all view interfaces.
  */
-class ViewIface {
-public:
-	ViewIface(){}
-	ViewIface( const ViewIface& ) = delete;
-	virtual ~ViewIface(){}
-};
+    class ViewIface {
+    public:
+        ViewIface() {}
+
+        ViewIface(const ViewIface &) = delete;
+
+        virtual ~ViewIface() {}
+    };
 
 }  // namespace trihlav
 

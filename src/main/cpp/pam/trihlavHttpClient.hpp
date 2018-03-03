@@ -42,63 +42,72 @@
 
 namespace trihlav {
 
-class HttpClient {
-public:
-	enum Mode {
-		HTTP = 1, HTTPS = 2, INVALID = 0
-	};
+    class HttpClient {
+    public:
+        enum Mode {
+            HTTP = 1, HTTPS = 2, INVALID = 0
+        };
 
-	HttpClient(boost::asio::io_service& io_service,
-			boost::asio::ssl::context& context, const std::string& server,
-			const std::string& pUsername, const Passwords& pPasswords);
-	virtual ~HttpClient();
+        HttpClient(boost::asio::io_service &io_service,
+                   boost::asio::ssl::context &context, const std::string &server,
+                   const std::string &pUsername, const Passwords &pPasswords);
 
-	const std::string& getPort() const {
-		return m_Port;
-	}
+        virtual ~HttpClient();
 
-	const std::string& getServer() const {
-		return m_Server;
-	}
+        const std::string &getPort() const {
+            return m_Port;
+        }
 
-	void parseModeHostAndPort(const std::string& pServer);
+        const std::string &getServer() const {
+            return m_Server;
+        }
 
-	bool isAuthOk() const {
-		return m_AuthOk;
-	}
+        void parseModeHostAndPort(const std::string &pServer);
 
-	const std::string& getResponse() const {
-		return m_ResponseStr;
-	}
+        bool isAuthOk() const {
+            return m_AuthOk;
+        }
 
-	Mode getMode() const {
-		return m_Mode;
-	}
+        const std::string &getResponse() const {
+            return m_ResponseStr;
+        }
 
-	bool foundResponseStr();
+        Mode getMode() const {
+            return m_Mode;
+        }
 
-private:
-	void handleResolve(const boost::system::error_code& err,
-			boost::asio::ip::tcp::resolver::iterator endpoint_iterator);
-	bool verifyCertificate(bool preverified,
-			boost::asio::ssl::verify_context& ctx);
-	void handleConnect(const boost::system::error_code& err);
-	void handleHandshake(const boost::system::error_code& error);
-	void handleWriteRequest(const boost::system::error_code& err);
-	void handleReadStatusLine(const boost::system::error_code& err);
-	void handleReadHeaders(const boost::system::error_code& err);
-	void handleReadContent(const boost::system::error_code& err);
-	const std::string& getProtocol() const;
+        bool foundResponseStr();
 
-	boost::asio::ip::tcp::resolver m_Resolver;
-	boost::asio::ssl::stream<boost::asio::ip::tcp::socket> m_SslSocket;
-	boost::asio::ip::tcp::socket m_HttpSocket;
-	boost::asio::streambuf m_Request;
-	boost::asio::streambuf m_Response;
-	std::string m_Server, m_Port, m_ResponseStr;
-	Mode m_Mode = INVALID;
-	bool m_AuthOk = false;
-};
+    private:
+        void handleResolve(const boost::system::error_code &err,
+                           boost::asio::ip::tcp::resolver::iterator endpoint_iterator);
+
+        bool verifyCertificate(bool preverified,
+                               boost::asio::ssl::verify_context &ctx);
+
+        void handleConnect(const boost::system::error_code &err);
+
+        void handleHandshake(const boost::system::error_code &error);
+
+        void handleWriteRequest(const boost::system::error_code &err);
+
+        void handleReadStatusLine(const boost::system::error_code &err);
+
+        void handleReadHeaders(const boost::system::error_code &err);
+
+        void handleReadContent(const boost::system::error_code &err);
+
+        const std::string &getProtocol() const;
+
+        boost::asio::ip::tcp::resolver m_Resolver;
+        boost::asio::ssl::stream<boost::asio::ip::tcp::socket> m_SslSocket;
+        boost::asio::ip::tcp::socket m_HttpSocket;
+        boost::asio::streambuf m_Request;
+        boost::asio::streambuf m_Response;
+        std::string m_Server, m_Port, m_ResponseStr;
+        Mode m_Mode = INVALID;
+        bool m_AuthOk = false;
+    };
 
 } /* namespace trihlav */
 

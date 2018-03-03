@@ -33,25 +33,26 @@
 
 namespace trihlav {
 
-	/**
-	 * Allow easier acces to Yubikeys timestamp.
-	 */
-	union UTimestamp {
-		/** Low/high access as in Yubkeys struct. */
-		struct {
+    /**
+     * Allow easier acces to Yubikeys timestamp.
+     */
+    union UTimestamp {
+        /** Low/high access as in Yubkeys struct. */
+        struct {
             /** Fill the struct to 32 bit */
             uint8_t filler;
-		    /** Timestamp (high part). */
-		    uint8_t tstph;
+            /** Timestamp (high part). */
+            uint8_t tstph;
             /** Timestamp incremented by approx 8Hz (low part). */
             uint16_t tstpl;
         } tstp;
-		/** Access timestamp as an integer. */
-		unsigned int tstp_int;
+        /** Access timestamp as an integer. */
+        unsigned int tstp_int;
 
-        UTimestamp() :tstp_int(0){}
-        UTimestamp(const int pAsInt) :tstp_int(pAsInt){}
-    } ;
+        UTimestamp() : tstp_int(0) {}
+
+        UTimestamp(const int pAsInt) : tstp_int(pAsInt) {}
+    };
 
 } // end namespace yuSerApi
 

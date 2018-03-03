@@ -35,31 +35,34 @@ namespace trihlav {
 /**
  * Interface to a UI widget, which can edit, set and get a value.
  */
-template< typename T>
-class EditIface {
-public:
-	EditIface(){}
-	EditIface(const EditIface& )=delete;
-	/**
-	 * @return The edited value.
-	 */
-	virtual const T getValue() const = 0;
+    template<typename T>
+    class EditIface {
+    public:
+        EditIface() {}
 
-	/**
-	 * @param pVal set the value, which can be edited.
-	 */
-	virtual void setValue(const T& pVal) =0;
+        EditIface(const EditIface &) = delete;
 
-	/**
-	 * Set the focus in widgets editor.
-	 */
-	virtual void setFocus(bool) = 0;
+        /**
+         * @return The edited value.
+         */
+        virtual const T getValue() const = 0;
 
-	/// Just ensure virtual destructor.
-	virtual ~EditIface(){}
-};
+        /**
+         * @param pVal set the value, which can be edited.
+         */
+        virtual void setValue(const T &pVal) =0;
 
-struct StrEditIface: virtual public EditIface<std::string>{};
+        /**
+         * Set the focus in widgets editor.
+         */
+        virtual void setFocus(bool) = 0;
+
+        /// Just ensure virtual destructor.
+        virtual ~EditIface() {}
+    };
+
+    struct StrEditIface : virtual public EditIface<std::string> {
+    };
 
 } /* namespace trihlav */
 

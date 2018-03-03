@@ -42,6 +42,8 @@ namespace Wt {
     class WMenuItem;
 
     class WPanel;
+
+    class WLineEdit;
 }
 
 namespace trihlav {
@@ -106,7 +108,12 @@ namespace trihlav {
         Wt::WStackedWidget *m_MainContent;
         Wt::WNavigationBar *m_Navigation;
         Wt::WStackedWidget *m_ContentsStack;
+        Wt::WLineEdit *m_SearchEdit;
         Wt::WMenu *m_LeftMenu;
+
+        void showNotYetImplemented();
+
+        void showHelpMsgBox(const Wt::WMenuItem *pItem) const;
     };
 
 } /* namespace trihlav */

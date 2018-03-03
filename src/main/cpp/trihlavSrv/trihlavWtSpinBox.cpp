@@ -30,13 +30,13 @@
 
 namespace trihlav {
 
-WtSpinBox::~WtSpinBox() {
-	// TODO Auto-generated destructor stub
-}
+    WtSpinBox::~WtSpinBox() {
+        // TODO Auto-generated destructor stub
+    }
 
-WtSpinBox::WtSpinBox() {
-	// TODO Auto-generated constructor stub
+    WtSpinBox::WtSpinBox() {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
 } /* namespace trihlav */

@@ -32,21 +32,29 @@
 
 namespace trihlav {
 
-class YubikoOtpKeyPresenterIface;
+    class YubikoOtpKeyPresenterIface;
 
-class WtUiFactory: virtual public FactoryIface {
-public:
-	WtUiFactory();
-	virtual ~WtUiFactory();
-	virtual MainPanelViewIfacePtr createMainPanelView() override;
-	virtual KeyListViewIfacePtr createKeyListView() override;
-	virtual PswdChckViewIfacePtr createPswdChckView() override;
-	virtual YubikoOtpKeyViewIfacePtr createYubikoOtpKeyView() override;
-	virtual MessageViewIfacePtr createMessageView() override;
-	virtual SysUserListViewIfacePtr createSysUserListView() override;
-	virtual LoginViewIfacePtr createLoginView() override;
+    class WtUiFactory : virtual public FactoryIface {
+    public:
+        WtUiFactory();
 
-};
+        virtual ~WtUiFactory();
+
+        virtual MainPanelViewIfacePtr createMainPanelView() override;
+
+        virtual KeyListViewIfacePtr createKeyListView() override;
+
+        virtual PswdChckViewIfacePtr createPswdChckView() override;
+
+        virtual YubikoOtpKeyViewIfacePtr createYubikoOtpKeyView() override;
+
+        virtual MessageViewIfacePtr createMessageView() override;
+
+        virtual SysUserListViewIfacePtr createSysUserListView() override;
+
+        virtual LoginViewIfacePtr createLoginView() override;
+
+    };
 
 } /* namespace trihlav */
 

@@ -33,30 +33,31 @@
 
 namespace trihlav {
 
-class FactoryIface;
+    class FactoryIface;
 
 /**
  * Common base to all controllers/presenters.
  * Every controller has an (UI) factory.
  */
-class PresenterBase {
-public:
+    class PresenterBase {
+    public:
 
-	PresenterBase(FactoryIface& pFactory) : m_Factory(pFactory) {
-	}
+        PresenterBase(FactoryIface &pFactory) : m_Factory(pFactory) {
+        }
 
-	const FactoryIface& getFactory() const {
-		return m_Factory;
-	}
+        const FactoryIface &getFactory() const {
+            return m_Factory;
+        }
 
-	FactoryIface& getFactory() {
-		return m_Factory;
-	}
+        FactoryIface &getFactory() {
+            return m_Factory;
+        }
 
-	virtual ~PresenterBase(){}
-private:
-	FactoryIface& m_Factory;
-};
+        virtual ~PresenterBase() {}
+
+    private:
+        FactoryIface &m_Factory;
+    };
 
 } /* namespace trihlav */
 

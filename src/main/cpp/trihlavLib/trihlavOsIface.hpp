@@ -35,45 +35,46 @@
 
 namespace trihlav {
 
-class Settings;
+    class Settings;
 
 /**
  * The operating system user information will be returned in this
  * structure.
  */
-struct SysUser {
-	std::string m_Login;
-	std::string m_FullName;
-	long m_Id;
-	const std::string str() const { return m_Login+" [ " + m_FullName + ", "+std::to_string(m_Id) +" ]"; }
-};
+    struct SysUser {
+        std::string m_Login;
+        std::string m_FullName;
+        long m_Id;
 
-inline std::ostream& operator << ( std::ostream& pOstr, const SysUser& pUser )  {
-	pOstr << "SysUser{ login=\"" << pUser.m_Login << "\" name=\"" << pUser.m_FullName << "\" }";
-	return pOstr;
-}
+        const std::string str() const { return m_Login + " [ " + m_FullName + ", " + std::to_string(m_Id) + " ]"; }
+    };
 
-using SysUsers = std::vector<SysUser>;
+    inline std::ostream &operator<<(std::ostream &pOstr, const SysUser &pUser) {
+        pOstr << "SysUser{ login=\"" << pUser.m_Login << "\" name=\"" << pUser.m_FullName << "\" }";
+        return pOstr;
+    }
 
-class OsIface {
-public:
-	/// Uses PAM on Linux to auth the user
-	virtual bool checkOsPswd(const std::string& p_strUName,
-			const std::string& p_strPswd) const;
+    using SysUsers = std::vector<SysUser>;
 
-	/// Execute a programm and pass a parameter
-	virtual int execute(const std::string& p_strPathFilename,
-			const std::string& p_strP0)const ;
+    class OsIface {
+    public:
+        /// Uses PAM on Linux to auth the user
+        virtual bool checkOsPswd(const std::string &p_strUName,
+                                 const std::string &p_strPswd) const;
 
-	/// @brief Get all users from the operating system.
-	virtual const SysUsers getSysUsers(const Settings& pSettings) const;
+        /// Execute a programm and pass a parameter
+        virtual int execute(const std::string &p_strPathFilename,
+                            const std::string &p_strP0) const;
 
-	/// We not need it yet, but we are prepared ...
-	virtual ~OsIface();
+        /// @brief Get all users from the operating system.
+        virtual const SysUsers getSysUsers(const Settings &pSettings) const;
 
-private:
-	constexpr static const char* K_ETC_PASSWD = "/etc/passwd";
-};
+        /// We not need it yet, but we are prepared ...
+        virtual ~OsIface();
+
+    private:
+        constexpr static const char *K_ETC_PASSWD = "/etc/passwd";
+    };
 
 } /* namespace trihlav */
 

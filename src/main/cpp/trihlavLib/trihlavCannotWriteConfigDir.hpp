@@ -10,10 +10,10 @@
 
 namespace trihlav {
 
-    class CannotWriteConfigDir  : virtual public std::invalid_argument {
+    class CannotWriteConfigDir : virtual public std::invalid_argument {
     private:
         boost::filesystem::path m_ConfigDir;
-        std::string             m_Msg;
+        std::string m_Msg;
     public:
         const boost::filesystem::path &getConfigDir() const {
             return m_ConfigDir;
@@ -22,9 +22,11 @@ namespace trihlav {
         void setConfigDir(const boost::filesystem::path &pConfigDir) {
             m_ConfigDir = pConfigDir;
         }
-        const char* what() const throw();
+
+        const char *what() const throw();
+
     public:
-        CannotWriteConfigDir(const boost::filesystem::path& pConfigDir);
+        CannotWriteConfigDir(const boost::filesystem::path &pConfigDir);
     };
 
 }

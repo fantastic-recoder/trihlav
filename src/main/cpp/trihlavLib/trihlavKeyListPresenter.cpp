@@ -31,13 +31,11 @@
 #include <boost/log/attributes.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/locale/message.hpp>
-#include <boost/format.hpp>
 
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 
 #include "trihlavButtonIface.hpp"
 #include "trihlavFactoryIface.hpp"
-#include "trihlavKeyListPresenterIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
 
@@ -46,117 +44,117 @@
 
 namespace trihlav {
 
-KeyListPresenter::KeyListPresenter(FactoryIface& pFactory) :
-		KeyListPresenterIface(pFactory), //
-		CanOsAuthPresenter(pFactory), //
-		m_YubikoOtpKeyPresenter(0) //
-{
-}
+    KeyListPresenter::KeyListPresenter(FactoryIface &pFactory) :
+            KeyListPresenterIface(pFactory), //
+            CanOsAuthPresenter(pFactory), //
+            m_YubikoOtpKeyPresenter(0) //
+    {
+    }
 
-void KeyListPresenter::disableKeyListBtns() {
-	if (m_KeyListView == 0) {
-		getView();
-		return;
-	}
-	getView().getBtnAddKey().setEnabled(false);
-	getView().getBtnDelKey().setEnabled(false);
-	getView().getBtnEditKey().setEnabled(false);
-	getView().getBtnReload().setEnabled(false);
-}
+    void KeyListPresenter::disableKeyListBtns() {
+        if (m_KeyListView == 0) {
+            getView();
+            return;
+        }
+        getView().getBtnAddKey().setEnabled(false);
+        getView().getBtnDelKey().setEnabled(false);
+        getView().getBtnEditKey().setEnabled(false);
+        getView().getBtnReload().setEnabled(false);
+    }
 
-KeyListViewIface& KeyListPresenter::getView() {
-	if (m_KeyListView == 0) {
-		m_KeyListView = getFactory().createKeyListView();
-		getView().getBtnAddKey().pressedSig.connect([=] {addKey();});
-		getView().getBtnReload().pressedSig.connect([=] {reloadKeyList();});
-		getView().getBtnEditKey().pressedSig.connect([=] {editKey();});
-		getView().getBtnDelKey().pressedSig.connect([=] {deleteKey();});
-		getView().selectionChangedSig.connect(
-				[=](int pIdx) {selectionChanged(pIdx);});
-		disableKeyListBtns();
-	}
-	return *m_KeyListView;
-}
+    KeyListViewIface &KeyListPresenter::getView() {
+        if (m_KeyListView == 0) {
+            m_KeyListView = getFactory().createKeyListView();
+            getView().getBtnAddKey().pressedSig.connect([=] { addKey(); });
+            getView().getBtnReload().pressedSig.connect([=] { reloadKeyList(); });
+            getView().getBtnEditKey().pressedSig.connect([=] { editKey(); });
+            getView().getBtnDelKey().pressedSig.connect([=] { deleteKey(); });
+            getView().selectionChangedSig.connect(
+                    [=](int pIdx) { selectionChanged(pIdx); });
+            disableKeyListBtns();
+        }
+        return *m_KeyListView;
+    }
 
-KeyListPresenter::~KeyListPresenter() {
-	delete m_YubikoOtpKeyPresenter;
-}
+    KeyListPresenter::~KeyListPresenter() {
+        delete m_YubikoOtpKeyPresenter;
+    }
 
-void KeyListPresenter::addKey() {
-	getYubikoOtpKeyPresenter().addKey();
-}
+    void KeyListPresenter::addKey() {
+        getYubikoOtpKeyPresenter().addKey();
+    }
 
-YubikoOtpKeyPresenter& KeyListPresenter::getYubikoOtpKeyPresenter() {
-	if (m_YubikoOtpKeyPresenter == 0) {
-		m_YubikoOtpKeyPresenter = new YubikoOtpKeyPresenter(getFactory());
-		m_YubikoOtpKeyPresenter->saved.connect([=] {reloadKeyList();});
-	}
-	return *m_YubikoOtpKeyPresenter;
-}
+    YubikoOtpKeyPresenter &KeyListPresenter::getYubikoOtpKeyPresenter() {
+        if (m_YubikoOtpKeyPresenter == 0) {
+            m_YubikoOtpKeyPresenter = new YubikoOtpKeyPresenter(getFactory());
+            m_YubikoOtpKeyPresenter->saved.connect([=] { reloadKeyList(); });
+        }
+        return *m_YubikoOtpKeyPresenter;
+    }
 
-void KeyListPresenter::reloadKeyList() {
-	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::reloadKeyList");
-	KeyManager& myKeyMan(getFactory().getKeyManager());
-	const size_t myKeySz = myKeyMan.loadKeys();
-	getView().clear();
-	for (int myRow = 0; myRow < myKeySz; ++myRow) {
-		const auto& myKey = myKeyMan.getKey(myRow);
-		getView().addRow(getView().createRow(myRow, myKey));
-	}
-	getView().addedAllRows();
-	getView().selectionChangedSig(-1);
-}
+    void KeyListPresenter::reloadKeyList() {
+        BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyPresenter::reloadKeyList");
+        KeyManager &myKeyMan(getFactory().getKeyManager());
+        const size_t myKeySz = myKeyMan.loadKeys();
+        getView().clear();
+        for (int myRow = 0; myRow < myKeySz; ++myRow) {
+            const auto &myKey = myKeyMan.getKey(myRow);
+            getView().addRow(getView().createRow(myRow, myKey));
+        }
+        getView().addedAllRows();
+        getView().selectionChangedSig(-1);
+    }
 
-void KeyListPresenter::doProtectedAction(bool pStatus) {
-	if (pStatus) {
-		getView().getBtnAddKey().setEnabled(true);
-		getView().getBtnReload().setEnabled(true);
-		reloadKeyList();
-	} else {
-		getView().getBtnAddKey().setEnabled(false);
-		getView().getBtnDelKey().setEnabled(false);
-		getView().getBtnEditKey().setEnabled(false);
-		getView().getBtnReload().setEnabled(false);
-	}
-}
+    void KeyListPresenter::doProtectedAction(bool pStatus) {
+        if (pStatus) {
+            getView().getBtnAddKey().setEnabled(true);
+            getView().getBtnReload().setEnabled(true);
+            reloadKeyList();
+        } else {
+            getView().getBtnAddKey().setEnabled(false);
+            getView().getBtnDelKey().setEnabled(false);
+            getView().getBtnEditKey().setEnabled(false);
+            getView().getBtnReload().setEnabled(false);
+        }
+    }
 
-bool KeyListPresenter::checkSelection() const {
-	if (m_SelectedKey == -1) {
-		BOOST_LOG_TRIVIAL(warning)<< "KeyListPresenter edit/delete "
-		"called without proper selection.";
-		return false;
-	}
-	return true;
-}
+    bool KeyListPresenter::checkSelection() const {
+        if (m_SelectedKey == -1) {
+            BOOST_LOG_TRIVIAL(warning) << "KeyListPresenter edit/delete "
+                        "called without proper selection.";
+            return false;
+        }
+        return true;
+    }
 
-void KeyListPresenter::editKey() {
-	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::editKey");
-	if (checkSelection()) {
-		KeyManager& myKeyMan(getFactory().getKeyManager());
-		getYubikoOtpKeyPresenter().editKey(myKeyMan.getKey(m_SelectedKey));
-	}
-}
+    void KeyListPresenter::editKey() {
+        BOOST_LOG_NAMED_SCOPE("KeyListPresenter::editKey");
+        if (checkSelection()) {
+            KeyManager &myKeyMan(getFactory().getKeyManager());
+            getYubikoOtpKeyPresenter().editKey(myKeyMan.getKey(m_SelectedKey));
+        }
+    }
 
-void KeyListPresenter::deleteKey() {
-	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::deleteKey");
-	if (checkSelection()) {
-		KeyManager& myKeyMan(getFactory().getKeyManager());
-		getYubikoOtpKeyPresenter().deleteKey(myKeyMan.getKey(m_SelectedKey));
-	}
-}
+    void KeyListPresenter::deleteKey() {
+        BOOST_LOG_NAMED_SCOPE("KeyListPresenter::deleteKey");
+        if (checkSelection()) {
+            KeyManager &myKeyMan(getFactory().getKeyManager());
+            getYubikoOtpKeyPresenter().deleteKey(myKeyMan.getKey(m_SelectedKey));
+        }
+    }
 
-void KeyListPresenter::selectionChanged(int pIdx) {
-	BOOST_LOG_NAMED_SCOPE("KeyListPresenter::selectionChange");
-	if (pIdx == -1) {
-		getView().getBtnDelKey().setEnabled(false);
-		getView().getBtnEditKey().setEnabled(false);
-	} else {
-		getView().getBtnDelKey().setEnabled(true);
-		getView().getBtnEditKey().setEnabled(true);
-	}
-	m_SelectedKey = pIdx;
-	BOOST_LOG_TRIVIAL(debug)<<"Curently selected " << m_SelectedKey;
-}
+    void KeyListPresenter::selectionChanged(int pIdx) {
+        BOOST_LOG_NAMED_SCOPE("KeyListPresenter::selectionChange");
+        if (pIdx == -1) {
+            getView().getBtnDelKey().setEnabled(false);
+            getView().getBtnEditKey().setEnabled(false);
+        } else {
+            getView().getBtnDelKey().setEnabled(true);
+            getView().getBtnEditKey().setEnabled(true);
+        }
+        m_SelectedKey = pIdx;
+        BOOST_LOG_TRIVIAL(debug) << "Curently selected " << m_SelectedKey;
+    }
 
 }
 /* namespace trihlav */

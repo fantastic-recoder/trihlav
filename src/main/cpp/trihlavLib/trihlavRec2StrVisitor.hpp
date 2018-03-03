@@ -38,16 +38,14 @@ namespace trihlav {
 /**
  * Control what is in the record and how it will be displayed.
  */
-class Rec2StrVisitor : public boost::static_visitor<std::string>
-{
-public:
+    class Rec2StrVisitor : public boost::static_visitor<std::string> {
+    public:
 
-	template<typename T>
-    std::string operator()(T pVal) const
-    {
-        return boost::lexical_cast<std::string>(pVal);
-    }
-};
+        template<typename T>
+        std::string operator()(T pVal) const {
+            return boost::lexical_cast<std::string>(pVal);
+        }
+    };
 
 }  // namespace trihlav
 

@@ -34,37 +34,38 @@
 #include "trihlavLib/trihlavWidgetIface.hpp"
 
 namespace trihlav {
-	/**
-	 * Interface to push-button UI element.
-	 */
-        class ButtonIface : virtual public WidgetIface {
-	public:
-		/// Hide the underlying boost signal.
-		typedef boost::signals2::signal<void()> PressedSignal;
+    /**
+     * Interface to push-button UI element.
+     */
+    class ButtonIface : virtual public WidgetIface {
+    public:
+        /// Hide the underlying boost signal.
+        typedef boost::signals2::signal<void()> PressedSignal;
 
-		/**
-		 * Button pressed event is signaling via this member.
-		 */
-		PressedSignal pressedSig;
+        /**
+         * Button pressed event is signaling via this member.
+         */
+        PressedSignal pressedSig;
 
-		virtual ~ButtonIface(){};
+        virtual ~ButtonIface() {};
 
-		/**
-		 * Trigger button-pressed signal.
-		 */
-		virtual void pressed() { pressedSig(); }
+        /**
+         * Trigger button-pressed signal.
+         */
+        virtual void pressed() { pressedSig(); }
 
-		/**
-		 * @return Buttons label value in UTF8.
-		 */
-		virtual const std::string getText() const = 0;
+        /**
+         * @return Buttons label value in UTF8.
+         */
+        virtual const std::string getText() const = 0;
 
-		/**
-		 * @param pText Set the button-label value in UTF8.
-		 */
-		virtual void setText( const std::string& pText) = 0;
-	private:
-	};
+        /**
+         * @param pText Set the button-label value in UTF8.
+         */
+        virtual void setText(const std::string &pText) = 0;
+
+    private:
+    };
 }
 
 #endif /* TRIHLAV_BUTTON_IFACE_HPP_ */

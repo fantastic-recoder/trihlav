@@ -35,14 +35,14 @@ using std::string;
 
 namespace trihlav {
 
-WtLabel::WtLabel(const string& pDefText ) : WLabel(pDefText) {
-	// TODO Auto-generated constructor stub
+    WtLabel::WtLabel(const string &pDefText) : WLabel(pDefText) {
+        // TODO Auto-generated constructor stub
 
-}
+    }
 
-WtLabel::~WtLabel() {
-	// TODO Auto-generated destructor stub
-}
+    WtLabel::~WtLabel() {
+        // TODO Auto-generated destructor stub
+    }
 
 } /* namespace trihlav */
 

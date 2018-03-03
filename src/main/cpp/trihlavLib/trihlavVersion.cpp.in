@@ -13,8 +13,8 @@ using namespace std;
 
 namespace trihlav {
 
-const string Version::getVersion() {
-	return "@GIT_SHA1@";
-}
+    const string Version::getVersion() {
+        return "@GIT_SHA1@";
+    }
 
 } /* namespace trihlav */

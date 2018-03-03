@@ -56,7 +56,7 @@ namespace trihlav {
          * Allow superuser?
          * @return Settings#m_AllowRoot.
          */
-        bool& isAllowRoot() {
+        bool &isAllowRoot() {
             return m_AllowRoot;
         }
 
@@ -72,7 +72,7 @@ namespace trihlav {
          * On UNIX systems will allow select user from this value.
          * @return Settings#m_MinUser .
          */
-        int& getMinUser() {
+        int &getMinUser() {
             return m_MinUser;
         }
 
@@ -99,8 +99,8 @@ namespace trihlav {
     private:
         boost::filesystem::path m_ArchFilename;
 
-        bool m_AllowRoot=true;
-        int  m_MinUser=1000;
+        bool m_AllowRoot = true;
+        int m_MinUser = 1000;
 
         boost::filesystem::path m_ConfigDir;
         mutable bool m_InitializedFlag;

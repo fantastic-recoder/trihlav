@@ -34,16 +34,20 @@
 
 namespace trihlav {
 
-class StrEditIface;
-class LabelIface;
+    class StrEditIface;
 
-class LoginViewIface: virtual public DialogViewIface {
-public:
-	virtual StrEditIface& getEdtUserName() =0;
-	virtual StrEditIface& getEdtPassword() =0;
-	virtual LabelIface& getLblUserName() =0;
-	virtual LabelIface& getLblPassword() =0;
-};
+    class LabelIface;
+
+    class LoginViewIface : virtual public DialogViewIface {
+    public:
+        virtual StrEditIface &getEdtUserName() =0;
+
+        virtual StrEditIface &getEdtPassword() =0;
+
+        virtual LabelIface &getLblUserName() =0;
+
+        virtual LabelIface &getLblPassword() =0;
+    };
 
 } /* namespace trihlav */
 

@@ -28,16 +28,13 @@
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/locale/message.hpp>
-#include <boost/format.hpp>
 
 #include "trihlavMessageViewIface.hpp"
 
 namespace trihlav {
 
-MessageViewIface::~MessageViewIface() {
-	BOOST_LOG_NAMED_SCOPE("MessageViewIface::~MessageViewIface");
-}
+    MessageViewIface::~MessageViewIface() {
+        BOOST_LOG_NAMED_SCOPE("MessageViewIface::~MessageViewIface");
+    }
 
 } /* namespace trihlav */

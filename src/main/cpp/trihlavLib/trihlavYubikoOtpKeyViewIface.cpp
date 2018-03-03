@@ -31,9 +31,9 @@
 
 namespace trihlav {
 
-YubikoOtpKeyViewIface::~YubikoOtpKeyViewIface() {
-	BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyViewIface::~YubikoOtpKeyViewIface");
-}
+    YubikoOtpKeyViewIface::~YubikoOtpKeyViewIface() {
+        BOOST_LOG_NAMED_SCOPE("YubikoOtpKeyViewIface::~YubikoOtpKeyViewIface");
+    }
 
 
 }  // namespace trihlav

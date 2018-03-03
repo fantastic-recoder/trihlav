@@ -5,8 +5,6 @@
  *      Author: grobap
  */
 
-#include "trihlavSysUserListViewIface.hpp"
-
 namespace trihlav {
 
 } /* namespace trihlav */

@@ -36,28 +36,33 @@
 
 namespace trihlav {
 
-class FactoryIface;
-class PswdChckViewIface;
-class MessageViewIface;
+    class FactoryIface;
+
+    class PswdChckViewIface;
+
+    class MessageViewIface;
 
 /**
  * Main functionality, checks the one passwords.
  */
-class PswdChckPresenter: public PswdChckPresenterIface {
-	mutable PswdChckViewIfacePtr m_View;
-	mutable MessageViewIfacePtr m_MessageView;
-public:
-	PswdChckPresenter(FactoryIface& pFactory);
-	virtual ~PswdChckPresenter() override;
+    class PswdChckPresenter : public PswdChckPresenterIface {
+        mutable PswdChckViewIfacePtr m_View;
+        mutable MessageViewIfacePtr m_MessageView;
+    public:
+        PswdChckPresenter(FactoryIface &pFactory);
 
-	PswdChckViewIface& getView() override;
-	MessageViewIface& getMessageView() override;
-	virtual void okPressed();
+        virtual ~PswdChckPresenter() override;
 
-	static const char* K_MSG_TITLE;
-	static const char* K_PSWD_NOT_OK;
-	static const char* K_PSWD_OK;
-};
+        PswdChckViewIface &getView() override;
+
+        MessageViewIface &getMessageView() override;
+
+        virtual void okPressed();
+
+        static const char *K_MSG_TITLE;
+        static const char *K_PSWD_NOT_OK;
+        static const char *K_PSWD_OK;
+    };
 
 } /* namespace trihlav */
 

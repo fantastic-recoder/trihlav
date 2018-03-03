@@ -32,18 +32,24 @@
 
 namespace trihlav {
 
-class KeyListViewIface;
+    class KeyListViewIface;
 
-class KeyListPresenterIface : virtual public CanOsAuthPresenter {
-public:
-	KeyListPresenterIface(FactoryIface& pFactory):CanOsAuthPresenter(pFactory) {}
-	virtual ~KeyListPresenterIface(){}
-	virtual KeyListViewIface& getView()=0;
-	virtual void addKey()=0;
-	virtual void editKey()=0;
-	virtual void deleteKey()=0;
-	virtual void reloadKeyList()=0;
-};
+    class KeyListPresenterIface : virtual public CanOsAuthPresenter {
+    public:
+        KeyListPresenterIface(FactoryIface &pFactory) : CanOsAuthPresenter(pFactory) {}
+
+        virtual ~KeyListPresenterIface() {}
+
+        virtual KeyListViewIface &getView()=0;
+
+        virtual void addKey()=0;
+
+        virtual void editKey()=0;
+
+        virtual void deleteKey()=0;
+
+        virtual void reloadKeyList()=0;
+    };
 
 }  // namespace trihlav
 

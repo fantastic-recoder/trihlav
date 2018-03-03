@@ -71,141 +71,146 @@ using U = Wt::WLength::Unit;
 
 namespace trihlav {
 
-const int WtKeyListView::K_TBL_V_MARGIN = 12;
+    const int WtKeyListView::K_TBL_V_MARGIN = 12;
 
 /**
  * @brief The WtKeyListModel class holds the data supplyed by the presenter.
  */
-class WtKeyListModel: public WtListModel<int, std::string, std::string,
-		std::string, int, int> {
-public:
-	WtKeyListModel() :
-			WtListModel<int, std::string, std::string, std::string, int, int>(
-					{ { translate("Record ID") }, { translate("Public ID") }, {
-							translate("Description") }, { translate(
-							"Private ID") }, { translate("Use counter") }, {
-							translate("Counter") } }) {
-	}
-}
-;
+    class WtKeyListModel : public WtListModel<int, std::string, std::string,
+            std::string, int, int> {
+    public:
+        WtKeyListModel() :
+                WtListModel<int, std::string, std::string, std::string, int, int>(
+                        {{translate("Record ID")},
+                         {translate("Public ID")},
+                         {
+                          translate("Description")},
+                         {translate(
+                                 "Private ID")},
+                         {translate("Use counter")},
+                         {
+                          translate("Counter")}}) {
+        }
+    };
 
-void WtKeyListView::layoutSizeChanged(int pW, int pH) {
-	BOOST_LOG_TRIVIAL(debug)<< "W=" << pW <<" H=" << pH;
-	const int WIDTH = 120; const int K_TBL_W=pW-2*K_TBL_V_MARGIN;
-	int K_COL_CNT {1};
-	if(m_Table->model()) {
-		K_COL_CNT=m_Table->model()->columnCount();
-	}
-	const int K_TBL_INT_M=7*K_COL_CNT+2;
-	for (int i = 0; i < K_COL_CNT; ++i) {
-		if(i==2) {
-			m_Table->setColumnWidth(i,K_TBL_W-5*WIDTH-K_TBL_INT_M);
-		} else {
-			m_Table->setColumnWidth(i, 120);
-		}
-	}
-	m_Table->resize(WLength(pW, U::Pixel), WLength(pH, U::Pixel));
-}
+    void WtKeyListView::layoutSizeChanged(int pW, int pH) {
+        BOOST_LOG_TRIVIAL(debug) << "W=" << pW << " H=" << pH;
+        const int WIDTH = 120;
+        const int K_TBL_W = pW - 2 * K_TBL_V_MARGIN;
+        int K_COL_CNT{1};
+        if (m_Table->model()) {
+            K_COL_CNT = m_Table->model()->columnCount();
+        }
+        const int K_TBL_INT_M = 7 * K_COL_CNT + 2;
+        for (int i = 0; i < K_COL_CNT; ++i) {
+            if (i == 2) {
+                m_Table->setColumnWidth(i, K_TBL_W - 5 * WIDTH - K_TBL_INT_M);
+            } else {
+                m_Table->setColumnWidth(i, 120);
+            }
+        }
+        m_Table->resize(WLength(pW, U::Pixel), WLength(pH, U::Pixel));
+    }
 
-void WtKeyListView::createTable() {
-	m_Table = new WTableView();
-	m_Table->setModel(m_DtaMdl);
-	m_Table->setAlternatingRowColors(true);
-	m_Table->setCanReceiveFocus(true);
-	m_Table->setColumnResizeEnabled(true);
-	m_Table->setColumnWidth(2, "400px");
-    m_Table->setSelectionMode(Wt::SelectionMode::Single);
-	m_Table->resize(WLength(100.0, U::Percentage), WLength(128.0, U::FontEm));
-	m_Table->selectionChanged().connect(this,
-			&WtKeyListView::selectionChanged);
-}
+    void WtKeyListView::createTable() {
+        m_Table = new WTableView();
+        m_Table->setModel(m_DtaMdl);
+        m_Table->setAlternatingRowColors(true);
+        m_Table->setCanReceiveFocus(true);
+        m_Table->setColumnResizeEnabled(true);
+        m_Table->setColumnWidth(2, "400px");
+        m_Table->setSelectionMode(Wt::SelectionMode::Single);
+        m_Table->resize(WLength(100.0, U::Percentage), WLength(128.0, U::FontEm));
+        m_Table->selectionChanged().connect(this,
+                                            &WtKeyListView::selectionChanged);
+    }
 
-WtKeyListView::WtKeyListView() {
-    m_DtaMdl = std::shared_ptr<WtKeyListModel>(new WtKeyListModel);
-	WHBoxLayout* myBtnsLayout = new WHBoxLayout;
-	WVBoxLayout* myTopLayout = new WVBoxLayout;
-	m_BtnAdd = new WtPushButton(translate("New key").str());
-	m_BtnDel = new WtPushButton(translate("Delete key").str());
-	m_BtnReload = new WtPushButton(translate("Reload keys").str());
-	m_BtnEdit = new WtPushButton(translate("Edit key").str());
-    m_BtnAdd->setWidth(WLength {6, LengthUnit::FontEm});
-    m_BtnEdit->setWidth(WLength {6, LengthUnit::FontEm});
-    m_BtnDel->setWidth(WLength {6, LengthUnit::FontEm});
-    m_BtnReload->setWidth(WLength {6, LengthUnit::FontEm});
-    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnAdd));
-    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnEdit));
-    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnDel));
-    myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnReload));
-	createTable();
-    myTopLayout->addLayout(std::unique_ptr<Wt::WLayout>(myBtnsLayout));
-    myTopLayout->addWidget(std::unique_ptr<Wt::WWidget>(m_Table));
-	myTopLayout->setContentsMargins(K_TBL_V_MARGIN, K_TBL_V_MARGIN,
-			K_TBL_V_MARGIN, K_TBL_V_MARGIN);
-	myTopLayout->setSpacing(K_TBL_V_MARGIN);
-    setLayout(std::unique_ptr<WLayout>(myTopLayout));
-	setLayoutSizeAware(true);
-}
+    WtKeyListView::WtKeyListView() {
+        m_DtaMdl = std::shared_ptr<WtKeyListModel>(new WtKeyListModel);
+        WHBoxLayout *myBtnsLayout = new WHBoxLayout;
+        WVBoxLayout *myTopLayout = new WVBoxLayout;
+        m_BtnAdd = new WtPushButton(translate("New key").str());
+        m_BtnDel = new WtPushButton(translate("Delete key").str());
+        m_BtnReload = new WtPushButton(translate("Reload keys").str());
+        m_BtnEdit = new WtPushButton(translate("Edit key").str());
+        m_BtnAdd->setWidth(WLength {6, LengthUnit::FontEm});
+        m_BtnEdit->setWidth(WLength {6, LengthUnit::FontEm});
+        m_BtnDel->setWidth(WLength {6, LengthUnit::FontEm});
+        m_BtnReload->setWidth(WLength {6, LengthUnit::FontEm});
+        myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnAdd));
+        myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnEdit));
+        myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnDel));
+        myBtnsLayout->addWidget(std::unique_ptr<WWidget>(m_BtnReload));
+        createTable();
+        myTopLayout->addLayout(std::unique_ptr<Wt::WLayout>(myBtnsLayout));
+        myTopLayout->addWidget(std::unique_ptr<Wt::WWidget>(m_Table));
+        myTopLayout->setContentsMargins(K_TBL_V_MARGIN, K_TBL_V_MARGIN,
+                                        K_TBL_V_MARGIN, K_TBL_V_MARGIN);
+        myTopLayout->setSpacing(K_TBL_V_MARGIN);
+        setLayout(std::unique_ptr<WLayout>(myTopLayout));
+        setLayoutSizeAware(true);
+    }
 
-WtKeyListView::~WtKeyListView() {
-}
+    WtKeyListView::~WtKeyListView() {
+    }
 
-Wt::WWidget* WtKeyListView::getWWidget() {
-	return this;
-}
+    Wt::WWidget *WtKeyListView::getWWidget() {
+        return this;
+    }
 
-ButtonIface& WtKeyListView::getBtnAddKey() {
-	return *m_BtnAdd;
-}
+    ButtonIface &WtKeyListView::getBtnAddKey() {
+        return *m_BtnAdd;
+    }
 
-ButtonIface& WtKeyListView::getBtnEditKey() {
-	return *m_BtnEdit;
-}
+    ButtonIface &WtKeyListView::getBtnEditKey() {
+        return *m_BtnEdit;
+    }
 
-ButtonIface& trihlav::WtKeyListView::getBtnDelKey() {
-	return *m_BtnDel;
-}
+    ButtonIface &trihlav::WtKeyListView::getBtnDelKey() {
+        return *m_BtnDel;
+    }
 
-ButtonIface& trihlav::WtKeyListView::getBtnReload() {
-	return *m_BtnReload;
-}
+    ButtonIface &trihlav::WtKeyListView::getBtnReload() {
+        return *m_BtnReload;
+    }
 
-void WtKeyListView::clear() {
-	m_Table->clearSelection();
-	m_DtaMdl->clear();
-}
+    void WtKeyListView::clear() {
+        m_Table->clearSelection();
+        m_DtaMdl->clear();
+    }
 
-void WtKeyListView::addRow(const KeyRow_t& pRow) {
-	m_DtaMdl->addRow(pRow);
-}
+    void WtKeyListView::addRow(const KeyRow_t &pRow) {
+        m_DtaMdl->addRow(pRow);
+    }
 
-void WtKeyListView::addedAllRows() {
-	BOOST_LOG_TRIVIAL(debug)<< "We have " << m_DtaMdl->rowCount();
-	m_Table->refresh();
-}
+    void WtKeyListView::addedAllRows() {
+        BOOST_LOG_TRIVIAL(debug) << "We have " << m_DtaMdl->rowCount();
+        m_Table->refresh();
+    }
 
-void WtKeyListView::unselectAll() {
-	m_Table->clearSelection();
-	this->selectionChangedSig(-1);
-}
+    void WtKeyListView::unselectAll() {
+        m_Table->clearSelection();
+        this->selectionChangedSig(-1);
+    }
 
 /**
  * @return a list of ids of the selected keys.
  */
-int WtKeyListView::getSelected() {
-	WModelIndexSet mySelected { m_Table->selectedIndexes() };
-	if (mySelected.empty()) {
-		return -1;
-	}
-	return mySelected.begin()->row();
-}
+    int WtKeyListView::getSelected() {
+        WModelIndexSet mySelected{m_Table->selectedIndexes()};
+        if (mySelected.empty()) {
+            return -1;
+        }
+        return mySelected.begin()->row();
+    }
 
-const WtKeyListView::KeyRow_t& WtKeyListView::getRow(int pId) const {
-	return m_DtaMdl->getRow(pId);
-}
+    const WtKeyListView::KeyRow_t &WtKeyListView::getRow(int pId) const {
+        return m_DtaMdl->getRow(pId);
+    }
 
-void WtKeyListView::selectionChanged() {
-	BOOST_LOG_NAMED_SCOPE("WtKeyListView::selectionChanged");
-	this->selectionChangedSig(getSelected());
-}
+    void WtKeyListView::selectionChanged() {
+        BOOST_LOG_NAMED_SCOPE("WtKeyListView::selectionChanged");
+        this->selectionChangedSig(getSelected());
+    }
 
 } /* namespace trihlav */

@@ -34,43 +34,44 @@
 
 namespace trihlav {
 
-class WtSpinBox: virtual public SpinBoxIface, virtual public Wt::WSpinBox {
-public:
-	virtual ~WtSpinBox();
-	WtSpinBox();
+    class WtSpinBox : virtual public SpinBoxIface, virtual public Wt::WSpinBox {
+    public:
+        virtual ~WtSpinBox();
 
-	virtual void setMin(const int pMin) {
-		Wt::WSpinBox::setMinimum(pMin);
-	}
+        WtSpinBox();
 
-	virtual const int getMin() const {
-		return minimum();
-	}
+        virtual void setMin(const int pMin) {
+            Wt::WSpinBox::setMinimum(pMin);
+        }
 
-	virtual void setMax(const int pMax) {
-		Wt::WSpinBox::setMaximum(pMax);
-	}
+        virtual const int getMin() const {
+            return minimum();
+        }
 
-	virtual const int getMax() const {
-		return maximum();
-	}
+        virtual void setMax(const int pMax) {
+            Wt::WSpinBox::setMaximum(pMax);
+        }
 
-	virtual void setStep(const int pStep) {
-		Wt::WSpinBox::setSingleStep(pStep);
-	}
+        virtual const int getMax() const {
+            return maximum();
+        }
 
-	virtual const int getStep() const {
-		return singleStep();
-	}
+        virtual void setStep(const int pStep) {
+            Wt::WSpinBox::setSingleStep(pStep);
+        }
 
-	virtual const int getValue() const {
-		return value();
-	}
+        virtual const int getStep() const {
+            return singleStep();
+        }
 
-	virtual void setValue(const int& pVal) {
-		Wt::WSpinBox::setValue(pVal);
-	}
-};
+        virtual const int getValue() const {
+            return value();
+        }
+
+        virtual void setValue(const int &pVal) {
+            Wt::WSpinBox::setValue(pVal);
+        }
+    };
 
 } /* namespace trihlav */
 

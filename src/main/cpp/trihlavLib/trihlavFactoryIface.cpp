@@ -32,7 +32,6 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 
-#include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavKeyListPresenter.hpp"
 #include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
@@ -63,7 +62,7 @@ namespace trihlav {
 
     KeyListPresenterIfacePtr FactoryIface::createKeyListPresenter() {
         BOOST_LOG_NAMED_SCOPE("IFactory::createKeyListPresenter()");
-        return KeyListPresenterIfacePtr (new KeyListPresenter(*this));
+        return KeyListPresenterIfacePtr(new KeyListPresenter(*this));
     }
 
     PswdChckPresenterIfacePtr FactoryIface::createPswdChckPresenter() {

@@ -30,21 +30,20 @@
 
 namespace trihlav {
 
-class WidgetIface
-{
-public:
-    /**
-     * @brief setEnabled alow or disalow user interaction
-     * @param pEnabled true to enable widget UI
-     */
-    virtual void setEnabled(bool pEnabled)=0;
+    class WidgetIface {
+    public:
+        /**
+         * @brief setEnabled alow or disalow user interaction
+         * @param pEnabled true to enable widget UI
+         */
+        virtual void setEnabled(bool pEnabled)=0;
 
-    /**
-     * @brief isEnabled is this widget enabled?
-     * @return true when enabled.
-     */
-    virtual bool isEnabled() const = 0;
-};
+        /**
+         * @brief isEnabled is this widget enabled?
+         * @return true when enabled.
+         */
+        virtual bool isEnabled() const = 0;
+    };
 
 } // end namespace trihlav
 

@@ -38,18 +38,18 @@ namespace {
 namespace trihlav {
     using namespace std;
 
-    CannotCastImplementation::CannotCastImplementation(const std::string& pTypename) : invalid_argument(
-    		K_PREFIX.c_str()) {
+    CannotCastImplementation::CannotCastImplementation(const std::string &pTypename) : invalid_argument(
+            K_PREFIX.c_str()) {
         try {
-            m_Msg=K_PREFIX+string(" \"")
-                   + getTypename()
-                   + string("\".") ;
+            m_Msg = K_PREFIX + string(" \"")
+                    + getTypename()
+                    + string("\".");
         } catch (...) {
-            m_Msg=K_FAILED_FORMAT_MSG.c_str();
+            m_Msg = K_FAILED_FORMAT_MSG.c_str();
         }
     }
 
-    const char* CannotCastImplementation::what() const throw() {
+    const char *CannotCastImplementation::what() const throw() {
         return m_Msg.c_str();
     }
 

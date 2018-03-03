@@ -32,10 +32,10 @@
 #include "trihlavFactoryIface.hpp"
 
 namespace trihlav {
-	/**
-	 * Get the implementation specific UI & Co.
-	 */
-	FactoryIface& getUiFactory();
+    /**
+     * Get the implementation specific UI & Co.
+     */
+    FactoryIface &getUiFactory();
 }  // namespace trihlav
 
 #endif // TRIHLAV_GET_UI_FACTORY_

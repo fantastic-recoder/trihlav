@@ -36,64 +36,76 @@
 
 namespace Wt {
 
-class WWidget;
-class WTableView;
+    class WWidget;
+
+    class WTableView;
 
 }  // namespace Wt
 
 namespace trihlav {
 
-class WtPushButton;
-class WtKeyListModel;
+    class WtPushButton;
 
-class WtKeyListView: virtual public KeyListViewIface, //
-		virtual public WtViewIface, //
-		virtual public Wt::WContainerWidget {
-public:
-	WtKeyListView();
-	virtual ~WtKeyListView();
+    class WtKeyListModel;
 
-    virtual Wt::WWidget *getWWidget() override;
+    class WtKeyListView : virtual public KeyListViewIface, //
+                          virtual public WtViewIface, //
+                          virtual public Wt::WContainerWidget {
+    public:
+        WtKeyListView();
 
-	const Wt::WTableView* getTable() const {
-		return m_Table;
-	}
+        virtual ~WtKeyListView();
 
-	Wt::WTableView* getTable() {
-		return m_Table;
-	}
+        virtual Wt::WWidget *getWWidget() override;
 
-	virtual ButtonIface& getBtnAddKey() override;
-	virtual ButtonIface& getBtnDelKey() override;
-	virtual ButtonIface& getBtnReload() override;
-	virtual ButtonIface& getBtnEditKey() override;
-	virtual void clear() override;
-	virtual void addRow(const KeyRow_t& pRow) override;
-	virtual void addedAllRows() override;
-	virtual void unselectAll() override;
-	virtual const KeyRow_t& getRow(int pId) const override;
+        const Wt::WTableView *getTable() const {
+            return m_Table;
+        }
 
-protected:
-	virtual int getSelected();
-	virtual void layoutSizeChanged(int, int) override;
+        Wt::WTableView *getTable() {
+            return m_Table;
+        }
 
-	void setTable(Wt::WTableView* pTable) {
-		m_Table = pTable;
-	}
+        virtual ButtonIface &getBtnAddKey() override;
 
-	void selectionChanged();
+        virtual ButtonIface &getBtnDelKey() override;
 
-private:
-	void createTable();
+        virtual ButtonIface &getBtnReload() override;
 
-	Wt::WTableView *m_Table;
-	WtPushButton* m_BtnAdd;
-	WtPushButton* m_BtnDel;
-	WtPushButton* m_BtnEdit;
-	WtPushButton* m_BtnReload;
-    std::shared_ptr<WtKeyListModel> m_DtaMdl;
-	static const int K_TBL_V_MARGIN;
-};
+        virtual ButtonIface &getBtnEditKey() override;
+
+        virtual void clear() override;
+
+        virtual void addRow(const KeyRow_t &pRow) override;
+
+        virtual void addedAllRows() override;
+
+        virtual void unselectAll() override;
+
+        virtual const KeyRow_t &getRow(int pId) const override;
+
+    protected:
+        virtual int getSelected();
+
+        virtual void layoutSizeChanged(int, int) override;
+
+        void setTable(Wt::WTableView *pTable) {
+            m_Table = pTable;
+        }
+
+        void selectionChanged();
+
+    private:
+        void createTable();
+
+        Wt::WTableView *m_Table;
+        WtPushButton *m_BtnAdd;
+        WtPushButton *m_BtnDel;
+        WtPushButton *m_BtnEdit;
+        WtPushButton *m_BtnReload;
+        std::shared_ptr<WtKeyListModel> m_DtaMdl;
+        static const int K_TBL_V_MARGIN;
+    };
 
 } /* namespace trihlav */
 

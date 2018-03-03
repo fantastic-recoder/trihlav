@@ -9,13 +9,11 @@
 #include <ios>
 #include <iostream>
 #include <fstream>
-#include <stdexcept>
 #include <memory>
 #include <list>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/filesystem/operations.hpp>
 
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>

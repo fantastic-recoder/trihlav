@@ -36,25 +36,27 @@
 
 namespace trihlav {
 
-class WtLabel: virtual public Wt::WLabel, virtual public LabelIface {
-public:
-	WtLabel(const std::string&);
-	virtual ~WtLabel();
-	/**
-	 * @return The displayed text.
-	 */
-	virtual const std::string getText() const override {
-		return text().toUTF8();
-	}
+    class WtLabel : virtual public Wt::WLabel, virtual public LabelIface {
+    public:
+        WtLabel(const std::string &);
 
-	/**
-	 * @param pVal set the displayed text.
-	 */
-	virtual void setText(const std::string& pVal) override {
-		Wt::WLabel::setText(Wt::WString::fromUTF8(pVal));
-	}
+        virtual ~WtLabel();
 
-};
+        /**
+         * @return The displayed text.
+         */
+        virtual const std::string getText() const override {
+            return text().toUTF8();
+        }
+
+        /**
+         * @param pVal set the displayed text.
+         */
+        virtual void setText(const std::string &pVal) override {
+            Wt::WLabel::setText(Wt::WString::fromUTF8(pVal));
+        }
+
+    };
 
 } /* namespace trihlav */
 

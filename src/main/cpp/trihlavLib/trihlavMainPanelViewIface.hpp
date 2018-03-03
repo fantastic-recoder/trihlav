@@ -35,25 +35,29 @@
 
 namespace trihlav {
 
-class PswdChckViewIface;
-class KeyListViewIface;
+    class PswdChckViewIface;
 
-enum class PanelName {
-	KeyList,PswdCheck,Settings
-};
+    class KeyListViewIface;
+
+    enum class PanelName {
+        KeyList, PswdCheck, Settings
+    };
 
 
 /**
  * The interface of the top level UI view, as in MVP design pattern.
  */
-class MainPanelViewIface : public ViewIface {
-public:
-	using SigShowedPanel = boost::signals2::signal<void (PanelName)>;
-	SigShowedPanel sigShowedPanel;
-	virtual void add(const std::string& pLocalizedName, const PanelName& pName,PswdChckViewIface& pPswdChckView)=0;
-	virtual void add(const std::string& pLocalizedName, const PanelName& pName,KeyListViewIface& pKeyListView)=0;
-	virtual ~MainPanelViewIface(){}
-};
+    class MainPanelViewIface : public ViewIface {
+    public:
+        using SigShowedPanel = boost::signals2::signal<void(PanelName)>;
+        SigShowedPanel sigShowedPanel;
+
+        virtual void add(const std::string &pLocalizedName, const PanelName &pName, PswdChckViewIface &pPswdChckView)=0;
+
+        virtual void add(const std::string &pLocalizedName, const PanelName &pName, KeyListViewIface &pKeyListView)=0;
+
+        virtual ~MainPanelViewIface() {}
+    };
 
 } // end namespace trihlav
 

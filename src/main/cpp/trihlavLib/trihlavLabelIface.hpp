@@ -38,22 +38,22 @@ namespace trihlav {
 /**
  * Interface for an UI label.
  */
-class LabelIface {
-public:
-	LabelIface();
+    class LabelIface {
+    public:
+        LabelIface();
 
-	/// Ensure non copyablity.
-	LabelIface(const LabelIface& ) = delete;
+        /// Ensure non copyablity.
+        LabelIface(const LabelIface &) = delete;
 
-	/// The text to be displayed.
-	virtual void setText(const std::string& pTxt) = 0;
+        /// The text to be displayed.
+        virtual void setText(const std::string &pTxt) = 0;
 
-	/// What is being displayed?
-	virtual const std::string getText() const = 0;
+        /// What is being displayed?
+        virtual const std::string getText() const = 0;
 
-	/// Ensure virtuability.
-	virtual ~LabelIface(){}
-};
+        /// Ensure virtuability.
+        virtual ~LabelIface() {}
+    };
 
 } /* namespace trihlav */
 

@@ -42,15 +42,15 @@ namespace trihlav {
     FailedCreateConfigDir::FailedCreateConfigDir(const boost::filesystem::path &pConfigDir) : invalid_argument(
             K_FAILED_CREATE_CONFIG_DIR.c_str()) {
         try {
-            m_Msg=string("Failed to create config directory \"")
-                   + getConfigDir().native()
-                   + string("\"") ;
+            m_Msg = string("Failed to create config directory \"")
+                    + getConfigDir().native()
+                    + string("\"");
         } catch (...) {
-            m_Msg=K_FAILED_FORMAT_MSG.c_str();
+            m_Msg = K_FAILED_FORMAT_MSG.c_str();
         }
     }
 
-    const char* FailedCreateConfigDir::what() const throw() {
+    const char *FailedCreateConfigDir::what() const throw() {
         return m_Msg.c_str();
     }
 

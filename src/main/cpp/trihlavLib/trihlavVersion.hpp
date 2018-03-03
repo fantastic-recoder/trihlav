@@ -12,12 +12,14 @@
 
 namespace trihlav {
 
-class Version {
-public:
-	Version( const boost::filesystem::path& ){}
-	virtual ~Version(){}
-	static const std::string getVersion();
-};
+    class Version {
+    public:
+        Version(const boost::filesystem::path &) {}
+
+        virtual ~Version() {}
+
+        static const std::string getVersion();
+    };
 
 } /* namespace trihlavApi */
 

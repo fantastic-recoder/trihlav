@@ -5,8 +5,6 @@
  *      Author: grobap
  */
 
-#include "trihlavLoginViewIface.hpp"
-
 namespace trihlav {
 
 } /* namespace trihlav */

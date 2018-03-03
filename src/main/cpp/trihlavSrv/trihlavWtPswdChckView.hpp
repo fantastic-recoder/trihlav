@@ -32,30 +32,36 @@
 #include "trihlavWtViewIface.hpp"
 
 namespace Wt {
-	class WContainerWidget;
-	class WWidget;
+    class WContainerWidget;
+
+    class WWidget;
 }
 
 namespace trihlav {
 
-class WtPushButton;
-class WtStrEdit;
+    class WtPushButton;
 
-class WtPswdChckView: virtual public PswdChckViewIface, virtual public WtViewIface {
-public:
-	WtPswdChckView();
+    class WtStrEdit;
 
-    virtual Wt::WWidget *getWWidget() override;
-	virtual void setupUi();
-	virtual ButtonIface& getBtnOk() override;
-	virtual StrEditIface& getEdtPswd0() override;
+    class WtPswdChckView : virtual public PswdChckViewIface, virtual public WtViewIface {
+    public:
+        WtPswdChckView();
 
-    virtual ~WtPswdChckView();
-private:
-	Wt::WContainerWidget* m_MainPanel;
-	WtPushButton* m_BtnOk;
-	WtStrEdit* m_EdtPswd;
-};
+        virtual Wt::WWidget *getWWidget() override;
+
+        virtual void setupUi();
+
+        virtual ButtonIface &getBtnOk() override;
+
+        virtual StrEditIface &getEdtPswd0() override;
+
+        virtual ~WtPswdChckView();
+
+    private:
+        Wt::WContainerWidget *m_MainPanel;
+        WtPushButton *m_BtnOk;
+        WtStrEdit *m_EdtPswd;
+    };
 
 } /* namespace trihlav */
 

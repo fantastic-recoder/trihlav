@@ -40,39 +40,44 @@ namespace trihlav {
 /**
  * Request the operating system credentials.
  */
-class LoginPresenter: public PresenterBase {
-public:
-    using SigUserAccepted = ::boost::signals2::signal<void(bool)>;
+    class LoginPresenter : public PresenterBase {
+    public:
+        using SigUserAccepted = ::boost::signals2::signal<void(bool)>;
 
-	LoginPresenter(FactoryIface& pFactory);
+        LoginPresenter(FactoryIface &pFactory);
 
-	virtual void show();
-	virtual LoginViewIface& getView();
-	virtual std::string& getLoggedInUser() {
-		return m_LoggedInUser;
-	}
+        virtual void show();
 
-	const OsIface& getOs() const {
-		return m_Os;
-	}
+        virtual LoginViewIface &getView();
 
-	MessageViewIface& getMessageView();
+        virtual std::string &getLoggedInUser() {
+            return m_LoggedInUser;
+        }
 
-	SigUserAccepted sigUserAccepted;
+        const OsIface &getOs() const {
+            return m_Os;
+        }
 
-	static const std::string K_TRIHLAV_OS_PASSWORD_CHECK;
+        MessageViewIface &getMessageView();
 
-private:
-	enum Status{SHOWING,HIDING} m_Status=HIDING;
+        SigUserAccepted sigUserAccepted;
 
-	void dialogClosed(bool);
-	void checkUser();
+        static const std::string K_TRIHLAV_OS_PASSWORD_CHECK;
 
-	LoginViewIfacePtr   m_LoginView;
-	std::string         m_LoggedInUser;
-	OsIface&            m_Os; ///< OS abstraction
-	MessageViewIfacePtr m_MessageView; ///< Can show a message to the user
-};
+    private:
+        enum Status {
+            SHOWING, HIDING
+        } m_Status = HIDING;
+
+        void dialogClosed(bool);
+
+        void checkUser();
+
+        LoginViewIfacePtr m_LoginView;
+        std::string m_LoggedInUser;
+        OsIface &m_Os; ///< OS abstraction
+        MessageViewIfacePtr m_MessageView; ///< Can show a message to the user
+    };
 
 } /* namespace trihlav */
 

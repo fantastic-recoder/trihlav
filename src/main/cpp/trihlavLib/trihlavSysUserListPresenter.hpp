@@ -16,34 +16,35 @@
 
 namespace trihlav {
 
-class SysUserListViewIface;
+    class SysUserListViewIface;
 
-class SysUserListPresenter: virtual public PresenterBase {
-public:
-	using UserSelectedSig = boost::signals2::signal<void()>;
+    class SysUserListPresenter : virtual public PresenterBase {
+    public:
+        using UserSelectedSig = boost::signals2::signal<void()>;
 
-	UserSelectedSig userSelectedSig;
+        UserSelectedSig userSelectedSig;
 
-	SysUserListPresenter(FactoryIface& pFactory);
+        SysUserListPresenter(FactoryIface &pFactory);
 
-	const std::string getSelectedSysUser() const;
+        const std::string getSelectedSysUser() const;
 
-	void show();
+        void show();
 
-	virtual ~SysUserListPresenter();
+        virtual ~SysUserListPresenter();
 
-	SysUserListViewIface& getView();
+        SysUserListViewIface &getView();
 
-	void selectedUser(int pIdx);
+        void selectedUser(int pIdx);
 
-	void accepted(bool);
-private:
-	using SysUsersIt=SysUsers::const_iterator;
+        void accepted(bool);
 
-	std::unique_ptr<SysUsers> m_SysUsers;
-	std::shared_ptr<SysUserListViewIface> m_View;
-	SysUsersIt m_CurrentUser;
-};
+    private:
+        using SysUsersIt=SysUsers::const_iterator;
+
+        std::unique_ptr<SysUsers> m_SysUsers;
+        std::shared_ptr<SysUserListViewIface> m_View;
+        SysUsersIt m_CurrentUser;
+    };
 
 } /* namespace trihlav */
 

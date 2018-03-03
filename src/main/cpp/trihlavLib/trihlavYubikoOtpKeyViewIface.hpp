@@ -33,45 +33,58 @@
 
 namespace trihlav {
 
-class SpinBoxIface;
-class StrEditIface;
-class ButtonIface;
+    class SpinBoxIface;
 
-class YubikoOtpKeyViewIface : virtual public DialogViewIface {
-public:
-    virtual const StrEditIface& getEdtPublicId() const = 0;
-	virtual StrEditIface& getEdtPublicId() = 0;
+    class StrEditIface;
 
-	virtual StrEditIface& getEdtDescription() = 0;
-	virtual const StrEditIface& getEdtDescription() const = 0;
+    class ButtonIface;
 
-	virtual SpinBoxIface& getSbxPublicIdLen() = 0;
-	virtual const SpinBoxIface& getSbxPublicIdLen() const = 0;
+    class YubikoOtpKeyViewIface : virtual public DialogViewIface {
+    public:
+        virtual const StrEditIface &getEdtPublicId() const = 0;
 
-	virtual const StrEditIface& getEdtPrivateId() const = 0;
-	virtual StrEditIface& getEdtPrivateId() = 0;
+        virtual StrEditIface &getEdtPublicId() = 0;
 
-	virtual const StrEditIface& getEdtSysUser() const = 0;
-	virtual StrEditIface& getEdtSysUser() = 0;
+        virtual StrEditIface &getEdtDescription() = 0;
 
-	virtual const StrEditIface& getEdtSecretKey() const = 0;
-	virtual StrEditIface& getEdtSecretKey() = 0;
+        virtual const StrEditIface &getEdtDescription() const = 0;
 
-	virtual const ButtonIface&  getBtnGenPublicId() const = 0;
-	virtual ButtonIface&  getBtnGenPublicId() = 0;
+        virtual SpinBoxIface &getSbxPublicIdLen() = 0;
 
-	virtual const ButtonIface&  getBtnGenPrivateId() const = 0;
-	virtual ButtonIface&  getBtnGenPrivateId() = 0;
+        virtual const SpinBoxIface &getSbxPublicIdLen() const = 0;
 
-	virtual const ButtonIface&  getBtnSelectSysUser() const = 0;
-	virtual ButtonIface&  getBtnSelectSysUser() = 0;
+        virtual const StrEditIface &getEdtPrivateId() const = 0;
 
-	virtual const ButtonIface&  getBtnGenSecretKey() const = 0;
-	virtual ButtonIface&  getBtnGenSecretKey() = 0;
+        virtual StrEditIface &getEdtPrivateId() = 0;
 
-	virtual ~YubikoOtpKeyViewIface();
-private:
-};
+        virtual const StrEditIface &getEdtSysUser() const = 0;
+
+        virtual StrEditIface &getEdtSysUser() = 0;
+
+        virtual const StrEditIface &getEdtSecretKey() const = 0;
+
+        virtual StrEditIface &getEdtSecretKey() = 0;
+
+        virtual const ButtonIface &getBtnGenPublicId() const = 0;
+
+        virtual ButtonIface &getBtnGenPublicId() = 0;
+
+        virtual const ButtonIface &getBtnGenPrivateId() const = 0;
+
+        virtual ButtonIface &getBtnGenPrivateId() = 0;
+
+        virtual const ButtonIface &getBtnSelectSysUser() const = 0;
+
+        virtual ButtonIface &getBtnSelectSysUser() = 0;
+
+        virtual const ButtonIface &getBtnGenSecretKey() const = 0;
+
+        virtual ButtonIface &getBtnGenSecretKey() = 0;
+
+        virtual ~YubikoOtpKeyViewIface();
+
+    private:
+    };
 
 } /* namespace trihlavApi */
 

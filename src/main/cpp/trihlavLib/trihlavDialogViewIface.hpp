@@ -35,39 +35,39 @@
 
 namespace trihlav {
 
-class ButtonIface;
+    class ButtonIface;
 
 /**
  * @brief Interface common to all UI dialogues with ok/cancel functionality.
  */
-class DialogViewIface: public virtual ViewIface {
+    class DialogViewIface : public virtual ViewIface {
 
-public:
+    public:
 
-    typedef ::boost::signals2::signal<void(const bool)> SigDialogFinished ;
+        typedef ::boost::signals2::signal<void(const bool)> SigDialogFinished;
 
-    SigDialogFinished sigDialogFinished;
+        SigDialogFinished sigDialogFinished;
 
-    /// @brief Cancel button constant interface.
-	virtual const ButtonIface&  getBtnCancel() const = 0;
+        /// @brief Cancel button constant interface.
+        virtual const ButtonIface &getBtnCancel() const = 0;
 
-	/// @brief Cancel button interface.
-	virtual ButtonIface&  getBtnCancel() = 0;
+        /// @brief Cancel button interface.
+        virtual ButtonIface &getBtnCancel() = 0;
 
-	/// @brief ok button constant interface.
-	virtual const ButtonIface&  getBtnOk() const = 0;
+        /// @brief ok button constant interface.
+        virtual const ButtonIface &getBtnOk() const = 0;
 
-	/// @brief ok button interface.
-	virtual ButtonIface&  getBtnOk() = 0;
+        /// @brief ok button interface.
+        virtual ButtonIface &getBtnOk() = 0;
 
-	/// @brief Shortcut to set ok button label
-	virtual void setOkLabel( const std::string& pNewLabel);
+        /// @brief Shortcut to set ok button label
+        virtual void setOkLabel(const std::string &pNewLabel);
 
-    /// @brief Show the dialog.
-    virtual void show() = 0;
+        /// @brief Show the dialog.
+        virtual void show() = 0;
 
-    virtual ~DialogViewIface();
-};
+        virtual ~DialogViewIface();
+    };
 
 } /* namespace trihlav */
 

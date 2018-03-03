@@ -49,75 +49,75 @@ using boost::locale::translate;
 
 namespace trihlav {
 
-const char* PswdChckPresenter::K_MSG_TITLE="Trihlav password check.";
-const char* PswdChckPresenter::K_PSWD_NOT_OK="Password is not valid.";
-const char* PswdChckPresenter::K_PSWD_OK="Password OK!";
+    const char *PswdChckPresenter::K_MSG_TITLE = "Trihlav password check.";
+    const char *PswdChckPresenter::K_PSWD_NOT_OK = "Password is not valid.";
+    const char *PswdChckPresenter::K_PSWD_OK = "Password OK!";
 
-PswdChckPresenter::PswdChckPresenter(FactoryIface& pFactory) :
-		PswdChckPresenterIface(pFactory), //< forced by virtual inheritance
-		PresenterBase(pFactory) //< has a factory
-{
-	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::PswdChckPresenter");
-}
+    PswdChckPresenter::PswdChckPresenter(FactoryIface &pFactory) :
+            PswdChckPresenterIface(pFactory), //< forced by virtual inheritance
+            PresenterBase(pFactory) //< has a factory
+    {
+        BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::PswdChckPresenter");
+    }
 
-PswdChckViewIface& PswdChckPresenter::getView() {
-	if (!m_View) {
-		BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::getView");
-		m_View = getFactory().createPswdChckView();
-		m_View->getBtnOk().pressedSig.connect([=]() {okPressed();});
-	}
-	return *m_View;
-}
+    PswdChckViewIface &PswdChckPresenter::getView() {
+        if (!m_View) {
+            BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::getView");
+            m_View = getFactory().createPswdChckView();
+            m_View->getBtnOk().pressedSig.connect([=]() { okPressed(); });
+        }
+        return *m_View;
+    }
 
-MessageViewIface& PswdChckPresenter::getMessageView() {
-	if (!m_MessageView) {
-		m_MessageView = getFactory().createMessageView();
-	}
-	return *m_MessageView;
-}
+    MessageViewIface &PswdChckPresenter::getMessageView() {
+        if (!m_MessageView) {
+            m_MessageView = getFactory().createMessageView();
+        }
+        return *m_MessageView;
+    }
 
-void PswdChckPresenter::okPressed() {
-	BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
-	string myPswd0(getView().getEdtPswd0().getValue());
-	getView().getEdtPswd0().setValue("");
-	const size_t myPswdSz(myPswd0.size());
-	if (myPswdSz < YUBIKEY_OTP_SIZE) {
-		getView().getEdtPswd0().setValue("");
-		getMessageView().showMessage( //
-				translate(K_MSG_TITLE), //
-				translate("Password is too short!"));
-		return;
-	}
-	// Find the key ...
-	if(myPswdSz==YUBIKEY_OTP_SIZE) {
-		getMessageView().showMessage( //
-				translate(K_MSG_TITLE), //
-				translate("Keys without public prefix are not yet supported!"));
-		return;
-	}
-	//myPswd0=YubikoOtpKeyConfig::modhex2Hex(myPswd0);
-	const size_t myPfxLen{myPswdSz-YUBIKEY_OTP_SIZE};
-	const string myPrefix=myPswd0.substr(0,myPfxLen);
-	const string myPswdSx=myPswd0.substr(myPfxLen);
-	BOOST_LOG_TRIVIAL(info)<< "Checking |" << myPrefix << ":" << myPswdSx << "|";
-	auto& myManager=getFactory().getKeyManager();
-	YubikoOtpKeyConfig* myKey = myManager.getKeyByPublicId(myPrefix);
-	if(myKey==0) {
-		getMessageView().showMessage(translate(K_MSG_TITLE),
-									 translate("Key not found."));
-	} else {
-		if (myKey->checkOtp(myPswdSx)) {
-			getMessageView().showMessage(translate(K_MSG_TITLE),
-										 translate(K_PSWD_OK));
-		} else {
-			getMessageView().showMessage(translate(K_MSG_TITLE),
-					translate(K_PSWD_NOT_OK));
-		}
-	}
-	getView().getEdtPswd0().setFocus(true);
-}
+    void PswdChckPresenter::okPressed() {
+        BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::okPressed");
+        string myPswd0(getView().getEdtPswd0().getValue());
+        getView().getEdtPswd0().setValue("");
+        const size_t myPswdSz(myPswd0.size());
+        if (myPswdSz < YUBIKEY_OTP_SIZE) {
+            getView().getEdtPswd0().setValue("");
+            getMessageView().showMessage( //
+                    translate(K_MSG_TITLE), //
+                    translate("Password is too short!"));
+            return;
+        }
+        // Find the key ...
+        if (myPswdSz == YUBIKEY_OTP_SIZE) {
+            getMessageView().showMessage( //
+                    translate(K_MSG_TITLE), //
+                    translate("Keys without public prefix are not yet supported!"));
+            return;
+        }
+        //myPswd0=YubikoOtpKeyConfig::modhex2Hex(myPswd0);
+        const size_t myPfxLen{myPswdSz - YUBIKEY_OTP_SIZE};
+        const string myPrefix = myPswd0.substr(0, myPfxLen);
+        const string myPswdSx = myPswd0.substr(myPfxLen);
+        BOOST_LOG_TRIVIAL(info) << "Checking |" << myPrefix << ":" << myPswdSx << "|";
+        auto &myManager = getFactory().getKeyManager();
+        YubikoOtpKeyConfig *myKey = myManager.getKeyByPublicId(myPrefix);
+        if (myKey == 0) {
+            getMessageView().showMessage(translate(K_MSG_TITLE),
+                                         translate("Key not found."));
+        } else {
+            if (myKey->checkOtp(myPswdSx)) {
+                getMessageView().showMessage(translate(K_MSG_TITLE),
+                                             translate(K_PSWD_OK));
+            } else {
+                getMessageView().showMessage(translate(K_MSG_TITLE),
+                                             translate(K_PSWD_NOT_OK));
+            }
+        }
+        getView().getEdtPswd0().setFocus(true);
+    }
 
-PswdChckPresenter::~PswdChckPresenter() {
-}
+    PswdChckPresenter::~PswdChckPresenter() {
+    }
 
 } /* namespace trihlav */

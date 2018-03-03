@@ -9,9 +9,9 @@
 
 namespace trihlav {
 
-WtPushButton::WtPushButton(const std::string& pText)
-: Wt::WPushButton(pText) {
-	this->clicked().connect(std::bind([=]{pressed();}));
-}
+    WtPushButton::WtPushButton(const std::string &pText)
+            : Wt::WPushButton(pText) {
+        this->clicked().connect(std::bind([=] { pressed(); }));
+    }
 
 } /* namespace trihlav */

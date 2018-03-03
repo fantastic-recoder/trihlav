@@ -33,10 +33,10 @@
 
 namespace trihlav {
 
-const std::string K_LOGIN{"login"};
-const std::string K_PSWD{"password"};
-const std::string K_USER_NM{"username"};
-const std::string K_AUTH_URL{"/auth"};
+    const std::string K_LOGIN{"login"};
+    const std::string K_PSWD{"password"};
+    const std::string K_USER_NM{"username"};
+    const std::string K_AUTH_URL{"/auth"};
 
 }
 
