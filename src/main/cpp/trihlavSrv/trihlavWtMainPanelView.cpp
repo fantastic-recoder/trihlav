@@ -117,7 +117,7 @@ namespace trihlav {
         // Create a m_Navigation bar with a link to a web page.
         setNavigation(new WNavigationBar());
         getNavigation()->setTitle(WString(translate("TRIHLAV OTP Server")),
-                                  "http://www.google.com/search?q=One+Time+Password");
+                                  "https://github.com/gogoba/trihlav");
         getNavigation()->setResponsive(true);
         m_MainContent = new WStackedWidget();
         setContentsStack(m_MainContent);

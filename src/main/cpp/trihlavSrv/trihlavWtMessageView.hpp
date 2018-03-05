@@ -36,8 +36,7 @@ namespace trihlav {
     public:
         virtual void showMessage(const std::string &pHeader, const std::string &pMsg) override;
 
-        virtual void
-        ask(const std::string &pHeader, const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) override;
+        virtual void ask(const std::string &pHeader, const std::string &pMsg, TCallback pCallback) override;
 
         WtMessageView();
 

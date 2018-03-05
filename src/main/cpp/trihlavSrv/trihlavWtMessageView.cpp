@@ -32,7 +32,7 @@ namespace trihlav {
     }
 
     void WtMessageView::ask(const std::string &pHeader,
-                            const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) {
+                            const std::string &pMsg, TCallback pCallback) {
         BOOST_LOG_NAMED_SCOPE("WtMessageView::ask");
         WMessageBox *myMsgBox = new Wt::WMessageBox( //
                 pHeader.c_str(),

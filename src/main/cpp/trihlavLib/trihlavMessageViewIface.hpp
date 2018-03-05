@@ -36,14 +36,15 @@
 namespace trihlav {
 
     /**
-     * A view, which can display messages and ask simple questions.
-     */
+         * A view, which can display messages and ask simple questions.
+         */
     class MessageViewIface {
     public:
+        using TCallback =  std::function<void(bool)>;
+
         virtual void showMessage(const std::string &pHeader, const std::string &pMsg) =0;
 
-        virtual void
-        ask(const std::string &pHeader, const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) =0;
+        virtual void ask(const std::string &pHeader, const std::string &pMsg, TCallback pCallback) =0;
 
         virtual ~MessageViewIface();
     };
