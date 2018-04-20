@@ -54,8 +54,9 @@ namespace trihlav {
     const char *PswdChckPresenter::K_PSWD_OK = "Password OK!";
 
     PswdChckPresenter::PswdChckPresenter(FactoryIface &pFactory) :
-            PswdChckPresenterIface(pFactory), //< forced by virtual inheritance
-            PresenterBase(pFactory) //< has a factory
+            PswdChckPresenterIface{pFactory}, //< forced by virtual inheritance
+            PresenterBase{pFactory}, //< has a factory
+            m_View{nullptr}
     {
         BOOST_LOG_NAMED_SCOPE("PswdChckPresenter::PswdChckPresenter");
     }

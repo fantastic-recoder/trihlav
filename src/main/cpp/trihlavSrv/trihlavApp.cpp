@@ -33,6 +33,7 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WBootstrapTheme.h>
+#include <Wt/WEnvironment.h>
 
 #include "trihlavLib/trihlavLogApi.hpp"
 
@@ -43,14 +44,17 @@
 
 using namespace Wt;
 using boost::locale::translate;
+using std::string;
 
 namespace trihlav {
+
+    static const char *const K_APP_NAME = "TRIHLAV OTP Server";
 
     App::App(const WEnvironment &pEnv) :
             WApplication(pEnv) //
     {
-        BOOST_LOG_TRIVIAL(info) << "App creating...";
-        setTitle("TRIHLAV");               // application title
+        BOOST_LOG_TRIVIAL(debug) << "App creating...";
+        setTitle(K_APP_NAME);               // application title
         auto bootstrapTheme = std::make_shared<WBootstrapTheme>();
         setTheme(bootstrapTheme);
         useStyleSheet("style/trihlav.css");
@@ -59,19 +63,27 @@ namespace trihlav {
         auto &myMainPanelView = dynamic_cast<WtMainPanelView &>(myIMainPanelView);
         root()->addWidget(std::unique_ptr<Wt::WWidget>(myMainPanelView.getRootWidget()));
         m_MainPanelCntrl->setupUi();
-        BOOST_LOG_TRIVIAL(info) << "App created.";
+        BOOST_LOG_TRIVIAL(debug) << "App created.";
     }
 
-    AppPtr App::createApplication(const WEnvironment &env) {
-        /*
-         * You could read information from the environment to decide whether
-         * the user has permission to start a new application
-         */
-        return std::unique_ptr<App>(new App(env));
+    AppPtr App::createApplication(const WEnvironment &pEnv) {
+        const string &myHost{pEnv.hostName()};
+        std::unique_ptr<App> myAppPtr{std::make_unique<App>(pEnv)};
+        BOOST_LOG_TRIVIAL(debug) << "Adding session from " << myHost << pEnv.internalPath() << ".";
+        const bool valid = myAppPtr->isAlloved(myHost);
+        if (!valid) {
+            myAppPtr->redirect("error.html");
+            BOOST_LOG_TRIVIAL(error) << "Host \"" << myHost << "\" is not aloved here.";
+            myAppPtr->quit();
+        }
+        return myAppPtr;
     }
 
     App::~App() {
         BOOST_LOG_NAMED_SCOPE("App::~App()");
     }
 
+    bool App::isAlloved(const std::string &pHostName) const {
+        return m_MainPanelCntrl->isAlloved(pHostName);
+    }
 } /* namespace trihlav */

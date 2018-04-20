@@ -73,10 +73,10 @@ namespace trihlav {
 
         void checkUser();
 
-        LoginViewIfacePtr m_LoginView;
+        LoginViewIfacePtr m_LoginView{nullptr};
         std::string m_LoggedInUser;
         OsIface &m_Os; ///< OS abstraction
-        MessageViewIfacePtr m_MessageView; ///< Can show a message to the user
+        MessageViewIfacePtr m_MessageView{nullptr}; ///< Can show a message to the user
     };
 
 } /* namespace trihlav */

@@ -124,6 +124,7 @@ TEST_F(TestLogin,validateUser) {
 	myLoginPresenter.getView().getBtnOk().pressed();
 	EXPECT_EQ(myLoginPresenter.getLoggedInUser(),"")
 		<< "Wrong password has not been recognised.";
+    delete &myMockView;
 }
 
 

@@ -193,3 +193,13 @@ ADD_SUBDIRECTORY(src/main/cpp/pam)
 ADD_SUBDIRECTORY(src/main/script)
 ADD_SUBDIRECTORY(src/main/resources)
 ADD_SUBDIRECTORY(src/test/cpp)
+
+ADD_CUSTOM_TARGET(test_${PROJECT_NAME}
+        $(MAKE) all test
+        DEPENDS trihlavTestApi trihlavTestKeyListPresenter
+        COMMENT "Test ${PROJECT_NAME}")
+
+ADD_CUSTOM_TARGET(install_${PROJECT_NAME}
+        $(MAKE) install
+        DEPENDS ${PROJECT_NAME}
+        COMMENT "Installing ${PROJECT_NAME}")

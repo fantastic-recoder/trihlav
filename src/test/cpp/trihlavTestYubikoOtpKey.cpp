@@ -65,7 +65,8 @@ TEST_F(TestYubikoOtpKey,factoryPointers) {
 	BOOST_LOG_NAMED_SCOPE("TestYubikoOtpKey_factoryPointers_Test::TestBody");
 	NiceMock<MockFactory> myMockFactory;
 	auto myView = myMockFactory.createKeyListView();
-	BOOST_LOG_TRIVIAL(debug)<< "YubikoOtpKeyViewPtr:" << myView.get();
+    BOOST_LOG_TRIVIAL(debug) << "YubikoOtpKeyViewPtr:" << myView;
+    delete myView;
 }
 
 TEST_F(TestYubikoOtpKey,keyManagerInit) {
@@ -99,6 +100,7 @@ TEST_F(TestYubikoOtpKey,keyManagerInit) {
 	EXPECT_TRUE(myPresenter.getView().getEdtPublicId().getValue().empty());
 	EXPECT_TRUE(remove_all(myKManPath));
 	BOOST_LOG_TRIVIAL(debug)<< "testKeyManager OK";
+    delete &myYubikoOtpKeyView;
 }
 
 TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
@@ -110,7 +112,7 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 			dynamic_cast<MockYubikoOtpKeyView&>(myPresenter.getView()));
 	BOOST_LOG_TRIVIAL(debug)<< "Expectations...";
 	EXPECT_CALL(myYubikoOtpKeyView, show());
-	BOOST_LOG_TRIVIAL(debug)<< "Expectations set.";
+    BOOST_LOG_TRIVIAL(debug) << "Expectations set.";
 	myPresenter.addKey();
 	myViewIface.getBtnGenPrivateId().pressedSig();
 	myViewIface.getBtnGenPublicId().pressedSig();
@@ -136,6 +138,7 @@ TEST_F(TestYubikoOtpKey,addKeyPressGenerateBtnsDeleteKey) {
 	EXPECT_TRUE(mySecretKey.compare(myCfg.getSecretKey()) == 0);
 	myPresenter.deleteKey();
 	EXPECT_FALSE(exists(myFilename));
+    delete &myYubikoOtpKeyView;
 }
 
 TEST_F(TestYubikoOtpKey,throwsExceptionOnWrongSysUser) {

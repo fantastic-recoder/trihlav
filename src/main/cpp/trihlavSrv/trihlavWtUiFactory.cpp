@@ -35,27 +35,27 @@ namespace trihlav {
     }
 
     KeyListViewIfacePtr WtUiFactory::createKeyListView() {
-        return KeyListViewIfacePtr(new WtKeyListView());
+        return KeyListViewIfacePtr{new WtKeyListView()};
     }
 
     PswdChckViewIfacePtr WtUiFactory::createPswdChckView() {
-        return PswdChckViewIfacePtr(new WtPswdChckView());
+        return PswdChckViewIfacePtr{new WtPswdChckView()};
     }
 
     YubikoOtpKeyViewIfacePtr WtUiFactory::createYubikoOtpKeyView() {
-        return YubikoOtpKeyViewIfacePtr(new WtYubikoOtpKeyView());
+        return YubikoOtpKeyViewIfacePtr{new WtYubikoOtpKeyView()};
     }
 
     MessageViewIfacePtr WtUiFactory::createMessageView() {
-        return MessageViewIfacePtr(new WtMessageView());
+        return MessageViewIfacePtr{new WtMessageView()};
     }
 
     SysUserListViewIfacePtr WtUiFactory::createSysUserListView() {
-        return SysUserListViewIfacePtr(new WtSysUserListView());
+        return SysUserListViewIfacePtr{new WtSysUserListView()};
     }
 
     LoginViewIfacePtr WtUiFactory::createLoginView() {
-        return LoginViewIfacePtr(new WtLoginView());
+        return LoginViewIfacePtr{new WtLoginView()};
     }
 
 } /* namespace trihlav */

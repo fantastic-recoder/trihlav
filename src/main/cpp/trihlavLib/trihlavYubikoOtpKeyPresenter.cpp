@@ -71,7 +71,7 @@ namespace trihlav {
     }
 
     YubikoOtpKeyPresenter::YubikoOtpKeyPresenter(FactoryIface &pFactory) :
-            PresenterBase(pFactory), m_CurCfg(0) {
+            PresenterBase(pFactory) {
         BOOST_LOG_NAMED_SCOPE("YubikoOptKeyPresenter::YubikoOptKeyPresenter");
     }
 
@@ -223,7 +223,7 @@ namespace trihlav {
     YubikoOtpKeyViewIface &YubikoOtpKeyPresenter::getView() {
         if (!m_View) {
             m_View = getFactory().createYubikoOtpKeyView();
-            BOOST_LOG_TRIVIAL(debug) << "Allocated view " << m_View.get();
+            BOOST_LOG_TRIVIAL(debug) << "Allocated view " << m_View;
             initUi();
         }
         return *m_View;

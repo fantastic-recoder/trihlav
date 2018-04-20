@@ -106,6 +106,7 @@ TEST_F(TestPswdChckPresenter,passwordMayNotBeEmpty) {
 			showMessage("Trihlav password check.","Password is too short!"));
 	myPresenter.getView().getEdtPswd0().setValue("");
 	myPresenter.getView().getBtnOk().pressedSig();
+    delete &myMockMessageView;
 }
 
 static const char* K_TST_DESC0 = "Test key 1";
@@ -207,6 +208,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
+    delete &myMockMessageView;
 }
 
 int main(int argc, char **argv) {

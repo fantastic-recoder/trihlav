@@ -76,7 +76,7 @@ namespace trihlav {
 
         bool checkSelection() const;
 
-        KeyListViewIfacePtr m_KeyListView;
+        KeyListViewIfacePtr m_KeyListView = 0;
         YubikoOtpKeyPresenter *m_YubikoOtpKeyPresenter;
         int m_SelectedKey = -1;
     };

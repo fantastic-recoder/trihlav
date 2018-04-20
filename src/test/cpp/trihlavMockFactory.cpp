@@ -97,12 +97,12 @@ MockFactory::MockFactory() {
 				return PswdChckViewIfacePtr(myRetVal);
 			}));
 	ON_CALL(*this, createLoginView()) //
-	.WillByDefault(Invoke([]()->std::unique_ptr<LoginViewIface> //
+            .WillByDefault(Invoke([]() -> LoginViewIfacePtr //
 			{
 				BOOST_LOG_NAMED_SCOPE("MockFactory::createLoginView");
 				auto myRetVal=new NiceMock< MockLoginView>;
 				BOOST_LOG_TRIVIAL(debug)<< "Created mock login view." << myRetVal;
-				return std::unique_ptr<LoginViewIface>(myRetVal);
+                return LoginViewIfacePtr(myRetVal);
 			}));
 	ON_CALL(*this, getOsIface()) //
 	.WillByDefault(Invoke([this]()->OsIface& //

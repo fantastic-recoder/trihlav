@@ -29,6 +29,7 @@
 #define TRIHLAV_TRIHLAV_APP_HPP_
 
 #include <memory>
+#include <map>
 #include <Wt/WApplication.h>
 
 namespace Wt {
@@ -51,6 +52,8 @@ namespace trihlav {
         App(const Wt::WEnvironment &pEnv);
 
         virtual ~App();
+
+        bool isAlloved(const std::string &pHostName) const;
 
         static std::unique_ptr<WApplication> createApplication(const Wt::WEnvironment &pEnv);
 

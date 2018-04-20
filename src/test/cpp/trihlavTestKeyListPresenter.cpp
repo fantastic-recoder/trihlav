@@ -156,6 +156,8 @@ TEST_F(TestKeyListPresenter,canAddYubikoKey) {
 	KeyListViewIface& myKeyListView = myKeyListPresenter.getView();
 	EXPECT_CALL(myMockYubikoOtpKeyView, show());
 	myKeyListView.getBtnAddKey().pressedSig();
+    delete &myMockYubikoOtpKeyView;
+    delete &myKeyListView;
 }
 
 static const char* K_TEST_USER = "test-user";
@@ -165,7 +167,7 @@ TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
 	BOOST_LOG_NAMED_SCOPE("TestKeyListPresenter::buttonsAreInCorrectState");
 	NiceMock<MockFactory> myMockFactory;
 	KeyListPresenter myKeyListPresenter(myMockFactory);
-	KeyListViewIface& myView { myKeyListPresenter.getView() };
+    KeyListViewIface &myKeyListView{myKeyListPresenter.getView()};
 	LoginPresenter& myLoginPresenter = myKeyListPresenter.getLoginPresenter();
 	LoginViewIface& myLoginViewIface = myLoginPresenter.getView();
 	OsIface& myOsIface = myMockFactory.getOsIface();
@@ -182,10 +184,12 @@ TEST_F(TestKeyListPresenter,buttonsAreInCorrectState) {
 		myMockLoginView.getBtnOk().pressed();
 	}));
 	myKeyListPresenter.protectedAction();
-	ASSERT_TRUE(myView.getBtnAddKey().isEnabled());
-	ASSERT_FALSE(myView.getBtnDelKey().isEnabled());
-	ASSERT_FALSE(myView.getBtnEditKey().isEnabled());
-	ASSERT_TRUE(myView.getBtnReload().isEnabled());
+    ASSERT_TRUE(myKeyListView.getBtnAddKey().isEnabled());
+    ASSERT_FALSE(myKeyListView.getBtnDelKey().isEnabled());
+    ASSERT_FALSE(myKeyListView.getBtnEditKey().isEnabled());
+    ASSERT_TRUE(myKeyListView.getBtnReload().isEnabled());
+    delete &myMockLoginView;
+    delete &myKeyListView;
 }
 
 static const char* K_TST_DESC0 = "Test key 1";
@@ -348,6 +352,7 @@ TEST_F(TestKeyListPresenter,selectingAKeyAllowsEditButton) {
 	EXPECT_EQ(3, myKeyMan.getKeyCount());
 	remove_all(myMockFactory.getSettings().getConfigDir());
 	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
+    delete &myKeyListView;
 }
 
 TEST_F(TestKeyListPresenter,canEditYubikoKey) {
@@ -370,6 +375,8 @@ TEST_F(TestKeyListPresenter,canEditYubikoKey) {
 	myKeyListView.getBtnEditKey().pressedSig();
 	remove_all(myMockFactory.getSettings().getConfigDir());
 	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
+    delete &myMockYubikoOtpKeyView;
+    delete &myKeyListView;
 }
 
 void ansverTrue(const std::string &pHeader, const std::string &pMsg, std::function<void(bool pAnswer)> pCallback) {
@@ -401,6 +408,9 @@ TEST_F(TestKeyListPresenter,canDeleteYubikoKey) {
 	EXPECT_EQ(2, myKeyMan.getKeyCount());
 	remove_all(myMockFactory.getSettings().getConfigDir());
 	EXPECT_FALSE(exists(myMockFactory.getSettings().getConfigDir()));
+    delete &myMockMessageView;
+    delete &myKeyListView;
+    delete &myMockYubikoOtpKeyView;
 }
 
 int main(int argc, char **argv) {

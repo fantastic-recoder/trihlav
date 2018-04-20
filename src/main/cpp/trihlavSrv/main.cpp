@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Wt/WApplication.h>
 #include <Wt/WServer.h>
+#include <Wt/WFileResource.h>
 
 #include <Wt/WContainerWidget.h>
 
@@ -27,6 +28,7 @@
 
 using namespace trihlav;
 using namespace Wt;
+using std::string;
 
 static const char *K_TRIHLAV_WT_HTTPD_CFG = "/etc/trihlav/wt_httpd.ini";
 
@@ -45,6 +47,10 @@ int main(int argc, char **argv, char **envp) {
         // create the auth REST resource
         WtAuthResource myAuthResource;
         myServer.addResource(&myAuthResource, K_AUTH_URL);
+        const string &myErrorPage =
+                myServer.appRoot() + "error.html";
+        BOOST_LOG_TRIVIAL(debug) << "Adding error page \"" + myErrorPage + "\".";
+        myServer.addResource(new WFileResource(myErrorPage), "/trihlav/error.html");
         if (myServer.start()) {
             int sig = WServer::waitForShutdown();
             BOOST_LOG_TRIVIAL(error) << "Shutdown (signal = " << sig << ")" << std::endl;

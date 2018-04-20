@@ -34,29 +34,26 @@
 namespace trihlav {
 
     class LoginViewIface;
-
     class MessageViewIface;
-
     class MainPanelViewIface;
-
     class KeyListPresenterIface;
-
     class KeyListViewIface;
-
     class PswdChckPresenterIface;
-
     class PswdChckViewIface;
-
     class YubikoOtpKeyViewIface;
 
-    using LoginViewIfacePtr = std::unique_ptr<LoginViewIface>;
-    using MessageViewIfacePtr = std::unique_ptr<MessageViewIface>;
-    using MainPanelViewIfacePtr = std::unique_ptr<MainPanelViewIface>;
+    class SysUserListPresenter;
+
+    using LoginViewIfacePtr = LoginViewIface *;
+    using MessageViewIfacePtr = MessageViewIface *;
+    using MainPanelViewIfacePtr = MainPanelViewIface *;
+    using KeyListViewIfacePtr = KeyListViewIface *;
+    using PswdChckViewIfacePtr = PswdChckViewIface *;
+    using YubikoOtpKeyViewIfacePtr = YubikoOtpKeyViewIface *;
+
     using KeyListPresenterIfacePtr = std::unique_ptr<KeyListPresenterIface>;
-    using KeyListViewIfacePtr = std::unique_ptr<KeyListViewIface>;
     using PswdChckPresenterIfacePtr = std::unique_ptr<PswdChckPresenterIface>;
-    using PswdChckViewIfacePtr = std::unique_ptr<PswdChckViewIface>;
-    using YubikoOtpKeyViewIfacePtr = std::unique_ptr<YubikoOtpKeyViewIface>;
+    using SysUserListPresenterPtr = std::unique_ptr<SysUserListPresenter>;
 
 }  // namespace trihlav
 

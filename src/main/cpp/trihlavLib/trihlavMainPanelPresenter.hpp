@@ -23,13 +23,20 @@ namespace trihlav {
 
     enum class PanelName;
 
-/**
- * Implementation of the top level UI presenter.
- */
+    /**
+     * Implementation of the top level UI presenter.
+     */
     class MainPanelPresenter : virtual public PresenterBase {
-        MainPanelViewIfacePtr m_MainPanelView;
+
+        using UserHostMap = std::map<std::string, std::string>;
+
+        MainPanelViewIfacePtr m_MainPanelView{nullptr};
         KeyListPresenterIfacePtr m_KeyListPresenter;
         PswdChckPresenterIfacePtr m_PswdChckPresenter;
+        bool m_isAthentificated;
+        /// Store authorised sessions
+        static UserHostMap theirUserHostMap;
+
     public:
         MainPanelPresenter(FactoryIface &pFactory);
 
@@ -40,6 +47,14 @@ namespace trihlav {
         virtual void setupUi();
 
         virtual void showedPanel(const PanelName pPanel);
+
+        /// @brief Is this host alloved?
+        bool isAlloved(const std::string &pHostName);
+
+        const bool isAuthenticated() const {
+            return m_isAthentificated;
+        }
+
     };
 
 } /* namespace trihlav */

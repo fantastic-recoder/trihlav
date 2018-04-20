@@ -126,8 +126,10 @@ namespace trihlav {
         signal_t saved;
     private:
         EMode m_Mode = None;
-        YubikoOtpKeyViewIfacePtr m_View;
-        YubikoOtpKeyConfig *m_CurCfg;
+        YubikoOtpKeyViewIfacePtr m_View{nullptr};
+        YubikoOtpKeyConfig *m_CurCfg{nullptr};
+        MessageViewIfacePtr m_MessageView{nullptr};
+        SysUserListPresenterPtr m_SysUserListPresenter;
 
         void accepted(bool pAccepted);
 
@@ -135,8 +137,6 @@ namespace trihlav {
 
         void initUi();
 
-        std::unique_ptr<MessageViewIface> m_MessageView;
-        std::unique_ptr<SysUserListPresenter> m_SysUserListPresenter;
     };
 
 } /* namespace trihlavApi */

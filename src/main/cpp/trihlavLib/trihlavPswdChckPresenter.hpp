@@ -46,8 +46,8 @@ namespace trihlav {
  * Main functionality, checks the one passwords.
  */
     class PswdChckPresenter : public PswdChckPresenterIface {
-        mutable PswdChckViewIfacePtr m_View;
-        mutable MessageViewIfacePtr m_MessageView;
+        mutable PswdChckViewIfacePtr m_View{nullptr};
+        mutable MessageViewIfacePtr m_MessageView{nullptr};
     public:
         PswdChckPresenter(FactoryIface &pFactory);
 
