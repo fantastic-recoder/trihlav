@@ -26,11 +26,18 @@
 #include "Android.h"
 #endif
 
-using namespace trihlav;
-using namespace Wt;
 using std::string;
 
-static const char *K_TRIHLAV_WT_HTTPD_CFG = "/etc/trihlav/wt_httpd.ini";
+using Wt::WServer;
+using Wt::EntryPointType;
+using Wt::WFileResource;
+using trihlav::App;
+using trihlav::WtAuthResource;
+using trihlav::K_APP_PATH;
+using trihlav::K_AUTH_URL;
+
+static const char *const K_TRIHLAV_WT_HTTPD_CFG //
+        = "/etc/trihlav/wt_httpd.ini";
 
 int main(int argc, char **argv, char **envp) {
     try {
@@ -43,14 +50,14 @@ int main(int argc, char **argv, char **envp) {
         myServer.setServerConfiguration(argc, argv, K_TRIHLAV_WT_HTTPD_CFG);
         // add a single entry point, at the default location (as determined
         // by the server configuration's deploy-path)
-        myServer.addEntryPoint(EntryPointType::Application, &App::createApplication, "/trihlav");
+        myServer.addEntryPoint(EntryPointType::Application, &App::createApplication, K_APP_PATH);
         // create the auth REST resource
         WtAuthResource myAuthResource;
         myServer.addResource(&myAuthResource, K_AUTH_URL);
         const string &myErrorPage =
-                myServer.appRoot() + "error.html";
+                myServer.appRoot() + trihlav::K_ERROR_PAGE;
         BOOST_LOG_TRIVIAL(debug) << "Adding error page \"" + myErrorPage + "\".";
-        myServer.addResource(new WFileResource(myErrorPage), "/trihlav/error.html");
+        myServer.addResource(new WFileResource("text/html", myErrorPage), "/" + trihlav::K_ERROR_PAGE);
         if (myServer.start()) {
             int sig = WServer::waitForShutdown();
             BOOST_LOG_TRIVIAL(error) << "Shutdown (signal = " << sig << ")" << std::endl;

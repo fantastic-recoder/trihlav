@@ -30,6 +30,7 @@
 
 #include <memory>
 #include <map>
+#include <string>
 #include <Wt/WApplication.h>
 
 namespace Wt {
@@ -46,6 +47,8 @@ namespace trihlav {
 
     using AppPtr = std::unique_ptr<Wt::WApplication>;
 
+    extern const std::string K_APP_PATH;
+
     class App : public Wt::WApplication {
     public:
 
@@ -60,6 +63,8 @@ namespace trihlav {
     private:
         std::unique_ptr<MainPanelPresenter> m_MainPanelCntrl;
     };
+
+    extern const std::string K_ERROR_PAGE;
 
 } /* namespace trihlav */
 

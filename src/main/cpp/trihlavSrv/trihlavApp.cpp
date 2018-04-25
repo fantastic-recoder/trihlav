@@ -35,6 +35,7 @@
 #include <Wt/WBootstrapTheme.h>
 #include <Wt/WEnvironment.h>
 
+#include "trihlavLib/trihlavGlobals.hpp"
 #include "trihlavLib/trihlavLogApi.hpp"
 
 #include "trihlavWtMainPanelView.hpp"
@@ -46,9 +47,14 @@ using namespace Wt;
 using boost::locale::translate;
 using std::string;
 
+extern const string K_ERROR_PAGE;
+
 namespace trihlav {
 
     static const char *const K_APP_NAME = "TRIHLAV OTP Server";
+    const string K_APP_PATH = "/trihlav";
+    const string K_ERROR_PAGE // TODO: make this configurable
+            = "error.html";
 
     App::App(const WEnvironment &pEnv) :
             WApplication(pEnv) //
@@ -72,7 +78,7 @@ namespace trihlav {
         BOOST_LOG_TRIVIAL(debug) << "Adding session from " << myHost << pEnv.internalPath() << ".";
         const bool valid = myAppPtr->isAlloved(myHost);
         if (!valid) {
-            myAppPtr->redirect("error.html");
+            myAppPtr->redirect("/" + K_ERROR_PAGE);
             BOOST_LOG_TRIVIAL(error) << "Host \"" << myHost << "\" is not aloved here.";
             myAppPtr->quit();
         }
