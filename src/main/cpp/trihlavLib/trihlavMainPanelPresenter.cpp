@@ -26,6 +26,8 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#include <list>
+#include <string>
 #include <boost/locale.hpp>
 
 #include "trihlavLib/trihlavLogApi.hpp"
@@ -38,6 +40,8 @@
 #include "trihlavPswdChckPresenterIface.hpp"
 
 using boost::locale::translate;
+using std::list;
+using std::string;
 
 namespace trihlav {
 
@@ -84,6 +88,13 @@ namespace trihlav {
      * @return true if the host match the mask.
      */
     bool MainPanelPresenter::isAlloved(const std::string &pHostName) {
+        list<string> myAllowedHosts{"localhost", "127.0.0.1"};
+        for (const string &myAllowedHost : myAllowedHosts) {
+            if (pHostName.find(myAllowedHost) == 0) {
+                BOOST_LOG_TRIVIAL(debug) << "found " << myAllowedHost << ".";
+                return true;
+            }
+        }
         return false;
     }
 

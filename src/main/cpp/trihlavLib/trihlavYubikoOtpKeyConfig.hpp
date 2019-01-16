@@ -252,6 +252,11 @@ namespace trihlav {
 
         const std::string checkFileName(bool pIsOut) const;
 
+        /**
+         * Generate an OTP token, it does not increase OTP counter or use counter.
+         * @return the token
+         */
+        const std::string generateOtp() const;
     protected:
         void setFilename(const std::string &value);
 

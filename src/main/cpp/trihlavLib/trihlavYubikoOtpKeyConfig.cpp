@@ -458,4 +458,15 @@ namespace trihlav {
         m_SysUser = pSysUser;
     }
 
+    const std::string YubikoOtpKeyConfig::generateOtp() const {
+        string myOtp0{YUBIKEY_OTP_SIZE + 1, '\0'};
+        yubikey_token_st myToken;
+        memcpy(&myToken, &getToken(), sizeof(myToken));
+
+        yubikey_generate(&myToken, m_Key.data(), &myOtp0[0]);
+        BOOST_LOG_TRIVIAL(debug) << "Generated yubikey OTP (0) " << myOtp0;
+
+        return myOtp0;
+    }
+
 } // end namespace trihlav

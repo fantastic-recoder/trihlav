@@ -195,7 +195,7 @@ TEST_F(TestPswdChckPresenter,checkPassword) {
 	yubikey_generate(&myTkn1, myCfg0.getSecretKeyArray().data(), &myOtp0[0]);
 	myOtp0.resize(YUBIKEY_OTP_SIZE);
 	myPresenter.getView().getEdtPswd0().setValue(myCfg0.getPublicId() + myOtp0);
-	myPresenter.gertView().getBtnOk().pressedSig();
+    myPresenter.getView().getBtnOk().pressedSig();
 	BOOST_LOG_TRIVIAL(debug)<< "And again after re-initialization.";
 	myTkn2.use++;
 	myTkn2.tstpl++;
