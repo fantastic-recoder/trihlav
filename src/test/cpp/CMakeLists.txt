@@ -1,15 +1,18 @@
 # Basic test
 
-include_directories(
-        ../../main/cpp
-        ${GTEST_INCLUDE_DIRS}
-        ${GMOCK_INCLUDE_DIRS}
+set(TRIHLAV_TEST_INCLUDES ../../main/cpp 
+	"googletest/googletest/include"
+    "googletest/googlemock/include"
 )
+
+include_directories( ${TRIHLAV_TEST_INCLUDES} )
+
+message(STATUS "Test include directories:${TRIHLAV_TEST_INCLUDES}.")
 
 set(COMMON_INCLUDES trihlavMockButton.hpp trihlavMockSpinBox.hpp trihlavMockEditIface.hpp
         trihlavMockStrEdit.hpp trihlavMockMessageView.hpp)
 
-set(TRIHLAV_TEST_LIBS gtest_main gmock_main)
+set(TRIHLAV_TEST_LIBS gtest gmock)
 
 add_executable(trihlavTestApi trihlavTestApi.cpp ${COMMON_INCLUDES})
 
@@ -19,7 +22,7 @@ target_link_libraries(trihlavTestApi
         ${YUBIKEY_LIB}
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
         ${OPENSSL_LIBRARIES}
@@ -35,7 +38,7 @@ add_test(NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey)
 target_link_libraries(trihlavTestYubikoOtpKey
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${YUBIKEY_LIB}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
@@ -52,7 +55,7 @@ add_test(NAME trihlavTestKeyListPresenter COMMAND trihlavTestKeyListPresenter)
 target_link_libraries(trihlavTestKeyListPresenter
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${YUBIKEY_LIB}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
@@ -69,7 +72,7 @@ add_test(NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter)
 target_link_libraries(trihlavTestPswdChckPresenter
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${YUBIKEY_LIB}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
@@ -83,7 +86,7 @@ add_test(NAME trihlavTestOsIface COMMAND trihlavTestOsIface)
 target_link_libraries(trihlavTestOsIface
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${YUBIKEY_LIB}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
@@ -116,7 +119,7 @@ add_executable(trihlavTestLoginPresenter trihlavTestLoginPresenter.cpp
 target_link_libraries(trihlavTestLoginPresenter
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${YUBIKEY_LIB}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}
@@ -134,7 +137,7 @@ add_test(NAME trihlavTestTupleList COMMAND trihlavTestTupleList)
 target_link_libraries(trihlavTestTupleList
         trihlavApi
         ${CMAKE_THREAD_LIBS_INIT}
-        $(TRIHLAV_TEST_LIBSk)
+        ${TRIHLAV_TEST_LIBS}
         ${YUBIKEY_LIB}
         ${Boost_LIBRARIES}
         ${PAM_LIBRARIES}

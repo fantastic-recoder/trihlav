@@ -82,46 +82,22 @@ SET(CMAKE_CXX_FLAGS "-DBOOST_ASIO_ENABLE_HANDLER_TRACKING=1 ${CMAKE_CXX_FLAGS}")
 #
 # Global Unit Testing
 #
-ENABLE_TESTING()
 
-# Enable ExternalProject CMake module
-include(ExternalProject)
+add_subdirectory("${PROJECT_SOURCE_DIR}/src/test/cpp/googletest" "src/test/cpp/googletest")
 
-# Download and install GoogleTest
-ExternalProject_Add(
-        gtest
-        URL https://github.com/google/googletest/archive/master.zip
-        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
-        # Disable install step
-        INSTALL_COMMAND ""
+mark_as_advanced(
+        BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
+        gmock_build_tests gtest_build_samples gtest_build_tests
+        gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
 )
 
-# Get GTest source and binary directories from CMake project
-ExternalProject_Get_Property(gtest source_dir binary_dir)
+set_target_properties(gtest PROPERTIES FOLDER src/test/cpp)
+set_target_properties(gtest_main PROPERTIES FOLDER src/test/cpp)
+set_target_properties(gmock PROPERTIES FOLDER src/test/cpp)
+set_target_properties(gmock_main PROPERTIES FOLDER src/test/cpp)
 
-# Create a libgtest target to be used as a dependency by test programs
-add_library(libgtest IMPORTED STATIC GLOBAL)
-add_dependencies(libgtest gtest)
+ENABLE_TESTING()
 
-# Set libgtest properties
-set_target_properties(libgtest PROPERTIES
-        "IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/libgtest.a"
-        "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-        )
-
-# Create a libgmock target to be used as a dependency by test programs
-add_library(libgmock IMPORTED STATIC GLOBAL)
-add_dependencies(libgmock gtest)
-
-# Set libgmock properties
-set_target_properties(libgmock PROPERTIES
-        "IMPORTED_LOCATION" "${binary_dir}/googlemock/libgmock.a"
-        "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-        )
-
-# I couldn't make it work with INTERFACE_INCLUDE_DIRECTORIES
-include_directories("${source_dir}/googletest/include"
-        "${source_dir}/googlemock/include")
 ###############################################################################
 
 ###############################################################################

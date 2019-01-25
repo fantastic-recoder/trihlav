@@ -90,13 +90,13 @@ namespace trihlav {
             const int myColumn = pIndex.column();
             if (pRole == Wt::ItemDataRole::Display) {
                 if (myColumn > sizeof ... (Columns_t)) {
-                    return Wt::cpp17::any::any();
+                    return Wt::cpp17::any();
                 } else {
                     return boost::apply_visitor(Rec2StrVisitor(),
                                                 TupleList_t::get(pIndex.row(), myColumn));
                 }
             }
-            return Wt::cpp17::any::any();
+            return Wt::cpp17::any();
         }
 
         int getIdOfRow(size_t pRow) {

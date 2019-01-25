@@ -7,3 +7,7 @@
 [submodule "src/main/docker/docker-containers-build"]
 	path = src/main/docker/docker-containers-build
 	url = https://github.com/openSUSE/docker-containers-build.git
+[submodule "src/test/cpp/googletest"]
+	path = src/test/cpp/googletest
+	url = https://github.com/google/googletest.git
+	branch = master
