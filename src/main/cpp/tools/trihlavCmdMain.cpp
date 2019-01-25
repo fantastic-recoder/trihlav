@@ -36,10 +36,10 @@
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 
 namespace {
-    static const char *const K_OPT_HELP = "help";
-    static const char *const K_OPT_LIST = "list";
-    static const char *const K_OPT_GEN = "generate";
-    static const char *const K_OPT_KEY = "key";
+    const char *const K_OPT_HELP = "help";
+    const char *const K_OPT_LIST = "list";
+    const char *const K_OPT_GEN = "generate";
+    const char *const K_OPT_KEY = "key";
 }
 
 using std::cout;
@@ -94,12 +94,12 @@ int main(int pArgC, char *pArgV[]) {
             cerr << K_OPT_GEN << " needs a key id (name)!" << endl;
             return 2;
         }
-        const YubikoOtpKeyConfig *pCfg = theKeyManager.getKeyByPublicId(theKeyId);
+        YubikoOtpKeyConfig *pCfg = theKeyManager.getKeyByPublicId(theKeyId);
         if (!pCfg) {
             cerr << "Invalid key id \"" << theKeyId << "\"!" << endl;
             return 3;
         }
-        cout << "Generating OTP for \"" << theKeyId << "\"" << endl;
+        cout << "Generating OTP for \"" << theKeyId << "\"." << endl;
         cout << pCfg->generateOtp();
     }
     return 0;

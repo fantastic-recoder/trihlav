@@ -46,7 +46,6 @@
 #include "trihlavLib/trihlavKeyManager.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
-#include "trihlavLib/trihlavPswdChckPresenter.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
 #include "trihlavLib/trihlavSysUserListViewIface.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
@@ -55,12 +54,10 @@
 #include "trihlavLib/trihlavKeyListViewIface.hpp"
 #include "trihlavLib/trihlavMainPanelViewIface.hpp"
 
-#include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
-#include "trihlavMockSpinBox.hpp"
 #include "trihlavMockFactory.hpp"
-#include "trihlavMockEditIface.hpp"
 #include "trihlavMockMessageView.hpp"
+#include "trihlavTestCommonUtils.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -109,12 +106,6 @@ TEST_F(TestPswdChckPresenter,passwordMayNotBeEmpty) {
     delete &myMockMessageView;
 }
 
-static const char* K_TST_DESC0 = "Test key 1";
-static const char* K_TST_PRIV0 = "aabbaabbaabb";
-static const char* K_TST_PUBL0 = "ccddccddccdd";
-static const char* K_TST_SECU0 = "ddeeddeeddeeddeeddeeddeeddeeddee";
-static const int K_TST_CNTR0 = 1;
-static const int K_TST_RNDM0 = 11;
 
 TEST_F(TestPswdChckPresenter,computeCrc) {
 	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::TestBody");
@@ -140,27 +131,17 @@ TEST_F(TestPswdChckPresenter,computeCrc) {
 	EXPECT_EQ(myCrc,myCfg0.getCrc()) << "Wrong CRC computation.";
 }
 
-TEST_F(TestPswdChckPresenter,checkPassword) {
+
+TEST_F(TestPswdChckPresenter, checkPassword) {
 	BOOST_LOG_NAMED_SCOPE("TestPswdChckPresenter::checkPassword");
 	path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
 	EXPECT_FALSE(exists(myTestCfgFile));
 	EXPECT_TRUE(create_directory(myTestCfgFile));
 	BOOST_LOG_TRIVIAL(debug)<< "Test data location: " << myTestCfgFile <<".";
-	int myTimer=333;
 	NiceMock<MockFactory> myMockFactory;
 	myMockFactory.getSettings().setConfigDir(myTestCfgFile);
 	KeyManager& myKeyMan(myMockFactory.getKeyManager());
-	YubikoOtpKeyConfig myCfg0(myKeyMan);
-	myCfg0.setDescription(K_TST_DESC0);
-	myCfg0.setPrivateId(K_TST_PRIV0);
-	myCfg0.setPublicId(K_TST_PUBL0);
-	myCfg0.setCounter(K_TST_CNTR0);
-	myCfg0.setRandom(K_TST_RNDM0);
-	myCfg0.setSecretKey(K_TST_SECU0);
-	myCfg0.setTimestamp(myTimer);
-	myCfg0.save();
-	myCfg0.computeCrc();
-	logDebug_token(myCfg0.getToken());
+	YubikoOtpKeyConfig myCfg0{createYubikoOtpKeyConfig(myKeyMan)};
 	string myOtp0(YUBIKEY_OTP_SIZE + 1, '\0');
 	yubikey_token_st myTkn { myCfg0.getToken() };
 	myTkn.use++;

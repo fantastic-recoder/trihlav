@@ -31,7 +31,7 @@ target_link_libraries(trihlavTestApi
 add_executable(trihlavTestYubikoOtpKey trihlavTestYubikoOtpKey.cpp
         trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
         trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
-        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES})
+        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES} trihlavTestCommonUtils.cpp trihlavTestCommonUtils.hpp)
 
 add_test(NAME trihlavTestYubikoOtpKey COMMAND trihlavTestYubikoOtpKey)
 
@@ -65,7 +65,7 @@ target_link_libraries(trihlavTestKeyListPresenter
 add_executable(trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp
         trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
         trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
-        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES})
+        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES} trihlavTestCommonUtils.cpp trihlavTestCommonUtils.hpp)
 
 add_test(NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter)
 

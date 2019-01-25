@@ -13,7 +13,6 @@
 #include "trihlavLib/trihlavSpinBoxIface.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyViewIface.hpp"
 #include "trihlavLib/trihlavOsIface.hpp"
-#include "trihlavLib/trihlavSysUserListViewIface.hpp"
 #include "trihlavLib/trihlavLoginViewIface.hpp"
 
 #include "gtest/gtest.h"
@@ -21,23 +20,19 @@
 
 #include "trihlavLib/trihlavLog.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyPresenter.hpp"
-#include "trihlavLib/trihlavUTimestamp.hpp"
 #include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavKeyManager.hpp"
-#include "trihlavLib/trihlavYubikoOtpKeyConfig.hpp"
 #include "trihlavLib/trihlavSettings.hpp"
-#include "trihlavLib/trihlavMessageViewIface.hpp"
 #include "trihlavLib/trihlavMainPanelViewIface.hpp"
 #include "trihlavLib/trihlavKeyListPresenterIface.hpp"
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 
-#include "trihlavMockButton.hpp"
 #include "trihlavMockEditIface.hpp"
 #include "trihlavMockStrEdit.hpp"
-#include "trihlavMockSpinBox.hpp"
 #include "trihlavMockYubikoOtpKeyView.hpp"
 #include "trihlavMockFactory.hpp"
 #include "trihlavMockKeyListView.hpp"
+#include "trihlavTestCommonUtils.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -161,9 +156,36 @@ TEST_F(TestYubikoOtpKey,throwsExceptionOnWrongSysUser) {
 	}
 }
 
+TEST_F(TestYubikoOtpKey, checkPassword) {
+    BOOST_LOG_NAMED_SCOPE("trihlavYubikoOtpKey::checkPassword");
+    path myTestCfgFile(unique_path("/tmp/trihlav-tests-%%%%-%%%%"));
+    EXPECT_FALSE(exists(myTestCfgFile));
+    EXPECT_TRUE(create_directory(myTestCfgFile));
+    BOOST_LOG_TRIVIAL(debug) << "Test data location: " << myTestCfgFile << ".";
+    NiceMock<MockFactory> myMockFactory;
+    myMockFactory.getSettings().setConfigDir(myTestCfgFile);
+    KeyManager &myKeyMan(myMockFactory.getKeyManager());
+    YubikoOtpKeyConfig myCfg0{createYubikoOtpKeyConfig(myKeyMan)};
+    string myOtp0{myCfg0.generateOtp()};
+    BOOST_LOG_TRIVIAL(debug) << "Got following OTP:" << myOtp0 << ".";
+    EXPECT_TRUE(myCfg0.checkOtp(myOtp0));
+
+    myOtp0 = myCfg0.generateOtp();
+    BOOST_LOG_TRIVIAL(debug) << "Got following OTP:" << myOtp0 << ".";
+    EXPECT_TRUE(myCfg0.checkOtp(myOtp0));
+
+    myOtp0 = myCfg0.generateOtp();
+    BOOST_LOG_TRIVIAL(debug) << "Got following OTP:" << myOtp0 << ".";
+    EXPECT_TRUE(myCfg0.checkOtp(myOtp0));
+
+    remove_all(myTestCfgFile);
+    EXPECT_FALSE(exists(myTestCfgFile));
+    //EXPECT_TRUE(false);
+}
+
 const int K_TST_STR_L = 8;
 
-TEST(trihlavYubikoOtpKey,generateHex) {
+TEST_F(TestYubikoOtpKey, generateHex) {
 	BOOST_LOG_NAMED_SCOPE("generateHex");
 	string myTestVal("XXXXXXXXXXXXXXX");
 	YubikoOtpKeyPresenter::generate(0, myTestVal);
@@ -172,3 +194,4 @@ TEST(trihlavYubikoOtpKey,generateHex) {
 	BOOST_LOG_TRIVIAL(debug)<< "Generated:"<<myTestVal<<".";
 	EXPECT_EQ(myTestVal.size(), K_TST_STR_L * 2);
 }
+
