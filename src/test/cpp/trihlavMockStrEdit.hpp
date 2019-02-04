@@ -30,13 +30,23 @@
 
 #include <string>
 
+#include <gmock/gmock.h>
+
 #include "trihlavMockEditIface.hpp"
 
 namespace trihlav {
 
 struct MockStrEdit: virtual public MockEditIface<std::string>,
 		virtual public StrEditIface {
-	MockStrEdit():MockEditIface<std::string>("nope!"){}
+    bool m_isPasswordMode = false;
+
+    MockStrEdit();
+
+    virtual ~MockStrEdit();
+
+    MOCK_CONST_METHOD0(isPasswordMode, bool());
+    MOCK_METHOD1(setPasswordMode, void(bool));
+
 };
 
 }  // namespace trihlav

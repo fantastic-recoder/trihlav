@@ -57,6 +57,16 @@ namespace trihlav {
          */
         virtual void setFocus(bool) = 0;
 
+        /**
+         * @return true if the password mode is on.
+         */
+        virtual bool isPasswordMode() const = 0;
+
+        /**
+         * @param pPasswordMode when passed true it switches the password mode on.
+         */
+        virtual void setPasswordMode(bool pPasswordMode) = 0;
+
         /// Just ensure virtual destructor.
         virtual ~EditIface() {}
     };

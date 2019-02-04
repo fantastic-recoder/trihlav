@@ -112,6 +112,7 @@ TEST_F(TestLogin,validateUser) {
 	auto& myMockView=dynamic_cast<MockLoginView&>(myView);
 	EXPECT_CALL(myMockView,getBtnOk()).Times(2);
 	EXPECT_CALL(myMockView,show()).Times(2);
+    EXPECT_CALL(myMockView.m_EdtPassword, setPasswordMode(true)).Times(2);
 	myLoginPresenter.show();
 	myView.getEdtUserName().setValue(::K_TST_USR1);
 	myLoginPresenter.getView().getEdtPassword().setValue(::K_TST_PSWD1);

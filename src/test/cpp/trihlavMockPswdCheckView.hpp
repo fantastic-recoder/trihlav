@@ -28,16 +28,16 @@
 #ifndef TRIHLAV_MOCK_PSWD_CHECK_VIEW_HPP_
 #define TRIHLAV_MOCK_PSWD_CHECK_VIEW_HPP_
 
+#include <gmock/gmock.h>
 #include "trihlavLib/trihlavPswdChckViewIface.hpp"
 #include "trihlavMockButton.hpp"
 #include "trihlavMockStrEdit.hpp"
 
 namespace trihlav {
 
-class MockPswdCheckView: public PswdChckViewIface {
+    struct MockPswdCheckView : public PswdChckViewIface {
 	MockButton m_BtnOk;
 	MockStrEdit m_EdtPswd0;
-public:
 	virtual ButtonIface& getBtnOk() override {
 		return m_BtnOk;
 	}

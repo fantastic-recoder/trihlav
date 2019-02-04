@@ -35,17 +35,18 @@
 
 namespace trihlav {
 
-class  MockButton: virtual public ButtonIface {
-public:
-	MockButton():ButtonIface() {}
+    class MockButton : virtual public ButtonIface {
+    public:
+        MockButton() : ButtonIface() {}
 
-	std::string m_Val;
-	virtual const std::string getText() const {
-		return m_Val;
-	}
+        std::string m_Val;
 
-	virtual void setText(const std::string& pVal) {
-            if(isEnabled()) {
+        virtual const std::string getText() const {
+            return m_Val;
+        }
+
+        virtual void setText(const std::string &pVal) {
+            if (isEnabled()) {
                 m_Val = pVal;
             }
         }
@@ -55,11 +56,12 @@ public:
         }
 
         virtual void setEnabled(bool pEnabled) override {
-            m_Enabled=pEnabled;
+            m_Enabled = pEnabled;
         }
-private:
-        bool m_Enabled=true;
-};
+
+    private:
+        bool m_Enabled = true;
+    };
 
 
 }  // namespace trihlav

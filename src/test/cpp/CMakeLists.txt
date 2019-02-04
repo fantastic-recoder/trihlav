@@ -10,7 +10,7 @@ include_directories( ${TRIHLAV_TEST_INCLUDES} )
 message(STATUS "Test include directories:${TRIHLAV_TEST_INCLUDES}.")
 
 set(COMMON_INCLUDES trihlavMockButton.hpp trihlavMockSpinBox.hpp trihlavMockEditIface.hpp
-        trihlavMockStrEdit.hpp trihlavMockMessageView.hpp)
+		trihlavMockStrEdit.hpp trihlavMockStrEdit.cpp trihlavMockMessageView.hpp)
 
 set(TRIHLAV_TEST_LIBS gtest gmock)
 
@@ -65,7 +65,7 @@ target_link_libraries(trihlavTestKeyListPresenter
 add_executable(trihlavTestPswdChckPresenter trihlavTestPswdChckPresenter.cpp
         trihlavMockFactory.cpp trihlavMockKeyListView.cpp trihlavMockOs.cpp
         trihlavMockYubikoOtpKeyView.cpp trihlavMockPswdCheckView.cpp
-        trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES} trihlavTestCommonUtils.cpp trihlavTestCommonUtils.hpp)
+		trihlavMockDialogView.cpp trihlavMockLoginView.cpp trihlavMockLabel.cpp ${COMMON_INCLUDES} trihlavTestCommonUtils.cpp trihlavTestCommonUtils.hpp trihlavMockStrEdit.cpp)
 
 add_test(NAME trihlavTestPswdChckPresenter COMMAND trihlavTestPswdChckPresenter)
 

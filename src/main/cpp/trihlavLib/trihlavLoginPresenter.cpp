@@ -61,6 +61,7 @@ namespace trihlav {
             getView().show();
             BOOST_LOG_TRIVIAL(debug) << "Showing login dialog ...";
         }
+        getView().getEdtPassword().setPasswordMode(true);
     }
 
     LoginViewIface &LoginPresenter::getView() {

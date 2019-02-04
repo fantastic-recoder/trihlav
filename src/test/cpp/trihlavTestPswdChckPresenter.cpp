@@ -58,6 +58,7 @@
 #include "trihlavMockFactory.hpp"
 #include "trihlavMockMessageView.hpp"
 #include "trihlavTestCommonUtils.hpp"
+#include "trihlavMockPswdCheckView.hpp"
 
 using namespace std;
 using namespace trihlav;
@@ -66,6 +67,7 @@ using namespace boost::filesystem;
 
 using ::testing::Return;
 using ::testing::NiceMock;
+using ::testing::_;
 
 class TestPswdChckPresenter: public ::testing::Test {
 public:
@@ -101,9 +103,13 @@ TEST_F(TestPswdChckPresenter,passwordMayNotBeEmpty) {
 			dynamic_cast<MockMessageView&>(myPresenter.getMessageView());
 	EXPECT_CALL(myMockMessageView,
 			showMessage("Trihlav password check.","Password is too short!"));
+    MockPswdCheckView &myMockPswdCheckView =
+            dynamic_cast<MockPswdCheckView &>(myPresenter.getView());
+    EXPECT_CALL(myMockPswdCheckView.m_EdtPswd0, isPasswordMode()).Times(0);
 	myPresenter.getView().getEdtPswd0().setValue("");
 	myPresenter.getView().getBtnOk().pressedSig();
     delete &myMockMessageView;
+    delete &myMockPswdCheckView;
 }
 
 
@@ -156,7 +162,9 @@ TEST_F(TestPswdChckPresenter, checkPassword) {
 	PswdChckPresenter myPresenter { myMockFactory };
 	MockMessageView& myMockMessageView =
 			dynamic_cast<MockMessageView&>(myPresenter.getMessageView());
-	EXPECT_CALL(myMockMessageView,
+    MockPswdCheckView &myMockPswdCheckView =
+            dynamic_cast<MockPswdCheckView &>(myPresenter.getView());
+    EXPECT_CALL(myMockMessageView,
 			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_NOT_OK));
 	EXPECT_CALL(myMockMessageView,
 			showMessage(PswdChckPresenter::K_MSG_TITLE, PswdChckPresenter::K_PSWD_OK)).Times(3);
@@ -190,6 +198,7 @@ TEST_F(TestPswdChckPresenter, checkPassword) {
 	remove_all(myTestCfgFile);
 	EXPECT_FALSE(exists(myTestCfgFile));
     delete &myMockMessageView;
+    delete &myMockPswdCheckView;
 }
 
 int main(int argc, char **argv) {

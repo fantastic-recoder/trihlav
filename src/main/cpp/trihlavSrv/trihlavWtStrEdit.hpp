@@ -60,6 +60,16 @@ namespace trihlav {
             Wt::WLineEdit::setFocus(pFlag);
         }
 
+        /**
+         * @see EditIface::isPasswordMode() const
+         */
+        virtual bool isPasswordMode() const override;
+
+        /**
+         * @see void setPasswordMode(bool)
+         */
+        virtual void setPasswordMode(bool pPasswordMode) override;
+
     };
 
 } /* namespace trihlav */

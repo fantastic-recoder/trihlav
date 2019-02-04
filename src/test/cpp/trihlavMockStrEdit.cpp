@@ -26,29 +26,21 @@
  Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include "trihlavWtStrEdit.hpp"
+#include "trihlavMockStrEdit.hpp"
 
 namespace trihlav {
 
-    WtStrEdit::WtStrEdit() {
-        // TODO Auto-generated constructor stub
-
+    MockStrEdit::MockStrEdit()
+            : MockEditIface<std::string>("nope!") {
+        ON_CALL(*this, isPasswordMode)
+                .WillByDefault([this]() -> const bool { return m_isPasswordMode; });
+        ON_CALL(*this, setPasswordMode)
+                .WillByDefault([this](bool pPswdMode) { m_isPasswordMode = pPswdMode; });
+        //testing::AllowLeak(this);
     }
 
-    WtStrEdit::~WtStrEdit() {
-        // TODO Auto-generated destructor stub
-    }
+    MockStrEdit::~MockStrEdit() {
 
-    bool WtStrEdit::isPasswordMode() const {
-        return this->echoMode() == Wt::EchoMode::Password;
     }
+}
 
-    void WtStrEdit::setPasswordMode(bool pPasswordMode) {
-        if (pPasswordMode) {
-            this->setEchoMode(Wt::EchoMode::Password);
-        } else {
-            this->setEchoMode(Wt::EchoMode::Normal);
-        }
-    }
-
-} /* namespace trihlav */
